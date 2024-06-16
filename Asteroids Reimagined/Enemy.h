@@ -4,7 +4,7 @@
 #include "Shot.h"
 #include "ParticleManager.h"
 
-class Enemy : public Model3D
+class Enemy : public LineModel
 {
 public:
 	Enemy();
@@ -13,7 +13,7 @@ public:
 	std::vector<Shot*> Shots;
 
 	void SetPlayer(ThePlayer* player);
-	void SetShotModel(Model model);
+	void SetShotModel(LineModelPoints model);
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);
 
@@ -47,6 +47,6 @@ protected:
 
 private:
 
-	Model ShotModel = { 0 };
+	LineModelPoints ShotModel = {};
 
 };

@@ -5,7 +5,7 @@ Game::Game()
 	LogicID = TheManagers.EM.AddCommon(Logic = DBG_NEW GameLogic());
 	BackGroundID = TheManagers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = TheManagers.EM.AddCommon(Enemies = DBG_NEW EnemyControl());
-	PlayerID = TheManagers.EM.AddModel3D(Player = DBG_NEW ThePlayer());
+	PlayerID = TheManagers.EM.AddLineModel(Player = DBG_NEW ThePlayer());
 }
 
 Game::~Game()
@@ -36,6 +36,8 @@ bool Game::Initialize(Utilities &utilities, GameLogic* gameLogic) //Initialize
 
 bool Game::Load()
 {
+	size_t shotModelID = TheManagers.CM.LoadTheLineModel("Dot");
+	Player->SetModel(TheManagers.CM.LoadAndGetLineModel("PlayerShip"));
 
 	return true;
 }

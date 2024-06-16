@@ -14,7 +14,7 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void Enemy::SetShotModel(Model model)
+void Enemy::SetShotModel(LineModelPoints model)
 {
 	ShotModel = model;
 }
@@ -36,14 +36,14 @@ void Enemy::SetParticleManager(ParticleManager* particleManager)
 
 bool Enemy::Initialize(Utilities* utilities)
 {
-	Model3D::Initialize(utilities);
+	LineModel::Initialize(utilities);
 
 	return false;
 }
 
 bool Enemy::BeginRun()
 {
-	Model3D::BeginRun();
+	LineModel::BeginRun();
 
 	TheManagers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
 
@@ -52,14 +52,14 @@ bool Enemy::BeginRun()
 
 void Enemy::Update(float deltaTime)
 {
-	Model3D::Update(deltaTime);
+	LineModel::Update(deltaTime);
 
 	CheckCollision();
 }
 
 void Enemy::Draw()
 {
-	Model3D::Draw();
+	LineModel::Draw();
 }
 
 void Enemy::Spawn(Vector3 position)
@@ -120,7 +120,7 @@ void Enemy::Shoot()
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddModel3D(Shots[spawnNumber], ShotModel);
+		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->Initialize(TheUtilities);
 		Shots[spawnNumber]->BeginRun();
 	}
@@ -148,7 +148,7 @@ void Enemy::Shoot(Vector3 velocity)
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddModel3D(Shots[spawnNumber], ShotModel);
+		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->Initialize(TheUtilities);
 		Shots[spawnNumber]->BeginRun();
 	}
@@ -180,18 +180,18 @@ bool Enemy::CheckCollision()
 		}
 	}
 
-	for (auto &shot : Player->Shots)
-	{
-		if (!shot->Enabled) continue;
+	//for (auto &shot : Player->Shots)
+	//{
+	//	if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersectBullet(*this))
-		{
-			Hit();
-			shot->Destroy();
+	//	if (shot->CirclesIntersectBullet(*this))
+	//	{
+	//		Hit();
+	//		shot->Destroy();
 
-			return true;
-		}
-	}
+	//		return true;
+	//	}
+	//}
 
 	return false;
 }

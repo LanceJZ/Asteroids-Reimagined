@@ -21,7 +21,7 @@ public:
 
 	void Update();
 
-	void SpawnExplosion(Vector3 position, Vector3 velocity, float endWidth,
+	void Spawn(Vector3 position, Vector3 velocity, float endWidth,
 		float length,  int count, float time, Color color);
 
 private:

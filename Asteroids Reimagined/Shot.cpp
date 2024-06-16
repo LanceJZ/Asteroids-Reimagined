@@ -10,7 +10,7 @@ Shot::~Shot()
 
 bool Shot::Initialize(Utilities* utilities)
 {
-	Model3D::Initialize(utilities);
+	LineModel::Initialize(utilities);
 
 	Radius = 6.0f;
 
@@ -19,21 +19,21 @@ bool Shot::Initialize(Utilities* utilities)
 
 bool Shot::BeginRun()
 {
-	Model3D::BeginRun();
+	LineModel::BeginRun();
 
 	return false;
 }
 
 void Shot::Update(float deltaTime)
 {
-	Model3D::Update(deltaTime);
+	LineModel::Update(deltaTime);
 
 	if (ScreenEdgeBoundY()) Destroy();
 }
 
 void Shot::Draw()
 {
-	Model3D::Draw();
+	LineModel::Draw();
 }
 
 void Shot::Spawn(Vector3 position)

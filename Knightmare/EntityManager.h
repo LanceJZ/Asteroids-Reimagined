@@ -41,6 +41,7 @@ public:
 	size_t AddEntity();
 	size_t AddLineModel(LineModel* model);
 	size_t AddLineModel(LineModelPoints model);
+	size_t AddLineModel(LineModel* model, LineModelPoints points);
 	size_t AddLineModel();
 	size_t AddModel3D(Model3D* model3D);
 	size_t AddModel3D(Model3D* model3D, Model &model);

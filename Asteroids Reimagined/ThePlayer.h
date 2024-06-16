@@ -1,7 +1,7 @@
 #pragma once
 #include "Globals.h"
 
-class ThePlayer : public Model3D
+class ThePlayer : public LineModel
 {
 public:
 	ThePlayer();

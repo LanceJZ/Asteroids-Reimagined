@@ -1,7 +1,7 @@
 #pragma once
 #include "Globals.h"
 
-class Shot : public Model3D
+class Shot : public LineModel
 {
 public:
 	Shot();

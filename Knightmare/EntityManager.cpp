@@ -223,6 +223,15 @@ size_t EntityManager::AddLineModel(LineModelPoints model)
 	return number;
 }
 
+size_t EntityManager::AddLineModel(LineModel* model, LineModelPoints modelPoints)
+{
+	size_t number = AddLineModel(model);
+
+	LineModels[number]->SetModel(modelPoints);
+
+	return number;
+}
+
 size_t EntityManager::AddLineModel()
 {
 	size_t number = LineModels.size();

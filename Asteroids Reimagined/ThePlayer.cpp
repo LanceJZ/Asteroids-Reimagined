@@ -10,21 +10,23 @@ ThePlayer::~ThePlayer()
 
 bool ThePlayer::Initialize(Utilities* utilities)
 {
-	Model3D::Initialize(utilities);
+	LineModel::Initialize(utilities);
+
+	//Scale = 3.5f;
 
 	return false;
 }
 
 bool ThePlayer::BeginRun()
 {
-	Model3D::BeginRun();
+	LineModel::BeginRun();
 
 	return false;
 }
 
 void ThePlayer::Input()
 {
-	Model3D::Input();
+	LineModel::Input();
 
 	Keyboard();
 
@@ -36,13 +38,13 @@ void ThePlayer::Input()
 
 void ThePlayer::Update(float deltaTime)
 {
-	Model3D::Update(deltaTime);
+	LineModel::Update(deltaTime);
 
 }
 
 void ThePlayer::Draw()
 {
-	Model3D::Draw();
+	LineModel::Draw();
 
 }
 

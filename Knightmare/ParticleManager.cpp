@@ -10,9 +10,8 @@ ParticleManager::~ParticleManager()
 	Particles.clear();
 }
 
-bool ParticleManager::Initialize()
+bool ParticleManager::Initialize(Utilities* utilities)
 {
-	Common::Initialize(TheUtilities);
 
 	return false;
 }
@@ -22,9 +21,9 @@ void ParticleManager::SetCubeModel(Model model)
 	CubeModel = model;
 }
 
-void ParticleManager::SetEntityManager(EntityManager* manager)
+void ParticleManager::SetManagers(Managers& managers)
 {
-	EM = manager;
+	Man = &managers;
 }
 
 bool ParticleManager::BeginRun()
@@ -39,7 +38,7 @@ void ParticleManager::Update()
 	Common::Update();
 }
 
-void ParticleManager::SpawnExplosion(Vector3 position, Vector3 velocity, float radius,
+void ParticleManager::Spawn(Vector3 position, Vector3 velocity, float radius,
 	float speed, int count, float time, Color color)
 {
 	for (int i = 0; i < count; i++)
@@ -77,7 +76,7 @@ size_t ParticleManager::SpawnPool(Color color)
 		if (spawnNew)
 		{
 			Particles.push_back(DBG_NEW ParticleCube());
-			EM->AddModel3D(Particles[cubeSpawnNumber], CubeModel);
+			Man->EM.AddModel3D(Particles[cubeSpawnNumber], CubeModel);
 		}
 
 		Particles[cubeSpawnNumber]->ModelColor = color;
