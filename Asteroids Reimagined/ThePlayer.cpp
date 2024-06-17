@@ -40,12 +40,38 @@ void ThePlayer::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	CheckScreenEdge();
 }
 
 void ThePlayer::Draw()
 {
 	LineModel::Draw();
 
+}
+
+void ThePlayer::RotateLeft(float amount)
+{
+	RotationVelocityZ = (amount * 5.5f);
+}
+
+void ThePlayer::RotateRight(float amount)
+{
+	RotationVelocityZ = (amount * 5.5f);
+}
+
+void ThePlayer::RotateStop()
+{
+	RotationVelocityZ = 0.0f;
+}
+
+void ThePlayer::ThrustOn(float amount)
+{
+	SetAccelerationToMaxAtRotation(-(amount * 50.25f), 150.0f);
+}
+
+void ThePlayer::ThrustOff()
+{
+	SetAccelerationToZero(0.45f);
 }
 
 void ThePlayer::Hit()
@@ -95,8 +121,52 @@ void ThePlayer::Gamepad()
 	//Button X is 5	//Left bumper is 9 //Right bumper is 11 for Shield //Left Trigger is 10
 	//Right Trigger is 12 for Thrust //Dpad Up is 1 for	//Dpad Down is 3 for
 	//Dpad Left is 4 for rotate left //Dpad Right is 2 for rotate right
-	//Axis 1 is -1 for , 1 for  on left stick.
+	//Axis 1 is -1 for Up, 1 for Down on left stick.
 	//Axis 0 is -1 for Left, 1 for right on left stick.
+	//Axis 3 is -1 for Up, 1 for Down on right stick.
+	//Axis 2 is -1 for Left, 1 for right on right stick.
+
+	//Left Stick
+	if (GetGamepadAxisMovement(0, 0) > 0.1f) //Right
+	{
+		RotateRight(GetGamepadAxisMovement(0, 0));
+	}
+	else if (GetGamepadAxisMovement(0, 0) < -0.1f) //Left
+	{
+		RotateLeft(GetGamepadAxisMovement(0, 0));
+	}
+	else
+	{
+		RotateStop();
+	}
+
+	if (GetGamepadAxisMovement(0, 1) > 0.1f) //Down
+	{
+	}
+	else if (GetGamepadAxisMovement(0, 1) < -0.1f) //Up
+	{
+		ThrustOn(GetGamepadAxisMovement(0, 1));
+	}
+	else
+	{
+		ThrustOff();
+	}
+
+	//Right Stick
+	if (GetGamepadAxisMovement(0, 2) > 0.25f) //Right
+	{
+	}
+	else if (GetGamepadAxisMovement(0, 2) < -0.25f) //Left
+	{
+	}
+
+	if (GetGamepadAxisMovement(0, 3) > 0.25f) //Down
+	{
+	}
+	else if (GetGamepadAxisMovement(0, 3) < -0.25f) //Up
+	{
+	}
+
 
 	if (IsGamepadButtonDown(0, 12))
 	{

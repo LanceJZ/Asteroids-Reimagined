@@ -29,6 +29,7 @@ public:
 	float RotationAccelerationX = 0;
 	float RotationAccelerationY = 0;
 	float RotationAccelerationZ = 0;
+	float DeltaTime = 0;
 
 	Vector3 Acceleration = Vector3Zero();
 	Vector3 Velocity = Vector3Zero();
@@ -66,11 +67,9 @@ public:
 	float GetAngleFromVectors(Vector3& target);
 	Vector3 RandomVelocity(float magnitude);
 	Vector3 VelocityFromAngleZ(float magnitude);
-	Vector3 DecelerationToZero(float decelerationAmount, float deltaTime);
-
 	void RotateTowardsTargetZ(Vector3& target, float magnitude);
-	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed,
-		float deltaTime);
+	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
+	void SetAccelerationToZero(float decelerationAmount);
 	void SetParent(PositionedObject* parent);
 	void RemoveFromParents();
 	void DisconnectChild(PositionedObject* child);
@@ -79,7 +78,7 @@ public:
 	void CheckScreenEdgeX();
 	void CheckScreenEdgeY();
 	void LeavePlay(float turnSpeed, float speed);
-	void RotateVelocity(Vector3& position, float turnSpeed, float speed);
+	void SetRotateVelocity(Vector3& position, float turnSpeed, float speed);
 	void CheckPlayfieldSidesWarp();
 	void CheckPlayfieldSidesWarp(float left, float right);
 	void CheckPlayfieldHeightWarp(float top, float bottom);

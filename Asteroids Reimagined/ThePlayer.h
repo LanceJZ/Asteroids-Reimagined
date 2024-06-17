@@ -21,6 +21,13 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
+	void RotateLeft(float amount);
+	void RotateRight(float amount);
+	void RotateStop();
+
+	void ThrustOn(float amount);
+	void ThrustOff();
+
 	void Hit();
 	void ScoreUpdate(int addToScore);
 	void Reset();

@@ -48,6 +48,8 @@ void PositionedObject::Update(float deltaTime)
 	RotationX = RadianSpin(RotationX);
 	RotationY = RadianSpin(RotationY);
 	RotationZ = RadianSpin(RotationZ);
+
+	DeltaTime = deltaTime;
 }
 
 float PositionedObject::Chase(PositionedObject Chasing)
@@ -77,24 +79,6 @@ Vector3 PositionedObject::VelocityFromAngleZ(float magnitude)
 	return { cosf(RotationZ) * magnitude, sinf(RotationZ) * magnitude, 0 };
 }
 
-//Returns Vector3 deceleration down to zero.
-Vector3 PositionedObject::DecelerationToZero(float decelerationAmount, float deltaTime)
-{
-	Vector3 deceleration = { 0, 0, 0 };
-
-	if (Velocity.x > 0.01 || Velocity.y > 0.01 || Velocity.x < -0.01 || Velocity.y < -0.01)
-	{
-		deceleration = { (-Velocity.x * decelerationAmount) * deltaTime,
-		(-Velocity.y * decelerationAmount) * deltaTime, 0 };
-	}
-	else
-	{
-		Velocity = { 0, 0, 0 };
-	}
-
-	return deceleration;
-}
-
 float PositionedObject::X()
 {
 	return Position.x;
@@ -111,15 +95,31 @@ float PositionedObject::Z()
 }
 
 //Sets Acceleration based on acceleration amount this frame, to topSpeed a max amount.
-//Max set at 1, would be an max of zero. The smaller the number, the higher
-//the max or topSpeed is.
 void PositionedObject::SetAccelerationToMaxAtRotation(float accelerationAmount,
-	float topSpeed, float deltaTime)
+	float topSpeed)
 {
-	Acceleration = { ((cosf(RotationZ) - (Velocity.x * topSpeed)) *
-		accelerationAmount) * deltaTime,
-			((sinf(RotationZ) - (Velocity.y * topSpeed)) *
-				accelerationAmount) * deltaTime, 0 };
+	float topSpeedX = (cosf(RotationZ) * Velocity.x) - topSpeed;
+	float topSpeedY = (sinf(RotationZ) * Velocity.y) - topSpeed;
+
+	Acceleration = {
+		(cosf(RotationZ) * -(topSpeedX - accelerationAmount)) * DeltaTime,
+		(sinf(RotationZ) * -(topSpeedY - accelerationAmount)) * DeltaTime,
+		0 };
+}
+
+//Sets Acceleration to zero over time based on deceleration amount.
+void PositionedObject::SetAccelerationToZero(float decelerationAmount)
+{
+	if (Velocity.x > 0.01 || Velocity.y > 0.01 ||
+		Velocity.x < -0.01 || Velocity.y < -0.01)
+	{
+		Acceleration = { (-Velocity.x * decelerationAmount) * DeltaTime,
+		(-Velocity.y * decelerationAmount) * DeltaTime, 0 };
+	}
+	else
+	{
+		Velocity = { 0, 0, 0 };
+	}
 }
 
 void PositionedObject::X(float x)
@@ -353,10 +353,10 @@ void PositionedObject::LeavePlay(float turnSpeed, float speed)
 
 	Vector3 pos = { stageLeft, Position.y, 0 };
 
-	RotateVelocity(pos, turnSpeed, speed);
+	SetRotateVelocity(pos, turnSpeed, speed);
 }
 
-void PositionedObject::RotateVelocity(Vector3& position, float turnSpeed, float speed)
+void PositionedObject::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)
 {
 	RotationVelocityZ = Common::RotateTowardsTargetZ(Position, position, RotationZ,
 		turnSpeed);
