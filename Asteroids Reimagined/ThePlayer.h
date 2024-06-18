@@ -20,9 +20,10 @@ public:
 	bool Initialize();
 	bool BeginRun();
 
+	void SetCrosshairModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
-	void SetCrosshairModel(LineModelPoints model);
+	void SetFlameModel(LineModelPoints model);
 
 	void Input();
 	void Update(float deltaTime);
@@ -43,6 +44,7 @@ private:
 	int TurretHeatMax = 100;
 	float TurretDirection = 0.0f;
 
+	LineModel* Flame = {};
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
 

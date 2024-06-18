@@ -2,6 +2,7 @@
 
 ThePlayer::ThePlayer()
 {
+	TheManagers.EM.AddLineModel(Flame = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
 	TheManagers.EM.AddTimer(ShotTimerID = TheManagers.EM.AddTimer());
@@ -30,7 +31,9 @@ bool ThePlayer::Initialize()
 		shot->Initialize();
 	}
 
-	//Scale = 3.5f;
+	//Scale = 35.0f;
+
+	Flame->Enabled = false;
 
 	return false;
 }
@@ -43,6 +46,9 @@ bool ThePlayer::BeginRun()
 	//{
 	//	shot->BeginRun();
 	//}
+
+	//Flame->X(-9.0f);
+	Flame->SetParent(this);
 
 	Turret->X(-9.0f);
 	Turret->SetParent(this);
@@ -61,6 +67,11 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 	{
 		shot->SetModel(model);
 	}
+}
+
+void ThePlayer::SetFlameModel(LineModelPoints model)
+{
+	Flame->SetModel(model);
 }
 
 void ThePlayer::SetCrosshairModel(LineModelPoints model)
@@ -130,6 +141,7 @@ void ThePlayer::Reset()
 	Position = { 0, 0, 0 };
 	Velocity = { 0, 0, 0 };
 	Enabled = true;
+	Flame->Enabled = false;
 }
 
 void ThePlayer::NewGame()
@@ -231,11 +243,13 @@ void ThePlayer::RotateStop()
 void ThePlayer::ThrustOn(float amount)
 {
 	SetAccelerationToMaxAtRotation((amount * 50.25f), 150.0f);
+	Flame->Enabled = true;
 }
 
 void ThePlayer::ThrustOff()
 {
 	SetAccelerationToZero(0.45f);
+	Flame->Enabled = false;
 }
 
 void ThePlayer::Gamepad()
@@ -359,9 +373,10 @@ void ThePlayer::Keyboard()
 	{
 	}
 
+	PointTurret(Crosshair->Position);
+
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
-		PointTurret(Crosshair->Position);
 		FireTurret();
 	}
 }

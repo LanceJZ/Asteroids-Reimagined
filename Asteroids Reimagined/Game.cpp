@@ -41,9 +41,19 @@ bool Game::Load()
 {
 	size_t shotModelID = TheManagers.CM.LoadTheLineModel("Dot");
 	Player->SetModel(TheManagers.CM.LoadAndGetLineModel("PlayerShip"));
+	Player->SetFlameModel(TheManagers.CM.LoadAndGetLineModel("PlayerFlame"));
 	Player->SetTurretModel(TheManagers.CM.LoadAndGetLineModel("PlayerTurret"));
 	Player->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
 	Player->SetCrosshairModel(TheManagers.CM.LoadAndGetLineModel("Cross"));
+
+	LineModelPoints rockModels[4];
+
+	rockModels[0] = TheManagers.CM.LoadAndGetLineModel("Rock1");
+	rockModels[1] = TheManagers.CM.LoadAndGetLineModel("Rock2");
+	rockModels[2] = TheManagers.CM.LoadAndGetLineModel("Rock3");
+	rockModels[3] = TheManagers.CM.LoadAndGetLineModel("Rock4");
+
+	Enemies->SetRockModels(rockModels);
 
 	return true;
 }

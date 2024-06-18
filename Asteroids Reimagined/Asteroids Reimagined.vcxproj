@@ -166,6 +166,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheRock.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
@@ -182,6 +186,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="ThePlayer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheRock.h">
       <SubType>
       </SubType>
     </ClInclude>

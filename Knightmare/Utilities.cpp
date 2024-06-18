@@ -14,7 +14,7 @@ float Utilities::GetRandomFloat(float min, float max)
 		return 0;
 	}
 
-	if (false)
+	if (true)
 	{
 		//Old Random Number Generator.
 		std::default_random_engine randEngine(RandomDevice());
