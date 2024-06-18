@@ -10,7 +10,7 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update();

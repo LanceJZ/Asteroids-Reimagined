@@ -57,9 +57,9 @@ void Enemy::Update(float deltaTime)
 	CheckCollision();
 }
 
-void Enemy::Draw()
+void Enemy::Draw3D()
 {
-	LineModel::Draw();
+	LineModel::Draw3D();
 }
 
 void Enemy::Spawn(Vector3 position)

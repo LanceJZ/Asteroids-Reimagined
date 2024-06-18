@@ -3,7 +3,6 @@
 Shot::Shot()
 {
 	TheManagers.EM.AddTimer(LifeTimerID = TheManagers.EM.AddTimer());
-	Enabled = false;
 }
 
 Shot::~Shot()
@@ -12,14 +11,13 @@ Shot::~Shot()
 
 bool Shot::Initialize()
 {
-	LineModel::Initialize(TheUtilities);
 
 	return false;
 }
 
 bool Shot::BeginRun()
 {
-	LineModel::BeginRun();
+	Enabled = false;
 
 	return false;
 }
@@ -36,9 +34,9 @@ void Shot::Update(float deltaTime)
 	CheckScreenEdge();
 }
 
-void Shot::Draw()
+void Shot::Draw3D()
 {
-	LineModel::Draw();
+	LineModel::Draw3D();
 }
 
 void Shot::Spawn(Vector3 position)

@@ -3,6 +3,7 @@
 ThePlayer::ThePlayer()
 {
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
+	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
 	TheManagers.EM.AddTimer(ShotTimerID = TheManagers.EM.AddTimer());
 	TheManagers.EM.AddTimer(TurretCooldownTimerID = TheManagers.EM.AddTimer());
 	TheManagers.EM.AddTimer(TurretHeatTimerID = TheManagers.EM.AddTimer());
@@ -10,6 +11,11 @@ ThePlayer::ThePlayer()
 	for (int i = 0; i < 8; i++)
 	{
 		Shots[i] = DBG_NEW Shot();
+	}
+
+	for (auto& shot : Shots)
+	{
+		TheManagers.EM.AddLineModel(shot);
 	}
 }
 
@@ -31,13 +37,12 @@ bool ThePlayer::Initialize()
 
 bool ThePlayer::BeginRun()
 {
-	LineModel::BeginRun();
+	//LineModel::BeginRun();
 
-	for (auto& shot : Shots)
-	{
-		TheManagers.EM.AddLineModel(shot);
-		shot->BeginRun();
-	}
+	//for (auto& shot : Shots)
+	//{
+	//	shot->BeginRun();
+	//}
 
 	Turret->X(-9.0f);
 	Turret->SetParent(this);
@@ -58,15 +63,25 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 	}
 }
 
+void ThePlayer::SetCrosshairModel(LineModelPoints model)
+{
+	Crosshair->SetModel(model);
+}
+
 void ThePlayer::Input()
 {
 	LineModel::Input();
 
-	Keyboard();
 
 	if (IsGamepadAvailable(0))
 	{
 		Gamepad();
+		Crosshair->Enabled = false;
+	}
+	else
+	{
+		Crosshair->Enabled = true;
+		Keyboard();
 	}
 }
 
@@ -76,11 +91,12 @@ void ThePlayer::Update(float deltaTime)
 
 	CheckScreenEdge();
 	TurretTimers();
+	CrosshairUpdate();
 }
 
-void ThePlayer::Draw()
+void ThePlayer::Draw3D()
 {
-	LineModel::Draw();
+	LineModel::Draw3D();
 
 }
 
@@ -131,9 +147,12 @@ void ThePlayer::NewGame()
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
 {
-	//TurretDirection = atan2f(stickDirectionY, stickDirectionX);
-
 	Turret->RotationZ = atan2f(stickDirectionY, stickDirectionX) - RotationZ;
+}
+
+void ThePlayer::PointTurret(Vector3 mouseLocation)
+{
+	Turret->RotationZ = AngleFromVectorZ(mouseLocation) - RotationZ;
 }
 
 void ThePlayer::FireTurret()
@@ -186,6 +205,12 @@ void ThePlayer::TurretTimers()
 			if (TurretHeat > 0)	TurretHeat -= 1;
 		}
 	}
+}
+
+void ThePlayer::CrosshairUpdate()
+{
+	Crosshair->X(GetMousePosition().x - WindowWidth);
+	Crosshair->Y(GetMousePosition().y - WindowHeight);
 }
 
 void ThePlayer::RotateLeft(float amount)
@@ -300,21 +325,26 @@ void ThePlayer::Gamepad()
 
 void ThePlayer::Keyboard()
 {
-	if (IsKeyDown(KEY_RIGHT))
+	if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
 	{
+		RotateRight(1.0f);
 	}
-	else if (IsKeyDown(KEY_LEFT))
+	else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
 	{
+		RotateLeft(-1.0f);
 	}
 	else
 	{
+		RotateStop();
 	}
 
-	if (IsKeyDown(KEY_UP))
+	if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W))
 	{
+		ThrustOn(1.0f);
 	}
 	else
 	{
+		ThrustOff();
 	}
 
 	if (IsKeyPressed(KEY_RIGHT_CONTROL) || IsKeyPressed(KEY_LEFT_CONTROL) ||
@@ -327,5 +357,11 @@ void ThePlayer::Keyboard()
 	}
 	else
 	{
+	}
+
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+	{
+		PointTurret(Crosshair->Position);
+		FireTurret();
 	}
 }

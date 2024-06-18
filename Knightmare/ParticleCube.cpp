@@ -36,9 +36,9 @@ void ParticleCube::Update(float deltaTime)
 	}
 }
 
-void ParticleCube::Draw()
+void ParticleCube::Draw3D()
 {
-	Model3D::Draw();
+	Model3D::Draw3D();
 
 }
 

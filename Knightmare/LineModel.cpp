@@ -17,9 +17,9 @@ void LineModel::Update(float deltaTime)
 	ModelColor.a = (char)Alpha;
 }
 
-void LineModel::Draw()
+void LineModel::Draw3D()
 {
-	Entity::Draw();
+	Entity::Draw3D();
 
 	if (!Enabled)
 	{

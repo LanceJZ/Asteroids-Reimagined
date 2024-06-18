@@ -19,7 +19,7 @@ public:
 	virtual bool SetCamera(Camera* camera);
 	virtual void Input();
 	void Update(float deltaTime);
-	void Draw();
+	void Draw3D();
 
 	//void AddChild(Model3D* child);
 	void SetModel(Model &model, float scale);

@@ -10,7 +10,7 @@ public:
 
 	virtual bool Initialize(Utilities* utilities);
 	virtual void Update(float deltaTime);
-	virtual void Draw();
+	virtual void Draw3D();
 
 	virtual void Spawn(Vector3 position);
 	virtual void Hit();

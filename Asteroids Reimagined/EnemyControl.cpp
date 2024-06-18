@@ -14,9 +14,8 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-bool EnemyControl::Initialize(Utilities* utilities)
+bool EnemyControl::Initialize()
 {
-	Common::Initialize(utilities);
 
 	return false;
 }

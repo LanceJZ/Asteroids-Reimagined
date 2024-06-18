@@ -26,6 +26,7 @@ public:
 private:
 	void GameInput();
 
+	bool CursorDisabled = true;
 	size_t LogicID = 0;
 	size_t BackGroundID = 0;
 	size_t PlayerID = 0;

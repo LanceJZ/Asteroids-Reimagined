@@ -22,10 +22,11 @@ public:
 
 	void SetTurretModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
+	void SetCrosshairModel(LineModelPoints model);
 
 	void Input();
 	void Update(float deltaTime);
-	void Draw();
+	void Draw3D();
 
 	void Hit();
 	void ScoreUpdate(int addToScore);
@@ -43,10 +44,14 @@ private:
 	float TurretDirection = 0.0f;
 
 	LineModel* Turret = {};
+	LineModel* Crosshair = {};
 
 	void PointTurret(float stickDirectionX, float stickDirectionY);
+	void PointTurret(Vector3 mouseLocation);
 	void FireTurret();
 	void TurretTimers();
+
+	void CrosshairUpdate();
 
 	void RotateLeft(float amount);
 	void RotateRight(float amount);

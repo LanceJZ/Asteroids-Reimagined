@@ -16,6 +16,8 @@ bool Game::Initialize() //Initialize
 {
 	Common::Initialize(TheUtilities);
 
+	DisableCursor();
+
 	float multi = 1.0f;
 	FieldSize = { GetScreenWidth() * multi, (float)GetScreenHeight() };
 
@@ -30,6 +32,7 @@ bool Game::Initialize() //Initialize
 	TheManagers.Initialize();
 	Player->Initialize();
 	Logic->Initialize();
+	Enemies->Initialize();
 
 	return true;
 }
@@ -40,6 +43,7 @@ bool Game::Load()
 	Player->SetModel(TheManagers.CM.LoadAndGetLineModel("PlayerShip"));
 	Player->SetTurretModel(TheManagers.CM.LoadAndGetLineModel("PlayerTurret"));
 	Player->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
+	Player->SetCrosshairModel(TheManagers.CM.LoadAndGetLineModel("Cross"));
 
 	return true;
 }
@@ -56,6 +60,17 @@ bool Game::BeginRun()
 
 void Game::ProcessInput()
 {
+	if (IsGamepadAvailable(0) && CursorDisabled)
+	{
+		EnableCursor();
+		CursorDisabled = false;
+	}
+	else if (!CursorDisabled && !IsGamepadAvailable(0))
+	{
+		DisableCursor();
+		CursorDisabled = true;
+	}
+
 	GameInput();
 	TheManagers.EM.Input();
 }
@@ -79,10 +94,10 @@ void Game::Draw3D()
 	int fsx = int(FieldSize.x * 0.5f);
 	int fsy = int(FieldSize.y * 0.5f);
 
-	DrawLine(-fsx, -fsy, fsx, -fsy, { DARKBLUE });
+	DrawLine(-fsx, -fsy, fsx, -fsy, { DARKBLUE }); //Top.
 	DrawLine(fsx, -fsy, fsx, fsy, { DARKBLUE }); //Right side.
-	DrawLine(fsx, fsy - 1, -fsx, fsy, { DARKBLUE });
-	DrawLine(-fsx + 1, fsy - 1, -fsx + 1, -fsy, { DARKBLUE }); //Left side.
+	DrawLine(fsx, fsy - 1, -fsx, fsy - 1, { DARKBLUE }); //Bottom.
+	DrawLine(-fsx + 1, fsy - 1, -fsx + 1, -fsy - 1, { DARKBLUE }); //Left side.
 #endif
 
 	EndMode3D();
@@ -91,6 +106,7 @@ void Game::Draw3D()
 void Game::Draw2D()
 {
 	//2D drawing, fonts go here.
+	TheManagers.EM.Draw2D();
 }
 
 void Game::GameInput()

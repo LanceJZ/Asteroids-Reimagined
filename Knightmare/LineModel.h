@@ -12,7 +12,7 @@ public:
 	virtual bool BeginRun();
 	virtual void Input();
 	virtual void Update(float deltaTime);
-	virtual void Draw();
+	virtual void Draw3D();
 
 	LineModelPoints GetLineModel();
 	std::vector<Vector3> GetModel();

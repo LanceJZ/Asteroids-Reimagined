@@ -137,17 +137,17 @@ void EntityManager::Draw3D()
 {
 	for (auto entity : Entities)
 	{
-		if (entity->Enabled) entity->Draw();
+		if (entity->Enabled) entity->Draw3D();
 	}
 
 	for (auto lineModel : LineModels)
 	{
-		if (lineModel->Enabled)	lineModel->Draw();
+		if (lineModel->Enabled)	lineModel->Draw3D();
 	}
 
 	for (auto model3D : Model3Ds)
 	{
-		if (model3D->Enabled) model3D->Draw();
+		if (model3D->Enabled) model3D->Draw3D();
 	}
 }
 

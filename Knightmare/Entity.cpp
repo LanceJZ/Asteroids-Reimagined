@@ -21,7 +21,7 @@ void Entity::Update(float deltaTime)
 	AfterCalculate();
 }
 
-void Entity::Draw()
+void Entity::Draw3D()
 {
 #ifdef _DEBUG
 	if(Enabled)
