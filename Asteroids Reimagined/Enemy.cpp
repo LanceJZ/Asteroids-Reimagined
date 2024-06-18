@@ -121,7 +121,7 @@ void Enemy::Shoot()
 	{
 		Shots.push_back(DBG_NEW Shot());
 		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
-		Shots[spawnNumber]->Initialize(TheUtilities);
+		Shots[spawnNumber]->Initialize();
 		Shots[spawnNumber]->BeginRun();
 	}
 
@@ -149,7 +149,7 @@ void Enemy::Shoot(Vector3 velocity)
 	{
 		Shots.push_back(DBG_NEW Shot());
 		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
-		Shots[spawnNumber]->Initialize(TheUtilities);
+		Shots[spawnNumber]->Initialize();
 		Shots[spawnNumber]->BeginRun();
 	}
 

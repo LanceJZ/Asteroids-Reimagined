@@ -94,20 +94,30 @@ float PositionedObject::Z()
 	return Position.z;
 }
 
-//Sets Acceleration based on acceleration amount this frame, to topSpeed a max amount.
-void PositionedObject::SetAccelerationToMaxAtRotation(float accelerationAmount,
-	float topSpeed)
+Vector3 PositionedObject::AccelerationToMaxAtRotation(float accelerationAmount, float topSpeed)
 {
+	Vector3 acceleration = { 0, 0, 0 };
+
 	float topSpeedX = (cosf(RotationZ) * Velocity.x) - topSpeed;
 	float topSpeedY = (sinf(RotationZ) * Velocity.y) - topSpeed;
 
-	Acceleration = {
+	acceleration = {
 		(cosf(RotationZ) * -(topSpeedX - accelerationAmount)) * DeltaTime,
 		(sinf(RotationZ) * -(topSpeedY - accelerationAmount)) * DeltaTime,
 		0 };
+
+	return acceleration;
 }
 
-//Sets Acceleration to zero over time based on deceleration amount.
+//Sets Acceleration based on acceleration amount this frame,
+//up to a max amount based on top speed.
+void PositionedObject::SetAccelerationToMaxAtRotation(float accelerationAmount,
+	float topSpeed)
+{
+	Acceleration = AccelerationToMaxAtRotation(accelerationAmount, topSpeed);
+}
+
+//Sets Acceleration down to zero over time based on deceleration amount.
 void PositionedObject::SetAccelerationToZero(float decelerationAmount)
 {
 	if (Velocity.x > 0.01 || Velocity.y > 0.01 ||

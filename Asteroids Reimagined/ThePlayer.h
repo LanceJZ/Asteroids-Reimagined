@@ -1,5 +1,6 @@
 #pragma once
 #include "Globals.h"
+#include "Shot.h"
 
 class ThePlayer : public LineModel
 {
@@ -14,19 +15,17 @@ public:
 	int HighScore { 0 };
 	int Lives { 0 };
 
-	bool Initialize(Utilities* utilities);
+	Shot* Shots[8] = { nullptr };
+
+	bool Initialize();
 	bool BeginRun();
+
+	void SetTurretModel(LineModelPoints model);
+	void SetShotModel(LineModelPoints model);
 
 	void Input();
 	void Update(float deltaTime);
 	void Draw();
-
-	void RotateLeft(float amount);
-	void RotateRight(float amount);
-	void RotateStop();
-
-	void ThrustOn(float amount);
-	void ThrustOff();
 
 	void Hit();
 	void ScoreUpdate(int addToScore);
@@ -34,7 +33,27 @@ public:
 	void NewGame();
 
 private:
+	bool TurretOverHeat = false;
+	size_t ShotTimerID = 0;
+	size_t TurretCooldownTimerID = 0;
+	size_t TurretHeatTimerID = 0;
 	int NextNewLifeScore = 10000;
+	int TurretHeat = 0;
+	int TurretHeatMax = 100;
+	float TurretDirection = 0.0f;
+
+	LineModel* Turret = {};
+
+	void PointTurret(float stickDirectionX, float stickDirectionY);
+	void FireTurret();
+	void TurretTimers();
+
+	void RotateLeft(float amount);
+	void RotateRight(float amount);
+	void RotateStop();
+
+	void ThrustOn(float amount);
+	void ThrustOff();
 
 	void Gamepad();
 	void Keyboard();

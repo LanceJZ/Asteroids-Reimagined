@@ -19,9 +19,9 @@ void GameLogic::SetEnemies(EnemyControl* enemies)
 	Enemies = enemies;
 }
 
-bool GameLogic::Initialize(Utilities* utilities)
+bool GameLogic::Initialize()
 {
-	Common::Initialize(utilities);
+	Common::Initialize(TheUtilities);
 
 	AdjustedFieldSize = Vector2Multiply(FieldSize, { 0.5f, 0.5f });
 

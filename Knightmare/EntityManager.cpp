@@ -207,7 +207,6 @@ size_t EntityManager::AddLineModel(LineModel* model)
 	size_t number = LineModels.size();
 
 	LineModels.push_back(model);
-	LineModels[number]->Initialize(TheUtilities);
 
 	return number;
 }
@@ -225,6 +224,11 @@ size_t EntityManager::AddLineModel(LineModelPoints model)
 
 size_t EntityManager::AddLineModel(LineModel* model, LineModelPoints modelPoints)
 {
+	if (model == nullptr)
+	{
+		return -1;
+	}
+
 	size_t number = AddLineModel(model);
 
 	LineModels[number]->SetModel(modelPoints);
@@ -237,7 +241,6 @@ size_t EntityManager::AddLineModel()
 	size_t number = LineModels.size();
 
 	LineModels.push_back(DBG_NEW LineModel());
-	LineModels[number]->Initialize(TheUtilities);
 
 	return number;
 }
@@ -247,19 +250,27 @@ size_t EntityManager::AddModel3D(Model3D* model3D)
 	size_t modelNumber = Model3Ds.size();
 
 	Model3Ds.push_back(model3D);
-	Model3Ds[modelNumber]->Initialize(TheUtilities);
-	Model3Ds[modelNumber]->SetCamera(TheCamera);
 
 	return modelNumber;
 }
 
 size_t EntityManager::AddModel3D(Model3D* model3D, Model &model)
 {
+	if (model3D == nullptr)
+	{
+		return -1;
+	}
+
 	return AddModel3D(model3D, model, 1.0f);
 }
 
 size_t EntityManager::AddModel3D(Model3D* model3D, Model &model, float scale)
 {
+	if (model3D == nullptr)
+	{
+		return -1;
+	}
+
 	size_t modelNumber = AddModel3D(model3D);
 	Model3Ds[modelNumber]->SetModel(model, scale);
 	Model3Ds[modelNumber]->SetCamera(TheCamera);

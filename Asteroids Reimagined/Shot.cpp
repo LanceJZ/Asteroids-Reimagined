@@ -2,17 +2,17 @@
 
 Shot::Shot()
 {
+	TheManagers.EM.AddTimer(LifeTimerID = TheManagers.EM.AddTimer());
+	Enabled = false;
 }
 
 Shot::~Shot()
 {
 }
 
-bool Shot::Initialize(Utilities* utilities)
+bool Shot::Initialize()
 {
-	LineModel::Initialize(utilities);
-
-	Radius = 6.0f;
+	LineModel::Initialize(TheUtilities);
 
 	return false;
 }
@@ -28,7 +28,12 @@ void Shot::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (ScreenEdgeBoundY()) Destroy();
+	if (TheManagers.EM.TimerElapsed(LifeTimerID))
+	{
+		Destroy();
+	}
+
+	CheckScreenEdge();
 }
 
 void Shot::Draw()
@@ -39,30 +44,21 @@ void Shot::Draw()
 void Shot::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
-
-	Enabled = true;
-	Velocity.y = 300.0f;
 }
 
 void Shot::Spawn(Vector3 position, Vector3 velocity)
 {
-	Entity::Spawn(position);
-
-	Enabled = true;
+	Spawn(position);
 	Velocity = velocity;
 }
 
-void Shot::SpawnPlayerShot(Vector3 position)
+void Shot::Spawn(Vector3 position, Vector3 velocity, float lifetime)
 {
-	Entity::Spawn(position);
-
-	Enabled = true;
-	Velocity.y = -900.0f;
+	TheManagers.EM.ResetTimer(LifeTimerID, lifetime);
+	Spawn(position, velocity);
 }
 
 void Shot::Destroy()
 {
 	Entity::Destroy();
-
-	Enabled = false;
 }

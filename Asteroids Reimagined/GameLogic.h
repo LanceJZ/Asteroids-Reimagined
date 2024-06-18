@@ -26,7 +26,7 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetEnemies(EnemyControl* enemies);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update();

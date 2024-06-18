@@ -2,15 +2,27 @@
 
 ThePlayer::ThePlayer()
 {
+	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
+	TheManagers.EM.AddTimer(ShotTimerID = TheManagers.EM.AddTimer());
+	TheManagers.EM.AddTimer(TurretCooldownTimerID = TheManagers.EM.AddTimer());
+	TheManagers.EM.AddTimer(TurretHeatTimerID = TheManagers.EM.AddTimer());
+
+	for (int i = 0; i < 8; i++)
+	{
+		Shots[i] = DBG_NEW Shot();
+	}
 }
 
 ThePlayer::~ThePlayer()
 {
 }
 
-bool ThePlayer::Initialize(Utilities* utilities)
+bool ThePlayer::Initialize()
 {
-	LineModel::Initialize(utilities);
+	for (auto& shot : Shots)
+	{
+		shot->Initialize();
+	}
 
 	//Scale = 3.5f;
 
@@ -21,7 +33,29 @@ bool ThePlayer::BeginRun()
 {
 	LineModel::BeginRun();
 
+	for (auto& shot : Shots)
+	{
+		TheManagers.EM.AddLineModel(shot);
+		shot->BeginRun();
+	}
+
+	Turret->X(-9.0f);
+	Turret->SetParent(this);
+
 	return false;
+}
+
+void ThePlayer::SetTurretModel(LineModelPoints model)
+{
+	Turret->SetModel(model);
+}
+
+void ThePlayer::SetShotModel(LineModelPoints model)
+{
+	for (auto& shot : Shots)
+	{
+		shot->SetModel(model);
+	}
 }
 
 void ThePlayer::Input()
@@ -41,37 +75,13 @@ void ThePlayer::Update(float deltaTime)
 	LineModel::Update(deltaTime);
 
 	CheckScreenEdge();
+	TurretTimers();
 }
 
 void ThePlayer::Draw()
 {
 	LineModel::Draw();
 
-}
-
-void ThePlayer::RotateLeft(float amount)
-{
-	RotationVelocityZ = (amount * 5.5f);
-}
-
-void ThePlayer::RotateRight(float amount)
-{
-	RotationVelocityZ = (amount * 5.5f);
-}
-
-void ThePlayer::RotateStop()
-{
-	RotationVelocityZ = 0.0f;
-}
-
-void ThePlayer::ThrustOn(float amount)
-{
-	SetAccelerationToMaxAtRotation(-(amount * 50.25f), 150.0f);
-}
-
-void ThePlayer::ThrustOff()
-{
-	SetAccelerationToZero(0.45f);
 }
 
 void ThePlayer::Hit()
@@ -108,11 +118,99 @@ void ThePlayer::Reset()
 
 void ThePlayer::NewGame()
 {
+	TheManagers.EM.SetTimer(TurretCooldownTimerID, 1.0f);
+	TheManagers.EM.SetTimer(TurretHeatTimerID, 0.15f);
+	TheManagers.EM.SetTimer(ShotTimerID, 0.125f);
+
 	Lives = 4;
 	NextNewLifeScore = 10000;
 	Score = 0;
 	GameOver = false;
 	Reset();
+}
+
+void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
+{
+	//TurretDirection = atan2f(stickDirectionY, stickDirectionX);
+
+	Turret->RotationZ = atan2f(stickDirectionY, stickDirectionX) - RotationZ;
+}
+
+void ThePlayer::FireTurret()
+{
+	if (TurretOverHeat)
+	{
+		return;
+	}
+
+	if (TheManagers.EM.TimerElapsed(ShotTimerID))
+	{
+		for (auto& shot : Shots)
+		{
+			if (!shot->Enabled)
+			{
+				TheManagers.EM.ResetTimer(ShotTimerID);
+				TurretHeat += 10;
+
+				if (TurretHeat > TurretHeatMax)
+				{
+					TheManagers.EM.ResetTimer(TurretCooldownTimerID);
+					TurretOverHeat = true;
+				}
+
+				Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 375.0f);
+				shot->Spawn(Turret->WorldPosition, velocity, 2.15f);
+				break;
+			}
+		}
+	}
+
+}
+
+void ThePlayer::TurretTimers()
+{
+	if (TurretOverHeat)
+	{
+		if (TheManagers.EM.TimerElapsed(TurretCooldownTimerID))
+		{
+			TurretOverHeat = false;
+			TurretHeat = 0;
+		}
+	}
+	else
+	{
+		if (TheManagers.EM.TimerElapsed(TurretHeatTimerID))
+		{
+			TheManagers.EM.ResetTimer(TurretHeatTimerID);
+
+			if (TurretHeat > 0)	TurretHeat -= 1;
+		}
+	}
+}
+
+void ThePlayer::RotateLeft(float amount)
+{
+	RotationVelocityZ = (amount * 5.5f);
+}
+
+void ThePlayer::RotateRight(float amount)
+{
+	RotationVelocityZ = (amount * 5.5f);
+}
+
+void ThePlayer::RotateStop()
+{
+	RotationVelocityZ = 0.0f;
+}
+
+void ThePlayer::ThrustOn(float amount)
+{
+	SetAccelerationToMaxAtRotation((amount * 50.25f), 150.0f);
+}
+
+void ThePlayer::ThrustOff()
+{
+	SetAccelerationToZero(0.45f);
 }
 
 void ThePlayer::Gamepad()
@@ -145,7 +243,7 @@ void ThePlayer::Gamepad()
 	}
 	else if (GetGamepadAxisMovement(0, 1) < -0.1f) //Up
 	{
-		ThrustOn(GetGamepadAxisMovement(0, 1));
+		ThrustOn(-GetGamepadAxisMovement(0, 1));
 	}
 	else
 	{
@@ -153,21 +251,27 @@ void ThePlayer::Gamepad()
 	}
 
 	//Right Stick
-	if (GetGamepadAxisMovement(0, 2) > 0.25f) //Right
+	if (GetGamepadAxisMovement(0, 2) > 0.1f) //Right
 	{
+		FireTurret();
 	}
-	else if (GetGamepadAxisMovement(0, 2) < -0.25f) //Left
+	else if (GetGamepadAxisMovement(0, 2) < -0.1f) //Left
 	{
-	}
-
-	if (GetGamepadAxisMovement(0, 3) > 0.25f) //Down
-	{
-	}
-	else if (GetGamepadAxisMovement(0, 3) < -0.25f) //Up
-	{
+		FireTurret();
 	}
 
+	if (GetGamepadAxisMovement(0, 3) > 0.1f) //Down
+	{
+		FireTurret();
+	}
+	else if (GetGamepadAxisMovement(0, 3) < -0.1f) //Up
+	{
+		FireTurret();
+	}
 
+	PointTurret(GetGamepadAxisMovement(0, 2), GetGamepadAxisMovement(0, 3));
+
+	//Right Trigger
 	if (IsGamepadButtonDown(0, 12))
 	{
 	}

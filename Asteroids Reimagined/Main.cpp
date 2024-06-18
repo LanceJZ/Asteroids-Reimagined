@@ -62,7 +62,7 @@ int WinMain()
 	// The Managers needs a reference to The Camera
 	TheManagers.SetCamera(TheCamera);
 
-	game.Initialize(TheUtilities, Logic);
+	game.Initialize();
 	game.Load();
 	game.BeginRun();
 
@@ -72,7 +72,8 @@ int WinMain()
 		game.Update(GetFrameTime());
 		BeginDrawing();
 		ClearBackground({ 8, 2, 16, 100 });
-		game.Draw();
+		game.Draw3D();
+		game.Draw2D();
 #ifdef _DEBUG
 		DrawFPS(5, 5);
 #endif

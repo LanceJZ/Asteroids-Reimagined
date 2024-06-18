@@ -15,16 +15,15 @@ public:
 
 	bool Paused = false;
 
-	bool Initialize(Utilities &utilities, GameLogic* gameLogic);
+	bool Initialize();
 	bool Load();
 	bool BeginRun();
 	void ProcessInput();
 	void Update(float deltaTime);
-	void Draw();
-
-private:
 	void Draw3D();
 	void Draw2D();
+
+private:
 	void GameInput();
 
 	size_t LogicID = 0;

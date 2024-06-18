@@ -68,6 +68,7 @@ public:
 	Vector3 RandomVelocity(float magnitude);
 	Vector3 VelocityFromAngleZ(float magnitude);
 	void RotateTowardsTargetZ(Vector3& target, float magnitude);
+	Vector3 AccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	void SetAccelerationToZero(float decelerationAmount);
 	void SetParent(PositionedObject* parent);

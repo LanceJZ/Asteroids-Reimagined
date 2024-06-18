@@ -106,9 +106,12 @@ void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Co
 		{
 			rlVertex3f(points[i].x, points[i].y, points[i].z);
 			rlVertex3f(
-				points[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].x,
-				points[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].y,
-				points[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].z
+				points[static_cast<std::vector<Vector3,
+				std::allocator<Vector3>>::size_type>(i) + 1].x,
+				points[static_cast<std::vector<Vector3,
+				std::allocator<Vector3>>::size_type>(i) + 1].y,
+				points[static_cast<std::vector<Vector3,
+				std::allocator<Vector3>>::size_type>(i) + 1].z
 			);
 		}
 
