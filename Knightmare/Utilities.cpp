@@ -30,6 +30,7 @@ float Utilities::GetRandomFloat(float min, float max)
 	}
 	else
 	{
+		//raylib Random Number Generator.
 		float rand = 0;
 		float acc = 1000.0f;
 

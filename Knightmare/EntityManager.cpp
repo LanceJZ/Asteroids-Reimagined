@@ -207,6 +207,7 @@ size_t EntityManager::AddLineModel(LineModel* model)
 	size_t number = LineModels.size();
 
 	LineModels.push_back(model);
+	LineModels[number]->Initialize(TheUtilities);
 
 	return number;
 }
@@ -241,6 +242,7 @@ size_t EntityManager::AddLineModel()
 	size_t number = LineModels.size();
 
 	LineModels.push_back(DBG_NEW LineModel());
+	LineModels[number]->Initialize(TheUtilities);
 
 	return number;
 }

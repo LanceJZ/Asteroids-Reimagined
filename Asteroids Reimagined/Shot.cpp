@@ -9,8 +9,9 @@ Shot::~Shot()
 {
 }
 
-bool Shot::Initialize()
+bool Shot::Initialize(Utilities* utilities)
 {
+	LineModel::Initialize(TheUtilities);
 
 	return false;
 }

@@ -17,13 +17,14 @@ public:
 
 	Shot* Shots[8] = { nullptr };
 
-	bool Initialize();
+	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
 	void SetCrosshairModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
 	void SetFlameModel(LineModelPoints model);
+	void SetShieldModel(LineModelPoints model);
 
 	void Input();
 	void Update(float deltaTime);
@@ -45,6 +46,7 @@ private:
 	float TurretDirection = 0.0f;
 
 	LineModel* Flame = {};
+	LineModel* Shield = {};
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
 

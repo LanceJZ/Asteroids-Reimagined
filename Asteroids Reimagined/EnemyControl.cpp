@@ -2,7 +2,11 @@
 
 EnemyControl::EnemyControl()
 {
-
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = DBG_NEW TheUFO();
+		TheManagers.EM.AddLineModel(UFOs[i]);
+	}
 }
 
 EnemyControl::~EnemyControl()
@@ -12,6 +16,12 @@ EnemyControl::~EnemyControl()
 void EnemyControl::SetPlayer(ThePlayer* player)
 {
 	Player = player;
+
+	for (auto &ufo : UFOs)
+	{
+		ufo->SetPlayer(player);
+		ufo->Enabled = false;
+	}
 }
 
 void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
@@ -22,8 +32,27 @@ void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
 	}
 }
 
-bool EnemyControl::Initialize()
+void EnemyControl::SetUFOModel(LineModelPoints model)
 {
+	for (auto &ufo : UFOs)
+	{
+		ufo->SetModel(model);
+	}
+}
+
+void EnemyControl::SetShotModel(LineModelPoints model)
+{
+	for (auto &ufo : UFOs)
+	{
+		ufo->SetShotModel(model);
+	}
+
+	ShotModel = model;
+}
+
+bool EnemyControl::Initialize(Utilities* utilities)
+{
+	Common::Initialize(TheUtilities);
 
 	return false;
 }
@@ -31,6 +60,7 @@ bool EnemyControl::Initialize()
 bool EnemyControl::BeginRun()
 {
 	SpawnRocks({ 0, 0, 0 }, 6, TheRock::Large);
+	SpawnUFO();
 
 	return false;
 }
@@ -71,6 +101,12 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 		Rocks[rockNumber]->Spawn(position, size);
 	}
+}
+
+void EnemyControl::SpawnUFO()
+{
+	UFOs[0]->Spawn(UFOSpawnCount);
+
 }
 
 void EnemyControl::Reset()

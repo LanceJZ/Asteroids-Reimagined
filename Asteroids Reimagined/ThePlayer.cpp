@@ -3,6 +3,7 @@
 ThePlayer::ThePlayer()
 {
 	TheManagers.EM.AddLineModel(Flame = DBG_NEW LineModel());
+	TheManagers.EM.AddLineModel(Shield = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
 	TheManagers.EM.AddTimer(ShotTimerID = TheManagers.EM.AddTimer());
@@ -12,11 +13,7 @@ ThePlayer::ThePlayer()
 	for (int i = 0; i < 8; i++)
 	{
 		Shots[i] = DBG_NEW Shot();
-	}
-
-	for (auto& shot : Shots)
-	{
-		TheManagers.EM.AddLineModel(shot);
+		TheManagers.EM.AddLineModel(Shots[i]);
 	}
 }
 
@@ -24,31 +21,21 @@ ThePlayer::~ThePlayer()
 {
 }
 
-bool ThePlayer::Initialize()
+bool ThePlayer::Initialize(Utilities* utilities)
 {
-	for (auto& shot : Shots)
-	{
-		shot->Initialize();
-	}
-
+	LineModel::Initialize(TheUtilities);
 	//Scale = 35.0f;
 
 	Flame->Enabled = false;
+	Shield->Enabled = false;
 
 	return false;
 }
 
 bool ThePlayer::BeginRun()
 {
-	//LineModel::BeginRun();
-
-	//for (auto& shot : Shots)
-	//{
-	//	shot->BeginRun();
-	//}
-
-	//Flame->X(-9.0f);
 	Flame->SetParent(this);
+	Shield->SetParent(this);
 
 	Turret->X(-9.0f);
 	Turret->SetParent(this);
@@ -72,6 +59,11 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 void ThePlayer::SetFlameModel(LineModelPoints model)
 {
 	Flame->SetModel(model);
+}
+
+void ThePlayer::SetShieldModel(LineModelPoints model)
+{
+	Shield->SetModel(model);
 }
 
 void ThePlayer::SetCrosshairModel(LineModelPoints model)
@@ -242,7 +234,7 @@ void ThePlayer::RotateStop()
 
 void ThePlayer::ThrustOn(float amount)
 {
-	SetAccelerationToMaxAtRotation((amount * 50.25f), 150.0f);
+	SetAccelerationToMaxAtRotation((amount * 50.25f), 350.0f);
 	Flame->Enabled = true;
 }
 
@@ -335,6 +327,15 @@ void ThePlayer::Gamepad()
 	else
 	{
 	}
+
+	if (IsGamepadButtonDown(0, 5) || IsGamepadButtonDown(0, 8)) //X button
+	{
+		Shield->Enabled = true;
+	}
+	else
+	{
+		Shield->Enabled = false;
+	}
 }
 
 void ThePlayer::Keyboard()
@@ -366,11 +367,13 @@ void ThePlayer::Keyboard()
 	{
 	}
 
-	if (IsKeyDown(KEY_DOWN))
+	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E))
 	{
+		Shield->Enabled = true;
 	}
 	else
 	{
+		Shield->Enabled = false;
 	}
 
 	PointTurret(Crosshair->Position);

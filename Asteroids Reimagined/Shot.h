@@ -7,7 +7,7 @@ public:
 	Shot();
 	virtual ~Shot();
 
-	bool Initialize();
+	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
 	void Update(float deltaTime);

@@ -30,9 +30,6 @@ bool Game::Initialize() //Initialize
 
 	//Any Entities added after this point need this method fired manually.
 	TheManagers.Initialize();
-	Player->Initialize();
-	Logic->Initialize();
-	Enemies->Initialize();
 
 	return true;
 }
@@ -42,9 +39,12 @@ bool Game::Load()
 	size_t shotModelID = TheManagers.CM.LoadTheLineModel("Dot");
 	Player->SetModel(TheManagers.CM.LoadAndGetLineModel("PlayerShip"));
 	Player->SetFlameModel(TheManagers.CM.LoadAndGetLineModel("PlayerFlame"));
+	Player->SetShieldModel(TheManagers.CM.LoadAndGetLineModel("PlayerShield"));
 	Player->SetTurretModel(TheManagers.CM.LoadAndGetLineModel("PlayerTurret"));
 	Player->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
 	Player->SetCrosshairModel(TheManagers.CM.LoadAndGetLineModel("Cross"));
+
+	Enemies->SetUFOModel(TheManagers.CM.LoadAndGetLineModel("UFO"));
 
 	LineModelPoints rockModels[4];
 

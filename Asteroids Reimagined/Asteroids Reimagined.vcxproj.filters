@@ -42,6 +42,9 @@
     <ClCompile Include="TheRock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TheUFO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TheRock.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheUFO.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

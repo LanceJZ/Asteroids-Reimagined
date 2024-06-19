@@ -19,7 +19,7 @@ void GameLogic::SetEnemies(EnemyControl* enemies)
 	Enemies = enemies;
 }
 
-bool GameLogic::Initialize()
+bool GameLogic::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
