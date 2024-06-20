@@ -84,12 +84,14 @@ void LineModel::SetModel(std::vector<Vector3> lines)
 {
 	LinePoints = lines;
 	Lines.linePoints = lines;
+	CalculateRadius();
 }
 
 void LineModel::SetModel(LineModelPoints lines)
 {
 	Lines = lines;
 	LinePoints = lines.linePoints;
+	CalculateRadius();
 }
 
 void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color)
@@ -136,4 +138,21 @@ void LineModel::DrawLines(Color color)
 	}
 
 	rlEnd();
+}
+
+void LineModel::CalculateRadius()
+{
+	float farDistance = 0.0f;
+
+	for (int i = 0; i < LinePoints.size() - 2; i++)
+	{
+		float distance = Vector3Distance(LinePoints[i], LinePoints[i + 1]);
+
+		if (distance > farDistance)
+		{
+			farDistance = distance;
+		}
+	}
+
+	Radius = farDistance * 0.5f;
 }

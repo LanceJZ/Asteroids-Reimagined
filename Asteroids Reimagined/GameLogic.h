@@ -35,9 +35,12 @@ public:
 private:
 	Vector2 AdjustedFieldSize = {};
 
+	Entity* PlayerClear;
+
 	ThePlayer* Player = {};
 	EnemyControl* Enemies = {};
 
 	void NewGame();
+	bool CheckPlayerClear();
 };
 

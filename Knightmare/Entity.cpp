@@ -37,11 +37,13 @@ void Entity::Spawn(Vector3 position)
 
 void Entity::Hit()
 {
+	BeenHit = true;
 }
 
 void Entity::Destroy()
 {
 	Enabled = false;
+	BeenHit = false;
 }
 
 /// <summary>

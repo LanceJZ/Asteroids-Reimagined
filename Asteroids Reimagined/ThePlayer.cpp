@@ -59,6 +59,7 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 void ThePlayer::SetFlameModel(LineModelPoints model)
 {
 	Flame->SetModel(model);
+	Flame->Radius = 0.0f;
 }
 
 void ThePlayer::SetShieldModel(LineModelPoints model)
@@ -69,6 +70,7 @@ void ThePlayer::SetShieldModel(LineModelPoints model)
 void ThePlayer::SetCrosshairModel(LineModelPoints model)
 {
 	Crosshair->SetModel(model);
+	Crosshair->Radius = 0.0f;
 }
 
 void ThePlayer::Input()
@@ -81,10 +83,14 @@ void ThePlayer::Input()
 		Gamepad();
 		Crosshair->Enabled = false;
 	}
-	else
+	else if (Enabled)
 	{
 		Crosshair->Enabled = true;
 		Keyboard();
+	}
+	else
+	{
+		Crosshair->Enabled = false;
 	}
 }
 
@@ -109,6 +115,7 @@ void ThePlayer::Hit()
 	Velocity = { 0 };
 	Lives--;
 	Enabled = false;
+	Turret->Enabled = false;
 }
 
 void ThePlayer::ScoreUpdate(int addToScore)
@@ -134,6 +141,7 @@ void ThePlayer::Reset()
 	Velocity = { 0, 0, 0 };
 	Enabled = true;
 	Flame->Enabled = false;
+	Turret->Enabled = true;
 }
 
 void ThePlayer::NewGame()
@@ -173,7 +181,7 @@ void ThePlayer::FireTurret()
 			if (!shot->Enabled)
 			{
 				TheManagers.EM.ResetTimer(ShotTimerID);
-				TurretHeat += 10;
+				TurretHeat += 1;
 
 				if (TurretHeat > TurretHeatMax)
 				{

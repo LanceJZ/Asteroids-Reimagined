@@ -24,9 +24,13 @@ public:
 	void Update();
 
 private:
+	bool NoMoreRocks = false;
+
 	size_t UFOSpawnTimerID;
 
 	int UFOSpawnCount = 0;
+	int StarRockCount = 4;
+	int RockCount = 0;
 
 	LineModelPoints ShotModel;
 	LineModelPoints RockModels[4];
@@ -35,6 +39,7 @@ private:
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();
+	bool CheckRockCollisions();
 
 	void Reset();
 };

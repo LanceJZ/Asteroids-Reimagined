@@ -16,6 +16,11 @@ TheUFO::~TheUFO()
 {
 }
 
+void TheUFO::SetRocks(std::vector<TheRock*> &rocks)
+{
+	Rocks = &rocks;
+}
+
 bool TheUFO::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(TheUtilities);
@@ -68,6 +73,7 @@ void TheUFO::Update(float deltaTime)
 	}
 
 	CheckScreenEdgeY();
+	CheckCollisions();
 }
 
 void TheUFO::Draw3D()
@@ -85,7 +91,7 @@ void TheUFO::Spawn(int spawnCount)
 	TheManagers.EM.ResetTimer(ChangeVectorTimerID);
 
 	float fullScale = 1.0f;
-	float fullRadius = 17.5f;
+	float fullRadius = 18.5f;
 	float fullSpeed = 128.666f;
 	float spawnPercent = (powf(0.915f, (float)spawnCount / (float)(Wave + 1)) * 100);
 
@@ -207,7 +213,37 @@ float TheUFO::AimedShotAtDeathStar()
 
 float TheUFO::AimedShotAtRock()
 {
-	return 0.0f;
+	bool noRocks = true;
+	Vector3 closestRockPosition = { 0, 0, 0 };
+	Vector3 closestRockVelocity = { 0, 0, 0 };
+	float shortestDistance = 0.0f;
+
+	for (auto &rock : *Rocks)
+	{
+		if (rock->Enabled)
+		{
+			noRocks = false;
+			float distance = Vector3Distance(rock->Position, Position);
+
+			if (distance < shortestDistance)
+			{
+				shortestDistance = distance;
+				closestRockPosition = rock->Position;
+				closestRockVelocity = rock->Velocity;
+			}
+		}
+	}
+
+	if (noRocks)
+	{
+		return GetRandomRadian();
+	}
+
+	Vector3 dist = GetVelocityFromAngleZ(AngleFromVectorZ(closestRockVelocity),
+		shortestDistance);
+
+	return AngleFromVectorZ(Vector3Add(closestRockPosition,
+		Vector3Add(closestRockVelocity, dist)));
 }
 
 void TheUFO::ChangeVector()
@@ -247,6 +283,52 @@ bool TheUFO::CheckReachedSide()
 	if (X() > WindowWidth)
 	{
 		return true;
+	}
+
+	return false;
+}
+
+bool TheUFO::CheckCollisions()
+{
+	if (Player->Enabled)
+	{
+		if (CirclesIntersect(*Player))
+		{
+			Destroy();
+			Player->Hit();
+
+			return true;
+		}
+
+		for (auto shot : Shots)
+		{
+			if (shot->Enabled && Player->CirclesIntersect(*shot))
+			{
+				Destroy();
+				Player->Hit();
+
+				return true;
+			}
+		}
+	}
+
+	for (auto& shot : Player->Shots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Destroy();
+			return true;
+		}
+	}
+
+	for (auto& rock : *Rocks)
+	{
+		if (rock->Enabled && CirclesIntersect(*rock))
+		{
+			rock->Hit();
+			Destroy();
+		}
 	}
 
 	return false;

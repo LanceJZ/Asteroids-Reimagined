@@ -33,4 +33,5 @@ private:
 
 	ThePlayer *Player = nullptr;
 
+	bool CheckCollisions();
 };

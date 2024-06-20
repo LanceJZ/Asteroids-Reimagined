@@ -20,8 +20,10 @@ public:
 	void SetModel(LineModelPoints lines);
 
 private:
-	void DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color);
-	void DrawLines(Color color);
 	std::vector<Vector3> LinePoints;
 	LineModelPoints Lines;
+
+	void DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color);
+	void DrawLines(Color color);
+	void CalculateRadius();
 };

@@ -2,7 +2,7 @@
 
 GameLogic::GameLogic()
 {
-
+	TheManagers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
 }
 
 GameLogic::~GameLogic()
@@ -25,6 +25,8 @@ bool GameLogic::Initialize(Utilities* utilities)
 
 	AdjustedFieldSize = Vector2Multiply(FieldSize, { 0.5f, 0.5f });
 
+	PlayerClear->Radius = 60.0f;
+
 	return false;
 }
 
@@ -39,6 +41,19 @@ void GameLogic::Update()
 {
 	Common::Update();
 
+	if (!Player->Enabled)
+	{
+		PlayerClear->Enabled = true;
+
+		if (CheckPlayerClear())
+		{
+			Player->Reset();
+		}
+	}
+	else
+	{
+		PlayerClear->Enabled = false;
+	}
 }
 
 void GameLogic::GameInput()
@@ -98,4 +113,25 @@ void GameLogic::GameInput()
 
 void GameLogic::NewGame()
 {
+}
+
+bool GameLogic::CheckPlayerClear()
+{
+	for (auto& rock : Enemies->Rocks)
+	{
+		if (rock->Enabled && rock->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
+	}
+
+	for (auto& ufo : Enemies->UFOs)
+	{
+		if (ufo->Enabled)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

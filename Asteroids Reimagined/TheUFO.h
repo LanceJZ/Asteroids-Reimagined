@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ThePlayer.h"
 #include "Shot.h"
+#include "TheRock.h"
 
 class TheUFO : public LineModel
 {
@@ -22,6 +23,8 @@ public:
 	TheUFO();
 	virtual ~TheUFO();
 
+	void SetRocks(std::vector<TheRock*> &rocks);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -41,6 +44,7 @@ private:
 	LineModelPoints ShotModel;
 
 	ThePlayer* Player = {};
+	std::vector<TheRock*> *Rocks;
 
 	void FireShot();
 	float AimedShot();
@@ -48,4 +52,5 @@ private:
 	float AimedShotAtRock();
 	void ChangeVector();
 	bool CheckReachedSide();
+	bool CheckCollisions();
 };

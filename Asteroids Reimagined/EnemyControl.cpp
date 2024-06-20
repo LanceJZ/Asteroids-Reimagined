@@ -62,13 +62,19 @@ bool EnemyControl::Initialize(Utilities* utilities)
 
 bool EnemyControl::BeginRun()
 {
-	SpawnRocks({ 0, 0, 0 }, 6, TheRock::Large);
 	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
 
 	for (auto &ufo : UFOs)
 	{
 		ufo->Enabled = false;
 	}
+
+	for (auto& ufo : UFOs)
+	{
+		ufo->SetRocks(Rocks);
+	}
+
+	Reset();
 
 	return false;
 }
@@ -78,6 +84,13 @@ void EnemyControl::Update()
 	Common::Update();
 
 	if (TheManagers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
+
+	if (NoMoreRocks)
+	{
+		SpawnRocks({ 0, 0, 0 }, RockCount++, TheRock::Large);
+	}
+
+	CheckRockCollisions();
 
 }
 
@@ -129,7 +142,59 @@ void EnemyControl::SpawnUFO()
 	}
 }
 
+bool EnemyControl::CheckRockCollisions()
+{
+	NoMoreRocks = true;
+
+	for (auto& rock : Rocks)
+	{
+		if (rock->Enabled)
+		{
+			NoMoreRocks = false;
+
+			for (auto& ufo : UFOs)
+			{
+				for (auto& shot : ufo->Shots)
+				{
+					if (shot->Enabled && shot->CirclesIntersect(*rock))
+					{
+						shot->Destroy();
+						rock->Hit();
+					}
+				}
+			}
+
+
+			if (rock->BeenHit)
+			{
+				rock->Destroy();
+
+				if (rock->Size == TheRock::Large)
+				{
+					SpawnRocks(rock->Position, 2, TheRock::MediumLarge);
+					return true;
+				}
+
+				if (rock->Size == TheRock::MediumLarge)
+				{
+					SpawnRocks(rock->Position, 3, TheRock::Medium);
+					return true;
+				}
+
+				if (rock->Size == TheRock::Medium)
+				{
+					SpawnRocks(rock->Position, 4, TheRock::Small);
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
 void EnemyControl::Reset()
 {
 	UFOSpawnCount = 0;
+	RockCount = StarRockCount;
 }

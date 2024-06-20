@@ -32,6 +32,7 @@ void TheRock::Update(float deltaTime)
 	LineModel::Update(deltaTime);
 
 	CheckScreenEdge();
+	CheckCollisions();
 }
 
 void TheRock::Draw3D()
@@ -61,15 +62,23 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 		Scale = scale / change;
 		Radius = radius / change;
 		maxVS = 3;
-		magnitude = GetRandomFloat(40.1f, 60.1f);
+		magnitude = GetRandomFloat(42.3f, 64.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Medium:
+		change = 2.75f;
+		Scale =  scale / change;
+		Radius = radius / change;
+		maxVS = 2;
+		magnitude = GetRandomFloat(33.2f, 53.1f);
+		Velocity = GetVelocityFromAngleZ(angle, magnitude);
+		break;
+	case MediumLarge:
 		change = 1.85f;
 		Scale =  scale / change;
 		Radius = radius / change;
 		maxVS = 2;
-		magnitude = GetRandomFloat(30.1f, 50.1f);
+		magnitude = GetRandomFloat(26.1f, 46.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Large:
@@ -78,7 +87,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 		Radius = radius;
 		maxVS = 1;
 
-		magnitude = GetRandomFloat(20.1f, 40.1f);
+		magnitude = GetRandomFloat(20.35f, 40.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 
 		if (Velocity.x > 0)
@@ -111,4 +120,27 @@ void TheRock::Destroy()
 {
 	Entity::Destroy();
 
+}
+
+bool TheRock::CheckCollisions()
+{
+	if (Player->Enabled && CirclesIntersect(*Player))
+	{
+		Destroy();
+		Player->Hit();
+
+		return true;
+	}
+
+	for (auto& shot : Player->Shots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			return true;
+		}
+	}
+
+	return false;
 }
