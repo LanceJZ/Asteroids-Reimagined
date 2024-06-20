@@ -2,6 +2,8 @@
 
 EnemyControl::EnemyControl()
 {
+	UFOSpawnTimerID = TheManagers.EM.AddTimer();
+
 	for (int i = 0; i < 2; i++)
 	{
 		UFOs[i] = DBG_NEW TheUFO();
@@ -20,7 +22,6 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	for (auto &ufo : UFOs)
 	{
 		ufo->SetPlayer(player);
-		ufo->Enabled = false;
 	}
 }
 
@@ -54,13 +55,20 @@ bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
+	TheManagers.EM.SetTimer(UFOSpawnTimerID, 5.0f);
+
 	return false;
 }
 
 bool EnemyControl::BeginRun()
 {
 	SpawnRocks({ 0, 0, 0 }, 6, TheRock::Large);
-	SpawnUFO();
+	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
+
+	for (auto &ufo : UFOs)
+	{
+		ufo->Enabled = false;
+	}
 
 	return false;
 }
@@ -68,6 +76,8 @@ bool EnemyControl::BeginRun()
 void EnemyControl::Update()
 {
 	Common::Update();
+
+	if (TheManagers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
 
 }
 
@@ -105,10 +115,21 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 void EnemyControl::SpawnUFO()
 {
-	UFOs[0]->Spawn(UFOSpawnCount);
+	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
 
+	if (!Player->GameOver && !Player->Enabled) return;
+
+	for (auto &ufo : UFOs)
+	{
+		if (!ufo->Enabled)
+		{
+			ufo->Spawn(UFOSpawnCount++);
+			break;
+		}
+	}
 }
 
 void EnemyControl::Reset()
 {
+	UFOSpawnCount = 0;
 }

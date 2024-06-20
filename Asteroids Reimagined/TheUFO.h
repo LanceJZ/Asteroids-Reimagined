@@ -15,6 +15,7 @@ public:
 	Size TheSize = Large;
 
 	bool DeathStarActive = false;
+	int Wave = 0;
 
 	Shot* Shots[2] = { nullptr };
 

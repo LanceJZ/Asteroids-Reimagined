@@ -45,6 +45,7 @@ bool Game::Load()
 	Player->SetCrosshairModel(TheManagers.CM.LoadAndGetLineModel("Cross"));
 
 	Enemies->SetUFOModel(TheManagers.CM.LoadAndGetLineModel("UFO"));
+	Enemies->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
 
 	LineModelPoints rockModels[4];
 

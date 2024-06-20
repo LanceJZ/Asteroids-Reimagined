@@ -24,7 +24,9 @@ public:
 	void Update();
 
 private:
-	int UFOSpawnCount;
+	size_t UFOSpawnTimerID;
+
+	int UFOSpawnCount = 0;
 
 	LineModelPoints ShotModel;
 	LineModelPoints RockModels[4];

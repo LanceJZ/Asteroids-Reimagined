@@ -29,8 +29,8 @@ bool TheUFO::BeginRun()
 {
 	LineModel::BeginRun();
 
-	TheManagers.EM.SetTimer(FireTimerID, 5.0f);
-	TheManagers.EM.SetTimer(ChangeVectorTimerID, 7.0f);
+	TheManagers.EM.SetTimer(FireTimerID, 1.25f);
+	TheManagers.EM.SetTimer(ChangeVectorTimerID, 5.50f);
 
 	return false;
 }
@@ -66,6 +66,8 @@ void TheUFO::Update(float deltaTime)
 	{
 		ChangeVector();
 	}
+
+	CheckScreenEdgeY();
 }
 
 void TheUFO::Draw3D()
@@ -75,14 +77,45 @@ void TheUFO::Draw3D()
 
 void TheUFO::Spawn(int spawnCount)
 {
-	Vector3 position = { 600, 0, 0 };
+	Vector3 position = { 0, 0, 0 };
 
-	Entity::Spawn(position);
+	position.y = GetRandomValue(-WindowHeight, WindowHeight);
 
 	TheManagers.EM.ResetTimer(FireTimerID);
 	TheManagers.EM.ResetTimer(ChangeVectorTimerID);
 
-	Velocity.x = -100;
+	float fullScale = 1.0f;
+	float fullRadius = 17.5f;
+	float fullSpeed = 128.666f;
+	float spawnPercent = (powf(0.915f, (float)spawnCount / (float)(Wave + 1)) * 100);
+
+	if (GetRandomFloat(0, 99) < spawnPercent - Player->Score / 500)
+	{
+		TheSize = Large;
+		Scale = fullScale;
+		MaxSpeed = fullSpeed / 1.333f;
+		Radius = fullRadius;
+	}
+	else
+	{
+		TheSize = Small;
+		Scale = fullScale / 2;
+		MaxSpeed = fullSpeed;
+		Radius = fullRadius / 2;
+	}
+
+	if (GetRandomValue(1, 10) < 5)
+	{
+		position.x = WindowWidth;
+		Velocity.x = -MaxSpeed;
+	}
+	else
+	{
+		position.x = -WindowWidth;
+		Velocity.x = MaxSpeed;
+	}
+
+	Entity::Spawn(position);
 }
 
 void TheUFO::Destroy()
@@ -96,6 +129,7 @@ void TheUFO::FireShot()
 	float angle = 0;
 	float shotSpeed = 325;
 	bool shootRocks = false;
+	TheManagers.EM.ResetTimer(FireTimerID);
 
 	if (DeathStarActive)
 	{
@@ -106,6 +140,7 @@ void TheUFO::FireShot()
 		if (GetRandomValue(1, 10) < 5 || !Player->Enabled)
 		{
 			angle = AimedShotAtRock();
+			angle = AimedShot();
 		}
 		else
 		{
@@ -115,7 +150,7 @@ void TheUFO::FireShot()
 
 	if (TheUFO::Large)
 	{
-		if (GetRandomValue(1, 10) < 2)
+		if (GetRandomValue(1, 10) < 3)
 		{
 			angle = GetRandomRadian();
 		}
@@ -140,7 +175,29 @@ void TheUFO::FireShot()
 
 float TheUFO::AimedShot()
 {
-	return 0.0f;
+	if (!Player->Enabled)
+	{
+		return GetRandomRadian();
+	}
+
+	float percentChance = 0.2f - (Player->Score * 0.00001f);
+
+	if (percentChance < 0)
+	{
+		percentChance = 0;
+	}
+
+	float minP = 0.015f - (0.01f * 0.0025f);
+
+	if (minP < 0)
+		minP = 0;
+
+	float maxP = 0.02f + minP;
+
+	percentChance += GetRandomFloat(minP, maxP);
+
+	return AngleFromVectorZ(Player->Position) +
+		GetRandomFloat(-percentChance, percentChance);
 }
 
 float TheUFO::AimedShotAtDeathStar()
