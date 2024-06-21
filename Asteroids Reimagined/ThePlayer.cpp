@@ -10,9 +10,9 @@ ThePlayer::ThePlayer()
 	TheManagers.EM.AddTimer(TurretCooldownTimerID = TheManagers.EM.AddTimer());
 	TheManagers.EM.AddTimer(TurretHeatTimerID = TheManagers.EM.AddTimer());
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < MagazineSize; i++)
 	{
-		Shots[i] = DBG_NEW Shot();
+		Shots.push_back(DBG_NEW Shot());
 		TheManagers.EM.AddLineModel(Shots[i]);
 	}
 }
@@ -116,6 +116,7 @@ void ThePlayer::Hit()
 	Lives--;
 	Enabled = false;
 	Turret->Enabled = false;
+	Flame->Enabled = false;
 }
 
 void ThePlayer::ScoreUpdate(int addToScore)
@@ -181,7 +182,7 @@ void ThePlayer::FireTurret()
 			if (!shot->Enabled)
 			{
 				TheManagers.EM.ResetTimer(ShotTimerID);
-				TurretHeat += 1;
+				TurretHeat += 5;
 
 				if (TurretHeat > TurretHeatMax)
 				{
@@ -214,7 +215,7 @@ void ThePlayer::TurretTimers()
 		{
 			TheManagers.EM.ResetTimer(TurretHeatTimerID);
 
-			if (TurretHeat > 0)	TurretHeat -= 1;
+			if (TurretHeat > 0)	TurretHeat -= 2;
 		}
 	}
 }

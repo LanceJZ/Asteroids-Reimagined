@@ -40,6 +40,7 @@ private:
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();
 	bool CheckRockCollisions();
+	bool CheckUFOCollisions(TheRock* rock);
 
 	void Reset();
 };

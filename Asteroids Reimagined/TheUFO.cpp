@@ -299,17 +299,6 @@ bool TheUFO::CheckCollisions()
 
 			return true;
 		}
-
-		for (auto shot : Shots)
-		{
-			if (shot->Enabled && Player->CirclesIntersect(*shot))
-			{
-				Destroy();
-				Player->Hit();
-
-				return true;
-			}
-		}
 	}
 
 	for (auto& shot : Player->Shots)
@@ -319,15 +308,6 @@ bool TheUFO::CheckCollisions()
 			shot->Destroy();
 			Destroy();
 			return true;
-		}
-	}
-
-	for (auto& rock : *Rocks)
-	{
-		if (rock->Enabled && CirclesIntersect(*rock))
-		{
-			rock->Hit();
-			Destroy();
 		}
 	}
 

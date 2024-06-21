@@ -15,7 +15,7 @@ public:
 	int HighScore { 0 };
 	int Lives { 0 };
 
-	Shot* Shots[8] = { nullptr };
+	std::vector<Shot*> Shots = {};
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -37,6 +37,7 @@ public:
 
 private:
 	bool TurretOverHeat = false;
+	size_t MagazineSize = 16;
 	size_t ShotTimerID = 0;
 	size_t TurretCooldownTimerID = 0;
 	size_t TurretHeatTimerID = 0;

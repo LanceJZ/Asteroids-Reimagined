@@ -55,20 +55,13 @@ bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
-	TheManagers.EM.SetTimer(UFOSpawnTimerID, 5.0f);
+	TheManagers.EM.SetTimer(UFOSpawnTimerID, 10.0f);
 
 	return false;
 }
 
 bool EnemyControl::BeginRun()
 {
-	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
-
-	for (auto &ufo : UFOs)
-	{
-		ufo->Enabled = false;
-	}
-
 	for (auto& ufo : UFOs)
 	{
 		ufo->SetRocks(Rocks);
@@ -152,18 +145,7 @@ bool EnemyControl::CheckRockCollisions()
 		{
 			NoMoreRocks = false;
 
-			for (auto& ufo : UFOs)
-			{
-				for (auto& shot : ufo->Shots)
-				{
-					if (shot->Enabled && shot->CirclesIntersect(*rock))
-					{
-						shot->Destroy();
-						rock->Hit();
-					}
-				}
-			}
-
+			CheckUFOCollisions(rock);
 
 			if (rock->BeenHit)
 			{
@@ -193,8 +175,47 @@ bool EnemyControl::CheckRockCollisions()
 	return false;
 }
 
+bool EnemyControl::CheckUFOCollisions(TheRock* rock)
+{
+	for (auto& ufo : UFOs)
+	{
+		for (auto& shot : ufo->Shots)
+		{
+			if (shot->Enabled && shot->CirclesIntersect(*rock))
+			{
+				shot->Destroy();
+				rock->Hit();
+				return true;
+			}
+
+			if (shot->Enabled && shot->CirclesIntersect(*Player))
+			{
+				shot->Destroy();
+				Player->Hit();
+				return true;
+			}
+		}
+
+		if (ufo->Enabled && ufo->CirclesIntersect(*rock))
+		{
+			ufo->Hit();
+			ufo->Destroy();
+			rock->Hit();
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void EnemyControl::Reset()
 {
 	UFOSpawnCount = 0;
 	RockCount = StarRockCount;
+	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
+
+	for (auto &ufo : UFOs)
+	{
+		ufo->Enabled = false;
+	}
 }
