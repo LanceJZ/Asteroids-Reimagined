@@ -6,12 +6,12 @@
 
 #define MAX(a, b) ((a)>(b)? (a) : (b))
 #define MIN(a, b) ((a)<(b)? (a) : (b))
-#define TWOPI = 6.283185307179586476925286766559f;
 
 class Common
 {
 public:
 	const float TwoPi = 6.283185307179586476925286766559f;
+	const float HalfPi = 1.5707963267948966192313216916398f;
 	float GameWindowHalfWidth = { 0 };
 	float GameWindowHalfHeight = { 0 };
 

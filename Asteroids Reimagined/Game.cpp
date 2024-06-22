@@ -46,6 +46,7 @@ bool Game::Load()
 
 	Enemies->SetUFOModel(TheManagers.CM.LoadAndGetLineModel("UFO"));
 	Enemies->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
+	Enemies->SetWedgeModel(TheManagers.CM.LoadAndGetLineModel("Wedge"));
 
 	LineModelPoints rockModels[4];
 

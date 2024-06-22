@@ -15,17 +15,13 @@ void Entity::Update(float deltaTime)
 
 	if (!EntityOnly) return;
 
-	BeforeCalculate();
-	CalculateWorldVectors();
-	CalculateWorldSpace();
-	AfterCalculate();
 }
 
 void Entity::Draw3D()
 {
 #ifdef _DEBUG
-	if(Enabled)
-		DrawCircle3D(WorldPosition, Radius, { 0 }, 0, { 150, 50, 200, 200 });
+	if(Enabled && !IsChild)
+		DrawCircle3D(Position, Radius, { 0 }, 0, { 150, 50, 200, 200 });
 #endif
 }
 
@@ -57,8 +53,8 @@ bool Entity::CirclesIntersect(Entity& target)
 	if (!Enabled || !target.Enabled)
 		return false;
 
-	Vector2 distance = { target.WorldPosition.x - WorldPosition.x,
-		target.WorldPosition.y - WorldPosition.y };
+	Vector2 distance = { target.Position.x - Position.x,
+		target.Position.y - Position.y };
 
 	float radius = Radius + target.Radius;
 
@@ -73,7 +69,7 @@ bool Entity::CirclesIntersectBullet(Entity& target)
 	if (!Enabled || !target.Enabled)
 		return false;
 
-	TheRay.position = WorldPosition;
+	TheRay.position = Position;
 
 	if (Velocity.x > 0)
 	{
@@ -93,12 +89,12 @@ bool Entity::CirclesIntersectBullet(Entity& target)
 		TheRay.direction.y = -1;
 	}
 
-	TheRayCollision = GetRayCollisionSphere(TheRay,	target.WorldPosition, target.Radius);
+	TheRayCollision = GetRayCollisionSphere(TheRay,	target.Position, target.Radius);
 
 	if (TheRayCollision.hit)
 	{
-		float distance = (WorldPosition.x - LastFrameWorldPosition.x) +
-			(WorldPosition.y - LastFrameWorldPosition.y);
+		float distance = (Position.x - LastFramePosition.x) +
+			(Position.y - LastFramePosition.y);
 
 		if (distance < 0) distance *= -1;
 

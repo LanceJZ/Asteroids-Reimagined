@@ -43,7 +43,7 @@ public:
 	Vector3 WorldRotation = Vector3Zero();
 	Quaternion RotationQ = {};
 	Matrix WorldMatrix = MatrixIdentity();
-	std::vector<PositionedObject*> Parents;
+	std::vector<PositionedObject*> *Parents;
 
 	virtual bool Initialize(Utilities* utilities);
 	virtual void Update(float deltaTime);
@@ -71,7 +71,7 @@ public:
 	Vector3 AccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	void SetAccelerationToZero(float decelerationAmount);
-	void SetParent(PositionedObject* parent);
+	void SetParent(PositionedObject& parent);
 	void RemoveFromParents();
 	void DisconnectChild(PositionedObject* child);
 	void ConnectChild(PositionedObject* child);

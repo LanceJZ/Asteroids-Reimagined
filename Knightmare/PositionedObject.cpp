@@ -3,11 +3,12 @@
 
 PositionedObject::PositionedObject()
 {
+	Parents = new std::vector<PositionedObject*>;
 }
 
 PositionedObject::~PositionedObject()
 {
-	Parents.clear();
+	Parents->clear();
 }
 
 bool PositionedObject::Initialize(Utilities* utilities)
@@ -147,18 +148,18 @@ void PositionedObject::Z(float z)
 	Position.z = z;
 }
 
-void PositionedObject::SetParent(PositionedObject* parent)
+void PositionedObject::SetParent(PositionedObject& parent)
 {
 	if (IsChild) return;
 
-	for (auto myParent : parent->Parents)
+	for (auto &myParent : *parent.Parents)
 	{
-		Parents.push_back(myParent);
+		Parents->push_back(myParent);
 	}
 
-	Parents.push_back(parent);
+	Parents->push_back(&parent);
 
-	parent->IsParent = true;
+	parent.IsParent = true;
 	IsChild = true;
 }
 
@@ -470,7 +471,7 @@ void PositionedObject::CalculateWorldVectors()
 {
 	if (IsChild)
 	{
-		for (auto parent : Parents)
+		for (auto &parent : *Parents)
 		{
 			rlTranslatef(parent->Position.x, parent->Position.y,
 				parent->Position.z);

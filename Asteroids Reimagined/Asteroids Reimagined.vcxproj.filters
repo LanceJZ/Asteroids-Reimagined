@@ -45,6 +45,15 @@
     <ClCompile Include="TheUFO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TheDeathStar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TheFighterPair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TheFighter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -75,6 +84,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="TheUFO.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheDeathStar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheFighterPair.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheFighter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

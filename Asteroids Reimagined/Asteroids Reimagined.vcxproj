@@ -162,6 +162,18 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheDeathStar.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TheFighter.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TheFighterPair.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="ThePlayer.cpp">
       <SubType>
       </SubType>
@@ -186,6 +198,18 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="TheBackground.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheDeathStar.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheFighter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheFighterPair.h">
       <SubType>
       </SubType>
     </ClInclude>

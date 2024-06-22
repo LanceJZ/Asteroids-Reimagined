@@ -35,13 +35,22 @@ void LineModel::Draw3D()
 
 	if (IsChild)
 	{
-		for (auto parent : Parents)
+		for (int i = 0; i < Parents->size(); i++)
 		{
-			rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
-			rlRotatef(parent->RotationX, 1, 0, 0);
-			rlRotatef(parent->RotationY, 0, 1, 0);
-			rlRotatef(parent->RotationZ, 0, 0, 1);
+			rlTranslatef(Parents->at(i)->Position.x, Parents->at(i)->Position.y, Position.z);
+			rlRotatef(Parents->at(i)->RotationX, 1, 0, 0);
+			rlRotatef(Parents->at(i)->RotationY, 0, 1, 0);
+			rlRotatef(Parents->at(i)->RotationZ, 0, 0, 1);
 		}
+
+		//for (auto &parent : *Parents)
+		//{
+		//	rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
+		//	rlRotatef(parent->RotationX, 1, 0, 0);
+		//	rlRotatef(parent->RotationY, 0, 1, 0);
+		//	rlRotatef(parent->RotationZ, 0, 0, 1);
+		//}
+
 	}
 
 	rlTranslatef(Position.x, Position.y, Position.z);
@@ -49,6 +58,7 @@ void LineModel::Draw3D()
 	rlRotatef(RotationY, 0, 1, 0);
 	rlRotatef(RotationZ, 0, 0, 1);
 	rlScalef(Scale, Scale, Scale);
+
 	rlBegin(RL_LINES);
 	rlColor4ub(ModelColor.r, ModelColor.g, ModelColor.b, ModelColor.a);
 
@@ -56,9 +66,12 @@ void LineModel::Draw3D()
 	{
 		rlVertex3f(LinePoints[i].x, LinePoints[i].y, LinePoints[i].z);
 		rlVertex3f(
-			LinePoints[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].x,
-			LinePoints[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].y,
-			LinePoints[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].z
+			LinePoints[static_cast<std::vector<Vector3,
+			std::allocator<Vector3>>::size_type>(i) + 1].x,
+			LinePoints[static_cast<std::vector<Vector3,
+			std::allocator<Vector3>>::size_type>(i) + 1].y,
+			LinePoints[static_cast<std::vector<Vector3,
+			std::allocator<Vector3>>::size_type>(i) + 1].z
 		);
 	}
 
@@ -94,6 +107,12 @@ void LineModel::SetModel(LineModelPoints lines)
 	CalculateRadius();
 }
 
+void LineModel::SetModel(LineModelPoints lines, float scale)
+{
+	Scale = scale;
+	SetModel(lines);
+}
+
 void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color)
 {
 	if (points.size() >= 2)
@@ -122,24 +141,6 @@ void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Co
 	}
 }
 
-void LineModel::DrawLines(Color color)
-{
-	rlBegin(RL_LINES);
-	rlColor4ub(color.r, color.g, color.b, color.a);
-
-	for (int i = 0; i < LinePoints.size() - 1; i++)
-	{
-		rlVertex3f(LinePoints[i].x, LinePoints[i].y, LinePoints[i].z);
-		rlVertex3f(
-			LinePoints[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].x,
-			LinePoints[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].y,
-			LinePoints[static_cast<std::vector<Vector3, std::allocator<Vector3>>::size_type>(i) + 1].z
-		);
-	}
-
-	rlEnd();
-}
-
 void LineModel::CalculateRadius()
 {
 	float farDistance = 0.0f;
@@ -154,5 +155,5 @@ void LineModel::CalculateRadius()
 		}
 	}
 
-	Radius = farDistance * 0.5f;
+	Radius = farDistance * 0.5f * Scale;
 }

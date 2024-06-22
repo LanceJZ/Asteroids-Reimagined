@@ -2,12 +2,12 @@
 
 EnemyControl::EnemyControl()
 {
+	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 	UFOSpawnTimerID = TheManagers.EM.AddTimer();
 
 	for (int i = 0; i < 2; i++)
 	{
-		UFOs[i] = DBG_NEW TheUFO();
-		TheManagers.EM.AddLineModel(UFOs[i]);
+		TheManagers.EM.AddLineModel(UFOs[i] = DBG_NEW TheUFO());
 	}
 }
 
@@ -23,6 +23,8 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	{
 		ufo->SetPlayer(player);
 	}
+
+	DeathStar->SetPlayer(player);
 }
 
 void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
@@ -51,23 +53,34 @@ void EnemyControl::SetShotModel(LineModelPoints model)
 	ShotModel = model;
 }
 
+void EnemyControl::SetWedgeModel(LineModelPoints model)
+{
+	DeathStar->SetWedgeModel(model);
+}
+
 bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
 	TheManagers.EM.SetTimer(UFOSpawnTimerID, 10.0f);
+	DeathStar->Initialize(TheUtilities);
 
 	return false;
 }
 
 bool EnemyControl::BeginRun()
 {
+
+	DeathStar->BeginRun();
+
 	for (auto& ufo : UFOs)
 	{
 		ufo->SetRocks(Rocks);
 	}
 
 	Reset();
+
+	DeathStar->Spawn({ -500, -400, 0 });
 
 	return false;
 }

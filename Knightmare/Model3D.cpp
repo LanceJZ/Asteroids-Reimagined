@@ -82,7 +82,7 @@ void Model3D::Draw3D()
 			Vector3 parentTest = Position;
 			float radius = 0;
 
-			for (auto parent : Parents)
+			for (auto parent : *Parents)
 			{
 				parentTest = Vector3Add(parent->Position, parentTest);
 				radius += parent->VerticesSize;
@@ -186,11 +186,4 @@ void Model3D::Spawn(Vector3 pos, Vector3 vel)
 void Model3D::Unload()
 {
 	UnloadModel(TheModel);
-}
-
-void Model3D::AddChildren(Model3D* child)
-{
-	child->Parents.push_back(this);
-	IsParent = true;
-	child->IsChild = true;
 }

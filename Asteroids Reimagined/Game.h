@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include "Globals.h"
-#include "Utilities.h"
 #include "GameLogic.h"
 #include "ThePlayer.h"
 #include "EnemyControl.h"

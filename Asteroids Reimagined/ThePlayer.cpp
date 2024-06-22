@@ -34,11 +34,11 @@ bool ThePlayer::Initialize(Utilities* utilities)
 
 bool ThePlayer::BeginRun()
 {
-	Flame->SetParent(this);
-	Shield->SetParent(this);
+	Flame->SetParent(*this);
+	Shield->SetParent(*this);
 
 	Turret->X(-9.0f);
-	Turret->SetParent(this);
+	Turret->SetParent(*this);
 
 	return false;
 }
@@ -59,7 +59,6 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 void ThePlayer::SetFlameModel(LineModelPoints model)
 {
 	Flame->SetModel(model);
-	Flame->Radius = 0.0f;
 }
 
 void ThePlayer::SetShieldModel(LineModelPoints model)
@@ -215,7 +214,8 @@ void ThePlayer::TurretTimers()
 		{
 			TheManagers.EM.ResetTimer(TurretHeatTimerID);
 
-			if (TurretHeat > 0)	TurretHeat -= 2;
+			if (TurretHeat > 2)	TurretHeat -= 2;
+			if (TurretHeat >= 1) TurretHeat -= 1;
 		}
 	}
 }
