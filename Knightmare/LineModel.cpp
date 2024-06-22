@@ -35,21 +35,21 @@ void LineModel::Draw3D()
 
 	if (IsChild)
 	{
-		for (int i = 0; i < Parents->size(); i++)
-		{
-			rlTranslatef(Parents->at(i)->Position.x, Parents->at(i)->Position.y, Position.z);
-			rlRotatef(Parents->at(i)->RotationX, 1, 0, 0);
-			rlRotatef(Parents->at(i)->RotationY, 0, 1, 0);
-			rlRotatef(Parents->at(i)->RotationZ, 0, 0, 1);
-		}
-
-		//for (auto &parent : *Parents)
+		//for (int i = 0; i < Parents->size(); i++)
 		//{
-		//	rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
-		//	rlRotatef(parent->RotationX, 1, 0, 0);
-		//	rlRotatef(parent->RotationY, 0, 1, 0);
-		//	rlRotatef(parent->RotationZ, 0, 0, 1);
+		//	rlTranslatef(Parents->at(i)->Position.x, Parents->at(i)->Position.y, Position.z);
+		//	rlRotatef(Parents->at(i)->RotationX, 1, 0, 0);
+		//	rlRotatef(Parents->at(i)->RotationY, 0, 1, 0);
+		//	rlRotatef(Parents->at(i)->RotationZ, 0, 0, 1);
 		//}
+
+		for (auto &parent : *Parents)
+		{
+			rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
+			rlRotatef(parent->RotationX, 1, 0, 0);
+			rlRotatef(parent->RotationY, 0, 1, 0);
+			rlRotatef(parent->RotationZ, 0, 0, 1);
+		}
 
 	}
 

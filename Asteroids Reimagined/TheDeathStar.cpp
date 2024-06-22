@@ -37,11 +37,21 @@ void TheDeathStar::SetWedgeModel(LineModelPoints model)
 void TheDeathStar::SetPlayer(ThePlayer* player)
 {
 	Player = player;
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->SetPlayer(player);
+	}
 }
 
 bool TheDeathStar::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->Initialize(TheUtilities);
+	}
 
 	Radius = 28.0f;
 
@@ -110,17 +120,14 @@ void TheDeathStar::Hit()
 
 	for (auto &fighterPair : FighterPairs)
 	{
+		fighterPair->Separate();
+
 		for (auto &fighter : fighterPair->Fighters)
 		{
 			auto it = std::find(fighter->Parents->begin(), fighter->Parents->end(), this);
 			if (it != fighter->Parents->end()) fighter->Parents->erase(it);
 		}
 
-		fighterPair->BeforeCalculate();
-		fighterPair->CalculateWorldVectors();
-		fighterPair->CalculateWorldSpace();
-		fighterPair->Position = fighterPair->WorldPosition;
-		fighterPair->AfterCalculate();
 	}
 
 }

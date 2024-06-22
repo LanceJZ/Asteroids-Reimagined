@@ -2,13 +2,14 @@
 
 EnemyControl::EnemyControl()
 {
-	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 	UFOSpawnTimerID = TheManagers.EM.AddTimer();
 
 	for (int i = 0; i < 2; i++)
 	{
 		TheManagers.EM.AddLineModel(UFOs[i] = DBG_NEW TheUFO());
 	}
+
+	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 }
 
 EnemyControl::~EnemyControl()
@@ -63,6 +64,12 @@ bool EnemyControl::Initialize(Utilities* utilities)
 	Common::Initialize(TheUtilities);
 
 	TheManagers.EM.SetTimer(UFOSpawnTimerID, 10.0f);
+
+	for (auto &ufo : UFOs)
+	{
+		ufo->Initialize(TheUtilities);
+	}
+
 	DeathStar->Initialize(TheUtilities);
 
 	return false;

@@ -110,6 +110,19 @@ Vector3 PositionedObject::AccelerationToMaxAtRotation(float accelerationAmount, 
 	return acceleration;
 }
 
+Vector3 PositionedObject::GetWorldPosition()
+{
+	Vector3 worldPosition = { 0, 0, 0 };
+
+		BeforeCalculate();
+		CalculateWorldVectors();
+		CalculateWorldSpace();
+		worldPosition = WorldPosition;
+		AfterCalculate();
+
+	return worldPosition;
+}
+
 //Sets Acceleration based on acceleration amount this frame,
 //up to a max amount based on top speed.
 void PositionedObject::SetAccelerationToMaxAtRotation(float accelerationAmount,
