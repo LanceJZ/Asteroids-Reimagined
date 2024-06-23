@@ -2,8 +2,8 @@
 
 TheUFO::TheUFO()
 {
-	FireTimerID = TheManagers.EM.AddTimer();
-	ChangeVectorTimerID = TheManagers.EM.AddTimer();
+	FireTimerID = TheManagers.EM.AddTimer(1.25f);
+	ChangeVectorTimerID = TheManagers.EM.AddTimer(5.50f);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -33,9 +33,6 @@ bool TheUFO::Initialize(Utilities* utilities)
 bool TheUFO::BeginRun()
 {
 	LineModel::BeginRun();
-
-	TheManagers.EM.SetTimer(FireTimerID, 1.25f);
-	TheManagers.EM.SetTimer(ChangeVectorTimerID, 5.50f);
 
 	return false;
 }
