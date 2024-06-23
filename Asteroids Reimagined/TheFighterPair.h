@@ -10,6 +10,8 @@ public:
 	TheFighterPair();
 	virtual ~TheFighterPair();
 
+	bool NewWave = false;
+
 	TheFighter* Fighters[2] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
@@ -23,6 +25,8 @@ public:
 	void Draw3D();
 
 	void Separate();
+	void Destroy();
+	void Reset();
 
 	void Spawn(Vector3 position);
 
@@ -42,6 +46,5 @@ private:
 	void LeaveScreen();
 	void CheckCollisions();
 	void Hit();
-	void Destroy();
 };
 

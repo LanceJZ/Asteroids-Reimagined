@@ -10,6 +10,8 @@ public:
 	TheDeathStar();
 	virtual ~TheDeathStar();
 
+	bool NewWave = false;
+
 	TheFighterPair* FighterPairs[3] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
@@ -22,6 +24,8 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
+	void NewWaveStart();
+	void Reset();
 	void Spawn(Vector3 position);
 
 private:

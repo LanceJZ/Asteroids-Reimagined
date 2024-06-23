@@ -9,6 +9,8 @@ public:
 	TheFighter();
 	virtual ~TheFighter();
 
+	bool NewWave = false;
+
 	void SetPlayer(ThePlayer* player);
 	void SetUFO(TheUFO* ufo[2]);
 
@@ -19,6 +21,8 @@ public:
 	void Draw3D();
 
 	void Separate();
+	void Reset();
+	void Destroy();
 
 	void Spawn(Vector3 position);
 
@@ -37,5 +41,4 @@ private:
 	void LeaveScreen();
 	void CheckCollisions();
 	void Hit();
-	void Destroy();
 };

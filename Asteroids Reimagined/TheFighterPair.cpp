@@ -52,6 +52,8 @@ bool TheFighterPair::Initialize(Utilities* utilities)
 		fighterPair->Initialize(TheUtilities);
 	}
 
+	Enabled = false;
+
 	return true;
 }
 
@@ -77,7 +79,16 @@ void TheFighterPair::Update(float deltaTime)
 		}
 
 		CheckCollisions();
-		CheckScreenEdge();
+
+		if (NewWave)
+		{
+			LeaveScreen();
+		}
+		else
+		{
+
+			CheckScreenEdge();
+		}
 	}
 }
 
@@ -95,13 +106,22 @@ void TheFighterPair::Separate()
 	IsChild = false;
 }
 
+void TheFighterPair::Reset()
+{
+	Velocity = { 0.0f, 0.0f, 0.0f };
+	RotationVelocityZ = 0.0f;
+	Destroy();
+}
+
 void TheFighterPair::Spawn(Vector3 position)
 {
 	Enabled = true;
 	Separated = false;
+	NewWave = false;
 
 	for (auto &fighter : Fighters)
 	{
+		fighter->Reset();
 		fighter->SetParent(*this);
 		fighter->Spawn(position);
 	}
@@ -126,15 +146,15 @@ void TheFighterPair::Hit()
 		fighter->RemoveParent(this);
 	}
 
-	Velocity = { 0.0f, 0.0f, 0.0f };
-	Position = { 0.0f, 0.0f, 0.0f };
-	RotationVelocityZ = 0.0f;
-	ClearParents();
+	Reset();
+	Destroy();
 }
 
 void TheFighterPair::Destroy()
 {
 	Entity::Destroy();
+
+	ClearParents();
 }
 
 void TheFighterPair::ChasePlayer()
@@ -170,6 +190,19 @@ void TheFighterPair::ChaseUFO()
 
 void TheFighterPair::LeaveScreen()
 {
+	LeavePlay(TurnSpeed, Speed);
+
+	if (OffScreen())
+	{
+		Reset();
+		Destroy();
+
+		for (auto &fighter : Fighters)
+		{
+			fighter->Reset();
+			fighter->Destroy();
+		}
+	}
 }
 
 void TheFighterPair::CheckCollisions()

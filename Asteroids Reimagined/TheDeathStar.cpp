@@ -69,7 +69,17 @@ void TheDeathStar::Update(float deltaTime)
 
 	CheckCollisions();
 
-	CheckScreenEdge();
+	if (NewWave)
+	{
+		if (OffScreen())
+		{
+			Reset();
+		}
+	}
+	else
+	{
+		CheckScreenEdge();
+	}
 }
 
 void TheDeathStar::Draw3D()
@@ -78,14 +88,48 @@ void TheDeathStar::Draw3D()
 
 }
 
+void TheDeathStar::NewWaveStart()
+{
+	NewWave = true;
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->NewWave = true;
+
+		for (auto &fighter : fighterPair->Fighters)
+		{
+			fighter->NewWave = true;
+		}
+	}
+}
+
+void TheDeathStar::Reset()
+{
+	Enabled = false;
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->Reset();
+		fighterPair->Destroy();
+
+		for (auto &fighter : fighterPair->Fighters)
+		{
+			fighter->Reset();
+			fighter->Destroy();
+		}
+	}
+}
+
 void TheDeathStar::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
 	Velocity = { 20.0f, 20.0f, 0.0f };
+	NewWave = false;
 
 	for (auto &fighterPair : FighterPairs)
 	{
+		fighterPair->Reset();
 		fighterPair->SetParent(*this);
 		fighterPair->Spawn(position);
 	}

@@ -352,19 +352,29 @@ bool PositionedObject::OffScreenTopBottom()
 void PositionedObject::LeavePlay(float turnSpeed, float speed)
 {
 	float stageLeft = 0;
+	float stageDown = 0;
 
 	if (Position.x > 0)
 	{
-		stageLeft = 60;
+		stageLeft = WindowWidth;
 	}
 	else
 	{
-		stageLeft = -60;
+		stageLeft = -WindowWidth;
 	}
 
-	Vector3 pos = { stageLeft, Position.y, 0 };
+	if (Position.y > 0)
+	{
+		stageDown = WindowHeight;
+	}
+	else
+	{
+		stageDown = -WindowHeight;
+	}
 
-	SetRotateVelocity(pos, turnSpeed, speed);
+	Vector3 position = { stageLeft, stageDown, 0 };
+
+	SetRotateVelocity(position, turnSpeed, speed);
 }
 
 void PositionedObject::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)

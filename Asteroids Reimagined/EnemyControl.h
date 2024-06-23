@@ -28,6 +28,7 @@ public:
 private:
 	bool NoMoreRocks = false;
 	bool SpawnedDeathStar = false;
+	bool NewWave = false;
 
 	size_t UFOSpawnTimerID;
 	size_t DeathStarSpawnTimerID;

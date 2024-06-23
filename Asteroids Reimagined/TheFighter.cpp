@@ -25,6 +25,8 @@ bool TheFighter::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(TheUtilities);
 
+	Enabled = false;
+
 	return false;
 }
 
@@ -51,7 +53,15 @@ void TheFighter::Update(float deltaTime)
 		}
 
 		CheckCollisions();
-		CheckScreenEdge();
+
+		if (NewWave)
+		{
+			LeaveScreen();
+		}
+		else
+		{
+			CheckScreenEdge();
+		}
 	}
 }
 
@@ -68,26 +78,32 @@ void TheFighter::Separate()
 	IsChild = false;
 }
 
+void TheFighter::Reset()
+{
+	Velocity = { 0.0f, 0.0f, 0.0f };
+	RotationVelocityZ = 0.0f;
+	Destroy();
+}
+
 void TheFighter::Spawn(Vector3 position)
 {
 	Enabled = true;
 	Separated = false;
+	NewWave = false;
 }
 
 void TheFighter::Hit()
 {
 	Entity::Hit();
 
-	Velocity = { 0.0f, 0.0f, 0.0f };
-	RotationVelocityZ = 0.0f;
-
-	ClearParents();
+	Reset();
 }
 
 void TheFighter::Destroy()
 {
 	Entity::Destroy();
 
+	ClearParents();
 }
 
 void TheFighter::ChasePlayer()
@@ -123,6 +139,13 @@ void TheFighter::ChaseUFO()
 
 void TheFighter::LeaveScreen()
 {
+	LeavePlay(TurnSpeed, Speed);
+
+	if (OffScreen())
+	{
+		Reset();
+		Destroy();
+	}
 }
 
 void TheFighter::CheckCollisions()

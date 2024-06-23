@@ -65,6 +65,7 @@ bool EnemyControl::Initialize(Utilities* utilities)
 	Common::Initialize(TheUtilities);
 
 	TheManagers.EM.SetTimer(UFOSpawnTimerID, 10.0f);
+	TheManagers.EM.SetTimer(DeathStarSpawnTimerID, 2.0f);
 
 	for (auto &ufo : UFOs)
 	{
@@ -86,8 +87,6 @@ bool EnemyControl::BeginRun()
 		ufo->SetRocks(Rocks);
 	}
 
-	TheManagers.EM.SetTimer(DeathStarSpawnTimerID, 2.0f);
-
 	Reset();
 
 	return false;
@@ -102,6 +101,7 @@ void EnemyControl::Update()
 	if (NoMoreRocks)
 	{
 		SpawnRocks({ 0, 0, 0 }, RockCount++, TheRock::Large);
+		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 	}
 
 	for (auto& ufo : UFOs)
@@ -110,7 +110,13 @@ void EnemyControl::Update()
 	}
 
 	if (SpawnedDeathStar) CheckDeathStarStatus();
-	else SpawnDeathStar();
+	else
+	{
+		if (TheManagers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		{
+			SpawnDeathStar();
+		}
+	}
 
 	CheckRockCollisions();
 
@@ -198,7 +204,12 @@ void EnemyControl::CheckDeathStarStatus()
 		}
 	}
 
-	if (deadJim) SpawnedDeathStar = false;
+	if (deadJim)
+	{
+		SpawnedDeathStar = false;
+		TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
+		return;
+	}
 }
 
 bool EnemyControl::CheckRockCollisions()
