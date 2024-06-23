@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "TheUFO.h"
 
 class TheFighter : public LineModel
 {
@@ -9,6 +10,7 @@ public:
 	virtual ~TheFighter();
 
 	void SetPlayer(ThePlayer* player);
+	void SetUFO(TheUFO* ufo[2]);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -19,8 +21,6 @@ public:
 	void Separate();
 
 	void Spawn(Vector3 position);
-	void Hit();
-	void Destroy();
 
 private:
 	bool Separated = false;
@@ -29,8 +29,13 @@ private:
 	float TurnSpeed = 0.45f;
 	float RotateMagnitude = PI / 2;
 
-	ThePlayer* Player;
+	ThePlayer* Player = nullptr;
+	TheUFO* UFOs[2] = { nullptr };
 
 	void ChasePlayer();
-
+	void ChaseUFO();
+	void LeaveScreen();
+	void CheckCollisions();
+	void Hit();
+	void Destroy();
 };

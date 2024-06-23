@@ -27,8 +27,10 @@ public:
 
 private:
 	bool NoMoreRocks = false;
+	bool SpawnedDeathStar = false;
 
 	size_t UFOSpawnTimerID;
+	size_t DeathStarSpawnTimerID;
 
 	int UFOSpawnCount = 0;
 	int StarRockCount = 4;
@@ -42,6 +44,8 @@ private:
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();
+	void SpawnDeathStar();
+	void CheckDeathStarStatus();
 	bool CheckRockCollisions();
 	bool CheckUFOCollisions(TheRock* rock);
 

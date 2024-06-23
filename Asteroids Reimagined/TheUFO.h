@@ -17,6 +17,7 @@ public:
 
 	bool DeathStarActive = false;
 	int Wave = 0;
+	float Distance = 0.0f;
 
 	Shot* Shots[2] = { nullptr };
 

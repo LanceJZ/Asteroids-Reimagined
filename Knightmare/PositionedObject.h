@@ -73,9 +73,8 @@ public:
 	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	void SetAccelerationToZero(float decelerationAmount);
 	void SetParent(PositionedObject& parent);
-	void RemoveFromParents();
-	void DisconnectChild(PositionedObject* child);
-	void ConnectChild(PositionedObject* child);
+	void RemoveParent(PositionedObject* parent);
+	void ClearParents();
 	void CheckScreenEdge();
 	void CheckScreenEdgeX();
 	void CheckScreenEdgeY();

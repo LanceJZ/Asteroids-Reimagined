@@ -189,8 +189,9 @@ void ThePlayer::FireTurret()
 					TurretOverHeat = true;
 				}
 
+				Vector3 turretPosition = Turret->GetWorldPosition();
 				Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 375.0f);
-				shot->Spawn(Turret->WorldPosition, velocity, 2.15f);
+				shot->Spawn(turretPosition, velocity, 2.15f);
 				break;
 			}
 		}

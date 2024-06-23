@@ -13,6 +13,14 @@ void TheFighter::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheFighter::SetUFO(TheUFO* ufo[2])
+{
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = ufo[i];
+	}
+}
+
 bool TheFighter::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(TheUtilities);
@@ -33,7 +41,16 @@ void TheFighter::Update(float deltaTime)
 
 	if (Separated)
 	{
-		ChasePlayer();
+		if (Player->Enabled)
+		{
+			ChasePlayer();
+		}
+		else if (UFOs[0]->Enabled || UFOs[1]->Enabled)
+		{
+			ChaseUFO();
+		}
+
+		CheckCollisions();
 		CheckScreenEdge();
 	}
 }
@@ -53,14 +70,18 @@ void TheFighter::Separate()
 
 void TheFighter::Spawn(Vector3 position)
 {
-	Entity::Spawn(position);
-
+	Enabled = true;
+	Separated = false;
 }
 
 void TheFighter::Hit()
 {
 	Entity::Hit();
 
+	Velocity = { 0.0f, 0.0f, 0.0f };
+	RotationVelocityZ = 0.0f;
+
+	ClearParents();
 }
 
 void TheFighter::Destroy()
@@ -72,4 +93,81 @@ void TheFighter::Destroy()
 void TheFighter::ChasePlayer()
 {
 	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
+}
+
+void TheFighter::ChaseUFO()
+{
+	if (UFOs[0]->Enabled && UFOs[1]->Enabled)
+	{
+		UFOs[0]->Distance = Vector3Distance(UFOs[0]->Position, Position);
+		UFOs[1]->Distance = Vector3Distance(UFOs[1]->Position, Position);
+
+		if (UFOs[0]->Distance < UFOs[1]->Distance && UFOs[0]->Enabled)
+		{
+			SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
+		}
+		else if (UFOs[1]->Distance < UFOs[0]->Distance && UFOs[1]->Enabled)
+		{
+			SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
+		}
+	}
+	else if (UFOs[0]->Enabled)
+	{
+		SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
+	}
+	else if (UFOs[1]->Enabled)
+	{
+		SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
+	}
+}
+
+void TheFighter::LeaveScreen()
+{
+}
+
+void TheFighter::CheckCollisions()
+{
+	if (Player->Enabled && CirclesIntersect(*Player))
+	{
+		Hit();
+		Player->Hit();
+		Destroy();
+		return;
+	}
+
+	for (auto& shot : Player->Shots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			Destroy();
+			return;
+		}
+	}
+
+	for (auto& ufo : UFOs)
+	{
+		if (ufo->Enabled && CirclesIntersect(*ufo))
+		{
+			ufo->Hit();
+			ufo->Destroy();
+			Hit();
+			Destroy();
+			return;
+		}
+
+		for (auto& shot : ufo->Shots)
+		{
+			if (shot->Enabled && CirclesIntersect(*shot))
+			{
+				shot->Destroy();
+				ufo->Hit();
+				ufo->Destroy();
+				Hit();
+				Destroy();
+				return;
+			}
+		}
+	}
 }

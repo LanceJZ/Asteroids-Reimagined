@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ThePlayer.h"
 #include "TheFighter.h"
+#include "TheUFO.h"
 
 class TheFighterPair : public Entity
 {
@@ -12,6 +13,7 @@ public:
 	TheFighter* Fighters[2] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
+	void SetUFO(TheUFO* ufo[2]);
 	void SetWedgeModel(LineModelPoints model);
 
 	bool Initialize(Utilities* utilities);
@@ -23,8 +25,6 @@ public:
 	void Separate();
 
 	void Spawn(Vector3 position);
-	void Hit();
-	void Destroy();
 
 private:
 	int TheScore = 200;
@@ -33,10 +33,15 @@ private:
 	float RotateMagnitude = PI / 2;
 
 	ThePlayer* Player = nullptr;
+	TheUFO* UFOs[2] = { nullptr };
 
 	bool Separated = false;
 
 	void ChasePlayer();
+	void ChaseUFO();
+	void LeaveScreen();
 	void CheckCollisions();
+	void Hit();
+	void Destroy();
 };
 

@@ -176,29 +176,16 @@ void PositionedObject::SetParent(PositionedObject& parent)
 	IsChild = true;
 }
 
-void PositionedObject::RemoveFromParents()
+void PositionedObject::RemoveParent(PositionedObject* parent)
 {
+	auto parentID = std::find(Parents->begin(), Parents->end(), parent);
+	if (parentID != Parents->end()) Parents->erase(parentID);
+}
+
+void PositionedObject::ClearParents()
+{
+	Parents->clear();
 	IsChild = false;
-	Position = WorldPosition;
-	//Rotation = WorldRotation;
-}
-
-void PositionedObject::DisconnectChild(PositionedObject* child)
-{
-	if (child->IsParent) return;
-
-	if (!child->IsChild) return;
-
-	child->IsConnectedChild = false;
-	child->IsChild = false;
-	child->Position = WorldPosition;
-}
-
-void PositionedObject::ConnectChild(PositionedObject* child)
-{
-	if (child->IsChild)	return;
-
-	child->IsChild = true;
 }
 
 void PositionedObject::CheckScreenEdge()

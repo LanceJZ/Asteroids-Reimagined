@@ -18,20 +18,6 @@ void TheDeathStar::SetWedgeModel(LineModelPoints model)
 	{
 		fighterPair->SetWedgeModel(model);
 	}
-
-	WY = FighterPairs[0]->Fighters[0]->Radius * 0.885f;
-	WX = FighterPairs[0]->Fighters[0]->Radius * 0.75f;
-
-	float rot = 0.333333f;
-	float offset = 3.75f;
-
-	FighterPairs[0]->RotationZ = HalfPi;
-	FighterPairs[1]->RotationZ = HalfPi * rot;
-	FighterPairs[2]->RotationZ = HalfPi + (PI * rot);
-
-	FighterPairs[0]->Position = { WX + offset, 0.0f, 0.0f };
-	FighterPairs[1]->Position = { -WX + offset, WY, 0.0f };
-	FighterPairs[2]->Position = { -WX + offset, -WY, 0.0f };
 }
 
 void TheDeathStar::SetPlayer(ThePlayer* player)
@@ -41,6 +27,19 @@ void TheDeathStar::SetPlayer(ThePlayer* player)
 	for (auto &fighterPair : FighterPairs)
 	{
 		fighterPair->SetPlayer(player);
+	}
+}
+
+void TheDeathStar::SetUFO(TheUFO* ufo[2])
+{
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = ufo[i];
+	}
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->SetUFO(ufo);
 	}
 }
 
@@ -55,23 +54,11 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 
 	Radius = 28.0f;
 
-	return false;
+	return true;
 }
 
 bool TheDeathStar::BeginRun()
 {
-	for (auto &fighterPair : FighterPairs)
-	{
-		fighterPair->SetParent(*this);
-
-		for (auto &fighter : fighterPair->Fighters)
-		{
-			fighter->SetParent(*fighterPair);
-		}
-	}
-
-	Velocity = { 20.0f, 20.0f, 0.0f };
-
 
 	return false;
 }
@@ -95,23 +82,74 @@ void TheDeathStar::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
+	Velocity = { 20.0f, 20.0f, 0.0f };
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->SetParent(*this);
+		fighterPair->Spawn(position);
+	}
+
+	WY = FighterPairs[0]->Fighters[0]->Radius * 0.885f;
+	WX = FighterPairs[0]->Fighters[0]->Radius * 0.75f;
+
+	float rot = 0.333333f;
+	float offset = 3.75f;
+
+	FighterPairs[0]->RotationZ = HalfPi;
+	FighterPairs[1]->RotationZ = HalfPi * rot;
+	FighterPairs[2]->RotationZ = HalfPi + (PI * rot);
+
+	FighterPairs[0]->Position = { WX + offset, 0.0f, 0.0f };
+	FighterPairs[1]->Position = { -WX + offset, WY, 0.0f };
+	FighterPairs[2]->Position = { -WX + offset, -WY, 0.0f };
 }
 
-bool TheDeathStar::CheckCollisions()
+void TheDeathStar::CheckCollisions()
 {
-	for (auto &shot : Player->Shots)
+	if (Player->Enabled && CirclesIntersect(*Player))
 	{
-		if (CirclesIntersect(*shot))
+		Hit();
+		Player->Hit();
+		Destroy();
+		return;
+	}
+
+	for (auto& shot : Player->Shots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
 		{
 			shot->Destroy();
 			Hit();
 			Destroy();
-
-			return true;
+			return;
 		}
 	}
 
-	return false;
+	for (auto& ufo : UFOs)
+	{
+		if (ufo->Enabled && CirclesIntersect(*ufo))
+		{
+			ufo->Hit();
+			ufo->Destroy();
+			Hit();
+			Destroy();
+			return;
+		}
+
+		for (auto& shot : ufo->Shots)
+		{
+			if (shot->Enabled && CirclesIntersect(*shot))
+			{
+				shot->Destroy();
+				ufo->Hit();
+				ufo->Destroy();
+				Hit();
+				Destroy();
+				return;
+			}
+		}
+	}
 }
 
 void TheDeathStar::Hit()
@@ -124,10 +162,8 @@ void TheDeathStar::Hit()
 
 		for (auto &fighter : fighterPair->Fighters)
 		{
-			auto it = std::find(fighter->Parents->begin(), fighter->Parents->end(), this);
-			if (it != fighter->Parents->end()) fighter->Parents->erase(it);
+			fighter->RemoveParent(this);
 		}
-
 	}
 
 }

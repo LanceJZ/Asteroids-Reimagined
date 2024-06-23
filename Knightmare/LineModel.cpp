@@ -75,9 +75,9 @@ void LineModel::Draw3D()
 		);
 	}
 
-	WorldMatrix = rlGetMatrixTransform();
-	WorldPosition = { WorldMatrix.m12, WorldMatrix.m13, WorldMatrix.m14 };
-	WorldRotation = QuaternionToEuler(QuaternionFromMatrix(WorldMatrix));
+	//WorldMatrix = rlGetMatrixTransform();
+	//WorldPosition = { WorldMatrix.m12, WorldMatrix.m13, WorldMatrix.m14 };
+	//WorldRotation = QuaternionToEuler(QuaternionFromMatrix(WorldMatrix));
 
 	rlPopMatrix();
 	rlEnd();
