@@ -6,9 +6,10 @@ ThePlayer::ThePlayer()
 	TheManagers.EM.AddLineModel(Shield = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
-	TheManagers.EM.AddTimer(ShotTimerID = TheManagers.EM.AddTimer());
-	TheManagers.EM.AddTimer(TurretCooldownTimerID = TheManagers.EM.AddTimer());
-	TheManagers.EM.AddTimer(TurretHeatTimerID = TheManagers.EM.AddTimer());
+
+	FirerateTimerID = TheManagers.EM.AddTimer(0.125f);
+	TurretCooldownTimerID = TheManagers.EM.AddTimer(1.0f);
+	TurretHeatTimerID = TheManagers.EM.AddTimer(0.15f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
@@ -146,10 +147,6 @@ void ThePlayer::Reset()
 
 void ThePlayer::NewGame()
 {
-	TheManagers.EM.SetTimer(TurretCooldownTimerID, 1.0f);
-	TheManagers.EM.SetTimer(TurretHeatTimerID, 0.15f);
-	TheManagers.EM.SetTimer(ShotTimerID, 0.125f);
-
 	Lives = 4;
 	NextNewLifeScore = 10000;
 	Score = 0;
@@ -174,13 +171,13 @@ void ThePlayer::FireTurret()
 		return;
 	}
 
-	if (TheManagers.EM.TimerElapsed(ShotTimerID))
+	if (TheManagers.EM.TimerElapsed(FirerateTimerID))
 	{
 		for (auto& shot : Shots)
 		{
 			if (!shot->Enabled)
 			{
-				TheManagers.EM.ResetTimer(ShotTimerID);
+				TheManagers.EM.ResetTimer(FirerateTimerID);
 				TurretHeat += 5;
 
 				if (TurretHeat > TurretHeatMax)

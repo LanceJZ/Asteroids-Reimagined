@@ -35,7 +35,9 @@ private:
 
 	int UFOSpawnCount = 0;
 	int StarRockCount = 4;
+	int RockSpawnCount = 0;
 	int RockCount = 0;
+	int Wave = 0;
 
 	LineModelPoints ShotModel;
 	LineModelPoints RockModels[4];

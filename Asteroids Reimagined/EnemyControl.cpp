@@ -2,8 +2,8 @@
 
 EnemyControl::EnemyControl()
 {
-	UFOSpawnTimerID = TheManagers.EM.AddTimer();
-	DeathStarSpawnTimerID = TheManagers.EM.AddTimer();
+	UFOSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
+	DeathStarSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -64,9 +64,6 @@ bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
-	TheManagers.EM.SetTimer(UFOSpawnTimerID, 10.0f);
-	TheManagers.EM.SetTimer(DeathStarSpawnTimerID, 2.0f);
-
 	for (auto &ufo : UFOs)
 	{
 		ufo->Initialize(TheUtilities);
@@ -100,8 +97,9 @@ void EnemyControl::Update()
 
 	if (NoMoreRocks)
 	{
-		SpawnRocks({ 0, 0, 0 }, RockCount++, TheRock::Large);
+		SpawnRocks({ 0, 0, 0 }, RockSpawnCount++, TheRock::Large);
 		if (SpawnedDeathStar) DeathStar->NewWaveStart();
+		Wave++;
 	}
 
 	for (auto& ufo : UFOs)
@@ -110,7 +108,7 @@ void EnemyControl::Update()
 	}
 
 	if (SpawnedDeathStar) CheckDeathStarStatus();
-	else
+	else if (Wave > 2 && RockCount < 6)
 	{
 		if (TheManagers.EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
@@ -215,36 +213,40 @@ void EnemyControl::CheckDeathStarStatus()
 bool EnemyControl::CheckRockCollisions()
 {
 	NoMoreRocks = true;
+	RockCount = 0;
 
-	for (auto& rock : Rocks)
+	for (int i = 0; i < Rocks.size(); i++)
 	{
-		if (rock->Enabled)
+		if (Rocks[i]->Enabled)
 		{
 			NoMoreRocks = false;
+			RockCount++;
 
-			CheckUFOCollisions(rock);
+			CheckUFOCollisions(Rocks[i]);
 
-			if (rock->BeenHit)
+			if (Rocks[i]->BeenHit)
 			{
-				rock->Destroy();
+				Rocks[i]->Destroy();
+				TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
 
-				if (rock->Size == TheRock::Large)
+				if (Rocks[i]->Size == TheRock::Large)
 				{
-					SpawnRocks(rock->Position, 2, TheRock::MediumLarge);
-					return true;
+					SpawnRocks(Rocks[i]->Position, 2, TheRock::MediumLarge);
+					continue;
 				}
 
-				if (rock->Size == TheRock::MediumLarge)
+				if (Rocks[i]->Size == TheRock::MediumLarge)
 				{
-					SpawnRocks(rock->Position, 3, TheRock::Medium);
-					return true;
+					SpawnRocks(Rocks[i]->Position, 3, TheRock::Medium);
+					continue;
 				}
 
-				if (rock->Size == TheRock::Medium)
+				if (Rocks[i]->Size == TheRock::Medium)
 				{
-					SpawnRocks(rock->Position, 4, TheRock::Small);
-					return true;
+					SpawnRocks(Rocks[i]->Position, 4, TheRock::Small);
+					continue;
 				}
+
 			}
 		}
 	}
@@ -288,7 +290,7 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 void EnemyControl::Reset()
 {
 	UFOSpawnCount = 0;
-	RockCount = StarRockCount;
+	RockSpawnCount = StarRockCount;
 	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
 	TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
 

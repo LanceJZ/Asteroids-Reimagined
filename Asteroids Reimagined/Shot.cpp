@@ -2,7 +2,7 @@
 
 Shot::Shot()
 {
-	TheManagers.EM.AddTimer(LifeTimerID = TheManagers.EM.AddTimer());
+	LifeTimerID = TheManagers.EM.AddTimer();
 }
 
 Shot::~Shot()
