@@ -11,6 +11,7 @@ EnemyControl::EnemyControl()
 	}
 
 	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
+	TheManagers.EM.AddLineModel(EnemyOne = DBG_NEW Enemy1());
 }
 
 EnemyControl::~EnemyControl()
@@ -27,6 +28,7 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	}
 
 	DeathStar->SetPlayer(player);
+	EnemyOne->SetPlayer(player);
 }
 
 void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
@@ -58,6 +60,11 @@ void EnemyControl::SetShotModel(LineModelPoints model)
 void EnemyControl::SetWedgeModel(LineModelPoints model)
 {
 	DeathStar->SetWedgeModel(model);
+}
+
+void EnemyControl::SetEnemy1Model(LineModelPoints model)
+{
+	EnemyOne->SetModel(model);
 }
 
 bool EnemyControl::Initialize(Utilities* utilities)
@@ -118,6 +125,10 @@ void EnemyControl::Update()
 
 	CheckRockCollisions();
 
+	if (!EnemyOne->Enabled)
+	{
+		EnemyOne->Spawn({ 0, 0, 0 });
+	}
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)

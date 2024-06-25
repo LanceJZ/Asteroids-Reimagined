@@ -150,6 +150,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy1.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EnemyControl.cpp">
       <SubType>
       </SubType>
@@ -189,6 +193,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy1.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EnemyControl.h">
       <SubType>
       </SubType>

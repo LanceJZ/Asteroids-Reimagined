@@ -84,7 +84,7 @@ public:
 	void CheckPlayfieldSidesWarp(float left, float right);
 	void CheckPlayfieldHeightWarp(float top, float bottom);
 	void AimAtTargetZ(Vector3& target, float facingAngle, float magnitute);
-	void SetRotationZFromVectors(Vector3& target);
+	void SetRotationZFromVector(Vector3& target);
 	void SetHeading(Vector3& waypoint, float rotationSpeed);
 	void BeforeCalculate();
 	void CalculateWorldSpace();

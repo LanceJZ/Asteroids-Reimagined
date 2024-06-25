@@ -81,8 +81,9 @@ void TheUFO::Draw3D()
 void TheUFO::Spawn(int spawnCount)
 {
 	Vector3 position = { 0, 0, 0 };
+	int height = WindowHeight / 1.25f;
 
-	position.y = GetRandomValue(-WindowHeight, WindowHeight);
+	position.y = GetRandomValue(-height, height);
 
 	TheManagers.EM.ResetTimer(FireTimerID);
 	TheManagers.EM.ResetTimer(ChangeVectorTimerID);

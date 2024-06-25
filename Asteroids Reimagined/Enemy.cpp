@@ -54,7 +54,7 @@ void Enemy::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	CheckCollision();
+	//CheckCollision();
 }
 
 void Enemy::Draw3D()

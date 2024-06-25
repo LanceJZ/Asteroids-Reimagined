@@ -4,6 +4,7 @@
 #include "TheRock.h"
 #include "TheUFO.h"
 #include "TheDeathStar.h"
+#include "Enemy1.h"
 
 class EnemyControl : public Common
 {
@@ -19,6 +20,7 @@ public:
 	void SetUFOModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
 	void SetWedgeModel(LineModelPoints model);
+	void SetEnemy1Model(LineModelPoints model);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -44,6 +46,7 @@ private:
 
 	ThePlayer *Player = nullptr;
 	TheDeathStar *DeathStar = nullptr;
+	Enemy1 *EnemyOne = nullptr;
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

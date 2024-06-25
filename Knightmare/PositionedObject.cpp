@@ -447,7 +447,7 @@ void PositionedObject::AimAtTargetZ(Vector3& target, float facingAngle, float ma
 	RotationVelocityZ = turnVelocity;
 }
 
-void PositionedObject::SetRotationZFromVectors(Vector3& target)
+void PositionedObject::SetRotationZFromVector(Vector3& target)
 {
 	RotationZ = GetAngleFromVectors(target);
 }
