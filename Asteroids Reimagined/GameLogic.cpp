@@ -25,7 +25,7 @@ bool GameLogic::Initialize(Utilities* utilities)
 
 	AdjustedFieldSize = Vector2Multiply(FieldSize, { 0.5f, 0.5f });
 
-	PlayerClear->Radius = 60.0f;
+	PlayerClear->Radius = 140.0f;
 
 	return false;
 }

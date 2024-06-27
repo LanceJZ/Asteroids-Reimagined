@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "Enemy.h"
+#include "TheMissile.h"
 
 class Enemy1 : public Enemy
 {
@@ -15,8 +16,13 @@ public:
 
 	Edge EdgeSpawnedFrom = Top;
 
+	TheMissile* Missile = nullptr;
+
 	Enemy1();
 	virtual ~Enemy1();
+
+	void SetPlayer(ThePlayer* player);
+	void SetMissileModel(LineModelPoints model);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -28,6 +34,7 @@ public:
 	void Destroy();
 
 private:
+	size_t FireMissileTimerID = 0;
 	int Score = 250;
 	float Speed = 133.666f;
 	float TurnSpeed = 0.666f;
@@ -41,4 +48,5 @@ private:
 	void DestinationBottom();
 	void DestinationLeft();
 	void DestinationRight();
+	void FireMissile();
 };

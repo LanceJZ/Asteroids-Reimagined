@@ -72,13 +72,13 @@ void Enemy::Hit()
 {
 	Entity::Hit();
 
-	PlaySound(ExplodeSound);
+	//PlaySound(ExplodeSound);
 
-	Player->ScoreUpdate(Points);
-	Destroy();
+	//Player->ScoreUpdate(Points);
+	//Destroy();
 
-	PM->Spawn(Position, Vector3Multiply(Velocity, {0.5f}),
-		20, 100, 20, 2.0f, { 255, 0, 0, 255 });
+	//PM->Spawn(Position, Vector3Multiply(Velocity, {0.5f}),
+	//	20, 100, 20, 2.0f, { 255, 0, 0, 255 });
 }
 
 void Enemy::Reset()
@@ -178,18 +178,23 @@ bool Enemy::CheckCollision()
 		}
 	}
 
-	//for (auto &shot : Player->Shots)
-	//{
-	//	if (!shot->Enabled) continue;
+	for (auto &shot : Player->Shots)
+	{
+		if (!shot->Enabled) continue;
 
-	//	if (shot->CirclesIntersectBullet(*this))
-	//	{
-	//		Hit();
-	//		shot->Destroy();
+		if (shot->CirclesIntersectBullet(*this))
+		{
+			Hit();
+			shot->Destroy();
 
-	//		return true;
-	//	}
-	//}
+			return true;
+		}
+	}
 
 	return false;
+}
+
+void Enemy::ChasePlayer()
+{
+	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
 }

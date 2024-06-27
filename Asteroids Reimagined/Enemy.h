@@ -43,10 +43,14 @@ protected:
 
 	void Shoot();
 	void Shoot(Vector3 velocity);
+	void ChasePlayer();
 	virtual bool CheckCollision();
 
 private:
+	float Speed = 200.0f;
+	float TurnSpeed = 1.45f;
 
 	LineModelPoints ShotModel = {};
+
 
 };

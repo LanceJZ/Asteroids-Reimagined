@@ -48,6 +48,7 @@ bool Game::Load()
 	Enemies->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
 	Enemies->SetWedgeModel(TheManagers.CM.LoadAndGetLineModel("Wedge"));
 	Enemies->SetEnemy1Model(TheManagers.CM.LoadAndGetLineModel("Enemy1"));
+	Enemies->SetEnemyMissileModel(TheManagers.CM.LoadAndGetLineModel("Missile"));
 
 	LineModelPoints rockModels[4];
 

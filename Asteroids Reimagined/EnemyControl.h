@@ -21,6 +21,7 @@ public:
 	void SetShotModel(LineModelPoints model);
 	void SetWedgeModel(LineModelPoints model);
 	void SetEnemy1Model(LineModelPoints model);
+	void SetEnemyMissileModel(LineModelPoints model);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -34,6 +35,7 @@ private:
 
 	size_t UFOSpawnTimerID;
 	size_t DeathStarSpawnTimerID;
+	size_t EnemyOneSpawnTimerID;
 
 	int UFOSpawnCount = 0;
 	int StarRockCount = 4;
@@ -54,6 +56,7 @@ private:
 	void CheckDeathStarStatus();
 	bool CheckRockCollisions();
 	bool CheckUFOCollisions(TheRock* rock);
+	bool CheckEnemyCollisions(TheRock* rock);
 
 	void Reset();
 };

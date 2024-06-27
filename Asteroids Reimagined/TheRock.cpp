@@ -44,7 +44,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 {
 	Entity::Spawn(position);
 
-	float magnitude = GetRandomFloat(30.1f, 50.1f);
+	float magnitude = 0;
 	float angle = GetRandomRadian();
 	float maxVS = 0;
 
@@ -62,7 +62,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 		Scale = scale / change;
 		Radius = radius / change;
 		maxVS = 3;
-		magnitude = GetRandomFloat(42.3f, 64.1f);
+		magnitude = GetRandomFloat(52.3f, 74.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Medium:
@@ -70,7 +70,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 		Scale =  scale / change;
 		Radius = radius / change;
 		maxVS = 2;
-		magnitude = GetRandomFloat(33.2f, 53.1f);
+		magnitude = GetRandomFloat(43.2f, 63.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case MediumLarge:
@@ -78,7 +78,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 		Scale =  scale / change;
 		Radius = radius / change;
 		maxVS = 2;
-		magnitude = GetRandomFloat(26.1f, 46.1f);
+		magnitude = GetRandomFloat(36.1f, 56.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Large:

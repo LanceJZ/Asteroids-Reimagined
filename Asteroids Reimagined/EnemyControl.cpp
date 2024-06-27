@@ -4,6 +4,7 @@ EnemyControl::EnemyControl()
 {
 	UFOSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
 	DeathStarSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
+	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(3.0f);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -67,6 +68,11 @@ void EnemyControl::SetEnemy1Model(LineModelPoints model)
 	EnemyOne->SetModel(model);
 }
 
+void EnemyControl::SetEnemyMissileModel(LineModelPoints model)
+{
+	EnemyOne->SetMissileModel(model);
+}
+
 bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
@@ -125,10 +131,16 @@ void EnemyControl::Update()
 
 	CheckRockCollisions();
 
-	if (!EnemyOne->Enabled)
+	if (TheManagers.EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
-		EnemyOne->Spawn({ 0, 0, 0 });
+		TheManagers.EM.ResetTimer(EnemyOneSpawnTimerID);
+
+		if (!EnemyOne->Enabled)
+		{
+			EnemyOne->Spawn({ 0, 0, 0 });
+		}
 	}
+
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
@@ -234,6 +246,7 @@ bool EnemyControl::CheckRockCollisions()
 			RockCount++;
 
 			CheckUFOCollisions(Rocks[i]);
+			CheckEnemyCollisions(Rocks[i]);
 
 			if (Rocks[i]->BeenHit)
 			{
@@ -293,6 +306,26 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 			rock->Hit();
 			return true;
 		}
+	}
+
+	return false;
+}
+
+bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
+{
+	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*rock))
+	{
+		EnemyOne->Hit();
+		EnemyOne->Destroy();
+		rock->Hit();
+		return true;
+	}
+
+	if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
+	{
+		EnemyOne->Missile->Destroy();
+		rock->Hit();
+		return true;
 	}
 
 	return false;

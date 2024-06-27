@@ -311,7 +311,7 @@ size_t EntityManager::AddTimer()
 size_t EntityManager::AddTimer(float amount)
 {
 	size_t number = AddTimer();
-	Timers[number]->Set(amount);
+	Timers[number]->Reset(amount);
 
 	return number;
 }
