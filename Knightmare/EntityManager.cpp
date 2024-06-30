@@ -107,19 +107,19 @@ void EntityManager::Input()
 
 void EntityManager::Update(float deltaTime)
 {
-	for (auto entity : Entities)
+	for (int i = 0; i < Entities.size(); i++)
 	{
-		if (entity->Enabled) entity->Update(deltaTime);
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(deltaTime);
 	}
 
-	for (auto lm : LineModels)
+	for (int i = 0; i < LineModels.size(); i++)
 	{
-		if (lm->Enabled) lm->Update(deltaTime);
+		if (LineModels.at(i)->Enabled) LineModels.at(i)->Update(deltaTime);
 	}
 
 	for (int i = 0; i < Model3Ds.size(); i++)
 	{
-		if (Model3Ds[i]->Enabled) Model3Ds[i]->Update(deltaTime);
+		if (Model3Ds.at(i)->Enabled) Model3Ds.at(i)->Update(deltaTime);
 	}
 
 	for (auto timer : Timers)

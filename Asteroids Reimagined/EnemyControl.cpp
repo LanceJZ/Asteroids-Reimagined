@@ -5,6 +5,7 @@ EnemyControl::EnemyControl()
 	UFOSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
 	DeathStarSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
 	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(3.0f);
+	EnemyTwoSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -13,6 +14,7 @@ EnemyControl::EnemyControl()
 
 	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 	TheManagers.EM.AddLineModel(EnemyOne = DBG_NEW Enemy1());
+	TheManagers.EM.AddLineModel(EnemyTwo = DBG_NEW Enemy2());
 }
 
 EnemyControl::~EnemyControl()
@@ -68,9 +70,19 @@ void EnemyControl::SetEnemy1Model(LineModelPoints model)
 	EnemyOne->SetModel(model);
 }
 
+void EnemyControl::SetEnemy2Model(LineModelPoints model)
+{
+	EnemyTwo->SetModel(model);
+}
+
 void EnemyControl::SetEnemyMissileModel(LineModelPoints model)
 {
 	EnemyOne->SetMissileModel(model);
+}
+
+void EnemyControl::SetEnemyMineModel(LineModelPoints model)
+{
+	EnemyTwo->SetMineModel(model);
 }
 
 bool EnemyControl::Initialize(Utilities* utilities)
@@ -141,6 +153,15 @@ void EnemyControl::Update()
 		}
 	}
 
+	if (TheManagers.EM.TimerElapsed(EnemyTwoSpawnTimerID))
+	{
+		TheManagers.EM.ResetTimer(EnemyTwoSpawnTimerID);
+
+		if (!EnemyTwo->Enabled)
+		{
+			EnemyTwo->Spawn({ 0, 0, 0 });
+		}
+	}
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
@@ -152,7 +173,7 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 		for (size_t rockCheck = 0; rockCheck < rockNumber; rockCheck++)
 		{
-			if (!Rocks[rockCheck]->Enabled)
+			if (!Rocks.at(rockCheck)->Enabled)
 			{
 				spawnNewRock = false;
 				rockNumber = rockCheck;
@@ -164,14 +185,14 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		{
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
-			TheManagers.EM.AddLineModel(Rocks[rockNumber]);
-			Rocks[rockNumber]->Initialize();
-			Rocks[rockNumber]->BeginRun();
-			Rocks[rockNumber]->SetModel((RockModels[rockType]));
-			Rocks[rockNumber]->SetPlayer(Player);
+			TheManagers.EM.AddLineModel(Rocks.at(rockNumber));
+			Rocks.at(rockNumber)->Initialize();
+			Rocks.at(rockNumber)->BeginRun();
+			Rocks.at(rockNumber)->SetModel((RockModels[rockType]));
+			Rocks.at(rockNumber)->SetPlayer(Player);
 		}
 
-		Rocks[rockNumber]->Spawn(position, size);
+		Rocks.at(rockNumber)->Spawn(position, size);
 	}
 }
 
@@ -240,7 +261,7 @@ bool EnemyControl::CheckRockCollisions()
 
 	for (int i = 0; i < Rocks.size(); i++)
 	{
-		if (Rocks[i]->Enabled)
+		if (Rocks.at(i)->Enabled)
 		{
 			NoMoreRocks = false;
 			RockCount++;
@@ -248,26 +269,26 @@ bool EnemyControl::CheckRockCollisions()
 			CheckUFOCollisions(Rocks[i]);
 			CheckEnemyCollisions(Rocks[i]);
 
-			if (Rocks[i]->BeenHit)
+			if (Rocks.at(i)->BeenHit)
 			{
-				Rocks[i]->Destroy();
+				Rocks.at(i)->Destroy();
 				TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
 
-				if (Rocks[i]->Size == TheRock::Large)
+				if (Rocks.at(i)->Size == TheRock::Large)
 				{
-					SpawnRocks(Rocks[i]->Position, 2, TheRock::MediumLarge);
+					SpawnRocks(Rocks.at(i)->Position, 2, TheRock::MediumLarge);
 					continue;
 				}
 
-				if (Rocks[i]->Size == TheRock::MediumLarge)
+				if (Rocks.at(i)->Size == TheRock::MediumLarge)
 				{
-					SpawnRocks(Rocks[i]->Position, 3, TheRock::Medium);
+					SpawnRocks(Rocks.at(i)->Position, 3, TheRock::Medium);
 					continue;
 				}
 
-				if (Rocks[i]->Size == TheRock::Medium)
+				if (Rocks.at(i)->Size == TheRock::Medium)
 				{
-					SpawnRocks(Rocks[i]->Position, 4, TheRock::Small);
+					SpawnRocks(Rocks.at(i)->Position, 4, TheRock::Small);
 					continue;
 				}
 
@@ -324,6 +345,14 @@ bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
 	{
 		EnemyOne->Missile->Destroy();
+		rock->Hit();
+		return true;
+	}
+
+	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*rock))
+	{
+		EnemyTwo->Hit();
+		EnemyTwo->Destroy();
 		rock->Hit();
 		return true;
 	}

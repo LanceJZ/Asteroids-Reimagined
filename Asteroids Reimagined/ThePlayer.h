@@ -38,7 +38,7 @@ public:
 private:
 	bool TurretOverHeat = false;
 	size_t MagazineSize = 16;
-	size_t FirerateTimerID = 0;
+	size_t FireRateTimerID = 0;
 	size_t TurretCooldownTimerID = 0;
 	size_t TurretHeatTimerID = 0;
 	int NextNewLifeScore = 10000;

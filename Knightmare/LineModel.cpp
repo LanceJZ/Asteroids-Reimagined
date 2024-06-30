@@ -145,6 +145,11 @@ void LineModel::CalculateRadius()
 {
 	float farDistance = 0.0f;
 
+	if (LinePoints.size() < 2)
+	{
+		return;
+	}
+
 	for (int i = 0; i < LinePoints.size() - 2; i++)
 	{
 		float distance = Vector3Distance(LinePoints[i], LinePoints[i + 1]);

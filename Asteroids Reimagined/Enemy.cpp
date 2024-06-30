@@ -45,7 +45,6 @@ bool Enemy::BeginRun()
 {
 	LineModel::BeginRun();
 
-	TheManagers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
 
 	return false;
 }
@@ -66,6 +65,7 @@ void Enemy::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
+	TheManagers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
 }
 
 void Enemy::Hit()

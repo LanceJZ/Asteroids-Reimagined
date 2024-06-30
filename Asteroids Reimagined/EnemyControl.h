@@ -5,6 +5,7 @@
 #include "TheUFO.h"
 #include "TheDeathStar.h"
 #include "Enemy1.h"
+#include "Enemy2.h"
 
 class EnemyControl : public Common
 {
@@ -21,7 +22,9 @@ public:
 	void SetShotModel(LineModelPoints model);
 	void SetWedgeModel(LineModelPoints model);
 	void SetEnemy1Model(LineModelPoints model);
+	void SetEnemy2Model(LineModelPoints model);
 	void SetEnemyMissileModel(LineModelPoints model);
+	void SetEnemyMineModel(LineModelPoints model);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -36,6 +39,7 @@ private:
 	size_t UFOSpawnTimerID;
 	size_t DeathStarSpawnTimerID;
 	size_t EnemyOneSpawnTimerID;
+	size_t EnemyTwoSpawnTimerID;
 
 	int UFOSpawnCount = 0;
 	int StarRockCount = 4;
@@ -49,6 +53,7 @@ private:
 	ThePlayer *Player = nullptr;
 	TheDeathStar *DeathStar = nullptr;
 	Enemy1 *EnemyOne = nullptr;
+	Enemy2 *EnemyTwo = nullptr;
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

@@ -7,14 +7,14 @@ ThePlayer::ThePlayer()
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
 
-	FirerateTimerID = TheManagers.EM.AddTimer(0.125f);
+	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
 	TurretCooldownTimerID = TheManagers.EM.AddTimer(1.0f);
 	TurretHeatTimerID = TheManagers.EM.AddTimer(0.15f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots[i]);
+		TheManagers.EM.AddLineModel(Shots.at(i));
 	}
 }
 
@@ -171,13 +171,13 @@ void ThePlayer::FireTurret()
 		return;
 	}
 
-	if (TheManagers.EM.TimerElapsed(FirerateTimerID))
+	if (TheManagers.EM.TimerElapsed(FireRateTimerID))
 	{
 		for (auto& shot : Shots)
 		{
 			if (!shot->Enabled)
 			{
-				TheManagers.EM.ResetTimer(FirerateTimerID);
+				TheManagers.EM.ResetTimer(FireRateTimerID);
 				TurretHeat += 5;
 
 				if (TurretHeat > TurretHeatMax)

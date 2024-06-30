@@ -252,7 +252,7 @@ std::vector<Vector3>  ContentManager::ConvertStringToPoints(std::string linesStr
 				line.y = stof(number);
 				number = "";
 			}
-			else if (character == 125)
+			else if (character == 125 || character == 41)
 			{
 				line.z = stof(number);
 				number = "";

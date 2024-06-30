@@ -154,6 +154,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Enemy2.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EnemyControl.cpp">
       <SubType>
       </SubType>
@@ -175,6 +179,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="TheFighterPair.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TheMine.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -201,6 +209,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Enemy2.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EnemyControl.h">
       <SubType>
       </SubType>
@@ -222,6 +234,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="TheFighterPair.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheMine.h">
       <SubType>
       </SubType>
     </ClInclude>
