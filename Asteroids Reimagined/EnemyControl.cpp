@@ -4,8 +4,8 @@ EnemyControl::EnemyControl()
 {
 	UFOSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
 	DeathStarSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
-	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(3.0f);
-	EnemyTwoSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
+	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(13.0f);
+	EnemyTwoSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -32,6 +32,7 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 
 	DeathStar->SetPlayer(player);
 	EnemyOne->SetPlayer(player);
+	EnemyTwo->SetPlayer(player);
 }
 
 void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
@@ -109,6 +110,9 @@ bool EnemyControl::BeginRun()
 		ufo->SetRocks(Rocks);
 	}
 
+	EnemyOne->SetUFO(UFOs);
+	EnemyTwo->SetUFO(UFOs);
+
 	Reset();
 
 	return false;
@@ -147,6 +151,8 @@ void EnemyControl::Update()
 	{
 		TheManagers.EM.ResetTimer(EnemyOneSpawnTimerID);
 
+		if (!Player->GameOver && !Player->Enabled) return;
+
 		if (!EnemyOne->Enabled)
 		{
 			EnemyOne->Spawn({ 0, 0, 0 });
@@ -156,6 +162,8 @@ void EnemyControl::Update()
 	if (TheManagers.EM.TimerElapsed(EnemyTwoSpawnTimerID))
 	{
 		TheManagers.EM.ResetTimer(EnemyTwoSpawnTimerID);
+
+		if (!Player->GameOver && !Player->Enabled) return;
 
 		if (!EnemyTwo->Enabled)
 		{
@@ -214,6 +222,8 @@ void EnemyControl::SpawnUFO()
 
 void EnemyControl::SpawnDeathStar()
 {
+	if (!Player->GameOver && !Player->Enabled) return;
+
 	DeathStar->Spawn({ -500, -400, 0 });
 	DeathStar->SetUFO(UFOs);
 	SpawnedDeathStar = true;
@@ -254,7 +264,7 @@ void EnemyControl::CheckDeathStarStatus()
 	}
 }
 
-bool EnemyControl::CheckRockCollisions()
+void EnemyControl::CheckRockCollisions()
 {
 	NoMoreRocks = true;
 	RockCount = 0;
@@ -266,8 +276,8 @@ bool EnemyControl::CheckRockCollisions()
 			NoMoreRocks = false;
 			RockCount++;
 
-			CheckUFOCollisions(Rocks[i]);
-			CheckEnemyCollisions(Rocks[i]);
+			CheckUFOCollisions(Rocks.at(i));
+			CheckEnemyCollisions(Rocks.at(i));
 
 			if (Rocks.at(i)->BeenHit)
 			{
@@ -291,62 +301,52 @@ bool EnemyControl::CheckRockCollisions()
 					SpawnRocks(Rocks.at(i)->Position, 4, TheRock::Small);
 					continue;
 				}
-
 			}
 		}
 	}
-
-	return false;
 }
 
-bool EnemyControl::CheckUFOCollisions(TheRock* rock)
+void EnemyControl::CheckUFOCollisions(TheRock* rock)
 {
 	for (auto& ufo : UFOs)
 	{
-		for (auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && shot->CirclesIntersect(*rock))
-			{
-				shot->Destroy();
-				rock->Hit();
-				return true;
-			}
+		ufo->CheckCollisions(rock);
 
-			if (shot->Enabled && shot->CirclesIntersect(*Player))
-			{
-				shot->Destroy();
-				Player->Hit();
-				return true;
-			}
-		}
+		if (!ufo->Enabled) return;
 
-		if (ufo->Enabled && ufo->CirclesIntersect(*rock))
+		if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
 		{
 			ufo->Hit();
 			ufo->Destroy();
-			rock->Hit();
-			return true;
+			EnemyOne->Hit();
+			EnemyOne->Destroy();
+		}
+
+		if (EnemyTwo->Enabled && ufo->CirclesIntersect(*EnemyTwo))
+		{
+			ufo->Hit();
+			ufo->Destroy();
+			EnemyTwo->Hit();
+			EnemyTwo->Destroy();
 		}
 	}
-
-	return false;
 }
 
-bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
+void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 {
 	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*rock))
 	{
 		EnemyOne->Hit();
 		EnemyOne->Destroy();
 		rock->Hit();
-		return true;
+		return;
 	}
 
 	if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
 	{
 		EnemyOne->Missile->Destroy();
 		rock->Hit();
-		return true;
+		return;
 	}
 
 	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*rock))
@@ -354,10 +354,34 @@ bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		EnemyTwo->Hit();
 		EnemyTwo->Destroy();
 		rock->Hit();
-		return true;
+		return;
 	}
 
-	return false;
+	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*EnemyTwo))
+	{
+		EnemyOne->Hit();
+		EnemyOne->Destroy();
+		EnemyTwo->Hit();
+		EnemyTwo->Destroy();
+		return;
+	}
+
+	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*EnemyOne))
+	{
+		EnemyTwo->Hit();
+		EnemyTwo->Destroy();
+		EnemyOne->Hit();
+		EnemyOne->Destroy();
+		return;
+	}
+
+	if (EnemyOne->Missile->Enabled && EnemyTwo->Enabled
+		&& EnemyOne->Missile->CirclesIntersect(*EnemyTwo))
+	{
+		EnemyOne->Missile->Destroy();
+		rock->Hit();
+		return;
+	}
 }
 
 void EnemyControl::Reset()

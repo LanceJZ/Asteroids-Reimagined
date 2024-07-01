@@ -49,4 +49,5 @@ private:
 	void DestinationLeft();
 	void DestinationRight();
 	void FireMissile();
+	bool CheckCollisions();
 };

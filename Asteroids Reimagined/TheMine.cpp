@@ -9,6 +9,11 @@ TheMine::~TheMine()
 {
 }
 
+void TheMine::SetPlayer(ThePlayer* player)
+{
+	Player = player;
+}
+
 bool TheMine::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -27,6 +32,9 @@ void TheMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	if (TheManagers.EM.TimerElapsed(LifeTimerID)) Destroy();
+
+	CheckCollisions();
 }
 
 void TheMine::Draw3D()
@@ -45,4 +53,24 @@ void TheMine::Destroy()
 {
 	Entity::Destroy();
 
+}
+
+void TheMine::CheckCollisions()
+{
+	for (auto& playerShot : Player->Shots)
+	{
+		if (playerShot->Enabled && playerShot->CirclesIntersect(*this))
+		{
+			playerShot->Destroy();
+			Destroy();
+			break;
+		}
+	}
+
+	if (Player->Enabled && CirclesIntersect(*Player))
+	{
+		Player->Hit(Position, Velocity);
+
+		if (!Player->Shield->Enabled) Destroy();
+	}
 }

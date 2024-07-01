@@ -126,8 +126,9 @@ bool TheRock::CheckCollisions()
 {
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{
-		Destroy();
-		Player->Hit();
+		if (!Player->Shield->Enabled) Destroy();
+
+		Player->Hit(Position, Velocity);
 
 		return true;
 	}

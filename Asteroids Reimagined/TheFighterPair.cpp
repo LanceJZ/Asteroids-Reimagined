@@ -210,7 +210,7 @@ void TheFighterPair::CheckCollisions()
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{
 		Hit();
-		Player->Hit();
+		Player->Hit(Position, Velocity);
 		Destroy();
 		return;
 	}

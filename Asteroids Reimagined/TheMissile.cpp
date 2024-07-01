@@ -36,6 +36,7 @@ void TheMissile::Update(float deltaTime)
 
 	ChasePlayer();
 	CheckScreenEdge();
+	CheckCollisions();
 }
 
 void TheMissile::Draw3D()
@@ -54,4 +55,33 @@ void TheMissile::Destroy()
 {
 	Entity::Destroy();
 
+}
+
+bool TheMissile::CheckCollisions()
+{
+	Enemy::CheckCollisions();
+
+	for (auto& ufo : UFOs)
+	{
+		if (ufo->Enabled && ufo->CirclesIntersect(*this))
+		{
+			ufo->Hit();
+			Hit();
+			Destroy();
+			return true;
+		}
+
+		for (auto& shot : ufo->Shots)
+		{
+			if (shot->Enabled && shot->CirclesIntersect(*this))
+			{
+				shot->Destroy();
+				Hit();
+				Destroy();
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

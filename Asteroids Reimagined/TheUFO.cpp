@@ -78,6 +78,34 @@ void TheUFO::Draw3D()
 	LineModel::Draw3D();
 }
 
+void TheUFO::CheckCollisions(TheRock* rock)
+{
+	for (auto& shot : Shots)
+	{
+		if (shot->Enabled && shot->CirclesIntersect(*rock))
+		{
+			shot->Destroy();
+			rock->Hit();
+			return;
+		}
+
+		if (shot->Enabled && shot->CirclesIntersect(*Player))
+		{
+			shot->Destroy();
+			Player->Hit(Position, Velocity);
+			return;
+		}
+	}
+
+	if (Enabled && CirclesIntersect(*rock))
+	{
+		Hit();
+		Destroy();
+		rock->Hit();
+		return;
+	}
+}
+
 void TheUFO::Spawn(int spawnCount)
 {
 	Vector3 position = { 0, 0, 0 };
@@ -292,8 +320,9 @@ bool TheUFO::CheckCollisions()
 	{
 		if (CirclesIntersect(*Player))
 		{
-			Destroy();
-			Player->Hit();
+			if (!Player->Shield->Enabled) Destroy();
+
+			Player->Hit(Position, Velocity);
 
 			return true;
 		}

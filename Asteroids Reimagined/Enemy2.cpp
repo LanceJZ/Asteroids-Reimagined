@@ -41,6 +41,10 @@ void Enemy2::Update(float deltaTime)
 		TheManagers.EM.ResetTimer(LayMineTimerID, GetRandomFloat(2.75f, 5.5f));
 		DropMine();
 	}
+
+	CheckCollisions();
+
+	if (CheckWentOffScreen()) Enabled = false;
 }
 
 void Enemy2::Draw3D()
@@ -213,10 +217,18 @@ void Enemy2::DropMine()
 	{
 		Mines.push_back(DBG_NEW TheMine());
 		TheManagers.EM.AddLineModel(Mines.at(mineNumber));
+		Mines.at(mineNumber)->SetPlayer(Player);
 		Mines.at(mineNumber)->SetModel(MineModel);
 		Mines.at(mineNumber)->Initialize(TheUtilities);
 		Mines.at(mineNumber)->BeginRun();
 	}
 
 	Mines.at(mineNumber)->Spawn(Position);
+}
+
+bool Enemy2::CheckCollisions()
+{
+	Enemy::CheckCollisions();
+
+	return false;
 }

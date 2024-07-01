@@ -131,6 +131,20 @@ bool GameLogic::CheckPlayerClear()
 		{
 			return false;
 		}
+
+		for (auto& Shot : ufo->Shots)
+		{
+			if (Shot->Enabled)
+			{
+				return false;
+			}
+		}
+	}
+
+	if (Enemies->EnemyOne->Enabled || Enemies->EnemyTwo->Enabled
+		|| Enemies->DeathStar->Enabled || Enemies->EnemyOne->Missile->Enabled)
+	{
+		return false;
 	}
 
 	return true;

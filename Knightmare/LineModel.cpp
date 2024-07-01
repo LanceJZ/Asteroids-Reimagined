@@ -150,9 +150,9 @@ void LineModel::CalculateRadius()
 		return;
 	}
 
-	for (int i = 0; i < LinePoints.size() - 2; i++)
+	for (int i = 0; i < LinePoints.size(); i++)
 	{
-		float distance = Vector3Distance(LinePoints[i], LinePoints[i + 1]);
+		float distance = Vector3Distance(LinePoints[i], { 0 });
 
 		if (distance > farDistance)
 		{
@@ -160,5 +160,5 @@ void LineModel::CalculateRadius()
 		}
 	}
 
-	Radius = farDistance * 0.5f * Scale;
+	Radius = farDistance * 0.9f * Scale;
 }

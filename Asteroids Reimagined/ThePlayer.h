@@ -17,6 +17,8 @@ public:
 
 	std::vector<Shot*> Shots = {};
 
+	LineModel* Shield = {};
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -30,7 +32,7 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void Hit();
+	void Hit(Vector3 location, Vector3 velocity);
 	void ScoreUpdate(int addToScore);
 	void Reset();
 	void NewGame();
@@ -41,13 +43,16 @@ private:
 	size_t FireRateTimerID = 0;
 	size_t TurretCooldownTimerID = 0;
 	size_t TurretHeatTimerID = 0;
+	size_t ShieldRechargeTimerID = 0;
+
 	int NextNewLifeScore = 10000;
 	int TurretHeat = 0;
 	int TurretHeatMax = 100;
+
 	float TurretDirection = 0.0f;
+	float ShieldPower = 0.0f;
 
 	LineModel* Flame = {};
-	LineModel* Shield = {};
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
 
@@ -64,6 +69,8 @@ private:
 
 	void ThrustOn(float amount);
 	void ThrustOff();
+
+	void ShieldHit(Vector3 location, Vector3 velocity);
 
 	void Gamepad();
 	void Keyboard();

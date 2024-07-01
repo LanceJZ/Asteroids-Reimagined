@@ -44,8 +44,6 @@ void Enemy1::Update(float deltaTime)
 
 	SetRotateVelocity(Destination, TurnSpeed, Speed);
 
-	if (CheckWentOffScreen()) Enabled = false;
-
 	if (TheManagers.EM.TimerElapsed(FireMissileTimerID))
 	{
 		if (!Missile->Enabled && Player->Enabled) FireMissile();
@@ -54,6 +52,8 @@ void Enemy1::Update(float deltaTime)
 	}
 
 	DestinationTarget();
+	CheckCollisions();
+	if (CheckWentOffScreen()) Enabled = false;
 }
 
 void Enemy1::Draw3D()
@@ -116,7 +116,7 @@ void Enemy1::Spawn(Vector3 position)
 
 	Enemy::Spawn(position);
 	RotationZ = AngleFromVectorZ(Destination);
-
+	Missile->SetUFO(UFOs);
 }
 
 void Enemy1::Destroy()
@@ -212,4 +212,11 @@ void Enemy1::FireMissile()
 {
 	Missile->Spawn(Position);
 	Missile->RotationZ = RotationZ;
+}
+
+bool Enemy1::CheckCollisions()
+{
+	Enemy::CheckCollisions();
+
+	return false;
 }

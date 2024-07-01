@@ -10,6 +10,7 @@ ThePlayer::ThePlayer()
 	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
 	TurretCooldownTimerID = TheManagers.EM.AddTimer(1.0f);
 	TurretHeatTimerID = TheManagers.EM.AddTimer(0.15f);
+	ShieldRechargeTimerID = TheManagers.EM.AddTimer(1.0f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
@@ -101,6 +102,16 @@ void ThePlayer::Update(float deltaTime)
 	CheckScreenEdge();
 	TurretTimers();
 	CrosshairUpdate();
+
+	if (Shield->Enabled)
+	{
+		ShieldPower -= 30.0f * deltaTime;
+
+		if (ShieldPower < 0.0f)
+		{
+			ShieldPower = 0.0f;
+		}
+	}
 }
 
 void ThePlayer::Draw3D()
@@ -109,14 +120,22 @@ void ThePlayer::Draw3D()
 
 }
 
-void ThePlayer::Hit()
+void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 {
-	Acceleration = { 0 };
-	Velocity = { 0 };
-	Lives--;
-	Enabled = false;
-	Turret->Enabled = false;
-	Flame->Enabled = false;
+	if (Shield->Enabled)
+	{
+		ShieldHit(location, velocity);
+	}
+	else
+	{
+		Acceleration = { 0 };
+		Velocity = { 0 };
+		Lives--;
+		Enabled = false;
+		Turret->Enabled = false;
+		Flame->Enabled = false;
+	}
+
 }
 
 void ThePlayer::ScoreUpdate(int addToScore)
@@ -143,6 +162,7 @@ void ThePlayer::Reset()
 	Enabled = true;
 	Flame->Enabled = false;
 	Turret->Enabled = true;
+	ShieldPower = 100.0f;
 }
 
 void ThePlayer::NewGame()
@@ -249,6 +269,24 @@ void ThePlayer::ThrustOff()
 {
 	SetAccelerationToZero(0.45f);
 	Flame->Enabled = false;
+}
+
+void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
+{
+	Acceleration = {0};
+
+	Velocity = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity, {0.25f}), {-1}),
+		Vector3Add(Vector3Multiply(velocity, {0.90f}),
+			GetVelocityFromAngleZ(GetAngleFromVectorsZ(location, Position),	196.666f)));
+
+	if (ShieldPower > 20)
+	{
+		ShieldPower -= 20;
+	}
+	else
+	{
+		ShieldPower = 0;
+	}
 }
 
 void ThePlayer::Gamepad()
@@ -376,11 +414,31 @@ void ThePlayer::Keyboard()
 
 	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E))
 	{
-		Shield->Enabled = true;
+		if (ShieldPower > 0.0f)
+		{
+			Shield->Enabled = true;
+		}
+
+		else
+		{
+			Shield->Enabled = false;
+		}
+
+		TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
 	}
 	else
 	{
 		Shield->Enabled = false;
+
+		if (TheManagers.EM.TimerElapsed(ShieldRechargeTimerID))
+		{
+			TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
+
+			if (ShieldPower < 100.0f)
+			{
+				ShieldPower += 1;
+			}
+		}
 	}
 
 	PointTurret(Crosshair->Position);

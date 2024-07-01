@@ -20,4 +20,5 @@ public:
 private:
 	size_t LifeTimerID = 0;
 
+	bool CheckCollisions();
 };

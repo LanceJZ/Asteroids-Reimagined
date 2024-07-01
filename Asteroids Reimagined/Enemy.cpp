@@ -14,6 +14,14 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void Enemy::SetUFO(TheUFO* ufos[2])
+{
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = ufos[i];
+	}
+}
+
 void Enemy::SetShotModel(LineModelPoints model)
 {
 	ShotModel = model;
@@ -154,40 +162,52 @@ void Enemy::Shoot(Vector3 velocity)
 	Shots[spawnNumber]->Spawn(Position, velocity);
 }
 
-bool Enemy::CheckCollision()
+bool Enemy::CheckCollisions()
 {
-	if (CirclesIntersect(*Player))
+	for (auto& playerShot : Player->Shots)
 	{
-		Hit();
-
-		Player->Hit();
-
-		return true;
-	}
-
-	for (auto& shot : Shots)
-	{
-		if (!shot->Enabled) continue;
-
-		if (shot->CirclesIntersect(*Player))
+		if (playerShot->Enabled && playerShot->CirclesIntersect(*this))
 		{
-			shot->Destroy();
-			Player->Hit();
+			playerShot->Destroy();
+			Hit();
+			Destroy();
 
 			return true;
 		}
 	}
 
-	for (auto &shot : Player->Shots)
+	if (Player->Enabled && Player->CirclesIntersect(*this))
 	{
-		if (!shot->Enabled) continue;
+		Player->Hit(Position, Velocity);
 
-		if (shot->CirclesIntersectBullet(*this))
+		if (!Player->Shield->Enabled)
 		{
 			Hit();
-			shot->Destroy();
+			Destroy();
+		}
 
+		return true;
+	}
+
+	for (auto& ufo : UFOs)
+	{
+		if (ufo->Enabled && ufo->CirclesIntersect(*this))
+		{
+			ufo->Hit();
+			Hit();
+			Destroy();
 			return true;
+		}
+
+		for (auto& shot : ufo->Shots)
+		{
+			if (shot->Enabled && shot->CirclesIntersect(*this))
+			{
+				shot->Destroy();
+				Hit();
+				Destroy();
+				return true;
+			}
 		}
 	}
 

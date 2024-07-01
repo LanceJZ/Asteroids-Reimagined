@@ -15,6 +15,9 @@ public:
 
 	std::vector<TheRock*> Rocks;
 	TheUFO* UFOs[2] = { nullptr };
+	TheDeathStar *DeathStar = nullptr;
+	Enemy1 *EnemyOne = nullptr;
+	Enemy2 *EnemyTwo = nullptr;
 
 	void SetPlayer(ThePlayer* player);
 	void SetRockModels(LineModelPoints rockModels[4]);
@@ -51,17 +54,14 @@ private:
 	LineModelPoints RockModels[4];
 
 	ThePlayer *Player = nullptr;
-	TheDeathStar *DeathStar = nullptr;
-	Enemy1 *EnemyOne = nullptr;
-	Enemy2 *EnemyTwo = nullptr;
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();
 	void SpawnDeathStar();
 	void CheckDeathStarStatus();
-	bool CheckRockCollisions();
-	bool CheckUFOCollisions(TheRock* rock);
-	bool CheckEnemyCollisions(TheRock* rock);
+	void CheckRockCollisions();
+	void CheckUFOCollisions(TheRock* rock);
+	void CheckEnemyCollisions(TheRock* rock);
 
 	void Reset();
 };
