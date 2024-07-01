@@ -357,7 +357,7 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		return;
 	}
 
-	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*EnemyTwo))
+	if (EnemyOne->Enabled && EnemyTwo->Enabled && EnemyOne->CirclesIntersect(*EnemyTwo))
 	{
 		EnemyOne->Hit();
 		EnemyOne->Destroy();
@@ -366,7 +366,7 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		return;
 	}
 
-	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*EnemyOne))
+	if (EnemyTwo->Enabled && EnemyOne->Enabled && EnemyTwo->CirclesIntersect(*EnemyOne))
 	{
 		EnemyTwo->Hit();
 		EnemyTwo->Destroy();
@@ -379,7 +379,8 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		&& EnemyOne->Missile->CirclesIntersect(*EnemyTwo))
 	{
 		EnemyOne->Missile->Destroy();
-		rock->Hit();
+		EnemyTwo->Hit();
+		EnemyTwo->Destroy();
 		return;
 	}
 }
