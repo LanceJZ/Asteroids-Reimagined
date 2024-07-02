@@ -53,6 +53,7 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 	}
 
 	Radius = 28.0f;
+	Enabled = false;
 
 	return true;
 }

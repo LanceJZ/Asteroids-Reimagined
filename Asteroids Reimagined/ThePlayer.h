@@ -12,7 +12,7 @@ public:
 	bool NewLife = false;
 	bool GameOver = false;
 
-	int Lives { 0 };
+	int Lives { 0 }; //TODO: Player lives next.
 
 	std::vector<Shot*> Shots = {};
 
