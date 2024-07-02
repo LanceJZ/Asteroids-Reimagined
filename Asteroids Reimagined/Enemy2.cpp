@@ -116,6 +116,16 @@ void Enemy2::Destroy()
 
 }
 
+void Enemy2::Reset()
+{
+	Destroy();
+
+	for (auto& mine : Mines)
+	{
+		mine->Destroy();
+	}
+}
+
 bool Enemy2::CheckWentOffScreen()
 {
 	if (EdgeSpawnedFrom == Edge::Right || EdgeSpawnedFrom == Edge::Left)

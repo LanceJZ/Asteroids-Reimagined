@@ -86,14 +86,12 @@ void TheUFO::CheckCollisions(TheRock* rock)
 		{
 			shot->Destroy();
 			rock->Hit();
-			return;
 		}
 
 		if (shot->Enabled && shot->CirclesIntersect(*Player))
 		{
 			shot->Destroy();
 			Player->Hit(Position, Velocity);
-			return;
 		}
 	}
 
@@ -102,7 +100,6 @@ void TheUFO::CheckCollisions(TheRock* rock)
 		Hit();
 		Destroy();
 		rock->Hit();
-		return;
 	}
 }
 
@@ -154,6 +151,16 @@ void TheUFO::Destroy()
 {
 	Entity::Destroy();
 
+}
+
+void TheUFO::Reset()
+{
+	Destroy();
+
+	for (auto& shot : Shots)
+	{
+		shot->Destroy();
+	}
 }
 
 void TheUFO::FireShot()

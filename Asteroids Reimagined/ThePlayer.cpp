@@ -31,6 +31,11 @@ bool ThePlayer::Initialize(Utilities* utilities)
 
 	Flame->Enabled = false;
 	Shield->Enabled = false;
+	Turret->Enabled = false;
+	Crosshair->Enabled = false;
+
+	GameOver = true;
+	Enabled = false;
 
 	return false;
 }
@@ -79,6 +84,8 @@ void ThePlayer::Input()
 {
 	LineModel::Input();
 
+	if (GameOver) return;
+
 
 	if (IsGamepadAvailable(0) && Enabled)
 	{
@@ -106,12 +113,16 @@ void ThePlayer::Update(float deltaTime)
 
 	if (Shield->Enabled)
 	{
-		ShieldPower -= 30.0f * deltaTime;
+		ShieldPower -= ShieldDrainRate * deltaTime;
 
 		if (ShieldPower < 0.0f)
 		{
 			ShieldPower = 0.0f;
 		}
+	}
+	else
+	{
+		ShieldPower += ShieldRechargeRate * deltaTime;
 	}
 }
 
@@ -135,6 +146,12 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Enabled = false;
 		Turret->Enabled = false;
 		Flame->Enabled = false;
+		Crosshair->Enabled = false;
+
+		if (Lives <= 0)
+		{
+			GameOver = true;
+		}
 	}
 
 }
@@ -169,8 +186,11 @@ void ThePlayer::Reset()
 void ThePlayer::NewGame()
 {
 	Lives = 4;
+	ShieldDrainRate = 25.15f;
+	ShieldRechargeRate = 5.15f;
 	NextNewLifeScore = 10000;
 	GameOver = false;
+	Score->Reset();
 	Reset();
 }
 
@@ -293,11 +313,6 @@ void ThePlayer::ShieldOff()
 	if (TheManagers.EM.TimerElapsed(ShieldRechargeTimerID))
 	{
 		TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
-
-		if (ShieldPower < 100.0f)
-		{
-			ShieldPower += 1;
-		}
 	}
 }
 

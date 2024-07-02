@@ -51,6 +51,10 @@ void TheFighter::Update(float deltaTime)
 		{
 			ChaseUFO();
 		}
+		else
+		{
+			LeaveScreen();
+		}
 
 		CheckCollisions();
 

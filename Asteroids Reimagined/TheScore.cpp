@@ -35,7 +35,7 @@ void TheScore::Draw2D()
 	DrawText(const_cast<char*>(std::to_string(Score).c_str()), 200, 5, 45, WHITE);
 	DrawText(const_cast<char*>(std::to_string(HighScore).c_str()),
 		GetScreenWidth() / 2, 4, 20, WHITE);
-	DrawText("(C) 1979 ATARI INC", (GetScreenWidth() / 2) - 15,
+	DrawText("(C) 1980 ATARI INC", (GetScreenWidth() / 2) - 35,
 		GetScreenHeight() - 12, 8, WHITE);
 }
 

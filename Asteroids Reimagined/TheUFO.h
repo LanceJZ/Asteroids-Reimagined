@@ -39,6 +39,7 @@ public:
 
 	void Spawn(int SpawnCount);
 	void Destroy();
+	void Reset();
 
 private:
 	size_t FireTimerID = 0;

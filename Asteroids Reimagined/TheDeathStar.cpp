@@ -52,7 +52,7 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 		fighterPair->Initialize(TheUtilities);
 	}
 
-	Radius = 28.0f;
+	Radius = 30.0f;
 	Enabled = false;
 
 	return true;
@@ -135,7 +135,7 @@ void TheDeathStar::Spawn(Vector3 position)
 		fighterPair->Spawn(position);
 	}
 
-	WY = FighterPairs[0]->Fighters[0]->Radius * 0.885f;
+	WY = FighterPairs[0]->Fighters[0]->Radius * 0.85f;
 	WX = FighterPairs[0]->Fighters[0]->Radius * 0.75f;
 
 	float rot = 0.333333f;
@@ -148,6 +148,21 @@ void TheDeathStar::Spawn(Vector3 position)
 	FighterPairs[0]->Position = { WX + offset, 0.0f, 0.0f };
 	FighterPairs[1]->Position = { -WX + offset, WY, 0.0f };
 	FighterPairs[2]->Position = { -WX + offset, -WY, 0.0f };
+}
+
+void TheDeathStar::NewGame()
+{
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->Reset();
+
+		for (auto &fighter : fighterPair->Fighters)
+		{
+			fighter->Reset();
+		}
+	}
+
+	Reset();
 }
 
 void TheDeathStar::CheckCollisions()

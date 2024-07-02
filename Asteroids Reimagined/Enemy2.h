@@ -31,6 +31,7 @@ public:
 
 	void Spawn(Vector3 position);
 	void Destroy();
+	void Reset();
 
 private:
 	size_t LayMineTimerID = 0;

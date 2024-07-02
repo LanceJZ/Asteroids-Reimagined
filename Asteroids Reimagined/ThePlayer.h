@@ -51,6 +51,8 @@ private:
 
 	float TurretDirection = 0.0f;
 	float ShieldPower = 0.0f;
+	float ShieldDrainRate = 0.0f;
+	float ShieldRechargeRate = 0.0f;
 
 	LineModel* Flame = {};
 	LineModel* Turret = {};

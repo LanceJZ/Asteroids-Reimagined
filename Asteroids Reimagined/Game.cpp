@@ -69,8 +69,6 @@ bool Game::BeginRun()
 	//Any Entities added after this point need this method fired manually.
 	TheManagers.BeginRun();
 
-	Player->NewGame();
-
 	return true;
 }
 

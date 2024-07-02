@@ -27,6 +27,7 @@ public:
 	void NewWaveStart();
 	void Reset();
 	void Spawn(Vector3 position);
+	void NewGame();
 
 private:
 	int Points = 50;

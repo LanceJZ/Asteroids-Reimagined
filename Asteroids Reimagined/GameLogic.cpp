@@ -27,6 +27,8 @@ bool GameLogic::Initialize(Utilities* utilities)
 
 	PlayerClear->Radius = 140.0f;
 
+	State = MainMenu;
+
 	return false;
 }
 
@@ -41,7 +43,9 @@ void GameLogic::Update()
 {
 	Common::Update();
 
-	if (!Player->Enabled)
+	if (Player->GameOver) State = MainMenu;
+
+	if (!Player->Enabled && State == InPlay)
 	{
 		PlayerClear->Enabled = true;
 
@@ -113,6 +117,10 @@ void GameLogic::GameInput()
 
 void GameLogic::NewGame()
 {
+	Player->NewGame();
+	Enemies->NewGame();
+
+	State = InPlay;
 }
 
 bool GameLogic::CheckPlayerClear()

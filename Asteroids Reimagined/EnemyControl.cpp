@@ -137,7 +137,7 @@ void EnemyControl::Update()
 	}
 
 	if (SpawnedDeathStar) CheckDeathStarStatus();
-	else if (Wave > 2 && RockCount < 6)
+	else if (Wave > 1 && RockCount < 5)
 	{
 		if (TheManagers.EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
@@ -153,7 +153,7 @@ void EnemyControl::Update()
 
 		if (!Player->GameOver && !Player->Enabled) return;
 
-		if (!EnemyOne->Enabled)
+		if (!EnemyOne->Enabled && Wave > 2)
 		{
 			EnemyOne->Spawn({ 0, 0, 0 });
 		}
@@ -165,10 +165,21 @@ void EnemyControl::Update()
 
 		if (!Player->GameOver && !Player->Enabled) return;
 
-		if (!EnemyTwo->Enabled)
+		if (!EnemyTwo->Enabled && Wave > 3)
 		{
 			EnemyTwo->Spawn({ 0, 0, 0 });
 		}
+	}
+}
+
+void EnemyControl::NewGame()
+{
+	DeathStar->NewGame();
+	Reset();
+
+	for (auto& rock : Rocks)
+	{
+		rock->Destroy();
 	}
 }
 
@@ -387,13 +398,17 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 
 void EnemyControl::Reset()
 {
+	Wave = 0;
 	UFOSpawnCount = 0;
-	RockSpawnCount = StarRockCount;
+	RockSpawnCount = StartRockCount;
 	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
 	TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
 
-	for (auto &ufo : UFOs)
+	for (auto& ufo : UFOs)
 	{
-		ufo->Enabled = false;
+		ufo->Reset();
 	}
+
+	EnemyOne->Reset();
+	EnemyTwo->Reset();
 }

@@ -34,6 +34,8 @@ public:
 
 	void Update();
 
+	void NewGame();
+
 private:
 	bool NoMoreRocks = false;
 	bool SpawnedDeathStar = false;
@@ -45,7 +47,7 @@ private:
 	size_t EnemyTwoSpawnTimerID;
 
 	int UFOSpawnCount = 0;
-	int StarRockCount = 4;
+	int StartRockCount = 4;
 	int RockSpawnCount = 0;
 	int RockCount = 0;
 	int Wave = 0;

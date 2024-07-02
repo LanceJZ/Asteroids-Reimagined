@@ -126,6 +126,12 @@ void Enemy1::Destroy()
 
 }
 
+void Enemy1::Reset()
+{
+	Destroy();
+	Missile->Destroy();
+}
+
 bool Enemy1::CheckWentOffScreen()
 {
 	if (EdgeSpawnedFrom == Edge::Right || EdgeSpawnedFrom == Edge::Left)

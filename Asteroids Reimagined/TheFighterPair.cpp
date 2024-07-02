@@ -77,6 +77,10 @@ void TheFighterPair::Update(float deltaTime)
 		{
 			ChaseUFO();
 		}
+		else
+		{
+			LeaveScreen();
+		}
 
 		CheckCollisions();
 
@@ -129,7 +133,7 @@ void TheFighterPair::Spawn(Vector3 position)
 	Fighters[0]->RotationZ = 0.0f;
 	Fighters[1]->RotationZ = PI;
 
-	float offset = 0.875f;
+	float offset = 0.78f;
 	Fighters[0]->Position.x = Fighters[0]->Radius * offset;
 	Fighters[0]->Position.y = 0.0f;
 	Fighters[1]->Position.x = -Fighters[1]->Radius * offset;
