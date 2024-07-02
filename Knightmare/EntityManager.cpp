@@ -153,9 +153,9 @@ void EntityManager::Draw3D()
 
 void EntityManager::Draw2D()
 {
-	for (auto common : Commons)
+	for (auto drawable : OnScreenTexts)
 	{
-		common->Draw2D();
+		drawable->Draw2D();
 	}
 }
 
@@ -323,6 +323,15 @@ size_t EntityManager::AddCommon(Common* common)
 	Commons[commonNumber]->Initialize(TheUtilities);
 
 	return commonNumber;
+}
+
+size_t EntityManager::AddOnScreenText(OnScreenText* onScreenText)
+{
+	size_t number = OnScreenTexts.size();
+	OnScreenTexts.push_back(onScreenText);
+	OnScreenTexts[number]->Initialize(TheUtilities);
+
+	return number;
 }
 
 Entity* EntityManager::CreateEntity()

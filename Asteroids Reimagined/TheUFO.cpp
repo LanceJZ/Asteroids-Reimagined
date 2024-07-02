@@ -121,7 +121,7 @@ void TheUFO::Spawn(int spawnCount)
 	float fullSpeed = 128.666f;
 	float spawnPercent = (powf(0.915f, (float)spawnCount / (float)(Wave + 1)) * 100);
 
-	if (GetRandomFloat(0, 99) < spawnPercent - Player->Score / 500)
+	if (GetRandomFloat(0, 99) < spawnPercent - Player->GetScore() / 500)
 	{
 		TheSize = Large;
 		Scale = fullScale;
@@ -212,7 +212,7 @@ float TheUFO::AimedShot()
 		return GetRandomRadian();
 	}
 
-	float percentChance = 0.2f - (Player->Score * 0.00001f);
+	float percentChance = 0.2f - (Player->GetScore() * 0.00001f);
 
 	if (percentChance < 0)
 	{
@@ -323,6 +323,7 @@ bool TheUFO::CheckCollisions()
 			if (!Player->Shield->Enabled) Destroy();
 
 			Player->Hit(Position, Velocity);
+			SendScoreToPlayer();
 
 			return true;
 		}
@@ -334,9 +335,24 @@ bool TheUFO::CheckCollisions()
 		{
 			shot->Destroy();
 			Destroy();
+			SendScoreToPlayer();
+
 			return true;
 		}
 	}
 
 	return false;
+}
+
+void TheUFO::SendScoreToPlayer()
+{
+	switch (TheSize)
+	{
+	case Large:
+		Player->ScoreUpdate(200);
+		break;
+	case Small:
+		Player->ScoreUpdate(1000);
+		break;
+	}
 }

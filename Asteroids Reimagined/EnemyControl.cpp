@@ -4,8 +4,8 @@ EnemyControl::EnemyControl()
 {
 	UFOSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
 	DeathStarSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
-	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(13.0f);
-	EnemyTwoSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
+	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(15.0f);
+	EnemyTwoSpawnTimerID = TheManagers.EM.AddTimer(12.0f);
 
 	for (int i = 0; i < 2; i++)
 	{

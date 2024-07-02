@@ -56,4 +56,5 @@ private:
 	void ChangeVector();
 	bool CheckReachedSide();
 	bool CheckCollisions();
+	void SendScoreToPlayer();
 };

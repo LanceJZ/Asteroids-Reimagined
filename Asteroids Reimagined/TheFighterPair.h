@@ -31,7 +31,7 @@ public:
 	void Spawn(Vector3 position);
 
 private:
-	int TheScore = 200;
+	int Points = 200;
 	float Speed = 100.0f;
 	float TurnSpeed = 0.5f;
 	float RotateMagnitude = PI / 2;

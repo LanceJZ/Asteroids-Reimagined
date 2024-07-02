@@ -6,6 +6,7 @@ ThePlayer::ThePlayer()
 	TheManagers.EM.AddLineModel(Shield = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
+	TheManagers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
 
 	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
 	TurretCooldownTimerID = TheManagers.EM.AddTimer(1.0f);
@@ -79,7 +80,7 @@ void ThePlayer::Input()
 	LineModel::Input();
 
 
-	if (IsGamepadAvailable(0))
+	if (IsGamepadAvailable(0) && Enabled)
 	{
 		Gamepad();
 		Crosshair->Enabled = false;
@@ -140,19 +141,19 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 
 void ThePlayer::ScoreUpdate(int addToScore)
 {
-	Score += addToScore;
+	Score->UpdateScore(addToScore);
 
-	if (Score > HighScore)
-	{
-		HighScore = Score;
-	}
-
-	if (Score > NextNewLifeScore)
+	if (Score->GetScore() > NextNewLifeScore)
 	{
 		NextNewLifeScore += 10000;
 		Lives++;
 		NewLife = true;
 	}
+}
+
+int ThePlayer::GetScore()
+{
+	return Score->GetScore();
 }
 
 void ThePlayer::Reset()
@@ -169,7 +170,6 @@ void ThePlayer::NewGame()
 {
 	Lives = 4;
 	NextNewLifeScore = 10000;
-	Score = 0;
 	GameOver = false;
 	Reset();
 }
@@ -271,6 +271,36 @@ void ThePlayer::ThrustOff()
 	Flame->Enabled = false;
 }
 
+void ThePlayer::ShieldOn()
+{
+	if (ShieldPower > 0.0f)
+	{
+		Shield->Enabled = true;
+	}
+
+	else
+	{
+		Shield->Enabled = false;
+	}
+
+	TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
+}
+
+void ThePlayer::ShieldOff()
+{
+	Shield->Enabled = false;
+
+	if (TheManagers.EM.TimerElapsed(ShieldRechargeTimerID))
+	{
+		TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
+
+		if (ShieldPower < 100.0f)
+		{
+			ShieldPower += 1;
+		}
+	}
+}
+
 void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 {
 	Acceleration = {0};
@@ -292,8 +322,8 @@ void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 void ThePlayer::Gamepad()
 {
 	//Button B is 6 for Shield //Button A is 7 for Fire //Button Y is 8 for Hyperspace
-	//Button X is 5	//Left bumper is 9 //Right bumper is 11 for Shield //Left Trigger is 10
-	//Right Trigger is 12 for Thrust //Dpad Up is 1 for	//Dpad Down is 3 for
+	//Button X is 5	//Left bumper is 9 //Right bumper is 11 //Left Trigger is 10
+	//Right Trigger is 12 for Shield //Dpad Up is 1 for	//Dpad Down is 3 for
 	//Dpad Left is 4 for rotate left //Dpad Right is 2 for rotate right
 	//Axis 1 is -1 for Up, 1 for Down on left stick.
 	//Axis 0 is -1 for Left, 1 for right on left stick.
@@ -350,9 +380,11 @@ void ThePlayer::Gamepad()
 	//Right Trigger
 	if (IsGamepadButtonDown(0, 12))
 	{
+		ShieldOn();
 	}
 	else
 	{
+		ShieldOff();
 	}
 
 	if (IsGamepadButtonDown(0, 4) || GetGamepadAxisMovement(0, 0) < -0.25f)
@@ -375,11 +407,9 @@ void ThePlayer::Gamepad()
 
 	if (IsGamepadButtonDown(0, 5) || IsGamepadButtonDown(0, 8)) //X button
 	{
-		Shield->Enabled = true;
 	}
 	else
 	{
-		Shield->Enabled = false;
 	}
 }
 
@@ -414,31 +444,11 @@ void ThePlayer::Keyboard()
 
 	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E))
 	{
-		if (ShieldPower > 0.0f)
-		{
-			Shield->Enabled = true;
-		}
-
-		else
-		{
-			Shield->Enabled = false;
-		}
-
-		TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
+		ShieldOn();
 	}
 	else
 	{
-		Shield->Enabled = false;
-
-		if (TheManagers.EM.TimerElapsed(ShieldRechargeTimerID))
-		{
-			TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
-
-			if (ShieldPower < 100.0f)
-			{
-				ShieldPower += 1;
-			}
-		}
+		ShieldOff();
 	}
 
 	PointTurret(Crosshair->Position);

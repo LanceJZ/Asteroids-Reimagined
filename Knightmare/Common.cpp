@@ -20,10 +20,6 @@ void Common::Update()
 {
 }
 
-void Common::Draw2D()
-{
-}
-
 float Common::GetRandomScreenY()
 {
 	return GetRandomFloat(-GameWindowHalfHeight, GameWindowHalfHeight);

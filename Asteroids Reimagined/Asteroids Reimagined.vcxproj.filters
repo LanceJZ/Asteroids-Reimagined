@@ -66,6 +66,9 @@
     <ClCompile Include="TheMine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TheScore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -92,24 +95,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TheRock.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TheUFO.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TheDeathStar.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TheFighterPair.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TheFighter.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy1.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="TheMissile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -117,6 +102,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TheMine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheDeathStar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheRock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheUFO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheFighter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheFighterPair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheScore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

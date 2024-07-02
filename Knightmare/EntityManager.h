@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "Entity.h"
+#include "OnScreenText.h"
 #include "LineModel.h"
 #include "Model3D.h"
 #include "Timer.h"
@@ -51,12 +52,14 @@ public:
 	size_t AddTimer();
 	size_t AddTimer(float amount);
 	size_t AddCommon(Common* common);
+	size_t AddOnScreenText(OnScreenText* drawText);
 
 	Entity* CreateEntity();
 	LineModel* CreateLineModel();
 	Model3D* CreateModel3D(Model model);
 
 	std::vector<Entity*> Entities = {};
+	std::vector<OnScreenText*> OnScreenTexts = {};
 	std::vector<LineModel*> LineModels = {};
 	std::vector<Model3D*> Model3Ds = {};
 	std::vector<Common*> Commons = {};

@@ -14,6 +14,7 @@ bool TheMissile::Initialize(Utilities* utilities)
 	Enemy::Initialize(utilities);
 
 	Enabled = false;
+	Points = 500;
 
 	return false;
 }

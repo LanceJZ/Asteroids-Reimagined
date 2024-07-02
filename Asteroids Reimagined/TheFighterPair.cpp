@@ -209,9 +209,15 @@ void TheFighterPair::CheckCollisions()
 {
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{
-		Hit();
 		Player->Hit(Position, Velocity);
-		Destroy();
+
+		if (!Player->Shield->Enabled)
+		{
+			Hit();
+			Destroy();
+			Player->ScoreUpdate(Points);
+		}
+
 		return;
 	}
 
@@ -222,6 +228,8 @@ void TheFighterPair::CheckCollisions()
 			shot->Destroy();
 			Hit();
 			Destroy();
+			Player->ScoreUpdate(Points);
+
 			return;
 		}
 	}

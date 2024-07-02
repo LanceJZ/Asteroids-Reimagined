@@ -27,6 +27,7 @@ bool Enemy1::Initialize(Utilities* utilities)
 	Enemy::Initialize(utilities);
 
 	Enabled = false;
+	Points = 1250;
 
 	return false;
 }

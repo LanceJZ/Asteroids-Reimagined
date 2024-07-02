@@ -29,7 +29,7 @@ public:
 	void Spawn(Vector3 position);
 
 private:
-	int Score = 50;
+	int Points = 50;
 
 	float WX = 0.0f;
 	float WY = 0.0f;

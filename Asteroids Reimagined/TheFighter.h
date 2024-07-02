@@ -28,7 +28,7 @@ public:
 
 private:
 	bool Separated = false;
-	int Score = 200;
+	int Points = 200;
 	float Speed = 150.0f;
 	float TurnSpeed = 0.45f;
 	float RotateMagnitude = PI / 2;

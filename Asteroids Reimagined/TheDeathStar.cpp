@@ -153,9 +153,15 @@ void TheDeathStar::CheckCollisions()
 {
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{
-		Hit();
 		Player->Hit(Position, Velocity);
-		Destroy();
+
+		if (!Player->Shield->Enabled)
+		{
+			Hit();
+			Destroy();
+			Player->ScoreUpdate(Points);
+		}
+
 		return;
 	}
 
@@ -166,6 +172,8 @@ void TheDeathStar::CheckCollisions()
 			shot->Destroy();
 			Hit();
 			Destroy();
+			Player->ScoreUpdate(Points);
+
 			return;
 		}
 	}

@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "Shot.h"
+#include "TheScore.h"
 
 class ThePlayer : public LineModel
 {
@@ -11,8 +12,6 @@ public:
 	bool NewLife = false;
 	bool GameOver = false;
 
-	int Score { 0 };
-	int HighScore { 0 };
 	int Lives { 0 };
 
 	std::vector<Shot*> Shots = {};
@@ -34,6 +33,7 @@ public:
 
 	void Hit(Vector3 location, Vector3 velocity);
 	void ScoreUpdate(int addToScore);
+	int GetScore();
 	void Reset();
 	void NewGame();
 
@@ -56,6 +56,8 @@ private:
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
 
+	TheScore* Score = {};
+
 	void PointTurret(float stickDirectionX, float stickDirectionY);
 	void PointTurret(Vector3 mouseLocation);
 	void FireTurret();
@@ -69,6 +71,9 @@ private:
 
 	void ThrustOn(float amount);
 	void ThrustOff();
+
+	void ShieldOn();
+	void ShieldOff();
 
 	void ShieldHit(Vector3 location, Vector3 velocity);
 

@@ -35,7 +35,7 @@ public:
 private:
 	size_t LayMineTimerID = 0;
 
-	int Score = 300;
+	//int Score = 1300;
 	float Speed = 75.0f;
 	float TurnSpeed = 0.4666f;
 	float RotateMagnitude = PI / 2;

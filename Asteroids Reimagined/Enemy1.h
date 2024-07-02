@@ -35,7 +35,7 @@ public:
 
 private:
 	size_t FireMissileTimerID = 0;
-	int Score = 250;
+	//int Score = 1250;
 	float Speed = 133.666f;
 	float TurnSpeed = 0.666f;
 	float RotateMagnitude = PI / 2;

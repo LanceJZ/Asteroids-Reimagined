@@ -20,7 +20,6 @@ public:
 	virtual bool Initialize(Utilities* utilities);
 	virtual bool BeginRun();
 	virtual void Update();
-	virtual void Draw2D();
 	float GetRandomScreenY();
 	float GetRandomScreenX();
 	float GetRandomFloat(float min, float max);

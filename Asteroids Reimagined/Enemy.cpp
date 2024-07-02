@@ -171,6 +171,7 @@ bool Enemy::CheckCollisions()
 			playerShot->Destroy();
 			Hit();
 			Destroy();
+			Player->ScoreUpdate(Points);
 
 			return true;
 		}
@@ -184,6 +185,7 @@ bool Enemy::CheckCollisions()
 		{
 			Hit();
 			Destroy();
+			Player->ScoreUpdate(Points);
 		}
 
 		return true;

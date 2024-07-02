@@ -129,6 +129,7 @@ bool TheRock::CheckCollisions()
 		if (!Player->Shield->Enabled) Destroy();
 
 		Player->Hit(Position, Velocity);
+		SendScoreToPlayer();
 
 		return true;
 	}
@@ -139,9 +140,26 @@ bool TheRock::CheckCollisions()
 		{
 			shot->Destroy();
 			Hit();
+			SendScoreToPlayer();
 			return true;
 		}
 	}
 
 	return false;
+}
+
+void TheRock::SendScoreToPlayer()
+{
+	switch (Size)
+	{
+	case Large:
+		Player->ScoreUpdate(20);
+		break;
+	case Medium:
+		Player->ScoreUpdate(50);
+		break;
+	case Small:
+		Player->ScoreUpdate(100);
+		break;
+	}
 }

@@ -34,4 +34,5 @@ private:
 	ThePlayer *Player = nullptr;
 
 	bool CheckCollisions();
+	void SendScoreToPlayer();
 };
