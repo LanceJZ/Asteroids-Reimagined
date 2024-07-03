@@ -36,14 +36,19 @@ bool GameLogic::BeginRun()
 {
 	Common::BeginRun();
 
-	return false;
+	PlayerModel = Player->GetLineModel();
+
+	return true;
 }
 
 void GameLogic::Update()
 {
 	Common::Update();
 
-	if (Player->GameOver) State = MainMenu;
+	if (Player->GameOver)
+	{
+		State = MainMenu;
+	}
 
 	if (!Player->Enabled && State == InPlay)
 	{
@@ -52,11 +57,18 @@ void GameLogic::Update()
 		if (CheckPlayerClear())
 		{
 			Player->Reset();
+			PlayerShipDisplay();
 		}
 	}
 	else
 	{
 		PlayerClear->Enabled = false;
+
+		if (Player->NewLife)
+		{
+			PlayerShipDisplay();
+			Player->NewLife = false;
+		}
 	}
 }
 
@@ -115,12 +127,50 @@ void GameLogic::GameInput()
 	}
 }
 
+void GameLogic::PlayerShipDisplay()
+{
+	Vector2 location = { (-GetScreenWidth() / 2.25f) + Player->Radius,
+		(-GetScreenHeight() / 2) + Player->Radius * 2.0f + 30.0f };
+
+	if (Player->Lives > PlayerShipModels.size())
+	{
+		PlayerShipModels.push_back(DBG_NEW LineModel());
+		TheManagers.EM.AddLineModel(PlayerShipModels.back());
+		PlayerShipModels.back()->SetModel(PlayerModel);
+		PlayerShipModels.back()->Initialize(TheUtilities);
+		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
+		PlayerShipModels.back()->Scale = 0.8f;
+	}
+
+	for (int i = 0; i < PlayerShipModels.size(); i++)
+	{
+		PlayerShipModels[i]->Enabled = false;
+		PlayerShipModels[i]->Position = { location.x, location.y, 0.0f };
+		location.x += Player->Radius * 2.0f;
+	}
+
+	if (Player->Lives > PlayerShipModels.size())
+	{
+		return;
+	}
+
+	for (int i = 0; i < Player->Lives; i++)
+	{
+		PlayerShipModels.at(i)->Enabled = true;
+	}
+}
+
 void GameLogic::NewGame()
 {
 	Player->NewGame();
 	Enemies->NewGame();
 
 	State = InPlay;
+
+	for (int i = 0; i < Player->Lives; i++)
+	{
+		PlayerShipDisplay();
+	}
 }
 
 bool GameLogic::CheckPlayerClear()

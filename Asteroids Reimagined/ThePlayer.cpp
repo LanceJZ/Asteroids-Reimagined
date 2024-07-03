@@ -148,7 +148,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Flame->Enabled = false;
 		Crosshair->Enabled = false;
 
-		if (Lives <= 0)
+		if (Lives < 0)
 		{
 			GameOver = true;
 		}

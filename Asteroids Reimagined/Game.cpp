@@ -66,7 +66,7 @@ bool Game::Load()
 
 bool Game::BeginRun()
 {
-	//Any Entities added after this point need this method fired manually.
+	//Any Entities added after this point need this method fired manually if needed.
 	TheManagers.BeginRun();
 
 	return true;

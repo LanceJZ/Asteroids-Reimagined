@@ -35,11 +35,16 @@ public:
 private:
 	Vector2 AdjustedFieldSize = {};
 
+	LineModelPoints PlayerModel;
+
+	std::vector <LineModel*> PlayerShipModels;
+
 	Entity* PlayerClear;
 
 	ThePlayer* Player = {};
 	EnemyControl* Enemies = {};
 
+	void PlayerShipDisplay();
 	void NewGame();
 	bool CheckPlayerClear();
 };
