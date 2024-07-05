@@ -29,12 +29,31 @@ public:
 	void SetEnemyMissileModel(LineModelPoints model);
 	void SetEnemyMineModel(LineModelPoints model);
 
+	void SetRockExplodeSound(Sound sound);
+	void SetUFOExplodeSound(Sound sound);
+	void SetUFOFireSound(Sound sound);
+	void SetUFOBigSound(Sound sound);
+	void SetUFOSmallSound(Sound sound);
+	void SetDeathStarSpawnSound(Sound sound);
+	void SetDeathStarExplodeSound(Sound sound);
+	void SetEnemyOneSpawnSound(Sound sound);
+	void SetEnemyOneFireSound(Sound sound);
+	void SetEnemyOneExplodeSound(Sound sound);
+	void SetEnemyOneOnSound(Sound sound);
+	void SetEnemyOneMissileExplodeSound(Sound sound);
+	void SetEnemyTwoSpawnSound(Sound sound);
+	void SetEnemyTwoFireSound(Sound sound);
+	void SetEnemyTwoExplodeSound(Sound sound);
+	void SetEnemyTwoOnSound(Sound sound);
+	void SetEnemyTwoMineExplodeSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
 	void Update();
 
 	void NewGame();
+	void NextWave();
 
 private:
 	bool NoMoreRocks = false;
@@ -51,6 +70,12 @@ private:
 	int RockSpawnCount = 0;
 	int RockCount = 0;
 	int Wave = 0;
+
+	Sound RockExplodeSound = {};
+	Sound UFOExplodeSound = {};
+	Sound UFOFireSound = {};
+	Sound UFOSmallSound = {};
+	Sound UFOBigSound = {};
 
 	LineModelPoints ShotModel;
 	LineModelPoints RockModels[4];

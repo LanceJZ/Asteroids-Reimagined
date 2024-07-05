@@ -9,6 +9,7 @@ public:
 	virtual ~TheMine();
 
 	void SetPlayer(ThePlayer* player);
+	void SetExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -17,11 +18,14 @@ public:
 	void Draw3D();
 
 	void Spawn(Vector3 position);
+	void Hit();
 	void Destroy();
 
 private:
 
 	size_t LifeTimerID = 0;
+
+	Sound ExplodeSound = {};
 
 	ThePlayer* Player = nullptr;
 

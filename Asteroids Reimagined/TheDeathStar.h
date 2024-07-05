@@ -18,6 +18,9 @@ public:
 	void SetUFO(TheUFO* ufo[2]);
 	void SetWedgeModel(LineModelPoints model);
 
+	void SetExplodeSound(Sound sound);
+	void SetSpawnSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -34,6 +37,9 @@ private:
 
 	float WX = 0.0f;
 	float WY = 0.0f;
+
+	Sound ExplodeSound = {};
+	Sound SpawnSound = {};
 
 	ThePlayer* Player = nullptr;
 	TheUFO* UFOs[2] = {nullptr};

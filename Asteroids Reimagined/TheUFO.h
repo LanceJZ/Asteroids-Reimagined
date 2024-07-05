@@ -32,6 +32,11 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetShotModel(LineModelPoints model);
 
+	void SetExplodeSound(Sound sound);
+	void SetFireSound(Sound sound);
+	void SetBigSound(Sound sound);
+	void SetSmallSound(Sound sound);
+
 	void Update(float deltaTime);
 	void Draw3D();
 
@@ -39,11 +44,17 @@ public:
 
 	void Spawn(int SpawnCount);
 	void Destroy();
+	void Hit();
 	void Reset();
 
 private:
 	size_t FireTimerID = 0;
 	size_t ChangeVectorTimerID = 0;
+
+	Sound ExplodeSound;
+	Sound FireSound;
+	Sound BigSound;
+	Sound SmallSound;
 
 	LineModelPoints ShotModel;
 
@@ -58,4 +69,5 @@ private:
 	bool CheckReachedSide();
 	bool CheckCollisions();
 	void SendScoreToPlayer();
+	void PlayOnSound();
 };

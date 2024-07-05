@@ -56,7 +56,7 @@ void GameLogic::Update()
 
 		if (CheckPlayerClear())
 		{
-			Player->Reset();
+			Player->Spawn();
 			PlayerShipDisplay();
 		}
 	}
@@ -124,6 +124,19 @@ void GameLogic::GameInput()
 		if (IsKeyPressed(KEY_B))
 		{
 		}
+
+#if DEBUG
+		if (IsKeyPressed(KEY_F5))
+		{
+			Enemies->NextWave();
+		}
+
+		if (IsKeyPressed(KEY_F6))
+		{
+			Player->ExtraLife();
+		}
+#endif
+
 	}
 }
 
@@ -200,7 +213,12 @@ bool GameLogic::CheckPlayerClear()
 	}
 
 	if (Enemies->EnemyOne->Enabled || Enemies->EnemyTwo->Enabled
-		|| Enemies->DeathStar->Enabled || Enemies->EnemyOne->Missile->Enabled)
+		|| Enemies->EnemyOne->Missile->Enabled)
+	{
+		return false;
+	}
+
+	if (Enemies->DeathStar->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 	}

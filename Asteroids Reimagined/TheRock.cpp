@@ -13,6 +13,12 @@ void TheRock::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheRock::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+	SetSoundVolume(ExplodeSound, 0.333f);
+}
+
 bool TheRock::Initialize()
 {
 	LineModel::Initialize(TheUtilities);
@@ -120,6 +126,13 @@ void TheRock::Destroy()
 {
 	Entity::Destroy();
 
+}
+
+void TheRock::Hit()
+{
+	Entity::Hit();
+
+	if (!Player->GameOver) PlaySound(ExplodeSound);
 }
 
 bool TheRock::CheckCollisions()

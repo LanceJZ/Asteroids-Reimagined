@@ -23,6 +23,8 @@ bool TheMissile::BeginRun()
 {
 	Enemy::BeginRun();
 
+	SetSoundVolume(ExplodeSound, 0.5f);
+
 	return false;
 }
 
@@ -52,6 +54,11 @@ void TheMissile::Spawn(Vector3 position)
 	TheManagers.EM.ResetTimer(LifeTimerID);
 }
 
+void TheMissile::Hit()
+{
+	Enemy::Hit();
+}
+
 void TheMissile::Destroy()
 {
 	Entity::Destroy();
@@ -68,7 +75,6 @@ bool TheMissile::CheckCollisions()
 		{
 			ufo->Hit();
 			Hit();
-			Destroy();
 			return true;
 		}
 
@@ -78,7 +84,6 @@ bool TheMissile::CheckCollisions()
 			{
 				shot->Destroy();
 				Hit();
-				Destroy();
 				return true;
 			}
 		}

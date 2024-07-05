@@ -14,6 +14,25 @@ void Enemy2::SetMineModel(LineModelPoints model)
 	MineModel = model;
 }
 
+void Enemy2::SetSpawnSound(Sound sound)
+{
+	SpawnSound = sound;
+
+	SetSoundVolume(SpawnSound, 0.5f);
+}
+
+void Enemy2::SetOnSound(Sound sound)
+{
+	OnSound = sound;
+
+	SetSoundVolume(OnSound, 0.25f);
+}
+
+void Enemy2::SetMineExplodeSound(Sound sound)
+{
+	MineExplodeSound = sound;
+}
+
 bool Enemy2::Initialize(Utilities* utilities)
 {
 	Enemy::Initialize(utilities);
@@ -27,6 +46,9 @@ bool Enemy2::Initialize(Utilities* utilities)
 bool Enemy2::BeginRun()
 {
 	Enemy::BeginRun();
+
+	SetSoundVolume(ExplodeSound, 0.5f);
+	SetSoundVolume(FireSound, 0.5f);
 
 	return false;
 }
@@ -46,6 +68,8 @@ void Enemy2::Update(float deltaTime)
 	CheckCollisions();
 
 	if (CheckWentOffScreen()) Enabled = false;
+
+	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void Enemy2::Draw3D()
@@ -56,6 +80,8 @@ void Enemy2::Draw3D()
 void Enemy2::Spawn(Vector3 position)
 {
 	TheManagers.EM.ResetTimer(LayMineTimerID);
+
+	if (!Player->GameOver) PlaySound(SpawnSound);
 
 	int width = WindowWidth / 1.25f;
 	int height = WindowHeight / 1.25f;
@@ -110,9 +136,15 @@ void Enemy2::Spawn(Vector3 position)
 
 }
 
+void Enemy2::Hit()
+{
+	Enemy::Hit();
+
+}
+
 void Enemy2::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 
 }
 
@@ -214,6 +246,8 @@ void Enemy2::DropMine()
 	bool spawnNewMine = true;
 	size_t mineNumber = Mines.size();
 
+	if (!Player->GameOver) PlaySound(FireSound);
+
 	for (size_t i = 0; i < mineNumber; i++)
 	{
 		if (Mines.at(i)->Enabled == false)
@@ -230,6 +264,7 @@ void Enemy2::DropMine()
 		TheManagers.EM.AddLineModel(Mines.at(mineNumber));
 		Mines.at(mineNumber)->SetPlayer(Player);
 		Mines.at(mineNumber)->SetModel(MineModel);
+		Mines.at(mineNumber)->SetExplodeSound(ExplodeSound);
 		Mines.at(mineNumber)->Initialize(TheUtilities);
 		Mines.at(mineNumber)->BeginRun();
 	}

@@ -21,6 +21,11 @@ void TheFighter::SetUFO(TheUFO* ufo[2])
 	}
 }
 
+void TheFighter::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+}
+
 bool TheFighter::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(TheUtilities);
@@ -99,6 +104,8 @@ void TheFighter::Spawn(Vector3 position)
 void TheFighter::Hit()
 {
 	Entity::Hit();
+
+	if (!Player->GameOver) PlaySound(ExplodeSound);
 
 	Reset();
 }

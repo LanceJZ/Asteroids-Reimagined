@@ -86,6 +86,91 @@ void EnemyControl::SetEnemyMineModel(LineModelPoints model)
 	EnemyTwo->SetMineModel(model);
 }
 
+void EnemyControl::SetRockExplodeSound(Sound sound)
+{
+	RockExplodeSound = sound;
+}
+
+void EnemyControl::SetUFOExplodeSound(Sound sound)
+{
+	UFOExplodeSound = sound;
+}
+
+void EnemyControl::SetUFOFireSound(Sound sound)
+{
+	UFOFireSound = sound;
+}
+
+void EnemyControl::SetUFOBigSound(Sound sound)
+{
+	UFOBigSound = sound;
+}
+
+void EnemyControl::SetUFOSmallSound(Sound sound)
+{
+	UFOSmallSound = sound;
+}
+
+void EnemyControl::SetDeathStarSpawnSound(Sound sound)
+{
+	DeathStar->SetSpawnSound(sound);
+}
+
+void EnemyControl::SetDeathStarExplodeSound(Sound sound)
+{
+	DeathStar->SetExplodeSound(sound);
+}
+
+void EnemyControl::SetEnemyOneSpawnSound(Sound sound)
+{
+	EnemyOne->SetSpawnSound(sound);
+}
+
+void EnemyControl::SetEnemyOneFireSound(Sound sound)
+{
+	EnemyOne->SetFireSound(sound);
+}
+
+void EnemyControl::SetEnemyOneExplodeSound(Sound sound)
+{
+	EnemyOne->SetExplodeSound(sound);
+}
+
+void EnemyControl::SetEnemyOneOnSound(Sound sound)
+{
+	EnemyOne->SetOnSound(sound);
+}
+
+void EnemyControl::SetEnemyOneMissileExplodeSound(Sound sound)
+{
+	EnemyOne->SetMissileExplodeSound(sound);
+}
+
+void EnemyControl::SetEnemyTwoSpawnSound(Sound sound)
+{
+	EnemyTwo->SetSpawnSound(sound);
+}
+
+void EnemyControl::SetEnemyTwoFireSound(Sound sound)
+{
+	EnemyTwo->SetFireSound(sound);
+}
+
+void EnemyControl::SetEnemyTwoExplodeSound(Sound sound)
+{
+	EnemyTwo->SetExplodeSound(sound);
+}
+
+void EnemyControl::SetEnemyTwoOnSound(Sound sound)
+{
+	EnemyTwo->SetOnSound(sound);
+}
+
+void EnemyControl::SetEnemyTwoMineExplodeSound(Sound sound)
+{
+	EnemyTwo->SetMineExplodeSound(sound);
+}
+
 bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
@@ -108,6 +193,10 @@ bool EnemyControl::BeginRun()
 	for (auto& ufo : UFOs)
 	{
 		ufo->SetRocks(Rocks);
+		ufo->SetExplodeSound(UFOExplodeSound);
+		ufo->SetFireSound(UFOFireSound);
+		ufo->SetBigSound(UFOBigSound);
+		ufo->SetSmallSound(UFOSmallSound);
 	}
 
 	EnemyOne->SetUFO(UFOs);
@@ -183,6 +272,12 @@ void EnemyControl::NewGame()
 	}
 }
 
+void EnemyControl::NextWave()
+{
+	Wave++;
+
+}
+
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
 {
 	for (int rock = 0; rock < count; rock++)
@@ -209,6 +304,7 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			Rocks.at(rockNumber)->BeginRun();
 			Rocks.at(rockNumber)->SetModel((RockModels[rockType]));
 			Rocks.at(rockNumber)->SetPlayer(Player);
+			Rocks.at(rockNumber)->SetExplodeSound(RockExplodeSound);
 		}
 
 		Rocks.at(rockNumber)->Spawn(position, size);
@@ -328,17 +424,13 @@ void EnemyControl::CheckUFOCollisions(TheRock* rock)
 		if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
 		{
 			ufo->Hit();
-			ufo->Destroy();
 			EnemyOne->Hit();
-			EnemyOne->Destroy();
 		}
 
 		if (EnemyTwo->Enabled && ufo->CirclesIntersect(*EnemyTwo))
 		{
 			ufo->Hit();
-			ufo->Destroy();
 			EnemyTwo->Hit();
-			EnemyTwo->Destroy();
 		}
 	}
 }
@@ -348,14 +440,13 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*rock))
 	{
 		EnemyOne->Hit();
-		EnemyOne->Destroy();
 		rock->Hit();
 		return;
 	}
 
 	if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
 	{
-		EnemyOne->Missile->Destroy();
+		EnemyOne->Missile->Hit();
 		rock->Hit();
 		return;
 	}
@@ -363,7 +454,6 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*rock))
 	{
 		EnemyTwo->Hit();
-		EnemyTwo->Destroy();
 		rock->Hit();
 		return;
 	}
@@ -371,27 +461,22 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	if (EnemyOne->Enabled && EnemyTwo->Enabled && EnemyOne->CirclesIntersect(*EnemyTwo))
 	{
 		EnemyOne->Hit();
-		EnemyOne->Destroy();
 		EnemyTwo->Hit();
-		EnemyTwo->Destroy();
 		return;
 	}
 
 	if (EnemyTwo->Enabled && EnemyOne->Enabled && EnemyTwo->CirclesIntersect(*EnemyOne))
 	{
 		EnemyTwo->Hit();
-		EnemyTwo->Destroy();
 		EnemyOne->Hit();
-		EnemyOne->Destroy();
 		return;
 	}
 
 	if (EnemyOne->Missile->Enabled && EnemyTwo->Enabled
 		&& EnemyOne->Missile->CirclesIntersect(*EnemyTwo))
 	{
-		EnemyOne->Missile->Destroy();
+		EnemyOne->Missile->Hit();
 		EnemyTwo->Hit();
-		EnemyTwo->Destroy();
 		return;
 	}
 }

@@ -19,6 +19,8 @@ public:
 	bool CirclesIntersect(Entity& target);
 	bool CirclesIntersectBullet(Entity& target);
 
+protected:
+
 private:
 	Ray TheRay = { 0 };
 	RayCollision TheRayCollision = { 0 };

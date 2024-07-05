@@ -6,6 +6,7 @@ ThePlayer::ThePlayer()
 	TheManagers.EM.AddLineModel(Shield = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
+	TheManagers.EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
 	TheManagers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
 
 	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
@@ -22,6 +23,78 @@ ThePlayer::ThePlayer()
 
 ThePlayer::~ThePlayer()
 {
+}
+
+void ThePlayer::SetTurretModel(LineModelPoints model)
+{
+	Turret->SetModel(model);
+}
+
+void ThePlayer::SetShotModel(LineModelPoints model)
+{
+	for (auto& shot : Shots)
+	{
+		shot->SetModel(model);
+	}
+}
+
+void ThePlayer::SetFlameModel(LineModelPoints model)
+{
+	Flame->SetModel(model);
+}
+
+void ThePlayer::SetShieldModel(LineModelPoints model)
+{
+	Shield->SetModel(model);
+}
+
+void ThePlayer::SetTurretHeatModel(LineModelPoints model)
+{
+	TurretHeatMeter->SetModel(model);
+}
+
+void ThePlayer::SetFireSound(Sound sound)
+{
+	FireSound = sound;
+	SetSoundVolume(FireSound, 0.25f);
+}
+
+void ThePlayer::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+	SetSoundVolume(ExplodeSound, 0.95f);
+}
+
+void ThePlayer::SetShieldOnSound(Sound sound)
+{
+	ShieldOnSound = sound;
+}
+
+void ThePlayer::SetShieldHitSound(Sound sound)
+{
+	ShieldHitSound = sound;
+}
+
+void ThePlayer::SetThrustSound(Sound sound)
+{
+	ThrustSound = sound;
+	SetSoundVolume(ThrustSound, 0.5f);
+}
+
+void ThePlayer::SetSpawnSound(Sound sound)
+{
+	SpawnSound = sound;
+}
+
+void ThePlayer::SetBonusSound(Sound sound)
+{
+	BonusSound = sound;
+}
+
+void ThePlayer::SetCrosshairModel(LineModelPoints model)
+{
+	Crosshair->SetModel(model);
+	Crosshair->Radius = 0.0f;
 }
 
 bool ThePlayer::Initialize(Utilities* utilities)
@@ -48,36 +121,13 @@ bool ThePlayer::BeginRun()
 	Turret->X(-9.0f);
 	Turret->SetParent(*this);
 
+	TurretHeatMeter->Y(-25.0f);
+	TurretHeatMeter->SetParent(*this);
+	TurretHeatMeter->Enabled = false;
+	TurretHeatMeter->Radius = 0.0f;
+	TurretHeatMeter->RotationLocked = true;
+
 	return false;
-}
-
-void ThePlayer::SetTurretModel(LineModelPoints model)
-{
-	Turret->SetModel(model);
-}
-
-void ThePlayer::SetShotModel(LineModelPoints model)
-{
-	for (auto& shot : Shots)
-	{
-		shot->SetModel(model);
-	}
-}
-
-void ThePlayer::SetFlameModel(LineModelPoints model)
-{
-	Flame->SetModel(model);
-}
-
-void ThePlayer::SetShieldModel(LineModelPoints model)
-{
-	Shield->SetModel(model);
-}
-
-void ThePlayer::SetCrosshairModel(LineModelPoints model)
-{
-	Crosshair->SetModel(model);
-	Crosshair->Radius = 0.0f;
 }
 
 void ThePlayer::Input()
@@ -140,6 +190,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 	}
 	else
 	{
+		PlaySound(ExplodeSound);
 		Acceleration = { 0 };
 		Velocity = { 0 };
 		Lives--;
@@ -147,6 +198,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Turret->Enabled = false;
 		Flame->Enabled = false;
 		Crosshair->Enabled = false;
+		TurretHeatMeter->Enabled = false;
 
 		if (Lives < 0)
 		{
@@ -165,6 +217,7 @@ void ThePlayer::ScoreUpdate(int addToScore)
 		NextNewLifeScore += 10000;
 		Lives++;
 		NewLife = true;
+		PlaySound(BonusSound);
 	}
 }
 
@@ -173,14 +226,19 @@ int ThePlayer::GetScore()
 	return Score->GetScore();
 }
 
-void ThePlayer::Reset()
+void ThePlayer::Spawn()
 {
 	Position = { 0, 0, 0 };
 	Velocity = { 0, 0, 0 };
 	Enabled = true;
 	Flame->Enabled = false;
 	Turret->Enabled = true;
+	TurretHeatMeter->Enabled = true;
 	ShieldPower = 100.0f;
+	TurretHeatMeter->Scale = 0.0f;
+	TurretOverHeat = false;
+	TurretHeat = 0;
+	PlaySound(SpawnSound);
 }
 
 void ThePlayer::NewGame()
@@ -191,7 +249,13 @@ void ThePlayer::NewGame()
 	NextNewLifeScore = 10000;
 	GameOver = false;
 	Score->Reset();
-	Reset();
+	Spawn();
+}
+
+void ThePlayer::ExtraLife()
+{
+	NewLife = true;
+	Lives++;
 }
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
@@ -217,8 +281,11 @@ void ThePlayer::FireTurret()
 		{
 			if (!shot->Enabled)
 			{
+				PlaySound(FireSound);
+
 				TheManagers.EM.ResetTimer(FireRateTimerID);
 				TurretHeat += 5;
+				TurretHeatMeterUpdate();
 
 				if (TurretHeat > TurretHeatMax)
 				{
@@ -244,6 +311,7 @@ void ThePlayer::TurretTimers()
 		{
 			TurretOverHeat = false;
 			TurretHeat = 0;
+			TurretHeatMeterUpdate();
 		}
 	}
 	else
@@ -254,6 +322,7 @@ void ThePlayer::TurretTimers()
 
 			if (TurretHeat > 2)	TurretHeat -= 2;
 			if (TurretHeat >= 1) TurretHeat -= 1;
+			TurretHeatMeterUpdate();
 		}
 	}
 }
@@ -283,10 +352,13 @@ void ThePlayer::ThrustOn(float amount)
 {
 	SetAccelerationToMaxAtRotation((amount * 50.25f), 350.0f);
 	Flame->Enabled = true;
+
+	if (!IsSoundPlaying(ThrustSound)) PlaySound(ThrustSound);
 }
 
 void ThePlayer::ThrustOff()
 {
+	StopSound(ThrustSound);
 	SetAccelerationToZero(0.45f);
 	Flame->Enabled = false;
 }
@@ -296,11 +368,12 @@ void ThePlayer::ShieldOn()
 	if (ShieldPower > 0.0f)
 	{
 		Shield->Enabled = true;
-	}
 
+		if (!IsSoundPlaying(ShieldOnSound)) PlaySound(ShieldOnSound);
+	}
 	else
 	{
-		Shield->Enabled = false;
+		ShieldOff();
 	}
 
 	TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
@@ -308,6 +381,7 @@ void ThePlayer::ShieldOn()
 
 void ThePlayer::ShieldOff()
 {
+	StopSound(ShieldOnSound);
 	Shield->Enabled = false;
 
 	if (TheManagers.EM.TimerElapsed(ShieldRechargeTimerID))
@@ -318,6 +392,7 @@ void ThePlayer::ShieldOff()
 
 void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 {
+	PlaySound(ShieldHitSound);
 	Acceleration = {0};
 
 	Velocity = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity, {0.25f}), {-1}),
@@ -331,6 +406,35 @@ void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 	else
 	{
 		ShieldPower = 0;
+	}
+}
+
+void ThePlayer::TurretHeatMeterUpdate()
+{
+	TurretHeatMeter->Scale = TurretHeat * 0.01f;
+
+	if (TurretHeat > 50.0f)
+	{
+		TurretHeatMeter->ModelColor = Color{ 200, 200, 200, 255 };
+
+		if (TurretHeat > 75.0f)
+		{
+			TurretHeatMeter->ModelColor = Color{ 173, 216, 255, 255 };
+
+			if (TurretHeat > 90.0f)
+			{
+				TurretHeatMeter->ModelColor = YELLOW;
+
+				if (TurretHeat > 99.0f)
+				{
+					TurretHeatMeter->ModelColor = RED;
+				}
+			}
+		}
+	}
+	else
+	{
+		TurretHeatMeter->ModelColor = Color{ 155, 155, 155, 200 };
 	}
 }
 

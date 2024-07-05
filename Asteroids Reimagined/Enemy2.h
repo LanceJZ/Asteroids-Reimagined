@@ -22,6 +22,9 @@ public:
 	virtual ~Enemy2();
 
 	void SetMineModel(LineModelPoints model);
+	void SetSpawnSound(Sound sound);
+	void SetOnSound(Sound sound);
+	void SetMineExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -30,6 +33,7 @@ public:
 	void Draw3D();
 
 	void Spawn(Vector3 position);
+	void Hit();
 	void Destroy();
 	void Reset();
 
@@ -42,6 +46,10 @@ private:
 	float RotateMagnitude = PI / 2;
 
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
+
+	Sound OnSound = {};
+	Sound SpawnSound = {};
+	Sound MineExplodeSound = {};
 
 	LineModelPoints MineModel = {};
 

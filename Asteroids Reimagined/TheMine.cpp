@@ -14,6 +14,13 @@ void TheMine::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheMine::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+
+	SetSoundVolume(ExplodeSound, 1.25f);
+}
+
 bool TheMine::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -49,6 +56,13 @@ void TheMine::Spawn(Vector3 position)
 	TheManagers.EM.ResetTimer(LifeTimerID);
 }
 
+void TheMine::Hit()
+{
+	PlaySound(ExplodeSound);
+
+	Destroy();
+}
+
 void TheMine::Destroy()
 {
 	Entity::Destroy();
@@ -62,7 +76,7 @@ void TheMine::CheckCollisions()
 		if (playerShot->Enabled && playerShot->CirclesIntersect(*this))
 		{
 			playerShot->Destroy();
-			Destroy();
+			Hit();
 			break;
 		}
 	}

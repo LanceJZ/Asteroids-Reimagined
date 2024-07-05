@@ -15,6 +15,7 @@ public:
 	void Draw3D();
 
 	void Spawn(Vector3 position);
+	void Hit();
 	void Destroy();
 
 private:

@@ -43,6 +43,16 @@ void TheFighterPair::SetWedgeModel(LineModelPoints model)
 	}
 }
 
+void TheFighterPair::SetExplodeSound(Sound sound)
+{
+	for (auto &fighter : Fighters)
+	{
+		fighter->SetExplodeSound(sound);
+	}
+
+	ExplodeSound = sound;
+}
+
 bool TheFighterPair::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
@@ -143,6 +153,8 @@ void TheFighterPair::Spawn(Vector3 position)
 void TheFighterPair::Hit()
 {
 	Entity::Hit();
+
+	if (!Player->GameOver) PlaySound(ExplodeSound);
 
 	for (auto &fighter : Fighters)
 	{

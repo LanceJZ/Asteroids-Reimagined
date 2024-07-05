@@ -22,6 +22,25 @@ void Enemy1::SetMissileModel(LineModelPoints model)
 	Missile->SetModel(model);
 }
 
+void Enemy1::SetSpawnSound(Sound sound)
+{
+	SpawnSound = sound;
+
+	SetSoundVolume(SpawnSound, 0.5f);
+}
+
+void Enemy1::SetOnSound(Sound sound)
+{
+	OnSound = sound;
+
+	SetSoundVolume(OnSound, 0.25f);
+}
+
+void Enemy1::SetMissileExplodeSound(Sound sound)
+{
+	Missile->SetExplodeSound(sound);
+}
+
 bool Enemy1::Initialize(Utilities* utilities)
 {
 	Enemy::Initialize(utilities);
@@ -35,6 +54,9 @@ bool Enemy1::Initialize(Utilities* utilities)
 bool Enemy1::BeginRun()
 {
 	Enemy::BeginRun();
+
+	SetSoundVolume(ExplodeSound, 0.5f);
+	SetSoundVolume(FireSound, 0.5f);
 
 	return false;
 }
@@ -54,7 +76,10 @@ void Enemy1::Update(float deltaTime)
 
 	DestinationTarget();
 	CheckCollisions();
+
 	if (CheckWentOffScreen()) Enabled = false;
+
+	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void Enemy1::Draw3D()
@@ -65,6 +90,8 @@ void Enemy1::Draw3D()
 void Enemy1::Spawn(Vector3 position)
 {
 	TheManagers.EM.ResetTimer(FireMissileTimerID);
+
+	if (!Player->GameOver) PlaySound(SpawnSound);
 
 	MaxSpeed = 133.666f;
 
@@ -217,6 +244,8 @@ void Enemy1::DestinationRight()
 
 void Enemy1::FireMissile()
 {
+	if (!Player->GameOver) PlaySound(FireSound);
+
 	Missile->Spawn(Position);
 	Missile->RotationZ = RotationZ;
 }

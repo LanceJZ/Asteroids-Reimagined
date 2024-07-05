@@ -19,6 +19,7 @@ public:
 	RockSize Size = Large;
 
 	void SetPlayer(ThePlayer* player);
+	void SetExplodeSound(Sound sound);
 
 	bool Initialize();
 	bool BeginRun();
@@ -28,8 +29,10 @@ public:
 
 	void Spawn(Vector3 position, RockSize size = Large);
 	void Destroy();
+	void Hit();
 
 private:
+	Sound ExplodeSound = {};
 
 	ThePlayer *Player = nullptr;
 

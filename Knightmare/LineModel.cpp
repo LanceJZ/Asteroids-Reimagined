@@ -46,9 +46,13 @@ void LineModel::Draw3D()
 		for (auto &parent : *Parents)
 		{
 			rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
-			rlRotatef(parent->RotationX, 1, 0, 0);
-			rlRotatef(parent->RotationY, 0, 1, 0);
-			rlRotatef(parent->RotationZ, 0, 0, 1);
+
+			if (!RotationLocked)
+			{
+				rlRotatef(parent->RotationX, 1, 0, 0);
+				rlRotatef(parent->RotationY, 0, 1, 0);
+				rlRotatef(parent->RotationZ, 0, 0, 1);
+			}
 		}
 
 	}

@@ -50,6 +50,30 @@ void TheUFO::SetShotModel(LineModelPoints model)
 	}
 }
 
+void TheUFO::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+	SetSoundVolume(ExplodeSound, 0.5f);
+}
+
+void TheUFO::SetFireSound(Sound sound)
+{
+	FireSound = sound;
+	SetSoundVolume(FireSound, 0.5f);
+}
+
+void TheUFO::SetBigSound(Sound sound)
+{
+	BigSound = sound;
+	SetSoundVolume(BigSound, 0.5f);
+}
+
+void TheUFO::SetSmallSound(Sound sound)
+{
+	SmallSound = sound;
+	SetSoundVolume(SmallSound, 0.5f);
+}
+
 void TheUFO::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
@@ -71,6 +95,8 @@ void TheUFO::Update(float deltaTime)
 
 	CheckScreenEdgeY();
 	CheckCollisions();
+
+	if (!Player->GameOver) PlayOnSound();
 }
 
 void TheUFO::Draw3D()
@@ -153,6 +179,15 @@ void TheUFO::Destroy()
 
 }
 
+void TheUFO::Hit()
+{
+	Entity::Hit();
+
+	if (!Player->GameOver) PlaySound(ExplodeSound);
+
+	Destroy();
+}
+
 void TheUFO::Reset()
 {
 	Destroy();
@@ -199,10 +234,7 @@ void TheUFO::FireShot()
 	{
 		if (!shot->Enabled)
 		{
-			//if (!player->gameOver)
-			//{
-			//	PlaySound(Sound04);
-			//}
+			if (!Player->GameOver) PlaySound(FireSound);
 
 			Vector3 offset = Vector3Add(VelocityFromAngleZ(Radius), Position);
 			shot->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
@@ -327,7 +359,7 @@ bool TheUFO::CheckCollisions()
 	{
 		if (CirclesIntersect(*Player))
 		{
-			if (!Player->Shield->Enabled) Destroy();
+			if (!Player->Shield->Enabled) Hit();
 
 			Player->Hit(Position, Velocity);
 			SendScoreToPlayer();
@@ -341,7 +373,7 @@ bool TheUFO::CheckCollisions()
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
 			shot->Destroy();
-			Destroy();
+			Hit();
 			SendScoreToPlayer();
 
 			return true;
@@ -360,6 +392,19 @@ void TheUFO::SendScoreToPlayer()
 		break;
 	case Small:
 		Player->ScoreUpdate(1000);
+		break;
+	}
+}
+
+void TheUFO::PlayOnSound()
+{
+	switch(TheSize)
+	{
+	case Large:
+		if (!IsSoundPlaying(BigSound)) PlaySound(BigSound);
+		break;
+	case Small:
+		if (!IsSoundPlaying(SmallSound)) PlaySound(SmallSound);
 		break;
 	}
 }

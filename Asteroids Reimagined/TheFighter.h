@@ -14,6 +14,8 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetUFO(TheUFO* ufo[2]);
 
+	void SetExplodeSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -32,6 +34,8 @@ private:
 	float Speed = 150.0f;
 	float TurnSpeed = 0.45f;
 	float RotateMagnitude = PI / 2;
+
+	Sound ExplodeSound;
 
 	ThePlayer* Player = nullptr;
 	TheUFO* UFOs[2] = { nullptr };

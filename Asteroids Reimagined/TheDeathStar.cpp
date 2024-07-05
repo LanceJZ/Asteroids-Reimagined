@@ -20,6 +20,21 @@ void TheDeathStar::SetWedgeModel(LineModelPoints model)
 	}
 }
 
+void TheDeathStar::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+
+	for (auto &fighterPair : FighterPairs)
+	{
+		fighterPair->SetExplodeSound(sound);
+	}
+}
+
+void TheDeathStar::SetSpawnSound(Sound sound)
+{
+	SpawnSound = sound;
+}
+
 void TheDeathStar::SetPlayer(ThePlayer* player)
 {
 	Player = player;
@@ -125,6 +140,8 @@ void TheDeathStar::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
+	if (!Player->GameOver) PlaySound(SpawnSound);
+
 	Velocity = { 20.0f, 20.0f, 0.0f };
 	NewWave = false;
 
@@ -223,6 +240,8 @@ void TheDeathStar::CheckCollisions()
 void TheDeathStar::Hit()
 {
 	Entity::Hit();
+
+	if (!Player->GameOver) PlaySound(ExplodeSound);
 
 	for (auto &fighterPair : FighterPairs)
 	{

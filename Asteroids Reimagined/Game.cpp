@@ -43,6 +43,7 @@ bool Game::Load()
 	Player->SetTurretModel(TheManagers.CM.LoadAndGetLineModel("PlayerTurret"));
 	Player->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
 	Player->SetCrosshairModel(TheManagers.CM.LoadAndGetLineModel("Cross"));
+	Player->SetTurretHeatModel(TheManagers.CM.LoadAndGetLineModel("HeatMeter"));
 
 	Enemies->SetUFOModel(TheManagers.CM.LoadAndGetLineModel("UFO"));
 	Enemies->SetShotModel(TheManagers.CM.GetLineModel(shotModelID));
@@ -51,6 +52,33 @@ bool Game::Load()
 	Enemies->SetEnemy2Model(TheManagers.CM.LoadAndGetLineModel("Enemy2"));
 	Enemies->SetEnemyMissileModel(TheManagers.CM.LoadAndGetLineModel("Missile"));
 	Enemies->SetEnemyMineModel(TheManagers.CM.LoadAndGetLineModel("Mine"));
+
+	//Sounds
+	Player->SetExplodeSound(TheManagers.CM.LoadAndGetSound("PlayerExplode"));
+	Player->SetBonusSound(TheManagers.CM.LoadAndGetSound("BonusShip"));
+	Player->SetFireSound(TheManagers.CM.LoadAndGetSound("PlayerFire"));
+	Player->SetShieldHitSound(TheManagers.CM.LoadAndGetSound("PlayerShieldHit"));
+	Player->SetShieldOnSound(TheManagers.CM.LoadAndGetSound("PlayerShieldOn"));
+	Player->SetThrustSound(TheManagers.CM.LoadAndGetSound("PlayerThrust"));
+	Player->SetSpawnSound(TheManagers.CM.LoadAndGetSound("PlayerSpawn"));
+
+	Enemies->SetRockExplodeSound(TheManagers.CM.LoadAndGetSound("RockExplode"));
+	Enemies->SetUFOExplodeSound(TheManagers.CM.LoadAndGetSound("UFOExplode"));
+	Enemies->SetUFOFireSound(TheManagers.CM.LoadAndGetSound("UFOFire"));
+	Enemies->SetUFOBigSound(TheManagers.CM.LoadAndGetSound("UFOBig"));
+	Enemies->SetUFOSmallSound(TheManagers.CM.LoadAndGetSound("UFOSmall"));
+	Enemies->SetDeathStarSpawnSound(TheManagers.CM.LoadAndGetSound("DeathStarSpawn"));
+	Enemies->SetDeathStarExplodeSound(TheManagers.CM.LoadAndGetSound("DeathStarExplode"));
+	Enemies->SetEnemyOneSpawnSound(TheManagers.CM.LoadAndGetSound("EnemyOneSpawn"));
+	Enemies->SetEnemyOneExplodeSound(TheManagers.CM.LoadAndGetSound("EnemyOneExplode"));
+	Enemies->SetEnemyOneFireSound(TheManagers.CM.LoadAndGetSound("MissileLaunch"));
+	Enemies->SetEnemyOneOnSound(TheManagers.CM.LoadAndGetSound("EnemyOne"));
+	Enemies->SetEnemyOneMissileExplodeSound(TheManagers.CM.LoadAndGetSound("MissileExplode"));
+	Enemies->SetEnemyTwoExplodeSound(TheManagers.CM.LoadAndGetSound("EnemyTwoExplode"));
+	Enemies->SetEnemyTwoSpawnSound(TheManagers.CM.LoadAndGetSound("EnemyTwoSpawn"));
+	Enemies->SetEnemyTwoFireSound(TheManagers.CM.LoadAndGetSound("MineDrop"));
+	Enemies->SetEnemyTwoOnSound(TheManagers.CM.LoadAndGetSound("EnemyTwo"));
+	Enemies->SetEnemyTwoMineExplodeSound(TheManagers.CM.LoadAndGetSound("MineExplode"));
 
 	LineModelPoints rockModels[4];
 

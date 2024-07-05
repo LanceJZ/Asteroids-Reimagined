@@ -24,6 +24,10 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetMissileModel(LineModelPoints model);
 
+	void SetSpawnSound(Sound sound);
+	void SetOnSound(Sound sound);
+	void SetMissileExplodeSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -42,6 +46,9 @@ private:
 	float RotateMagnitude = PI / 2;
 
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
+
+	Sound SpawnSound;
+	Sound OnSound;
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

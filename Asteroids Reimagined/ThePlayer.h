@@ -12,20 +12,29 @@ public:
 	bool NewLife = false;
 	bool GameOver = false;
 
-	int Lives { 0 }; //TODO: Player lives next.
+	int Lives { 0 };
 
 	std::vector<Shot*> Shots = {};
 
 	LineModel* Shield = {};
-
-	bool Initialize(Utilities* utilities);
-	bool BeginRun();
 
 	void SetCrosshairModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
 	void SetFlameModel(LineModelPoints model);
 	void SetShieldModel(LineModelPoints model);
+	void SetTurretHeatModel(LineModelPoints model);
+
+	void SetFireSound(Sound sound);
+	void SetExplodeSound(Sound sound);
+	void SetShieldOnSound(Sound sound);
+	void SetShieldHitSound(Sound sound);
+	void SetThrustSound(Sound sound);
+	void SetSpawnSound(Sound sound);
+	void SetBonusSound(Sound sound);
+
+	bool Initialize(Utilities* utilities);
+	bool BeginRun();
 
 	void Input();
 	void Update(float deltaTime);
@@ -34,8 +43,9 @@ public:
 	void Hit(Vector3 location, Vector3 velocity);
 	void ScoreUpdate(int addToScore);
 	int GetScore();
-	void Reset();
+	void Spawn();
 	void NewGame();
+	void ExtraLife();
 
 private:
 	bool TurretOverHeat = false;
@@ -54,9 +64,18 @@ private:
 	float ShieldDrainRate = 0.0f;
 	float ShieldRechargeRate = 0.0f;
 
+	Sound FireSound = {};
+	Sound ExplodeSound = {};
+	Sound ShieldOnSound = {};
+	Sound ShieldHitSound = {};
+	Sound ThrustSound = {};
+	Sound SpawnSound = {};
+	Sound BonusSound = {};
+
 	LineModel* Flame = {};
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
+	LineModel* TurretHeatMeter = {};
 
 	TheScore* Score = {};
 
@@ -78,6 +97,7 @@ private:
 	void ShieldOff();
 
 	void ShieldHit(Vector3 location, Vector3 velocity);
+	void TurretHeatMeterUpdate();
 
 	void Gamepad();
 	void Keyboard();

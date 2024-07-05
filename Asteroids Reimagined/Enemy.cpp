@@ -80,10 +80,10 @@ void Enemy::Hit()
 {
 	Entity::Hit();
 
-	//PlaySound(ExplodeSound);
+	if (!Player->GameOver) PlaySound(ExplodeSound);
 
 	//Player->ScoreUpdate(Points);
-	//Destroy();
+	Destroy();
 
 	//PM->Spawn(Position, Vector3Multiply(Velocity, {0.5f}),
 	//	20, 100, 20, 2.0f, { 255, 0, 0, 255 });
