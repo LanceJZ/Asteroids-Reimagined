@@ -381,6 +381,8 @@ void ThePlayer::ShieldOn()
 		Shield->Enabled = true;
 
 		if (!IsSoundPlaying(ShieldOnSound)) PlaySound(ShieldOnSound);
+
+		Shield->Alpha = ShieldPower * 2.55f;
 	}
 	else
 	{
