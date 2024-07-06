@@ -14,7 +14,7 @@ TheDeathStar::~TheDeathStar()
 
 void TheDeathStar::SetWedgeModel(LineModelPoints model)
 {
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->SetWedgeModel(model);
 	}
@@ -24,7 +24,7 @@ void TheDeathStar::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->SetExplodeSound(sound);
 	}
@@ -39,7 +39,7 @@ void TheDeathStar::SetPlayer(ThePlayer* player)
 {
 	Player = player;
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->SetPlayer(player);
 	}
@@ -52,7 +52,7 @@ void TheDeathStar::SetUFO(TheUFO* ufo[2])
 		UFOs[i] = ufo[i];
 	}
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->SetUFO(ufo);
 	}
@@ -62,7 +62,7 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Initialize(TheUtilities);
 	}
@@ -108,11 +108,11 @@ void TheDeathStar::NewWaveStart()
 {
 	NewWave = true;
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->NewWave = true;
 
-		for (auto &fighter : fighterPair->Fighters)
+		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->NewWave = true;
 		}
@@ -123,12 +123,12 @@ void TheDeathStar::Reset()
 {
 	Enabled = false;
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
 		fighterPair->Destroy();
 
-		for (auto &fighter : fighterPair->Fighters)
+		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->Reset();
 			fighter->Destroy();
@@ -145,7 +145,7 @@ void TheDeathStar::Spawn(Vector3 position)
 	Velocity = { 20.0f, 20.0f, 0.0f };
 	NewWave = false;
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
 		fighterPair->SetParent(*this);
@@ -169,11 +169,11 @@ void TheDeathStar::Spawn(Vector3 position)
 
 void TheDeathStar::NewGame()
 {
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
 
-		for (auto &fighter : fighterPair->Fighters)
+		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->Reset();
 		}
@@ -198,7 +198,7 @@ void TheDeathStar::CheckCollisions()
 		return;
 	}
 
-	for (auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
@@ -211,7 +211,7 @@ void TheDeathStar::CheckCollisions()
 		}
 	}
 
-	for (auto& ufo : UFOs)
+	for (const auto& ufo : UFOs)
 	{
 		if (ufo->Enabled && CirclesIntersect(*ufo))
 		{
@@ -222,7 +222,7 @@ void TheDeathStar::CheckCollisions()
 			return;
 		}
 
-		for (auto& shot : ufo->Shots)
+		for (const auto& shot : ufo->Shots)
 		{
 			if (shot->Enabled && CirclesIntersect(*shot))
 			{
@@ -243,11 +243,11 @@ void TheDeathStar::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	for (auto &fighterPair : FighterPairs)
+	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Separate();
 
-		for (auto &fighter : fighterPair->Fighters)
+		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->RemoveParent(this);
 		}

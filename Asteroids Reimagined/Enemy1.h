@@ -35,6 +35,7 @@ public:
 	void Draw3D();
 
 	void Spawn(Vector3 position);
+	void Hit();
 	void Destroy();
 	void Reset();
 
@@ -47,8 +48,8 @@ private:
 
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
-	Sound SpawnSound;
-	Sound OnSound;
+	Sound SpawnSound = {};
+	Sound OnSound = {};
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

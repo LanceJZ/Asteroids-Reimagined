@@ -25,7 +25,7 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 {
 	Player = player;
 
-	for (auto &ufo : UFOs)
+	for (const auto &ufo : UFOs)
 	{
 		ufo->SetPlayer(player);
 	}
@@ -171,11 +171,25 @@ void EnemyControl::SetEnemyTwoMineExplodeSound(Sound sound)
 	EnemyTwo->SetMineExplodeSound(sound);
 }
 
+void EnemyControl::SetParticleManager(ParticleManager* particles)
+{
+	Particles = particles;
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->SetParticles(particles);
+	}
+
+	EnemyOne->SetParticleManager(particles);
+	EnemyOne->Missile->SetParticleManager(particles);
+	EnemyTwo->SetParticleManager(particles);
+}
+
 bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
-	for (auto &ufo : UFOs)
+	for (const auto &ufo : UFOs)
 	{
 		ufo->Initialize(TheUtilities);
 	}
@@ -190,7 +204,7 @@ bool EnemyControl::BeginRun()
 
 	DeathStar->BeginRun();
 
-	for (auto& ufo : UFOs)
+	for (const auto& ufo : UFOs)
 	{
 		ufo->SetRocks(Rocks);
 		ufo->SetExplodeSound(UFOExplodeSound);
@@ -220,9 +234,10 @@ void EnemyControl::Update()
 		Wave++;
 	}
 
-	for (auto& ufo : UFOs)
+	for (const auto& ufo : UFOs)
 	{
 		ufo->DeathStarActive = DeathStar->Enabled;
+		ufo->DeathStarPosition = DeathStar->Position;
 	}
 
 	if (SpawnedDeathStar) CheckDeathStarStatus();
@@ -266,7 +281,7 @@ void EnemyControl::NewGame()
 	DeathStar->NewGame();
 	Reset();
 
-	for (auto& rock : Rocks)
+	for (const auto& rock : Rocks)
 	{
 		rock->Destroy();
 	}
@@ -317,7 +332,7 @@ void EnemyControl::SpawnUFO()
 
 	if (!Player->GameOver && !Player->Enabled) return;
 
-	for (auto &ufo : UFOs)
+	for (const auto &ufo : UFOs)
 	{
 		if (!ufo->Enabled)
 		{
@@ -345,7 +360,7 @@ void EnemyControl::CheckDeathStarStatus()
 
 	bool deadJim = true;
 
-	for (auto& pairs : DeathStar->FighterPairs)
+	for (const auto& pairs : DeathStar->FighterPairs)
 	{
 		if (pairs->Enabled)
 		{
@@ -353,7 +368,7 @@ void EnemyControl::CheckDeathStarStatus()
 			break;
 		}
 
-		for (auto& fighter : pairs->Fighters)
+		for (const auto& fighter : pairs->Fighters)
 		{
 			if (fighter->Enabled)
 			{
@@ -390,6 +405,9 @@ void EnemyControl::CheckRockCollisions()
 			{
 				Rocks.at(i)->Destroy();
 				TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
+				Particles->SpawnLineParticles(Rocks.at(i)->Position,
+					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f }),
+					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 
 				if (Rocks.at(i)->Size == TheRock::Large)
 				{
@@ -415,7 +433,7 @@ void EnemyControl::CheckRockCollisions()
 
 void EnemyControl::CheckUFOCollisions(TheRock* rock)
 {
-	for (auto& ufo : UFOs)
+	for (const auto& ufo : UFOs)
 	{
 		ufo->CheckCollisions(rock);
 

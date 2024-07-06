@@ -6,6 +6,7 @@ Game::Game()
 	BackGroundID = TheManagers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = TheManagers.EM.AddCommon(Enemies = DBG_NEW EnemyControl());
 	PlayerID = TheManagers.EM.AddLineModel(Player = DBG_NEW ThePlayer());
+	ParticlesID = TheManagers.EM.AddCommon(Particles = DBG_NEW ParticleManager());
 }
 
 Game::~Game()
@@ -94,6 +95,10 @@ bool Game::Load()
 
 bool Game::BeginRun()
 {
+	Particles->SetManagers(TheManagers);
+	Player->SetParticleManager(Particles);
+	Enemies->SetParticleManager(Particles);
+
 	//Any Entities added after this point need this method fired manually if needed.
 	TheManagers.BeginRun();
 
@@ -120,7 +125,7 @@ void Game::ProcessInput()
 
 void Game::Update(float deltaTime)
 {
-	if (Paused)	return;
+	if (Logic->State == Pause)	return;
 
 	TheManagers.EM.Update(deltaTime);
 }

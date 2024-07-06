@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Shot.h"
 #include "TheScore.h"
+#include "ParticleManager.h"
 
 class ThePlayer : public LineModel
 {
@@ -32,6 +33,8 @@ public:
 	void SetThrustSound(Sound sound);
 	void SetSpawnSound(Sound sound);
 	void SetBonusSound(Sound sound);
+
+	void SetParticleManager(ParticleManager* particleManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -78,6 +81,7 @@ private:
 	LineModel* TurretHeatMeter = {};
 
 	TheScore* Score = {};
+	ParticleManager* Particles = {};
 
 	void PointTurret(float stickDirectionX, float stickDirectionY);
 	void PointTurret(Vector3 mouseLocation);

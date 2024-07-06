@@ -3,6 +3,7 @@
 GameLogic::GameLogic()
 {
 	TheManagers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
+	ExplodeTimerID = TheManagers.EM.AddTimer(3.1f);
 }
 
 GameLogic::~GameLogic()
@@ -52,12 +53,21 @@ void GameLogic::Update()
 
 	if (!Player->Enabled && State == InPlay)
 	{
-		PlayerClear->Enabled = true;
-
-		if (CheckPlayerClear())
+		if (Player->BeenHit)
 		{
-			Player->Spawn();
-			PlayerShipDisplay();
+			TheManagers.EM.ResetTimer(ExplodeTimerID);
+			Player->BeenHit = false;
+		}
+
+		if (TheManagers.EM.TimerElapsed(ExplodeTimerID))
+		{
+			PlayerClear->Enabled = true;
+
+			if (CheckPlayerClear())
+			{
+				Player->Spawn();
+				PlayerShipDisplay();
+			}
 		}
 	}
 	else
@@ -74,7 +84,22 @@ void GameLogic::Update()
 
 void GameLogic::GameInput()
 {
-	if (State == MainMenu)
+	if (State == Pause)
+	{
+		if (IsKeyPressed(KEY_P))
+		{
+			State = InPlay;
+		}
+
+		if (IsGamepadAvailable(0))
+		{
+			if (IsGamepadButtonPressed(0, 13)) //Menu Button
+			{
+				State = InPlay;
+			}
+		}
+	}
+	else if (State == MainMenu)
 	{
 		if (IsGamepadAvailable(0))
 		{
@@ -94,8 +119,7 @@ void GameLogic::GameInput()
 
 		}
 	}
-
-	if (State == InPlay)
+	else if (State == InPlay)
 	{
 		if (IsGamepadAvailable(0))
 		{
@@ -136,7 +160,6 @@ void GameLogic::GameInput()
 			Player->ExtraLife();
 		}
 #endif
-
 	}
 }
 
@@ -198,29 +221,50 @@ bool GameLogic::CheckPlayerClear()
 
 	for (auto& ufo : Enemies->UFOs)
 	{
-		if (ufo->Enabled)
+		if (ufo->Enabled && ufo->CirclesIntersect(*PlayerClear))
 		{
 			return false;
 		}
 
 		for (auto& Shot : ufo->Shots)
 		{
-			if (Shot->Enabled)
+			if (Shot->Enabled && Shot->CirclesIntersect(*PlayerClear))
 			{
 				return false;
 			}
 		}
 	}
 
-	if (Enemies->EnemyOne->Enabled || Enemies->EnemyTwo->Enabled
-		|| Enemies->EnemyOne->Missile->Enabled)
+	if (Enemies->EnemyOne->Enabled &&
+		Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 	}
 
-	if (Enemies->DeathStar->CirclesIntersect(*PlayerClear))
+	if (Enemies->EnemyTwo->Enabled &&
+		Enemies->EnemyTwo->CirclesIntersect(*PlayerClear))
 	{
 		return false;
+	}
+
+	if (Enemies->DeathStar->Enabled &&
+		Enemies->DeathStar->CirclesIntersect(*PlayerClear))
+	{
+		return false;
+	}
+
+	if (Enemies->EnemyOne->Missile->Enabled &&
+		Enemies->EnemyOne->Missile->CirclesIntersect(*PlayerClear))
+	{
+		return false;
+	}
+
+	for (auto& mine : Enemies->EnemyTwo->Mines)
+	{
+		if (mine->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
 	}
 
 	return true;

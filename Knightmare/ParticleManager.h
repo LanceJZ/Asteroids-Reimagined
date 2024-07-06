@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Managers.h"
 #include "ParticleCube.h"
+#include "LineParticle.h"
 
 #ifdef _DEBUG
 	#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -25,16 +26,21 @@ public:
 
 	virtual void Update();
 
-	virtual void Spawn(Vector3 position, Vector3 velocity, float radius,
+	virtual void SpawnCubes(Vector3 position, Vector3 velocity, float radius,
 		float speed,  int count, float time, Color color);
-	virtual void Reset();
+	virtual void SpawnLineParticles(Vector3 position, Vector3 velocity, float radius,
+		float speed, int count, float time, Color color);
+	virtual void ResetCubes();
+	virtual void ResetLines();
 protected:
 	Model CubeModel = {};
+	LineModelPoints ParticleModel = {};
 	Managers* Man = {};
 
 private:
-	std::vector<ParticleCube*> Particles;
-	size_t SpawnPool(Color color);
-
+	std::vector<ParticleCube*> CubeParticles;
+	std::vector<LineParticle*> LineParticles;
+	size_t SpawnCubePool(Color color);
+	size_t SpawnLinePool(Color color);
 };
 

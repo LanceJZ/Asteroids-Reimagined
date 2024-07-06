@@ -152,7 +152,7 @@ void Enemy2::Reset()
 {
 	Destroy();
 
-	for (auto& mine : Mines)
+	for (const auto& mine : Mines)
 	{
 		mine->Destroy();
 	}
@@ -266,6 +266,7 @@ void Enemy2::DropMine()
 		Mines.at(mineNumber)->SetModel(MineModel);
 		Mines.at(mineNumber)->SetExplodeSound(ExplodeSound);
 		Mines.at(mineNumber)->Initialize(TheUtilities);
+		Mines.at(mineNumber)->SetParticleManager(Particles);
 		Mines.at(mineNumber)->BeginRun();
 	}
 

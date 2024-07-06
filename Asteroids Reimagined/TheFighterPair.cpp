@@ -16,7 +16,7 @@ void TheFighterPair::SetPlayer(ThePlayer* player)
 {
 	Player = player;
 
-	for (auto &fighter : Fighters)
+	for (const auto &fighter : Fighters)
 	{
 		fighter->SetPlayer(player);
 	}
@@ -29,7 +29,7 @@ void TheFighterPair::SetUFO(TheUFO* ufo[2])
 		UFOs[i] = ufo[i];
 	}
 
-	for (auto &fighter : Fighters)
+	for (const auto &fighter : Fighters)
 	{
 		fighter->SetUFO(ufo);
 	}
@@ -37,7 +37,7 @@ void TheFighterPair::SetUFO(TheUFO* ufo[2])
 
 void TheFighterPair::SetWedgeModel(LineModelPoints model)
 {
-	for (auto &fighter : Fighters)
+	for (const auto &fighter : Fighters)
 	{
 		fighter->SetModel(model);
 	}
@@ -45,7 +45,7 @@ void TheFighterPair::SetWedgeModel(LineModelPoints model)
 
 void TheFighterPair::SetExplodeSound(Sound sound)
 {
-	for (auto &fighter : Fighters)
+	for (const auto &fighter : Fighters)
 	{
 		fighter->SetExplodeSound(sound);
 	}
@@ -57,7 +57,7 @@ bool TheFighterPair::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
 
-	for (auto &fighterPair : Fighters)
+	for (const auto &fighterPair : Fighters)
 	{
 		fighterPair->Initialize(TheUtilities);
 	}
@@ -133,7 +133,7 @@ void TheFighterPair::Spawn(Vector3 position)
 	Separated = false;
 	NewWave = false;
 
-	for (auto &fighter : Fighters)
+	for (const auto &fighter : Fighters)
 	{
 		fighter->Reset();
 		fighter->SetParent(*this);
@@ -156,7 +156,7 @@ void TheFighterPair::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	for (auto &fighter : Fighters)
+	for (const auto &fighter : Fighters)
 	{
 		fighter->Separate();
 		fighter->RemoveParent(this);
@@ -213,7 +213,7 @@ void TheFighterPair::LeaveScreen()
 		Reset();
 		Destroy();
 
-		for (auto &fighter : Fighters)
+		for (const auto &fighter : Fighters)
 		{
 			fighter->Reset();
 			fighter->Destroy();
@@ -237,7 +237,7 @@ void TheFighterPair::CheckCollisions()
 		return;
 	}
 
-	for (auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
@@ -250,7 +250,7 @@ void TheFighterPair::CheckCollisions()
 		}
 	}
 
-	for (auto& ufo : UFOs)
+	for (const auto& ufo : UFOs)
 	{
 		if (ufo->Enabled && CirclesIntersect(*ufo))
 		{
@@ -261,7 +261,7 @@ void TheFighterPair::CheckCollisions()
 			return;
 		}
 
-		for (auto& shot : ufo->Shots)
+		for (const auto& shot : ufo->Shots)
 		{
 			if (shot->Enabled && CirclesIntersect(*shot))
 			{

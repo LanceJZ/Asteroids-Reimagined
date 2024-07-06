@@ -21,6 +21,11 @@ void TheMine::SetExplodeSound(Sound sound)
 	SetSoundVolume(ExplodeSound, 1.25f);
 }
 
+void TheMine::SetParticleManager(ParticleManager* particles)
+{
+	Particles = particles;
+}
+
 bool TheMine::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -59,6 +64,8 @@ void TheMine::Spawn(Vector3 position)
 void TheMine::Hit()
 {
 	PlaySound(ExplodeSound);
+
+	Particles->SpawnLineParticles(Position, { 0.0f }, Radius * 0.25f, 50, 25, 1.0f, WHITE);
 
 	Destroy();
 }

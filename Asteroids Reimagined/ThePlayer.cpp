@@ -10,7 +10,7 @@ ThePlayer::ThePlayer()
 	TheManagers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
 
 	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
-	TurretCooldownTimerID = TheManagers.EM.AddTimer(1.0f);
+	TurretCooldownTimerID = TheManagers.EM.AddTimer(2.0f);
 	TurretHeatTimerID = TheManagers.EM.AddTimer(0.15f);
 	ShieldRechargeTimerID = TheManagers.EM.AddTimer(1.0f);
 
@@ -89,6 +89,11 @@ void ThePlayer::SetSpawnSound(Sound sound)
 void ThePlayer::SetBonusSound(Sound sound)
 {
 	BonusSound = sound;
+}
+
+void ThePlayer::SetParticleManager(ParticleManager* particleManager)
+{
+	Particles = particleManager;
 }
 
 void ThePlayer::SetCrosshairModel(LineModelPoints model)
@@ -191,6 +196,8 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 	else
 	{
 		PlaySound(ExplodeSound);
+		Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
+			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
 		Acceleration = { 0 };
 		Velocity = { 0 };
 		Lives--;
@@ -199,6 +206,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Flame->Enabled = false;
 		Crosshair->Enabled = false;
 		TurretHeatMeter->Enabled = false;
+		BeenHit = true;
 
 		if (Lives < 0)
 		{
@@ -260,7 +268,10 @@ void ThePlayer::ExtraLife()
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
 {
-	Turret->RotationZ = atan2f(stickDirectionY, stickDirectionX) - RotationZ;
+	if (stickDirectionX != 0 || stickDirectionY != 0)
+	{
+		Turret->RotationZ = atan2f(stickDirectionY, stickDirectionX) - RotationZ;
+	}
 }
 
 void ThePlayer::PointTurret(Vector3 mouseLocation)
@@ -476,6 +487,8 @@ void ThePlayer::Gamepad()
 	}
 
 	//Right Stick
+	PointTurret(GetGamepadAxisMovement(0, 2), GetGamepadAxisMovement(0, 3));
+
 	if (GetGamepadAxisMovement(0, 2) > 0.1f) //Right
 	{
 		FireTurret();
@@ -493,8 +506,6 @@ void ThePlayer::Gamepad()
 	{
 		FireTurret();
 	}
-
-	PointTurret(GetGamepadAxisMovement(0, 2), GetGamepadAxisMovement(0, 3));
 
 	//Right Trigger
 	if (IsGamepadButtonDown(0, 12))

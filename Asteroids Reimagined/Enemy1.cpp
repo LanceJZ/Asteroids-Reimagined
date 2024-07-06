@@ -147,6 +147,12 @@ void Enemy1::Spawn(Vector3 position)
 	Missile->SetUFO(UFOs);
 }
 
+void Enemy1::Hit()
+{
+	Enemy::Hit();
+
+}
+
 void Enemy1::Destroy()
 {
 	Entity::Destroy();

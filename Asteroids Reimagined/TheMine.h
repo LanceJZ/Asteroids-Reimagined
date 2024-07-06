@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "ParticleManager.h"
 
 class TheMine : public LineModel
 {
@@ -10,6 +11,8 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 	void SetExplodeSound(Sound sound);
+
+	void SetParticleManager(ParticleManager* particles);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -28,6 +31,7 @@ private:
 	Sound ExplodeSound = {};
 
 	ThePlayer* Player = nullptr;
+	ParticleManager* Particles = nullptr;
 
 	void CheckCollisions();
 };

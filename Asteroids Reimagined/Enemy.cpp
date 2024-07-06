@@ -39,7 +39,7 @@ void Enemy::SetExplodeSound(Sound explodeSound)
 
 void Enemy::SetParticleManager(ParticleManager* particleManager)
 {
-	PM = particleManager;
+	Particles = particleManager;
 }
 
 bool Enemy::Initialize(Utilities* utilities)
@@ -82,11 +82,13 @@ void Enemy::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
+
+
 	//Player->ScoreUpdate(Points);
 	Destroy();
 
-	//PM->Spawn(Position, Vector3Multiply(Velocity, {0.5f}),
-	//	20, 100, 20, 2.0f, { 255, 0, 0, 255 });
+	Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, {0.25f}),
+		20, 100, 20, 2.0f, WHITE);
 }
 
 void Enemy::Reset()

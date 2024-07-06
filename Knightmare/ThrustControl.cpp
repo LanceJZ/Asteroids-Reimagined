@@ -29,7 +29,7 @@ void ThrustControl::Update()
 
 }
 
-void ThrustControl::Spawn(Vector3 position, Vector3 velocity, float endWidth,
+void ThrustControl::SpawnCubes(Vector3 position, Vector3 velocity, float endWidth,
 	float length, int count, float time, Color color)
 {
 	float size = 3.1f;
@@ -39,5 +39,5 @@ void ThrustControl::Spawn(Vector3 position, Vector3 velocity, float endWidth,
 
 	velocity = Vector3Add(GetVelocityFromAngleZ(width, length), velocity);
 
-	ParticleManager::Spawn(position, velocity, size, speed, count, time, color);
+	ParticleManager::SpawnCubes(position, velocity, size, speed, count, time, color);
 }

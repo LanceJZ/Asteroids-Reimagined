@@ -42,7 +42,7 @@ protected:
 
 	ThePlayer* Player = nullptr;
 	TheUFO* UFOs[2] = { nullptr };
-	ParticleManager* PM = nullptr;
+	ParticleManager* Particles = nullptr;
 
 	void Shoot();
 	void Shoot(Vector3 velocity);

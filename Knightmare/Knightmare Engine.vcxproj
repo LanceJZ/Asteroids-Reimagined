@@ -166,6 +166,10 @@
   <ItemGroup>
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ContentManager.cpp" />
+    <ClCompile Include="LineParticle.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="OnScreenText.cpp">
       <SubType>
       </SubType>
@@ -202,6 +206,10 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="ContentManager.h" />
+    <ClInclude Include="LineParticle.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="OnScreenText.h">
       <SubType>
       </SubType>

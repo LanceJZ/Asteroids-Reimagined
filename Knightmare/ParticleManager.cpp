@@ -7,7 +7,7 @@ ParticleManager::ParticleManager()
 
 ParticleManager::~ParticleManager()
 {
-	Particles.clear();
+	CubeParticles.clear();
 }
 
 bool ParticleManager::Initialize(Utilities* utilities)
@@ -30,6 +30,8 @@ bool ParticleManager::BeginRun()
 {
 	Common::BeginRun();
 
+	ParticleModel = Man->CM.LoadAndGetLineModel("Dot"); //Replace with vertices in code.
+
 	return false;
 }
 
@@ -38,30 +40,46 @@ void ParticleManager::Update()
 	Common::Update();
 }
 
-void ParticleManager::Spawn(Vector3 position, Vector3 velocity, float radius,
+void ParticleManager::SpawnCubes(Vector3 position, Vector3 velocity, float radius,
 	float speed, int count, float time, Color color)
 {
 	for (int i = 0; i < count; i++)
 	{
-		Particles[SpawnPool(color)]->Spawn(position, velocity, radius, speed,  time);
+		CubeParticles[SpawnCubePool(color)]->Spawn(position, velocity, radius, speed,  time);
 	}
 
 }
 
-void ParticleManager::Reset()
+void ParticleManager::SpawnLineParticles(Vector3 position, Vector3 velocity, float radius,
+	float speed, int count, float time, Color color)
 {
-	for (const auto& cube : Particles)
+	for (int i = 0; i < count; i++)
+	{
+		LineParticles[SpawnLinePool(color)]->Spawn(position, velocity, radius, speed, time);
+	}
+}
+
+void ParticleManager::ResetCubes()
+{
+	for (const auto& cube : CubeParticles)
 	{
 		cube->Enabled = false;
 	}
 }
-size_t ParticleManager::SpawnPool(Color color)
+void ParticleManager::ResetLines()
+{
+	for (const auto& line : LineParticles)
+	{
+		line->Enabled = false;
+	}
+}
+size_t ParticleManager::SpawnCubePool(Color color)
 {
 		bool spawnNew = true;
-		size_t cubeSpawnNumber = Particles.size();
+		size_t cubeSpawnNumber = CubeParticles.size();
 		int cubeNumber = 0;
 
-		for (const auto& cube : Particles)
+		for (const auto& cube : CubeParticles)
 		{
 			if (!cube->Enabled)
 			{
@@ -75,11 +93,43 @@ size_t ParticleManager::SpawnPool(Color color)
 
 		if (spawnNew)
 		{
-			Particles.push_back(DBG_NEW ParticleCube());
-			Man->EM.AddModel3D(Particles[cubeSpawnNumber], CubeModel);
+			CubeParticles.push_back(DBG_NEW ParticleCube());
+			Man->EM.AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
 		}
 
-		Particles[cubeSpawnNumber]->ModelColor = color;
+		CubeParticles[cubeSpawnNumber]->ModelColor = color;
 
 	return cubeSpawnNumber;
+}
+
+size_t ParticleManager::SpawnLinePool(Color color)
+{
+	bool spawnNew = true;
+	size_t lineSpawnNumber = LineParticles.size();
+	int lineNumber = 0;
+
+	for (const auto& line : LineParticles)
+	{
+		if (!line->Enabled)
+		{
+			spawnNew = false;
+			lineSpawnNumber = lineNumber;
+			break;
+		}
+
+		lineNumber++;
+	}
+
+	if (spawnNew)
+	{
+		LineParticles.push_back(DBG_NEW LineParticle());
+		LineParticles.back()->SetManagers(Man);
+		LineParticles.back()->Initialize(TheUtilities);
+		LineParticles.back()->BeginRun();
+		Man->EM.AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
+	}
+
+	LineParticles[lineSpawnNumber]->ModelColor = color;
+
+	return lineSpawnNumber;
 }

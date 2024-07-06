@@ -6,6 +6,7 @@
 #include "TheDeathStar.h"
 #include "Enemy1.h"
 #include "Enemy2.h"
+#include "ParticleManager.h"
 
 class EnemyControl : public Common
 {
@@ -47,6 +48,8 @@ public:
 	void SetEnemyTwoOnSound(Sound sound);
 	void SetEnemyTwoMineExplodeSound(Sound sound);
 
+	void SetParticleManager(ParticleManager* particles);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -81,6 +84,7 @@ private:
 	LineModelPoints RockModels[4];
 
 	ThePlayer *Player = nullptr;
+	ParticleManager *Particles = nullptr;
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

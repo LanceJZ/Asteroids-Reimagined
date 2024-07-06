@@ -44,7 +44,7 @@ void TheUFO::SetPlayer(ThePlayer* player)
 
 void TheUFO::SetShotModel(LineModelPoints model)
 {
-	for (auto& shot : Shots)
+	for (const auto& shot : Shots)
 	{
 		shot->SetModel(model);
 	}
@@ -72,6 +72,11 @@ void TheUFO::SetSmallSound(Sound sound)
 {
 	SmallSound = sound;
 	SetSoundVolume(SmallSound, 0.5f);
+}
+
+void TheUFO::SetParticles(ParticleManager* particles)
+{
+	Particles = particles;
 }
 
 void TheUFO::Update(float deltaTime)
@@ -106,7 +111,7 @@ void TheUFO::Draw3D()
 
 void TheUFO::CheckCollisions(TheRock* rock)
 {
-	for (auto& shot : Shots)
+	for (const auto& shot : Shots)
 	{
 		if (shot->Enabled && shot->CirclesIntersect(*rock))
 		{
@@ -185,6 +190,9 @@ void TheUFO::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
+	Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
+		Radius * 0.25f, 20.0f, 30, 2.0f, WHITE);
+
 	Destroy();
 }
 
@@ -192,7 +200,7 @@ void TheUFO::Reset()
 {
 	Destroy();
 
-	for (auto& shot : Shots)
+	for (const auto& shot : Shots)
 	{
 		shot->Destroy();
 	}
@@ -230,7 +238,7 @@ void TheUFO::FireShot()
 		}
 	}
 
-	for (auto shot : Shots)
+	for (const auto& shot : Shots)
 	{
 		if (!shot->Enabled)
 		{
@@ -273,7 +281,7 @@ float TheUFO::AimedShot()
 
 float TheUFO::AimedShotAtDeathStar()
 {
-	return 0.0f;
+	return AngleFromVectorZ(DeathStarPosition);
 }
 
 float TheUFO::AimedShotAtRock()
@@ -283,7 +291,7 @@ float TheUFO::AimedShotAtRock()
 	Vector3 closestRockVelocity = { 0, 0, 0 };
 	float shortestDistance = 0.0f;
 
-	for (auto &rock : *Rocks)
+	for (const auto &rock : *Rocks)
 	{
 		if (rock->Enabled)
 		{
@@ -304,11 +312,11 @@ float TheUFO::AimedShotAtRock()
 		return GetRandomRadian();
 	}
 
-	Vector3 dist = GetVelocityFromAngleZ(AngleFromVectorZ(closestRockVelocity),
+	Vector3 compensation = GetVelocityFromAngleZ(AngleFromVectorZ(closestRockVelocity),
 		shortestDistance);
 
 	return AngleFromVectorZ(Vector3Add(closestRockPosition,
-		Vector3Add(closestRockVelocity, dist)));
+		Vector3Add(closestRockVelocity, compensation)));
 }
 
 void TheUFO::ChangeVector()
@@ -368,7 +376,7 @@ bool TheUFO::CheckCollisions()
 		}
 	}
 
-	for (auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{

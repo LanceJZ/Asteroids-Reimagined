@@ -3,6 +3,7 @@
 #include "ThePlayer.h"
 #include "Shot.h"
 #include "TheRock.h"
+#include "ParticleManager.h"
 
 class TheUFO : public LineModel
 {
@@ -18,6 +19,8 @@ public:
 	bool DeathStarActive = false;
 	int Wave = 0;
 	float Distance = 0.0f;
+
+	Vector3 DeathStarPosition = { 0.0f, 0.0f, 0.0f };
 
 	Shot* Shots[2] = { nullptr };
 
@@ -36,6 +39,7 @@ public:
 	void SetFireSound(Sound sound);
 	void SetBigSound(Sound sound);
 	void SetSmallSound(Sound sound);
+	void SetParticles(ParticleManager* particles);
 
 	void Update(float deltaTime);
 	void Draw3D();
@@ -59,6 +63,7 @@ private:
 	LineModelPoints ShotModel;
 
 	ThePlayer* Player = {};
+	ParticleManager* Particles = {};
 	std::vector<TheRock*> *Rocks;
 
 	void FireShot();

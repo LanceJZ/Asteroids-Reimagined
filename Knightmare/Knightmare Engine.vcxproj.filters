@@ -63,6 +63,9 @@
     <ClCompile Include="OnScreenText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LineParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="OnScreenText.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineParticle.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

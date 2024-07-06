@@ -33,6 +33,7 @@ public:
 	void GameInput();
 
 private:
+	size_t ExplodeTimerID = 0;
 	Vector2 AdjustedFieldSize = {};
 
 	LineModelPoints PlayerModel;
