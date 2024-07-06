@@ -20,6 +20,21 @@ void GameLogic::SetEnemies(EnemyControl* enemies)
 	Enemies = enemies;
 }
 
+void GameLogic::SetPowerUpModel(LineModelPoints model)
+{
+	PowerUpModel = model;
+}
+
+void GameLogic::SetPowerUpSound(Sound sound)
+{
+	PowerUpSound = sound;
+}
+
+void GameLogic::SetPickUpSound(Sound sound)
+{
+	PickUpSound = sound;
+}
+
 bool GameLogic::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
@@ -78,6 +93,15 @@ void GameLogic::Update()
 		{
 			PlayerShipDisplay();
 			Player->NewLife = false;
+		}
+	}
+
+	if (Player->Enabled)
+	{
+		if (Enemies->SpawnPowerUp)
+		{
+			Enemies->SpawnPowerUp = false;
+			SpawnPowerUp(Enemies->PowerUpSpawnPosition);
 		}
 	}
 }
@@ -163,6 +187,40 @@ void GameLogic::GameInput()
 	}
 }
 
+void GameLogic::SpawnPowerUp(Vector3 position)
+{
+	if (!Player->Enabled)
+	{
+		PlaySound(PowerUpSound);
+	}
+
+	bool spawnNewPowerUp = true;
+	size_t powerUpNumber = PowerUps.size();
+
+	for (size_t powerUpCheck = 0; powerUpCheck < powerUpNumber; powerUpCheck++)
+	{
+		if (!PowerUps.at(powerUpCheck)->Enabled)
+		{
+			spawnNewPowerUp = false;
+			powerUpNumber = powerUpCheck;
+			break;
+		}
+	}
+
+	if (spawnNewPowerUp)
+	{
+		PowerUps.push_back(DBG_NEW PowerUp());
+		TheManagers.EM.AddEntity(PowerUps.back());
+		PowerUps.back()->SetPlayer(Player);
+		PowerUps.back()->SetModel(PowerUpModel);
+		PowerUps.back()->SetPickUpSound(PickUpSound);
+		PowerUps.back()->Initialize(TheUtilities);
+		PowerUps.back()->BeginRun();
+	}
+
+	PowerUps.at(powerUpNumber)->Spawn(position);
+}
+
 void GameLogic::PlayerShipDisplay()
 {
 	Vector2 location = { (-GetScreenWidth() / 2.25f) + Player->Radius,
@@ -206,6 +264,11 @@ void GameLogic::NewGame()
 	for (int i = 0; i < Player->Lives; i++)
 	{
 		PlayerShipDisplay();
+	}
+
+	for (const auto& powerUp : PowerUps)
+	{
+		powerUp->Enabled = false;
 	}
 }
 

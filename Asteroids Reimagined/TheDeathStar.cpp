@@ -204,7 +204,6 @@ void TheDeathStar::CheckCollisions()
 		{
 			shot->Destroy();
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return;
@@ -216,7 +215,6 @@ void TheDeathStar::CheckCollisions()
 		if (ufo->Enabled && CirclesIntersect(*ufo))
 		{
 			ufo->Hit();
-			ufo->Destroy();
 			Hit();
 			Destroy();
 			return;
@@ -227,8 +225,6 @@ void TheDeathStar::CheckCollisions()
 			if (shot->Enabled && CirclesIntersect(*shot))
 			{
 				shot->Destroy();
-				ufo->Hit();
-				ufo->Destroy();
 				Hit();
 				Destroy();
 				return;

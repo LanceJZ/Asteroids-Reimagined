@@ -117,6 +117,7 @@ void TheUFO::CheckCollisions(TheRock* rock)
 		{
 			shot->Destroy();
 			rock->Hit();
+			continue;
 		}
 
 		if (shot->Enabled && shot->CirclesIntersect(*Player))
@@ -129,7 +130,6 @@ void TheUFO::CheckCollisions(TheRock* rock)
 	if (Enabled && CirclesIntersect(*rock))
 	{
 		Hit();
-		Destroy();
 		rock->Hit();
 	}
 }
@@ -147,9 +147,14 @@ void TheUFO::Spawn(int spawnCount)
 	float fullScale = 1.0f;
 	float fullRadius = 18.5f;
 	float fullSpeed = 128.666f;
-	float spawnPercent = (powf(0.915f, (float)spawnCount / (float)(Wave + 1)) * 100);
+	//float spawnPercent = (powf(0.915f, ((float)spawnCount * 0.5f)
+	//	/ (float)(Wave + 1)) * 100.0f);
 
-	if (GetRandomFloat(0, 99) < spawnPercent - Player->GetScore() / 500)
+	float spawnPercent = (float)spawnCount * 0.5f;
+	spawnPercent += (Player->GetScore() * 0.0001f);
+	spawnPercent += (Wave);
+
+	if (GetRandomFloat(0, 300) > spawnPercent)
 	{
 		TheSize = Large;
 		Scale = fullScale;

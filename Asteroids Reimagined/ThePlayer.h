@@ -45,10 +45,12 @@ public:
 
 	void Hit(Vector3 location, Vector3 velocity);
 	void ScoreUpdate(int addToScore);
-	int GetScore();
 	void Spawn();
 	void NewGame();
 	void ExtraLife();
+	void ShieldPowerUp();
+	void HeatPowerUp();
+	int GetScore();
 
 private:
 	bool TurretOverHeat = false;

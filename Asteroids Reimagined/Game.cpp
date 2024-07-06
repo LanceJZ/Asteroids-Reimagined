@@ -54,6 +54,8 @@ bool Game::Load()
 	Enemies->SetEnemyMissileModel(TheManagers.CM.LoadAndGetLineModel("Missile"));
 	Enemies->SetEnemyMineModel(TheManagers.CM.LoadAndGetLineModel("Mine"));
 
+	Logic->SetPowerUpModel(TheManagers.CM.LoadAndGetLineModel("PowerUp"));
+
 	//Sounds
 	Player->SetExplodeSound(TheManagers.CM.LoadAndGetSound("PlayerExplode"));
 	Player->SetBonusSound(TheManagers.CM.LoadAndGetSound("BonusShip"));
@@ -80,6 +82,9 @@ bool Game::Load()
 	Enemies->SetEnemyTwoFireSound(TheManagers.CM.LoadAndGetSound("MineDrop"));
 	Enemies->SetEnemyTwoOnSound(TheManagers.CM.LoadAndGetSound("EnemyTwo"));
 	Enemies->SetEnemyTwoMineExplodeSound(TheManagers.CM.LoadAndGetSound("MineExplode"));
+
+	Logic->SetPowerUpSound(TheManagers.CM.LoadAndGetSound("PowerUp"));
+	Logic->SetPickUpSound(TheManagers.CM.LoadAndGetSound("PickUp"));
 
 	LineModelPoints rockModels[4];
 

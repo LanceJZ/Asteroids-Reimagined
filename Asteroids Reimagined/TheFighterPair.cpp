@@ -230,7 +230,6 @@ void TheFighterPair::CheckCollisions()
 		if (!Player->Shield->Enabled)
 		{
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 		}
 
@@ -243,7 +242,6 @@ void TheFighterPair::CheckCollisions()
 		{
 			shot->Destroy();
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return;
@@ -255,9 +253,7 @@ void TheFighterPair::CheckCollisions()
 		if (ufo->Enabled && CirclesIntersect(*ufo))
 		{
 			ufo->Hit();
-			ufo->Destroy();
 			Hit();
-			Destroy();
 			return;
 		}
 
@@ -266,10 +262,7 @@ void TheFighterPair::CheckCollisions()
 			if (shot->Enabled && CirclesIntersect(*shot))
 			{
 				shot->Destroy();
-				ufo->Hit();
-				ufo->Destroy();
 				Hit();
-				Destroy();
 				return;
 			}
 		}

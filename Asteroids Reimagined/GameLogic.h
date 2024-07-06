@@ -3,6 +3,7 @@
 #include "Utilities.h"
 #include "ThePlayer.h"
 #include "EnemyControl.h"
+#include "PowerUp.h"
 
 enum GameState
 {
@@ -26,21 +27,33 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetEnemies(EnemyControl* enemies);
 
+	void SetPowerUpModel(LineModelPoints model);
+
+	void SetPowerUpSound(Sound sound);
+	void SetPickUpSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
 	void Update();
 	void GameInput();
 
+	void SpawnPowerUp(Vector3 position);
+
 private:
 	size_t ExplodeTimerID = 0;
 	Vector2 AdjustedFieldSize = {};
 
-	LineModelPoints PlayerModel;
+	LineModelPoints PlayerModel = {};
+	LineModelPoints PowerUpModel = {};
+
+	Sound PowerUpSound = {};
+	Sound PickUpSound = {};
 
 	std::vector <LineModel*> PlayerShipModels;
+	std::vector <PowerUp*> PowerUps;
 
-	Entity* PlayerClear;
+	Entity* PlayerClear = {};
 
 	ThePlayer* Player = {};
 	EnemyControl* Enemies = {};

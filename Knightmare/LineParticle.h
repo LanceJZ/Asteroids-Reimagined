@@ -20,7 +20,7 @@ public:
 	void Destroy();
 
 private:
-	size_t LifeTimerID;
+	size_t LifeTimerID = 0;
 
 	Managers* Man = nullptr;
 };

@@ -206,7 +206,6 @@ bool EnemyControl::BeginRun()
 
 	for (const auto& ufo : UFOs)
 	{
-		ufo->SetRocks(Rocks);
 		ufo->SetExplodeSound(UFOExplodeSound);
 		ufo->SetFireSound(UFOFireSound);
 		ufo->SetBigSound(UFOBigSound);
@@ -314,15 +313,20 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		{
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
-			TheManagers.EM.AddLineModel(Rocks.at(rockNumber));
-			Rocks.at(rockNumber)->Initialize();
-			Rocks.at(rockNumber)->BeginRun();
-			Rocks.at(rockNumber)->SetModel((RockModels[rockType]));
-			Rocks.at(rockNumber)->SetPlayer(Player);
-			Rocks.at(rockNumber)->SetExplodeSound(RockExplodeSound);
+			TheManagers.EM.AddLineModel(Rocks.back());
+			Rocks.back()->Initialize();
+			Rocks.back()->BeginRun();
+			Rocks.back()->SetModel((RockModels[rockType]));
+			Rocks.back()->SetPlayer(Player);
+			Rocks.back()->SetExplodeSound(RockExplodeSound);
 		}
 
 		Rocks.at(rockNumber)->Spawn(position, size);
+
+		for (const auto& ufo : UFOs)
+		{
+			ufo->SetRocks(Rocks);
+		}
 	}
 }
 
@@ -403,6 +407,15 @@ void EnemyControl::CheckRockCollisions()
 
 			if (Rocks.at(i)->BeenHit)
 			{
+				if (Player->Enabled)
+				{
+					if (GetRandomValue(0, 100) < 10)
+					{
+						SpawnPowerUp = true;
+						PowerUpSpawnPosition = Rocks.at(i)->Position;
+					}
+				}
+
 				Rocks.at(i)->Destroy();
 				TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
 				Particles->SpawnLineParticles(Rocks.at(i)->Position,
@@ -437,7 +450,7 @@ void EnemyControl::CheckUFOCollisions(TheRock* rock)
 	{
 		ufo->CheckCollisions(rock);
 
-		if (!ufo->Enabled) return;
+		if (!ufo->Enabled) continue;
 
 		if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
 		{

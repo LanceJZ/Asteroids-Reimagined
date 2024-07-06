@@ -14,6 +14,9 @@ public:
 	EnemyControl();
 	virtual ~EnemyControl();
 
+	bool SpawnPowerUp = false;
+	Vector3 PowerUpSpawnPosition = {};
+
 	std::vector<TheRock*> Rocks;
 	TheUFO* UFOs[2] = { nullptr };
 	TheDeathStar *DeathStar = nullptr;

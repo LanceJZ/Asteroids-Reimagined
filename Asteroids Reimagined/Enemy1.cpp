@@ -95,8 +95,8 @@ void Enemy1::Spawn(Vector3 position)
 
 	MaxSpeed = 133.666f;
 
-	int width = WindowWidth / 1.25f;
-	int height = WindowHeight / 1.25f;
+	int width = (int)(WindowWidth / 1.25f);
+	int height = (int)(WindowHeight / 1.25f);
 
 	if (GetRandomValue(1, 10) < 5)
 	{
@@ -104,19 +104,19 @@ void Enemy1::Spawn(Vector3 position)
 		{
 			// Top
 			EdgeSpawnedFrom = Edge::Top;
-			position.y = -WindowHeight;
-			position.x = GetRandomValue(-width, width);
+			position.y = (float)-WindowHeight;
+			position.x = (float)GetRandomValue(-width, width);
 			Velocity.y = MaxSpeed;
-			Destination = { position.x, WindowHeight, 0 };
+			Destination = { position.x, (float)WindowHeight, 0 };
 		}
 		else
 		{
 			//Bottom
 			EdgeSpawnedFrom = Edge::Bottom;
-			position.y = WindowHeight;
-			position.x = GetRandomValue(-width, width);
+			position.y = (float)WindowHeight;
+			position.x = (float)GetRandomValue(-width, width);
 			Velocity.y = -MaxSpeed;
-			Destination = { position.x, -WindowHeight, 0 };
+			Destination = { position.x, (float) -WindowHeight, 0};
 		}
 
 	}
@@ -126,19 +126,19 @@ void Enemy1::Spawn(Vector3 position)
 		{
 			//Left
 			EdgeSpawnedFrom = Edge::Left;
-			position.x = -WindowWidth;
-			position.y = GetRandomValue(-height, height);
+			position.x = (float)-WindowWidth;
+			position.y = (float)GetRandomValue(-height, height);
 			Velocity.x = MaxSpeed;
-			Destination = { WindowWidth, position.y, 0 };
+			Destination = { (float)WindowWidth, position.y, 0 };
 		}
 		else
 		{
 			//Right
 			EdgeSpawnedFrom = Edge::Right;
-			position.x = WindowWidth;
-			position.y = GetRandomValue(-height, height);
+			position.x = (float)WindowWidth;
+			position.y = (float)GetRandomValue(-height, height);
 			Velocity.x = -MaxSpeed;
-			Destination = { -WindowWidth, position.y, 0 };
+			Destination = { (float) -WindowWidth, position.y, 0};
 		}
 	}
 

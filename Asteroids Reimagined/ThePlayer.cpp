@@ -17,7 +17,7 @@ ThePlayer::ThePlayer()
 	for (int i = 0; i < MagazineSize; i++)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots.at(i));
+		TheManagers.EM.AddLineModel(Shots.back());
 	}
 }
 
@@ -264,6 +264,18 @@ void ThePlayer::ExtraLife()
 {
 	NewLife = true;
 	Lives++;
+}
+
+void ThePlayer::ShieldPowerUp()
+{
+	ShieldPower = 100;
+}
+
+void ThePlayer::HeatPowerUp()
+{
+	TurretOverHeat = false;
+	TurretHeat = 0;
+	TurretHeatMeter->Scale = 0.0f;
 }
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)

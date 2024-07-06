@@ -165,6 +165,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PowerUp.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TheScore.cpp">
       <SubType>
       </SubType>
@@ -224,6 +228,10 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="PowerUp.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TheScore.h">
       <SubType>
       </SubType>
