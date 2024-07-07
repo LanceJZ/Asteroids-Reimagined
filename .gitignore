@@ -9,3 +9,4 @@ resources
 /build
 /Debug
 *.gif
+/Release/Asteroids Reimagined.pdb
