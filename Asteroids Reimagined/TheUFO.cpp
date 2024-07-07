@@ -137,9 +137,9 @@ void TheUFO::CheckCollisions(TheRock* rock)
 void TheUFO::Spawn(int spawnCount)
 {
 	Vector3 position = { 0, 0, 0 };
-	int height = WindowHeight / 1.25f;
+	int height = (int)(WindowHeight / 1.25f);
 
-	position.y = GetRandomValue(-height, height);
+	position.y = (float)GetRandomValue(-height, height);
 
 	TheManagers.EM.ResetTimer(FireTimerID);
 	TheManagers.EM.ResetTimer(ChangeVectorTimerID);
@@ -147,9 +147,6 @@ void TheUFO::Spawn(int spawnCount)
 	float fullScale = 1.0f;
 	float fullRadius = 18.5f;
 	float fullSpeed = 128.666f;
-	//float spawnPercent = (powf(0.915f, ((float)spawnCount * 0.5f)
-	//	/ (float)(Wave + 1)) * 100.0f);
-
 	float spawnPercent = (float)spawnCount * 0.5f;
 	spawnPercent += (Player->GetScore() * 0.0001f);
 	spawnPercent += (Wave);

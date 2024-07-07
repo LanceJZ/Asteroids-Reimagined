@@ -50,15 +50,21 @@ public:
 	void ExtraLife();
 	void ShieldPowerUp();
 	void HeatPowerUp();
+	void FullPowerUp();
 	int GetScore();
 
 private:
 	bool TurretOverHeat = false;
+	bool PoweredUp = false;
+	bool PoweredUpRundown = false;
+
 	size_t MagazineSize = 16;
 	size_t FireRateTimerID = 0;
 	size_t TurretCooldownTimerID = 0;
 	size_t TurretHeatTimerID = 0;
-	size_t ShieldRechargeTimerID = 0;
+	size_t PowerupTimerID = 0;
+	size_t PowerupRundownTimerID = 0;
+	size_t PowerUpBlinkTimerID = 0;
 
 	int NextNewLifeScore = 10000;
 	int TurretHeat = 0;
@@ -101,6 +107,9 @@ private:
 
 	void ShieldOn();
 	void ShieldOff();
+	void ShieldPowerDrain(float deltaTime);
+
+	void WeHaveThePower();
 
 	void ShieldHit(Vector3 location, Vector3 velocity);
 	void TurretHeatMeterUpdate();

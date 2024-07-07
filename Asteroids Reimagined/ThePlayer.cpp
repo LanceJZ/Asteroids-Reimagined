@@ -12,7 +12,9 @@ ThePlayer::ThePlayer()
 	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
 	TurretCooldownTimerID = TheManagers.EM.AddTimer(2.0f);
 	TurretHeatTimerID = TheManagers.EM.AddTimer(0.15f);
-	ShieldRechargeTimerID = TheManagers.EM.AddTimer(1.0f);
+	PowerupTimerID = TheManagers.EM.AddTimer(8.0f);
+	PowerupRundownTimerID = TheManagers.EM.AddTimer(2.0f);
+	PowerUpBlinkTimerID = TheManagers.EM.AddTimer(0.25f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
@@ -165,19 +167,11 @@ void ThePlayer::Update(float deltaTime)
 	CheckScreenEdge();
 	TurretTimers();
 	CrosshairUpdate();
+	ShieldPowerDrain(deltaTime);
 
-	if (Shield->Enabled)
+	if (PoweredUp)
 	{
-		ShieldPower -= ShieldDrainRate * deltaTime;
-
-		if (ShieldPower < 0.0f)
-		{
-			ShieldPower = 0.0f;
-		}
-	}
-	else
-	{
-		ShieldPower += ShieldRechargeRate * deltaTime;
+		WeHaveThePower();
 	}
 }
 
@@ -246,6 +240,10 @@ void ThePlayer::Spawn()
 	TurretHeatMeter->Scale = 0.0f;
 	TurretOverHeat = false;
 	TurretHeat = 0;
+	PoweredUp = false;
+	PoweredUpRundown = false;
+	ModelColor = WHITE;
+
 	PlaySound(SpawnSound);
 }
 
@@ -276,6 +274,15 @@ void ThePlayer::HeatPowerUp()
 	TurretOverHeat = false;
 	TurretHeat = 0;
 	TurretHeatMeter->Scale = 0.0f;
+}
+
+void ThePlayer::FullPowerUp()
+{
+	TheManagers.EM.ResetTimer(PowerupTimerID);
+	ModelColor = PURPLE;
+	PoweredUp = true;
+	PoweredUpRundown = false;
+	TurretOverHeat = false;
 }
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
@@ -354,6 +361,31 @@ void ThePlayer::CrosshairUpdate()
 {
 	Crosshair->X(GetMousePosition().x - WindowWidth);
 	Crosshair->Y(GetMousePosition().y - WindowHeight);
+
+	if (Crosshair->X() < -WindowWidth)
+	{
+		Crosshair->X(-WindowWidth);
+		SetMousePosition(0, (int)GetMousePosition().y);
+	}
+
+	if (Crosshair->X() > WindowWidth)
+	{
+		Crosshair->X(WindowWidth);
+		SetMousePosition((int)WindowWidth * 2, (int)GetMousePosition().y);
+	}
+
+	if (Crosshair->Y() < -WindowHeight)
+	{
+		Crosshair->Y(-WindowHeight);
+		SetMousePosition((int)GetMousePosition().x, 0);
+	}
+
+	if (Crosshair->Y() > WindowHeight)
+	{
+		Crosshair->Y((float)WindowHeight);
+		SetMousePosition((int)GetMousePosition().x, (int)WindowHeight * 2);
+	}
+
 }
 
 void ThePlayer::RotateLeft(float amount)
@@ -400,19 +432,66 @@ void ThePlayer::ShieldOn()
 	{
 		ShieldOff();
 	}
-
-	TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
 }
 
 void ThePlayer::ShieldOff()
 {
 	StopSound(ShieldOnSound);
 	Shield->Enabled = false;
+}
 
-	if (TheManagers.EM.TimerElapsed(ShieldRechargeTimerID))
+void ThePlayer::ShieldPowerDrain(float deltaTime)
+{
+	if (Shield->Enabled)
 	{
-		TheManagers.EM.ResetTimer(ShieldRechargeTimerID);
+		ShieldPower -= ShieldDrainRate * deltaTime;
+
+		if (ShieldPower < 0.0f)
+		{
+			ShieldPower = 0.0f;
+		}
 	}
+	else
+	{
+		ShieldPower += ShieldRechargeRate * deltaTime;
+	}
+}
+
+void ThePlayer::WeHaveThePower()
+{
+		ShieldPower = 100.0f;
+		TurretHeat = 0;
+
+		if (TheManagers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
+		{
+			PoweredUpRundown = true;
+			TheManagers.EM.ResetTimer(PowerupRundownTimerID);
+			TheManagers.EM.ResetTimer(PowerUpBlinkTimerID);
+		}
+
+		if (PoweredUpRundown)
+		{
+			if (TheManagers.EM.TimerElapsed(PowerUpBlinkTimerID))
+			{
+				TheManagers.EM.ResetTimer(PowerUpBlinkTimerID);
+
+				if (ModelColor.g == 255.0f)
+				{
+					ModelColor = PURPLE;
+				}
+				else
+				{
+					ModelColor = WHITE;
+				}
+			}
+		}
+
+		if (TheManagers.EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
+		{
+			PoweredUp = false;
+			PoweredUpRundown = false;
+			ModelColor = WHITE;
+		}
 }
 
 void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
@@ -586,7 +665,7 @@ void ThePlayer::Keyboard()
 	{
 	}
 
-	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E))
+	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E) || IsKeyDown(KEY_S))
 	{
 		ShieldOn();
 	}

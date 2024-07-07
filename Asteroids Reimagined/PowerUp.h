@@ -24,6 +24,7 @@ public:
 private:
 	bool Shield = false;
 	bool Heat = false;
+	bool Power = false;
 
 	size_t LifeTimerID = 0;
 

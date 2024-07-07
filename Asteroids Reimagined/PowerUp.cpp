@@ -56,15 +56,22 @@ void PowerUp::Spawn(Vector3 position)
 
 	TheManagers.EM.ResetTimer(LifeTimerID);
 
-	if (GetRandomValue(1, 10) < 5)
+	int chance = GetRandomValue(1, 10);
+
+	if (chance < 5)
 	{
 		Shield = true;
 		ModelColor = BLUE;
 	}
-	else
+	else if (chance < 3)
 	{
 		Heat = true;
 		ModelColor = RED;
+	}
+	else
+	{
+		Power = true;
+		ModelColor = PURPLE;
 	}
 }
 
@@ -83,6 +90,8 @@ void PowerUp::CheckCollisions()
 		if (Shield) Player->ShieldPowerUp();
 
 		if (Heat) Player->HeatPowerUp();
+
+		if (Power) Player->FullPowerUp();
 
 		Destroy();
 	}

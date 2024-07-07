@@ -147,7 +147,7 @@ bool TheRock::CheckCollisions()
 		return true;
 	}
 
-	for (auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{

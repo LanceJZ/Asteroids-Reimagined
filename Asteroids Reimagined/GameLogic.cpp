@@ -234,6 +234,7 @@ void GameLogic::PlayerShipDisplay()
 		PlayerShipModels.back()->Initialize(TheUtilities);
 		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
 		PlayerShipModels.back()->Scale = 0.8f;
+		PlayerShipModels.back()->Radius = 0.0f;
 	}
 
 	for (int i = 0; i < PlayerShipModels.size(); i++)

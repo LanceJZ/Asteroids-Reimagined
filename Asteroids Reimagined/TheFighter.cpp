@@ -174,7 +174,7 @@ void TheFighter::CheckCollisions()
 		return;
 	}
 
-	for (auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
@@ -186,7 +186,7 @@ void TheFighter::CheckCollisions()
 		}
 	}
 
-	for (auto& ufo : UFOs)
+	for (const auto& ufo : UFOs)
 	{
 		if (ufo->Enabled && CirclesIntersect(*ufo))
 		{
@@ -195,7 +195,7 @@ void TheFighter::CheckCollisions()
 			return;
 		}
 
-		for (auto& shot : ufo->Shots)
+		for (const auto& shot : ufo->Shots)
 		{
 			if (shot->Enabled && CirclesIntersect(*shot))
 			{
