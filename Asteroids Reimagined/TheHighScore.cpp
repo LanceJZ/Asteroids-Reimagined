@@ -57,20 +57,16 @@ void TheHighScore::Draw2D()
 	{
 		if (NewHighScore)
 		{
-			DrawText("Left/Right",
-				(GetScreenWidth() / 2) - 80, (GetScreenHeight() / 2) - 260, 30, color);
-			DrawText("arrow keys",
-				(GetScreenWidth() / 2) - 90, (GetScreenHeight() / 2) - 210, 30, color);
-			DrawText("to change letter,",
-				(GetScreenWidth() / 2) - 130, (GetScreenHeight() / 2) - 160, 30, color);
-			DrawText("down arrow key",
-				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 110, 30, color);
-			DrawText("to chose letter.",
-				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 60, 30, color);
+			DrawText("Left/Right arrow keys",
+				(GetScreenWidth() / 2) - 150, (GetScreenHeight() / 2) - 280, 30, color);
+			DrawText("to change letter, down arrow key",
+				(GetScreenWidth() / 2) - 230, (GetScreenHeight() / 2) - 200, 30, color);
+			DrawText("to go to next letter.",
+				(GetScreenWidth() / 2) - 130, (GetScreenHeight() / 2) - 120, 30, color);
 			DrawText("Enter to submit.",
-				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 30, 20, color);
-			DrawText(const_cast<char*>(HighScoreEntryText.c_str()), (GetScreenWidth() / 2) - 30,
-				(GetScreenHeight() / 2) + 130, 60, color);
+				(GetScreenWidth() / 2) - 100, (GetScreenHeight() / 2) - 30, 30, color);
+			DrawText(const_cast<char*>(HighScoreEntryText.c_str()),
+				(GetScreenWidth() / 2) - 70, (GetScreenHeight() / 2) + 100, 60, color);
 		}
 		else
 		{
