@@ -248,6 +248,10 @@ void ThePlayer::Spawn()
 	PoweredUp = false;
 	PoweredUpRundown = false;
 	ModelColor = WHITE;
+	Turret->ModelColor = WHITE;
+	Shield->ModelColor = WHITE;
+	GunOverCharge = false;
+	ShieldOverCharge = false;
 
 	PlaySound(SpawnSound);
 }
@@ -271,14 +275,20 @@ void ThePlayer::ExtraLife()
 
 void ThePlayer::ShieldPowerUp()
 {
-	ShieldPower = 100;
+	ShieldOverCharge = true;
+	ShieldPower = 300;
+	Shield->ModelColor = BLUE;
+	Shield->Alpha = 255.0f;
 }
 
-void ThePlayer::HeatPowerUp()
+void ThePlayer::GunPowerUp()
 {
+	GunOverCharge = true;
 	TurretOverHeat = false;
-	TurretHeat = 0;
+	TurretHeat = -200;
 	TurretHeatMeter->Scale = 0.0f;
+	Turret->ModelColor = RED;
+	TurretHeatMeter->ModelColor = BLUE;
 }
 
 void ThePlayer::FullPowerUp()
@@ -326,6 +336,16 @@ void ThePlayer::FireTurret()
 				{
 					TheManagers.EM.ResetTimer(TurretCooldownTimerID);
 					TurretOverHeat = true;
+				}
+
+				if (GunOverCharge)
+				{
+					if (TurretHeat > 0)
+					{
+						GunOverCharge = false;
+						Turret->ModelColor = WHITE;
+						TurretHeatMeter->ModelColor = WHITE;
+					}
 				}
 
 				Vector3 turretPosition = Turret->GetWorldPosition();
@@ -430,7 +450,19 @@ void ThePlayer::ShieldOn()
 
 		if (!IsSoundPlaying(ShieldOnSound)) PlaySound(ShieldOnSound);
 
-		Shield->Alpha = ShieldPower * 2.55f;
+		if (ShieldOverCharge)
+		{
+			if (ShieldPower < 100.0f)
+			{
+				Shield->ModelColor = WHITE;
+				ShieldOverCharge = false;
+			}
+		}
+
+		if (!ShieldOverCharge)
+		{
+			Shield->Alpha = ShieldPower * 2.55f;
+		}
 	}
 	else
 	{
@@ -519,30 +551,38 @@ void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 
 void ThePlayer::TurretHeatMeterUpdate()
 {
-	TurretHeatMeter->Scale = TurretHeat * 0.01f;
-
-	if (TurretHeat > 50.0f)
+	if (!GunOverCharge)
 	{
-		TurretHeatMeter->ModelColor = Color{ 200, 200, 200, 255 };
+		TurretHeatMeter->Scale = TurretHeat * 0.01f;
 
-		if (TurretHeat > 75.0f)
+		if (TurretHeat > 50.0f)
 		{
-			TurretHeatMeter->ModelColor = Color{ 173, 216, 255, 255 };
+			TurretHeatMeter->ModelColor = Color{ 200, 200, 200, 255 };
 
-			if (TurretHeat > 90.0f)
+			if (TurretHeat > 75.0f)
 			{
-				TurretHeatMeter->ModelColor = YELLOW;
+				TurretHeatMeter->ModelColor = Color{ 173, 216, 255, 255 };
 
-				if (TurretHeat > 99.0f)
+				if (TurretHeat > 90.0f)
 				{
-					TurretHeatMeter->ModelColor = RED;
+					TurretHeatMeter->ModelColor = YELLOW;
+
+					if (TurretHeat > 99.0f)
+					{
+						TurretHeatMeter->ModelColor = RED;
+					}
 				}
 			}
+		}
+		else
+		{
+			TurretHeatMeter->ModelColor = Color{ 155, 155, 155, 200 };
 		}
 	}
 	else
 	{
-		TurretHeatMeter->ModelColor = Color{ 155, 155, 155, 200 };
+		TurretHeatMeter->ModelColor = SKYBLUE;
+		TurretHeatMeter->Scale = (TurretHeat * 0.01f) * -1.0f;
 	}
 }
 

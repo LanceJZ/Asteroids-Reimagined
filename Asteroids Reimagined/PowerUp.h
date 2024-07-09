@@ -5,6 +5,15 @@
 class PowerUp : public LineModel
 {
 public:
+	enum PowerUpType
+	{
+		Red,
+		Blue,
+		Purple
+	};
+
+	PowerUpType Type = PowerUpType::Red;
+
 	PowerUp();
 	virtual ~PowerUp();
 
@@ -22,10 +31,6 @@ public:
 	void Destroy();
 
 private:
-	bool Shield = false;
-	bool Heat = false;
-	bool Power = false;
-
 	size_t LifeTimerID = 0;
 
 	Sound PickUpSound = {};

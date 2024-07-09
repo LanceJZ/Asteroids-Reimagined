@@ -58,15 +58,17 @@ void TheHighScore::Draw2D()
 		if (NewHighScore)
 		{
 			DrawText("Left/Right",
-				(GetScreenWidth() / 2) - 80, (GetScreenHeight() / 2) - 250, 40, color);
+				(GetScreenWidth() / 2) - 80, (GetScreenHeight() / 2) - 260, 30, color);
 			DrawText("arrow keys",
-				(GetScreenWidth() / 2) - 90, (GetScreenHeight() / 2) - 200, 40, color);
+				(GetScreenWidth() / 2) - 90, (GetScreenHeight() / 2) - 210, 30, color);
 			DrawText("to change letter,",
-				(GetScreenWidth() / 2) - 130, (GetScreenHeight() / 2) - 150, 40, color);
+				(GetScreenWidth() / 2) - 130, (GetScreenHeight() / 2) - 160, 30, color);
 			DrawText("down arrow key",
-				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 100, 40, color);
+				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 110, 30, color);
 			DrawText("to chose letter.",
-				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 50, 40, color);
+				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 60, 30, color);
+			DrawText("Enter to submit.",
+				(GetScreenWidth() / 2) - 120, (GetScreenHeight() / 2) - 30, 20, color);
 			DrawText(const_cast<char*>(HighScoreEntryText.c_str()), (GetScreenWidth() / 2) - 30,
 				(GetScreenHeight() / 2) + 130, 60, color);
 		}
@@ -176,6 +178,14 @@ void TheHighScore::NewHighScoreEntry()//TODO: Make so it can use controller as w
 		{
 			HighScoreEntryText[HighScoreSelectedLetter] = (char)32;
 		}
+	}
+	else if (IsKeyPressed(KEY_ENTER))
+	{
+		HighScoreList[NewHighScoreRank].Name = HighScoreEntryText;
+		NewHighScore = false;
+		ConvertScoreListToString();
+		Save();
+		return;
 	}
 }
 

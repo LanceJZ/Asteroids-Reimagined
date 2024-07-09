@@ -49,7 +49,7 @@ public:
 	void NewGame();
 	void ExtraLife();
 	void ShieldPowerUp();
-	void HeatPowerUp();
+	void GunPowerUp();
 	void FullPowerUp();
 	int GetScore();
 	void SetHighScore(int highScore);
@@ -58,6 +58,8 @@ private:
 	bool TurretOverHeat = false;
 	bool PoweredUp = false;
 	bool PoweredUpRundown = false;
+	bool ShieldOverCharge = false;
+	bool GunOverCharge = false;
 
 	size_t MagazineSize = 16;
 	size_t FireRateTimerID = 0;

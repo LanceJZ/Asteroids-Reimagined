@@ -60,18 +60,18 @@ void PowerUp::Spawn(Vector3 position)
 
 	if (chance < 5)
 	{
-		Shield = true;
 		ModelColor = BLUE;
+		Type = Blue;
 	}
-	else if (chance < 3)
+	else if (chance < 9)
 	{
-		Heat = true;
 		ModelColor = RED;
+		Type = Red;
 	}
 	else
 	{
-		Power = true;
 		ModelColor = PURPLE;
+		Type = Purple;
 	}
 }
 
@@ -87,11 +87,20 @@ void PowerUp::CheckCollisions()
 	{
 		PlaySound(PickUpSound);
 
-		if (Shield) Player->ShieldPowerUp();
-
-		if (Heat) Player->HeatPowerUp();
-
-		if (Power) Player->FullPowerUp();
+		switch (Type)
+		{
+		case PowerUp::Red:
+			Player->GunPowerUp();
+			break;
+		case PowerUp::Blue:
+			Player->ShieldPowerUp();
+			break;
+		case PowerUp::Purple:
+			Player->FullPowerUp();
+			break;
+		default:
+			break;
+		}
 
 		Destroy();
 	}
