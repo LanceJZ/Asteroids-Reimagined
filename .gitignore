@@ -10,3 +10,5 @@ resources
 /Debug
 *.gif
 /Release/Asteroids Reimagined.pdb
+/Release/Knightmare Engine.lib
+/Release/Knightmare Engine.pdb
