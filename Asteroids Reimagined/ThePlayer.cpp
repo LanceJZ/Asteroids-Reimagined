@@ -228,6 +228,11 @@ int ThePlayer::GetScore()
 	return Score->GetScore();
 }
 
+void ThePlayer::SetHighScore(int highScore)
+{
+	Score->SetHighScore(highScore);
+}
+
 void ThePlayer::Spawn()
 {
 	Position = { 0, 0, 0 };
@@ -385,7 +390,6 @@ void ThePlayer::CrosshairUpdate()
 		Crosshair->Y((float)WindowHeight);
 		SetMousePosition((int)GetMousePosition().x, (int)WindowHeight * 2);
 	}
-
 }
 
 void ThePlayer::RotateLeft(float amount)
@@ -665,7 +669,8 @@ void ThePlayer::Keyboard()
 	{
 	}
 
-	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E) || IsKeyDown(KEY_S))
+	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E) || IsKeyDown(KEY_S)
+		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
 		ShieldOn();
 	}

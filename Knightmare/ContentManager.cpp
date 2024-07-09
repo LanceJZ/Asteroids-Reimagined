@@ -226,7 +226,7 @@ std::vector<Vector3>  ContentManager::ConvertStringToPoints(std::string linesStr
 	Vector3 line = { 0 };
 	std::vector<Vector3> linesConverted;
 
-	for (auto character : linesString)
+	for (const auto& character : linesString)
 	{
 		if (character > 44 && character < 58)
 		{

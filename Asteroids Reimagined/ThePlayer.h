@@ -52,6 +52,7 @@ public:
 	void HeatPowerUp();
 	void FullPowerUp();
 	int GetScore();
+	void SetHighScore(int highScore);
 
 private:
 	bool TurretOverHeat = false;

@@ -3,6 +3,8 @@
 GameLogic::GameLogic()
 {
 	TheManagers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
+	TheManagers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
+
 	ExplodeTimerID = TheManagers.EM.AddTimer(3.1f);
 }
 
@@ -54,6 +56,8 @@ bool GameLogic::BeginRun()
 
 	PlayerModel = Player->GetLineModel();
 
+	GameEnded = true;
+
 	return true;
 }
 
@@ -64,6 +68,15 @@ void GameLogic::Update()
 	if (Player->GameOver)
 	{
 		State = MainMenu;
+	}
+
+	if (State == MainMenu)
+	{
+		if (!GameEnded)
+		{
+			HighScores->TheGameIsOver(Player->GetScore());
+			GameEnded = true;
+		}
 	}
 
 	if (!Player->Enabled && State == InPlay)
@@ -259,8 +272,12 @@ void GameLogic::NewGame()
 {
 	Player->NewGame();
 	Enemies->NewGame();
+	HighScores->Reset();
 
 	State = InPlay;
+	GameEnded = false;
+
+	Player->SetHighScore(HighScores->GetHighScore());
 
 	for (int i = 0; i < Player->Lives; i++)
 	{

@@ -19,6 +19,7 @@ public:
 
 	virtual bool Initialize(Utilities* utilities);
 	virtual bool BeginRun();
+	virtual void Input();
 	virtual void Update();
 	float GetRandomScreenY();
 	float GetRandomScreenX();

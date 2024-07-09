@@ -191,7 +191,6 @@ void TheDeathStar::CheckCollisions()
 		if (!Player->Shield->Enabled)
 		{
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 		}
 
@@ -216,7 +215,6 @@ void TheDeathStar::CheckCollisions()
 		{
 			ufo->Hit();
 			Hit();
-			Destroy();
 			return;
 		}
 
@@ -226,7 +224,6 @@ void TheDeathStar::CheckCollisions()
 			{
 				shot->Destroy();
 				Hit();
-				Destroy();
 				return;
 			}
 		}
@@ -235,7 +232,7 @@ void TheDeathStar::CheckCollisions()
 
 void TheDeathStar::Hit()
 {
-	Entity::Hit();
+	Entity::Destroy();
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 

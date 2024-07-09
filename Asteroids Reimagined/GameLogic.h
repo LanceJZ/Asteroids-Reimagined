@@ -4,11 +4,12 @@
 #include "ThePlayer.h"
 #include "EnemyControl.h"
 #include "PowerUp.h"
+#include "TheHighScore.h"
 
 enum GameState
 {
 	PlayerHit,
-	Over,
+	Ended,
 	InPlay,
 	Pause,
 	HighScores,
@@ -41,6 +42,7 @@ public:
 	void SpawnPowerUp(Vector3 position);
 
 private:
+	bool GameEnded = false;
 	size_t ExplodeTimerID = 0;
 	Vector2 AdjustedFieldSize = {};
 
@@ -57,6 +59,7 @@ private:
 
 	ThePlayer* Player = {};
 	EnemyControl* Enemies = {};
+	TheHighScore* HighScores = {};
 
 	void PlayerShipDisplay();
 	void NewGame();

@@ -6,27 +6,27 @@ EntityManager::EntityManager()
 
 EntityManager::~EntityManager()
 {
-	for (auto model : LineModels)
+	for (const auto& model : LineModels)
 	{
 		delete(model);
 	}
 
-	for (auto model : Model3Ds)
+	for (const auto& model : Model3Ds)
 	{
 		delete(model);
 	}
 
-	for (auto entity : Entities)
+	for (const auto& entity : Entities)
 	{
 		delete(entity);
 	}
 
-	for (auto timer : Timers)
+	for (const auto& timer : Timers)
 	{
 		delete(timer);
 	}
 
-	for (auto common : Commons)
+	for (const auto& common : Commons)
 	{
 		delete(common);
 	}
@@ -40,17 +40,22 @@ EntityManager::~EntityManager()
 
 bool EntityManager::Initialize()
 {
-	for (auto common : Commons)
+	for (const auto& drawable : OnScreenTexts)
+	{
+		drawable->Initialize(TheUtilities);
+	}
+
+	for (const auto& common : Commons)
 	{
 		common->Initialize(TheUtilities);
 	}
 
-	for (auto model3D : Model3Ds)
+	for (const auto& model3D : Model3Ds)
 	{
 		model3D->Initialize(TheUtilities);
 	}
 
-	for (auto lineModel : LineModels)
+	for (const auto& lineModel : LineModels)
 	{
 		lineModel->Initialize(TheUtilities);
 	}
@@ -59,17 +64,22 @@ bool EntityManager::Initialize()
 
 bool EntityManager::BeginRun()
 {
-	for (auto model3D : Model3Ds)
+	for (const auto& model3D : Model3Ds)
 	{
 		model3D->BeginRun();
 	}
 
-	for (auto lineModel : LineModels)
+	for (const auto& lineModel : LineModels)
 	{
 		lineModel->BeginRun();
 	}
 
-	for (auto common : Commons)
+	for (const auto& drawable : OnScreenTexts)
+	{
+		drawable->BeginRun();
+	}
+
+	for (const auto& common : Commons)
 	{
 		common->BeginRun();
 	}
@@ -81,7 +91,7 @@ void EntityManager::SetCamera(Camera& camera)
 {
 	TheCamera = &camera;
 
-	for (auto model3D : Model3Ds)
+	for (const auto& model3D : Model3Ds)
 	{
 		model3D->SetCamera(TheCamera);
 	}
@@ -103,6 +113,16 @@ void EntityManager::Input()
 	{
 		Model3Ds[i]->Input();
 	}
+
+	for (const auto& drawable : OnScreenTexts)
+	{
+		drawable->Input();
+	}
+
+	for (const auto& common : Commons)
+	{
+		common->Input();
+	}
 }
 
 void EntityManager::Update(float deltaTime)
@@ -122,12 +142,17 @@ void EntityManager::Update(float deltaTime)
 		if (Model3Ds.at(i)->Enabled) Model3Ds.at(i)->Update(deltaTime);
 	}
 
-	for (auto timer : Timers)
+	for (const auto& timer : Timers)
 	{
 		timer->Update(deltaTime);
 	}
 
-	for (auto common : Commons)
+	for (const auto& drawable : OnScreenTexts)
+	{
+		drawable->Update();
+	}
+
+	for (const auto& common : Commons)
 	{
 		common->Update();
 	}
@@ -135,17 +160,17 @@ void EntityManager::Update(float deltaTime)
 
 void EntityManager::Draw3D()
 {
-	for (auto entity : Entities)
+	for (const auto& entity : Entities)
 	{
 		if (entity->Enabled) entity->Draw3D();
 	}
 
-	for (auto lineModel : LineModels)
+	for (const auto& lineModel : LineModels)
 	{
 		if (lineModel->Enabled)	lineModel->Draw3D();
 	}
 
-	for (auto model3D : Model3Ds)
+	for (const auto& model3D : Model3Ds)
 	{
 		if (model3D->Enabled) model3D->Draw3D();
 	}
@@ -153,7 +178,7 @@ void EntityManager::Draw3D()
 
 void EntityManager::Draw2D()
 {
-	for (auto drawable : OnScreenTexts)
+	for (const auto& drawable : OnScreenTexts)
 	{
 		drawable->Draw2D();
 	}

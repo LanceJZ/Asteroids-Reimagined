@@ -12,8 +12,11 @@ bool Common::Initialize(Utilities* utilities)
 
 bool Common::BeginRun()
 {
+	return false;
+}
 
-	return true;
+void Common::Input()
+{
 }
 
 void Common::Update()
