@@ -710,7 +710,7 @@ void ThePlayer::Keyboard()
 	}
 
 	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E) || IsKeyDown(KEY_S)
-		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT) || IsKeyPressed(KEY_SPACE))
 	{
 		ShieldOn();
 	}

@@ -120,7 +120,7 @@ void TheUFO::CheckCollisions(TheRock* rock)
 			continue;
 		}
 
-		if (shot->Enabled && shot->CirclesIntersect(*Player))
+		if (shot->Enabled && shot->CirclesIntersect(*Player) && Player->Enabled)
 		{
 			shot->Destroy();
 			Player->Hit(Position, Velocity);
