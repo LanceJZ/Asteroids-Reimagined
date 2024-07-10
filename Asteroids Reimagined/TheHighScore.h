@@ -14,7 +14,6 @@ public:
 	TheHighScore();
 	virtual ~TheHighScore();
 
-
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -44,6 +43,9 @@ private:
 
 	std::string HighScoreEntryText = "";
 	std::string HighScoreListRaw = "";
+
+	Font TheFontLarge = {};
+	Font TheFontSmall = {};
 
 	ScoreList HighScoreList[50];
 
