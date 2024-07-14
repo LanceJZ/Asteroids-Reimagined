@@ -6,6 +6,7 @@
 #include "TheDeathStar.h"
 #include "Enemy1.h"
 #include "Enemy2.h"
+#include "TheBoss.h"
 #include "ParticleManager.h"
 
 class EnemyControl : public Common
@@ -22,6 +23,7 @@ public:
 	TheDeathStar *DeathStar = nullptr;
 	Enemy1 *EnemyOne = nullptr;
 	Enemy2 *EnemyTwo = nullptr;
+	TheBoss *Boss = nullptr;
 
 	void SetPlayer(ThePlayer* player);
 	void SetRockModels(LineModelPoints rockModels[4]);
@@ -30,6 +32,9 @@ public:
 	void SetWedgeModel(LineModelPoints model);
 	void SetEnemy1Model(LineModelPoints model);
 	void SetEnemy2Model(LineModelPoints model);
+	void SetBossModel(LineModelPoints model);
+	void SetBossShieldModel(LineModelPoints model);
+	void SetBossTurretModel(LineModelPoints model);
 	void SetEnemyMissileModel(LineModelPoints model);
 	void SetEnemyMineModel(LineModelPoints model);
 

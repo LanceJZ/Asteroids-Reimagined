@@ -60,20 +60,20 @@ void TheHighScore::Draw2D()
 		if (NewHighScore)
 		{
 			DrawTextEx(TheFontSmall, "Left/Right arrow keys",
-				Vector2((GetScreenWidth() / 2) - 150,
-				(GetScreenHeight() / 2) - 280), 30, 0, color);
+				Vector2((float)(GetScreenWidth() / 2) - 150,
+				(float)(GetScreenHeight() / 2) - 280), 30, 0, color);
 			DrawTextEx(TheFontSmall, "to change letter, down arrow key",
-				Vector2((GetScreenWidth() / 2) - 230,
-				(GetScreenHeight() / 2) - 200), 30, 0, color);
+				Vector2((float)(GetScreenWidth() / 2) - 230,
+				(float)(GetScreenHeight() / 2) - 200), 30, 0, color);
 			DrawTextEx(TheFontSmall, "to go to next letter.",
-				Vector2((GetScreenWidth() / 2) - 130,
-				(GetScreenHeight() / 2) - 120), 30, 0, color);
+				Vector2((float)(GetScreenWidth() / 2) - 130,
+				(float)(GetScreenHeight() / 2) - 120), 30, 0, color);
 			DrawTextEx(TheFontSmall, "Enter to submit.",
-				Vector2((GetScreenWidth() / 2) - 100,
-				(GetScreenHeight() / 2) - 30), 30, 0, color);
+				Vector2((float)(GetScreenWidth() / 2) - 100,
+				(float)(GetScreenHeight() / 2) - 30), 30, 0, color);
 			DrawTextEx(TheFontLarge, const_cast<char*>(HighScoreEntryText.c_str()),
-				Vector2((GetScreenWidth() / 2) - 70,
-				(GetScreenHeight() / 2) + 100), 60, 0, color);
+				Vector2((float)(GetScreenWidth() / 2) - 70,
+				(float)(GetScreenHeight() / 2) + 100), 60, 0, color);
 		}
 		else
 		{
@@ -84,15 +84,13 @@ void TheHighScore::Draw2D()
 			else
 			{
 				DrawTextEx(TheFontLarge, "GAME OVER",
-					Vector2((GetScreenWidth() / 2) - 170,
-					(GetScreenHeight() / 2) - 100), 60, 0, color);
+					Vector2((float)(GetScreenWidth() / 2) - 170.0f,
+					(float)(GetScreenHeight() / 2) - 100.0f), 60.0f, 0, color);
 				DrawTextEx(TheFontLarge, "ONE COIN ONE PLAY",
-					Vector2((GetScreenWidth() / 2) - 290,
-					(GetScreenHeight() / 2) + 60), 60, 0, color);
+					Vector2((float)(GetScreenWidth() / 2) - 290.0f,
+					(float)(GetScreenHeight() / 2) + 60.0f), 60.0f, 0, color);
 			}
-
 		}
-
 	}
 }
 
@@ -116,10 +114,10 @@ void TheHighScore::DisplayHighScoreList()
 {
 	std::string name = "";
 	std::string score = "";
-	int space = 30;
-	int font = 30;
-	int start = 150;
-	int center = GetScreenWidth() / 2;
+	float space = 30.0f;
+	float font = 30.0f;
+	float start = 150.0f;
+	float center = (float)GetScreenWidth() / 2.0f;
 
 	DrawTextEx(TheFontSmall, "HIGH SCORE LIST",
 		Vector2((center - 120), start - 50), font, 0, color);
@@ -138,7 +136,7 @@ void TheHighScore::DisplayHighScoreList()
 		score = std::to_string(HighScoreList[i].Score);
 
 		DrawTextEx(TheFontSmall, const_cast<char*>(name.c_str()),
-			Vector2(center - (space + 70),
+			Vector2(center - (space + 70.0f),
 			start + (space * i)), font, 0, color);
 		DrawTextEx(TheFontSmall, const_cast<char*>(score.c_str()),
 			Vector2(center + space,
@@ -146,7 +144,7 @@ void TheHighScore::DisplayHighScoreList()
 	}
 
 	DrawTextEx(TheFontSmall, "PRESS N OR START TO START NEW GAME.",
-		Vector2((center - 280), (GetScreenHeight()) - 100), font, 0, color);
+		Vector2((center - 280.0f), (float)(GetScreenHeight()) - 100.0f), font, 0, color);
 }
 
 void TheHighScore::NewHighScoreEntry()//TODO: Make so it can use controller as well.

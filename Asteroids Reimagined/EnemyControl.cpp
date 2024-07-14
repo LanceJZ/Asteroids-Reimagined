@@ -15,6 +15,7 @@ EnemyControl::EnemyControl()
 	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 	TheManagers.EM.AddLineModel(EnemyOne = DBG_NEW Enemy1());
 	TheManagers.EM.AddLineModel(EnemyTwo = DBG_NEW Enemy2());
+	TheManagers.EM.AddLineModel(Boss = DBG_NEW TheBoss());
 }
 
 EnemyControl::~EnemyControl()
@@ -58,6 +59,8 @@ void EnemyControl::SetShotModel(LineModelPoints model)
 		ufo->SetShotModel(model);
 	}
 
+	Boss->SetShotModel(model);
+
 	ShotModel = model;
 }
 
@@ -76,14 +79,31 @@ void EnemyControl::SetEnemy2Model(LineModelPoints model)
 	EnemyTwo->SetModel(model);
 }
 
+void EnemyControl::SetBossModel(LineModelPoints model)
+{
+	Boss->SetModel(model);
+}
+
+void EnemyControl::SetBossShieldModel(LineModelPoints model)
+{
+	Boss->SetShieldModel(model);
+}
+
+void EnemyControl::SetBossTurretModel(LineModelPoints model)
+{
+	Boss->SetTurretModel(model);
+}
+
 void EnemyControl::SetEnemyMissileModel(LineModelPoints model)
 {
 	EnemyOne->SetMissileModel(model);
+	Boss->SetMissileModel(model);
 }
 
 void EnemyControl::SetEnemyMineModel(LineModelPoints model)
 {
 	EnemyTwo->SetMineModel(model);
+	Boss->SetMineModel(model);
 }
 
 void EnemyControl::SetRockExplodeSound(Sound sound)

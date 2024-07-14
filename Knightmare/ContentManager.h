@@ -44,6 +44,7 @@ private:
 	Texture LoadTextureFile(std::string textureFileName);
 
 	LineModelPoints LoadLineModel(std::string fileName);
-	std::vector<Vector3> ConvertStringToPoints(std::string fileName);
+	std::vector<Vector3> ConvertStringToPoints(std::string linesString);
+	std::vector<Vector3> ConvertStringToPointsNew(std::string linesString);
 };
 

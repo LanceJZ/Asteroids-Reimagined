@@ -82,6 +82,9 @@ bool Game::Load()
 	Enemies->SetEnemyTwoFireSound(TheManagers.CM.LoadAndGetSound("MineDrop"));
 	Enemies->SetEnemyTwoOnSound(TheManagers.CM.LoadAndGetSound("EnemyTwo"));
 	Enemies->SetEnemyTwoMineExplodeSound(TheManagers.CM.LoadAndGetSound("MineExplode"));
+	Enemies->SetBossModel(TheManagers.CM.LoadAndGetLineModel("BossShip"));
+	Enemies->SetBossShieldModel(TheManagers.CM.LoadAndGetLineModel("BossShield"));
+	Enemies->SetBossTurretModel(TheManagers.CM.LoadAndGetLineModel("BossTurret"));
 
 	Logic->SetPowerUpSound(TheManagers.CM.LoadAndGetSound("PowerUp"));
 	Logic->SetPickUpSound(TheManagers.CM.LoadAndGetSound("PickUp"));

@@ -6,8 +6,8 @@ class TheHighScore : public OnScreenText
 {
 	struct ScoreList
 	{
-		std::string Name;
-		int Score;
+		std::string Name = "";
+		int Score = 0;
 	};
 
 public:

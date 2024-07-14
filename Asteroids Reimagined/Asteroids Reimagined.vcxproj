@@ -173,6 +173,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheBossTurret.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TheHighScore.cpp">
       <SubType>
       </SubType>
@@ -241,6 +245,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="TheBoss.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheBossTurret.h">
       <SubType>
       </SubType>
     </ClInclude>
