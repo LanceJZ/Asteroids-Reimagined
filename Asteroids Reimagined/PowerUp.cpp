@@ -2,7 +2,7 @@
 
 PowerUp::PowerUp()
 {
-	LifeTimerID = TheManagers.EM.AddTimer(15.0f);
+	LifeTimerID = Managers.EM.AddTimer(15.0f);
 }
 
 PowerUp::~PowerUp()
@@ -37,7 +37,7 @@ void PowerUp::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (TheManagers.EM.TimerElapsed(LifeTimerID))
+	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
@@ -54,7 +54,7 @@ void PowerUp::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(LifeTimerID);
+	Managers.EM.ResetTimer(LifeTimerID);
 
 	int chance = GetRandomValue(1, 10);
 

@@ -4,7 +4,7 @@ TheDeathStar::TheDeathStar()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		TheManagers.EM.AddEntity(FighterPairs[i] = DBG_NEW TheFighterPair());
+		Managers.EM.AddEntity(FighterPairs[i] = DBG_NEW TheFighterPair());
 	}
 }
 

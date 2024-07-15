@@ -21,16 +21,16 @@ void ParticleManager::SetCubeModel(Model model)
 	CubeModel = model;
 }
 
-void ParticleManager::SetManagers(Managers& managers)
+void ParticleManager::SetManagers(TheManagers& managers)
 {
-	Man = &managers;
+	Managers = &managers;
 }
 
 bool ParticleManager::BeginRun()
 {
 	Common::BeginRun();
 
-	ParticleModel = Man->CM.LoadAndGetLineModel("Dot"); //Replace with vertices in code.
+	ParticleModel = Managers->CM.LoadAndGetLineModel("Dot"); //Replace with vertices in code.
 
 	return false;
 }
@@ -94,7 +94,7 @@ size_t ParticleManager::SpawnCubePool(Color color)
 		if (spawnNew)
 		{
 			CubeParticles.push_back(DBG_NEW ParticleCube());
-			Man->EM.AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
+			Managers->EM.AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
 		}
 
 		CubeParticles[cubeSpawnNumber]->ModelColor = color;
@@ -123,10 +123,10 @@ size_t ParticleManager::SpawnLinePool(Color color)
 	if (spawnNew)
 	{
 		LineParticles.push_back(DBG_NEW LineParticle());
-		LineParticles.back()->SetManagers(Man);
+		LineParticles.back()->SetManagers(Managers);
 		LineParticles.back()->Initialize(TheUtilities);
 		LineParticles.back()->BeginRun();
-		Man->EM.AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
+		Managers->EM.AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
 	}
 
 	LineParticles[lineSpawnNumber]->ModelColor = color;

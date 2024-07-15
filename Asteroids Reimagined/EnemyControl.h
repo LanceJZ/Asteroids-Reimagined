@@ -70,6 +70,8 @@ private:
 	bool NoMoreRocks = false;
 	bool SpawnedDeathStar = false;
 	bool NewWave = false;
+	bool BossWave = false;
+	bool ClearForBossWave = false;
 
 	size_t UFOSpawnTimerID;
 	size_t DeathStarSpawnTimerID;
@@ -101,6 +103,9 @@ private:
 	void CheckRockCollisions();
 	void CheckUFOCollisions(TheRock* rock);
 	void CheckEnemyCollisions(TheRock* rock);
+	void MakeReadyForBossWave();
+	void DoBossStuff();
+	void SpawnBoss();
 
 	void Reset();
 };

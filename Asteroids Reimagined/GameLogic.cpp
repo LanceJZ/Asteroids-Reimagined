@@ -2,10 +2,10 @@
 
 GameLogic::GameLogic()
 {
-	TheManagers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
-	TheManagers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
+	Managers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
+	Managers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
 
-	ExplodeTimerID = TheManagers.EM.AddTimer(3.1f);
+	ExplodeTimerID = Managers.EM.AddTimer(3.1f);
 }
 
 GameLogic::~GameLogic()
@@ -83,11 +83,11 @@ void GameLogic::Update()
 	{
 		if (Player->BeenHit)
 		{
-			TheManagers.EM.ResetTimer(ExplodeTimerID);
+			Managers.EM.ResetTimer(ExplodeTimerID);
 			Player->BeenHit = false;
 		}
 
-		if (TheManagers.EM.TimerElapsed(ExplodeTimerID))
+		if (Managers.EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
 
@@ -223,7 +223,7 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 	if (spawnNewPowerUp)
 	{
 		PowerUps.push_back(DBG_NEW PowerUp());
-		TheManagers.EM.AddEntity(PowerUps.back());
+		Managers.EM.AddEntity(PowerUps.back());
 		PowerUps.back()->SetPlayer(Player);
 		PowerUps.back()->SetModel(PowerUpModel);
 		PowerUps.back()->SetPickUpSound(PickUpSound);
@@ -242,7 +242,7 @@ void GameLogic::PlayerShipDisplay()
 	if (Player->Lives > PlayerShipModels.size())
 	{
 		PlayerShipModels.push_back(DBG_NEW LineModel());
-		TheManagers.EM.AddLineModel(PlayerShipModels.back());
+		Managers.EM.AddLineModel(PlayerShipModels.back());
 		PlayerShipModels.back()->SetModel(PlayerModel);
 		PlayerShipModels.back()->Initialize(TheUtilities);
 		PlayerShipModels.back()->RotationZ = PI / 2 + PI;

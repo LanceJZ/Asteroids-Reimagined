@@ -2,7 +2,7 @@
 
 TheMine::TheMine()
 {
-	LifeTimerID = TheManagers.EM.AddTimer(10.0f);
+	LifeTimerID = Managers.EM.AddTimer(10.0f);
 }
 
 TheMine::~TheMine()
@@ -44,7 +44,7 @@ void TheMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (TheManagers.EM.TimerElapsed(LifeTimerID)) Destroy();
+	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	CheckCollisions();
 }
@@ -58,7 +58,7 @@ void TheMine::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(LifeTimerID);
+	Managers.EM.ResetTimer(LifeTimerID);
 }
 
 void TheMine::Hit()

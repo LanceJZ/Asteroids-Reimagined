@@ -2,7 +2,7 @@
 
 TheHighScore::TheHighScore()
 {
-	HighScoreListTimerID = TheManagers.EM.AddTimer(7.5f);
+	HighScoreListTimerID = Managers.EM.AddTimer(7.5f);
 }
 
 TheHighScore::~TheHighScore()
@@ -43,10 +43,10 @@ void TheHighScore::Update()
 
 	if (GameOver && !NewHighScore)
 	{
-		if (TheManagers.EM.TimerElapsed(HighScoreListTimerID))
+		if (Managers.EM.TimerElapsed(HighScoreListTimerID))
 		{
 			ShowHighScores = !ShowHighScores;
-			TheManagers.EM.ResetTimer(HighScoreListTimerID);
+			Managers.EM.ResetTimer(HighScoreListTimerID);
 		}
 	}
 }

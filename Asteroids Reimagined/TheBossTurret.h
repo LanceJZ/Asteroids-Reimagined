@@ -14,7 +14,7 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position);
+	void Spawn();
 	void Destroy();
 
 private:

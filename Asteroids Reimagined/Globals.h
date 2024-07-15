@@ -1,5 +1,5 @@
-#include "Managers.h"
+#include "TheManagers.h"
 
 extern Camera TheCamera;
-extern Managers TheManagers;
+extern TheManagers Managers;
 extern Vector2 FieldSize;

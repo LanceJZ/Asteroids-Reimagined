@@ -2,24 +2,24 @@
 
 ThePlayer::ThePlayer()
 {
-	TheManagers.EM.AddLineModel(Flame = DBG_NEW LineModel());
-	TheManagers.EM.AddLineModel(Shield = DBG_NEW LineModel());
-	TheManagers.EM.AddLineModel(Turret = DBG_NEW LineModel());
-	TheManagers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
-	TheManagers.EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
-	TheManagers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
+	Managers.EM.AddLineModel(Flame = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(Shield = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(Turret = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
+	Managers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
 
-	FireRateTimerID = TheManagers.EM.AddTimer(0.125f);
-	TurretCooldownTimerID = TheManagers.EM.AddTimer(2.0f);
-	TurretHeatTimerID = TheManagers.EM.AddTimer(0.15f);
-	PowerupTimerID = TheManagers.EM.AddTimer(8.0f);
-	PowerupRundownTimerID = TheManagers.EM.AddTimer(2.0f);
-	PowerUpBlinkTimerID = TheManagers.EM.AddTimer(0.25f);
+	FireRateTimerID = Managers.EM.AddTimer(0.125f);
+	TurretCooldownTimerID = Managers.EM.AddTimer(2.0f);
+	TurretHeatTimerID = Managers.EM.AddTimer(0.15f);
+	PowerupTimerID = Managers.EM.AddTimer(8.0f);
+	PowerupRundownTimerID = Managers.EM.AddTimer(2.0f);
+	PowerUpBlinkTimerID = Managers.EM.AddTimer(0.25f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots.back());
+		Managers.EM.AddLineModel(Shots.back());
 	}
 }
 
@@ -293,7 +293,7 @@ void ThePlayer::GunPowerUp()
 
 void ThePlayer::FullPowerUp()
 {
-	TheManagers.EM.ResetTimer(PowerupTimerID);
+	Managers.EM.ResetTimer(PowerupTimerID);
 	ModelColor = PURPLE;
 	PoweredUp = true;
 	PoweredUpRundown = false;
@@ -315,12 +315,9 @@ void ThePlayer::PointTurret(Vector3 mouseLocation)
 
 void ThePlayer::FireTurret()
 {
-	if (TurretOverHeat)
-	{
-		return;
-	}
+	if (TurretOverHeat)	return;
 
-	if (TheManagers.EM.TimerElapsed(FireRateTimerID))
+	if (Managers.EM.TimerElapsed(FireRateTimerID))
 	{
 		for (auto& shot : Shots)
 		{
@@ -328,13 +325,13 @@ void ThePlayer::FireTurret()
 			{
 				PlaySound(FireSound);
 
-				TheManagers.EM.ResetTimer(FireRateTimerID);
+				Managers.EM.ResetTimer(FireRateTimerID);
 				TurretHeat += 5;
 				TurretHeatMeterUpdate();
 
 				if (TurretHeat > TurretHeatMax)
 				{
-					TheManagers.EM.ResetTimer(TurretCooldownTimerID);
+					Managers.EM.ResetTimer(TurretCooldownTimerID);
 					TurretOverHeat = true;
 				}
 
@@ -362,7 +359,7 @@ void ThePlayer::TurretTimers()
 {
 	if (TurretOverHeat)
 	{
-		if (TheManagers.EM.TimerElapsed(TurretCooldownTimerID))
+		if (Managers.EM.TimerElapsed(TurretCooldownTimerID))
 		{
 			TurretOverHeat = false;
 			TurretHeat = 0;
@@ -371,9 +368,9 @@ void ThePlayer::TurretTimers()
 	}
 	else
 	{
-		if (TheManagers.EM.TimerElapsed(TurretHeatTimerID))
+		if (Managers.EM.TimerElapsed(TurretHeatTimerID))
 		{
-			TheManagers.EM.ResetTimer(TurretHeatTimerID);
+			Managers.EM.ResetTimer(TurretHeatTimerID);
 
 			if (TurretHeat > 2)	TurretHeat -= 2;
 			if (TurretHeat >= 1) TurretHeat -= 1;
@@ -458,8 +455,7 @@ void ThePlayer::ShieldOn()
 				ShieldOverCharge = false;
 			}
 		}
-
-		if (!ShieldOverCharge)
+		else
 		{
 			Shield->Alpha = ShieldPower * 2.55f;
 		}
@@ -498,18 +494,18 @@ void ThePlayer::WeHaveThePower()
 		ShieldPower = 100.0f;
 		TurretHeat = 0;
 
-		if (TheManagers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
+		if (Managers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
 		{
 			PoweredUpRundown = true;
-			TheManagers.EM.ResetTimer(PowerupRundownTimerID);
-			TheManagers.EM.ResetTimer(PowerUpBlinkTimerID);
+			Managers.EM.ResetTimer(PowerupRundownTimerID);
+			Managers.EM.ResetTimer(PowerUpBlinkTimerID);
 		}
 
 		if (PoweredUpRundown)
 		{
-			if (TheManagers.EM.TimerElapsed(PowerUpBlinkTimerID))
+			if (Managers.EM.TimerElapsed(PowerUpBlinkTimerID))
 			{
-				TheManagers.EM.ResetTimer(PowerUpBlinkTimerID);
+				Managers.EM.ResetTimer(PowerUpBlinkTimerID);
 
 				if (ModelColor.g == 255.0f)
 				{
@@ -522,7 +518,7 @@ void ThePlayer::WeHaveThePower()
 			}
 		}
 
-		if (TheManagers.EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
+		if (Managers.EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
 		{
 			PoweredUp = false;
 			PoweredUpRundown = false;

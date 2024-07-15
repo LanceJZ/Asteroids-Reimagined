@@ -181,7 +181,7 @@
     </ClCompile>
     <ClCompile Include="ExplosionControl.cpp" />
     <ClCompile Include="LineModel.cpp" />
-    <ClCompile Include="Managers.cpp">
+    <ClCompile Include="TheManagers.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -221,7 +221,7 @@
     </ClInclude>
     <ClInclude Include="ExplosionControl.h" />
     <ClInclude Include="LineModel.h" />
-    <ClInclude Include="Managers.h">
+    <ClInclude Include="TheManagers.h">
       <SubType>
       </SubType>
     </ClInclude>

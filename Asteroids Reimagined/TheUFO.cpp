@@ -2,13 +2,13 @@
 
 TheUFO::TheUFO()
 {
-	FireTimerID = TheManagers.EM.AddTimer(1.25f);
-	ChangeVectorTimerID = TheManagers.EM.AddTimer(5.50f);
+	FireTimerID = Managers.EM.AddTimer(1.25f);
+	ChangeVectorTimerID = Managers.EM.AddTimer(5.50f);
 
 	for (int i = 0; i < 2; i++)
 	{
 		Shots[i] = DBG_NEW Shot();
-		TheManagers.EM.AddLineModel(Shots[i]);
+		Managers.EM.AddLineModel(Shots[i]);
 	}
 }
 
@@ -88,12 +88,12 @@ void TheUFO::Update(float deltaTime)
 		Enabled = false;
 	}
 
-	if (TheManagers.EM.TimerElapsed(FireTimerID))
+	if (Managers.EM.TimerElapsed(FireTimerID))
 	{
 		FireShot();
 	}
 
-	if (TheManagers.EM.TimerElapsed(ChangeVectorTimerID))
+	if (Managers.EM.TimerElapsed(ChangeVectorTimerID))
 	{
 		ChangeVector();
 	}
@@ -141,8 +141,8 @@ void TheUFO::Spawn(int spawnCount)
 
 	position.y = (float)GetRandomValue(-height, height);
 
-	TheManagers.EM.ResetTimer(FireTimerID);
-	TheManagers.EM.ResetTimer(ChangeVectorTimerID);
+	Managers.EM.ResetTimer(FireTimerID);
+	Managers.EM.ResetTimer(ChangeVectorTimerID);
 
 	float fullScale = 1.0f;
 	float fullRadius = 18.5f;
@@ -213,7 +213,7 @@ void TheUFO::FireShot()
 	float angle = 0;
 	float shotSpeed = 325;
 	bool shootRocks = false;
-	TheManagers.EM.ResetTimer(FireTimerID);
+	Managers.EM.ResetTimer(FireTimerID);
 
 	if (DeathStarActive)
 	{
@@ -323,7 +323,7 @@ float TheUFO::AimedShotAtRock()
 
 void TheUFO::ChangeVector()
 {
-	TheManagers.EM.ResetTimer(ChangeVectorTimerID, GetRandomFloat(3.1f, 7.5f));
+	Managers.EM.ResetTimer(ChangeVectorTimerID, GetRandomFloat(3.1f, 7.5f));
 
 	if (GetRandomValue(1, 10) > 2)
 	{

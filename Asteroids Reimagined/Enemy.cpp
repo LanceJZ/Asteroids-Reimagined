@@ -2,7 +2,7 @@
 
 Enemy::Enemy()
 {
-	ShotTimerID = TheManagers.EM.AddTimer();
+	ShotTimerID = Managers.EM.AddTimer();
 }
 
 Enemy::~Enemy()
@@ -73,7 +73,7 @@ void Enemy::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
+	Managers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
 }
 
 void Enemy::Hit()
@@ -112,7 +112,7 @@ void Enemy::Shoot()
 {
 	PlaySound(FireSound);
 
-	TheManagers.EM.ResetTimer(ShotTimerID);
+	Managers.EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -130,7 +130,7 @@ void Enemy::Shoot()
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 
@@ -139,7 +139,7 @@ void Enemy::Shoot()
 
 void Enemy::Shoot(Vector3 velocity)
 {
-	TheManagers.EM.ResetTimer(ShotTimerID);
+	Managers.EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -157,7 +157,7 @@ void Enemy::Shoot(Vector3 velocity)
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 

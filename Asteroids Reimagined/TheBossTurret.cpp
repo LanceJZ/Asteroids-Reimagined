@@ -33,14 +33,13 @@ void TheBossTurret::Draw3D()
 	LineModel::Draw3D();
 }
 
-void TheBossTurret::Spawn(Vector3 position)
+void TheBossTurret::Spawn()
 {
-	Entity::Spawn(position);
-
+	Enabled = true;
 }
 
 void TheBossTurret::Destroy()
 {
 	Entity::Destroy();
-
+	RotationZ = 0.0f;
 }

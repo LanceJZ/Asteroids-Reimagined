@@ -4,7 +4,7 @@ TheFighterPair::TheFighterPair()
 {
 	for (int i = 0; i < 2; i++)
 	{
-		TheManagers.EM.AddLineModel(Fighters[i] = DBG_NEW TheFighter());
+		Managers.EM.AddLineModel(Fighters[i] = DBG_NEW TheFighter());
 	}
 }
 

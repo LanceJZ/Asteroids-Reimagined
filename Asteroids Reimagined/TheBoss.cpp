@@ -2,7 +2,15 @@
 
 TheBoss::TheBoss()
 {
-	TheManagers.EM.AddEntity(Shield = DBG_NEW LineModel());
+	MissileFireTimerID = Managers.EM.AddTimer(1.25f);
+	MineDropTimerID = Managers.EM.AddTimer(1.5f);
+
+	Managers.EM.AddEntity(Shield = DBG_NEW LineModel());
+
+	for (int i = 0; i < 5; i++)
+	{
+		Managers.EM.AddLineModel(Turrets[i] = DBG_NEW TheBossTurret());
+	}
 }
 
 TheBoss::~TheBoss()
@@ -21,7 +29,10 @@ void TheBoss::SetShieldModel(LineModelPoints model)
 
 void TheBoss::SetTurretModel(LineModelPoints model)
 {
-	TurretModel = model;
+	for (int i = 0; i < 5; i++)
+	{
+		Turrets[i]->SetModel(model);
+	}
 }
 
 void TheBoss::SetMissileModel(LineModelPoints model)
@@ -46,6 +57,8 @@ bool TheBoss::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
 
+	ActualShipRadius = Radius;
+
 	return false;
 }
 
@@ -55,6 +68,19 @@ bool TheBoss::BeginRun()
 
 	Shield->SetParent(*this);
 
+	for (int i = 0; i < 5; i++)
+	{
+		Turrets[i]->SetParent(*this);
+	}
+
+	Turrets[0]->Position = { 0.0f, 37.0f * 2, 0.0f };
+	Turrets[1]->Position = { 0.0f, -37.0f * 2, 0.0f };
+	Turrets[2]->Position = { 31.0f * 2, 0.0f, 0.0f };
+	Turrets[3]->Position = { -29.0f * 2, 25.0f * 2, 0.0f };
+	Turrets[4]->Position = { -29.0f * 2, -25.0f * 2, 0.0f };
+
+	Reset();
+
 	return false;
 }
 
@@ -62,6 +88,15 @@ void TheBoss::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+
+	if (Shield->Enabled)
+	{
+		if (ShieldPower <= 0)
+		{
+			Shield->Enabled = false;
+			Radius = ActualShipRadius;
+		}
+	}
 }
 
 void TheBoss::Draw3D()
@@ -69,14 +104,49 @@ void TheBoss::Draw3D()
 	LineModel::Draw3D();
 }
 
-void TheBoss::Spawn(Vector3 position)
+void TheBoss::Reset()
+{
+	Destroy();
+
+	Shield->Enabled = false;
+
+	for (const auto& shot : Shots)
+	{
+		shot->Destroy();
+	}
+
+	for (const auto& missile : Missiles)
+	{
+		missile->Destroy();
+	}
+
+	for (const auto& mine : Mines)
+	{
+		mine->Destroy();
+	}
+}
+
+void TheBoss::Spawn(Vector3 position, float rotation)
 {
 	Entity::Spawn(position);
 
+	RotationZ = rotation;
+	Radius = Shield->Radius;
+	Shield->Enabled = true;
+	ShieldPower = 100;
+
+	for (const auto& turret : Turrets)
+	{
+		turret->Spawn();
+	}
 }
 
 void TheBoss::Destroy()
 {
 	Entity::Destroy();
 
+	for (const auto& turret : Turrets)
+	{
+		turret->Destroy();
+	}
 }

@@ -26,10 +26,18 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position);
+	void Reset();
+	void Spawn(Vector3 position, float rotation);
 	void Destroy();
 
 private:
+	size_t MissileFireTimerID = 0;
+	size_t MineDropTimerID = 0;
+
+	int ShieldPower = 100;
+
+	float ActualShipRadius = 0.0f;
+
 	LineModelPoints MissileModel;
 	LineModelPoints ShotModel;
 	LineModelPoints MineModel;
@@ -37,8 +45,9 @@ private:
 
 	LineModel* Shield = nullptr;
 	ThePlayer* Player = nullptr;
+
 	std::vector<TheMissile*> Missiles;
 	std::vector<TheMine*> Mines;
 	std::vector<Shot*> Shots;
-	std::vector<TheBossTurret*> Turrets;
+	TheBossTurret* Turrets[5] = { nullptr };
 };

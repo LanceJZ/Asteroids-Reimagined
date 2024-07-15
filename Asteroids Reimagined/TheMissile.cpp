@@ -2,7 +2,7 @@
 
 TheMissile::TheMissile()
 {
-	LifeTimerID = TheManagers.EM.AddTimer(5.0f);
+	LifeTimerID = Managers.EM.AddTimer(5.0f);
 }
 
 TheMissile::~TheMissile()
@@ -32,7 +32,7 @@ void TheMissile::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
-	if (TheManagers.EM.TimerElapsed(LifeTimerID))
+	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
@@ -51,7 +51,7 @@ void TheMissile::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(LifeTimerID);
+	Managers.EM.ResetTimer(LifeTimerID);
 }
 
 void TheMissile::Hit()

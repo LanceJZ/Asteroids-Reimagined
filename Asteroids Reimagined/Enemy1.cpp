@@ -2,8 +2,8 @@
 
 Enemy1::Enemy1()
 {
-	TheManagers.EM.AddLineModel(Missile = DBG_NEW TheMissile());
-	FireMissileTimerID = TheManagers.EM.AddTimer(2.0f);
+	Managers.EM.AddLineModel(Missile = DBG_NEW TheMissile());
+	FireMissileTimerID = Managers.EM.AddTimer(2.0f);
 }
 
 Enemy1::~Enemy1()
@@ -67,11 +67,11 @@ void Enemy1::Update(float deltaTime)
 
 	SetRotateVelocity(Destination, TurnSpeed, Speed);
 
-	if (TheManagers.EM.TimerElapsed(FireMissileTimerID))
+	if (Managers.EM.TimerElapsed(FireMissileTimerID))
 	{
 		if (!Missile->Enabled && Player->Enabled) FireMissile();
 
-		TheManagers.EM.ResetTimer(FireMissileTimerID);
+		Managers.EM.ResetTimer(FireMissileTimerID);
 	}
 
 	DestinationTarget();
@@ -89,7 +89,7 @@ void Enemy1::Draw3D()
 
 void Enemy1::Spawn(Vector3 position)
 {
-	TheManagers.EM.ResetTimer(FireMissileTimerID);
+	Managers.EM.ResetTimer(FireMissileTimerID);
 
 	if (!Player->GameOver) PlaySound(SpawnSound);
 
