@@ -10,6 +10,7 @@ public:
 	virtual ~TheBossTurret();
 
 	void SetPlayer(ThePlayer* player);
+	void SetShotModel(LineModelPoints model);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -25,6 +26,7 @@ private:
 
 	float FireTimerSetting = 0;
 
+	LineModelPoints ShotModel = {};
 	ThePlayer* Player = nullptr;
 
 	std::vector<Shot*> Shots;

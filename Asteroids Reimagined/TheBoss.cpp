@@ -50,6 +50,11 @@ void TheBoss::SetShotModel(LineModelPoints model)
 {
 
 	ShotModel = model;
+
+	for (int i = 0; i < 5; i++)
+	{
+		Turrets[i]->SetShotModel(model);
+	}
 }
 
 void TheBoss::SetMineModel(LineModelPoints model)
@@ -64,17 +69,7 @@ bool TheBoss::Initialize(Utilities* utilities)
 
 	ActualShipRadius = Radius;
 
-	float upper = WindowHeight * 0.75f;
-	float lower = -WindowHeight * 0.75f;
-	float left = -WindowWidth * 0.75f;
-	float right = WindowWidth * 0.75f;
-
-	Path.push_back({ upper, left, 0.0f });
-	Path.push_back({ upper, right, 0.0f });
-	Path.push_back({ lower, right, 0.0f });
-	Path.push_back({ lower, left, 0.0f });
-
-	return false;
+	return true;
 }
 
 bool TheBoss::BeginRun()
@@ -94,6 +89,17 @@ bool TheBoss::BeginRun()
 	Turrets[3]->Position = { -29.0f * 2, 25.0f * 2, 0.0f };
 	Turrets[4]->Position = { -29.0f * 2, -25.0f * 2, 0.0f };
 
+	float edge = 0.666f;
+	float upper = WindowHeight * edge;
+	float lower = -WindowHeight * edge;
+	float left = -WindowWidth * edge;
+	float right = WindowWidth * edge;
+
+	Path.push_back({ left, upper, 0.0f });
+	Path.push_back({ right, upper, 0.0f });
+	Path.push_back({ right, lower, 0.0f });
+	Path.push_back({ left, lower, 0.0f });
+
 	Reset();
 
 	return false;
@@ -112,6 +118,9 @@ void TheBoss::Update(float deltaTime)
 			Radius = ActualShipRadius;
 		}
 	}
+
+	HeadToNextWaypoint();
+	ReachedWaypoint();
 }
 
 void TheBoss::Draw3D()
@@ -163,5 +172,18 @@ void TheBoss::Destroy()
 	for (const auto& turret : Turrets)
 	{
 		turret->Destroy();
+	}
+}
+
+void TheBoss::HeadToNextWaypoint()
+{
+	SetRotateVelocity(Path[NextWaypoint], 0.20, 20);
+}
+
+void TheBoss::ReachedWaypoint()
+{
+	if (CirclesIntersect(Path[NextWaypoint], 10.0f))
+	{
+		NextWaypoint = GetRandomValue(0, Path.size() - 1);
 	}
 }

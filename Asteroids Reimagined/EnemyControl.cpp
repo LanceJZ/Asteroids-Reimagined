@@ -34,6 +34,7 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	DeathStar->SetPlayer(player);
 	EnemyOne->SetPlayer(player);
 	EnemyTwo->SetPlayer(player);
+	Boss->SetPlayer(player);
 }
 
 void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
@@ -264,7 +265,7 @@ void EnemyControl::Update()
 
 		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 
-		if (Wave == 2)
+		if (Wave == 1)
 		{
 			ClearForBossWave = true;
 			return;

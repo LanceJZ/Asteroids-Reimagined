@@ -14,6 +14,11 @@ void TheBossTurret::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheBossTurret::SetShotModel(LineModelPoints model)
+{
+	ShotModel = model;
+}
+
 bool TheBossTurret::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -65,26 +70,19 @@ void TheBossTurret::Fire()
 
 	if (!Player->Enabled) return;
 
-		float percentChance = 0.2f - (Player->GetScore() * 0.00001f);
+	float percentChance = 0.02f - (Player->GetScore() * 0.00001f);
 
 	if (percentChance < 0)
 	{
 		percentChance = 0;
 	}
 
-	float minP = 0.015f - (0.01f * 0.0025f);
-
-	if (minP < 0)
-		minP = 0;
-
-	float maxP = 0.02f + minP;
-
-	percentChance += GetRandomFloat(minP, maxP);
-
 	float angle = AngleFromVectorZ(Player->Position) +
 		GetRandomFloat(-percentChance, percentChance);
 
-	RotationZ = angle - Parents->at(0)->RotationZ;
+	//float angle = AngleFromVectorZ(Player->Position);
+
+	RotationZ = angle -Parents->at(0)->RotationZ;
 
 	float shotSpeed = 200;
 

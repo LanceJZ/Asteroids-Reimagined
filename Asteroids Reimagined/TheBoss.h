@@ -53,4 +53,7 @@ private:
 	std::vector<TheMine*> Mines;
 	std::vector<Shot*> Shots;
 	TheBossTurret* Turrets[5] = { nullptr };
+
+	void HeadToNextWaypoint();
+	void ReachedWaypoint();
 };
