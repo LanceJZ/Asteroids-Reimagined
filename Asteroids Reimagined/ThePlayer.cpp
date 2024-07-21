@@ -172,6 +172,7 @@ void ThePlayer::Update(float deltaTime)
 	if (PoweredUp)
 	{
 		WeHaveThePower();
+		ShieldOn();
 	}
 }
 

@@ -422,21 +422,21 @@ void EnemyControl::CheckRockCollisions()
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 
+				int count = GetRandomValue(1, 4);
+
 				if (Rocks.at(i)->Size == TheRock::Large)
 				{
-					SpawnRocks(Rocks.at(i)->Position, 2, TheRock::MediumLarge);
+					SpawnRocks(Rocks.at(i)->Position, count, TheRock::MediumLarge);
 					continue;
 				}
-
-				if (Rocks.at(i)->Size == TheRock::MediumLarge)
+				else if (Rocks.at(i)->Size == TheRock::MediumLarge)
 				{
-					SpawnRocks(Rocks.at(i)->Position, 3, TheRock::Medium);
+					SpawnRocks(Rocks.at(i)->Position, count, TheRock::Medium);
 					continue;
 				}
-
-				if (Rocks.at(i)->Size == TheRock::Medium)
+				else if (Rocks.at(i)->Size == TheRock::Medium)
 				{
-					SpawnRocks(Rocks.at(i)->Position, 4, TheRock::Small);
+					SpawnRocks(Rocks.at(i)->Position, count, TheRock::Small);
 					continue;
 				}
 			}
