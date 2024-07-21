@@ -81,10 +81,10 @@ void GameLogic::Update()
 
 	if (!Player->Enabled && State == InPlay)
 	{
-		if (Player->BeenHit)
+		if (Player->GetBeenHit())
 		{
 			Managers.EM.ResetTimer(ExplodeTimerID);
-			Player->BeenHit = false;
+			Player->Destroy();
 		}
 
 		if (Managers.EM.TimerElapsed(ExplodeTimerID))

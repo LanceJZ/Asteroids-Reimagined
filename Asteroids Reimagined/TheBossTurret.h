@@ -1,5 +1,6 @@
 #pragma once
 #include "Globals.h"
+#include "ThePlayer.h"
 #include "Shot.h"
 
 class TheBossTurret : public LineModel
@@ -7,6 +8,8 @@ class TheBossTurret : public LineModel
 public:
 	TheBossTurret();
 	virtual ~TheBossTurret();
+
+	void SetPlayer(ThePlayer* player);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -18,6 +21,13 @@ public:
 	void Destroy();
 
 private:
+	size_t FireTimerID;
+
+	float FireTimerSetting = 0;
+
+	ThePlayer* Player = nullptr;
 
 	std::vector<Shot*> Shots;
+
+	void Fire();
 };

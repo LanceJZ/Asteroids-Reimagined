@@ -35,8 +35,11 @@ private:
 	size_t MineDropTimerID = 0;
 
 	int ShieldPower = 100;
+	int NextWaypoint = 0;
 
 	float ActualShipRadius = 0.0f;
+
+	std::vector<Vector3> Path;
 
 	LineModelPoints MissileModel;
 	LineModelPoints ShotModel;

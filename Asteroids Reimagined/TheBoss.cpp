@@ -20,6 +20,11 @@ TheBoss::~TheBoss()
 void TheBoss::SetPlayer(ThePlayer* player)
 {
 	Player = player;
+
+	for (int i = 0; i < 5; i++)
+	{
+		Turrets[i]->SetPlayer(player);
+	}
 }
 
 void TheBoss::SetShieldModel(LineModelPoints model)
@@ -58,6 +63,16 @@ bool TheBoss::Initialize(Utilities* utilities)
 	LineModel::Initialize(utilities);
 
 	ActualShipRadius = Radius;
+
+	float upper = WindowHeight * 0.75f;
+	float lower = -WindowHeight * 0.75f;
+	float left = -WindowWidth * 0.75f;
+	float right = WindowWidth * 0.75f;
+
+	Path.push_back({ upper, left, 0.0f });
+	Path.push_back({ upper, right, 0.0f });
+	Path.push_back({ lower, right, 0.0f });
+	Path.push_back({ lower, left, 0.0f });
 
 	return false;
 }

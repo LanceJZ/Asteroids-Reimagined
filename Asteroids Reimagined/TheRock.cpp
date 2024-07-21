@@ -58,8 +58,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	float scale = 25;
 	float radius = 47.25f;
 	float change = 0;
-	Enabled = true;
-	BeenHit = false;
 
 	switch (size)
 	{

@@ -172,6 +172,7 @@ void ThePlayer::Update(float deltaTime)
 	if (PoweredUp)
 	{
 		WeHaveThePower();
+		ShieldOn();
 	}
 }
 
@@ -189,6 +190,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 	}
 	else
 	{
+		Entity::Hit();
 		PlaySound(ExplodeSound);
 		Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
 			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
@@ -200,7 +202,6 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Flame->Enabled = false;
 		Crosshair->Enabled = false;
 		TurretHeatMeter->Enabled = false;
-		BeenHit = true;
 
 		if (Lives < 0)
 		{

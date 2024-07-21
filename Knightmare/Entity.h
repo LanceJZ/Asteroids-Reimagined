@@ -4,7 +4,6 @@
 class Entity : public PositionedObject
 {
 public:
-	bool BeenHit = false;
 	bool EntityOnly = false;
 	std::string EntityName = {};
 
@@ -16,12 +15,16 @@ public:
 	virtual void Hit();
 	virtual void Destroy();
 
+	bool GetBeenHit();
+
+	bool CirclesIntersect(Vector3 targetPosition, float targetRadius);
 	bool CirclesIntersect(Entity& target);
 	bool CirclesIntersectBullet(Entity& target);
 
 protected:
 
 private:
+	bool BeenHit = false;
 	Ray TheRay = { 0 };
 	RayCollision TheRayCollision = { 0 };
 };

@@ -2,6 +2,8 @@
 
 Game::Game()
 {
+	//When adding classes to EM, must be pointer to heap,IE: Name = new Class().
+
 	LogicID = Managers.EM.AddCommon(Logic = DBG_NEW GameLogic());
 	BackGroundID = Managers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = Managers.EM.AddCommon(Enemies = DBG_NEW EnemyControl());
@@ -21,8 +23,6 @@ bool Game::Initialize() //Initialize
 
 	float multi = 1.0f;
 	FieldSize = { GetScreenWidth() * multi, (float)GetScreenHeight() };
-
-	//When adding classes to EM, must be pointer to heap,IE: Name = new Class().
 
 	Logic->SetPlayer(Player);
 	Logic->SetEnemies(Enemies);

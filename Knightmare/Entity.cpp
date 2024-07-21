@@ -4,6 +4,7 @@
 bool Entity::Initialize(Utilities* utilities)
 {
 	PositionedObject::Initialize(utilities);
+
 	return true;
 }
 
@@ -12,9 +13,6 @@ void Entity::Update(float deltaTime)
 	if (!Enabled) return;
 
 	PositionedObject::Update(deltaTime);
-
-	if (!EntityOnly) return;
-
 }
 
 void Entity::Draw3D()
@@ -29,6 +27,7 @@ void Entity::Spawn(Vector3 position)
 {
 	Position = position;
 	Enabled = true;
+	BeenHit = false;
 }
 
 void Entity::Hit()
@@ -42,26 +41,44 @@ void Entity::Destroy()
 	BeenHit = false;
 }
 
+bool Entity::GetBeenHit()
+{
+	return BeenHit;
+}
+
 /// <summary>
 /// Circle collusion detection. Target circle will be compared to this class's.
 /// Will return true of they intersect. Only for use with 2D Z plane.
+/// Only X and Y will be used.
 /// </summary>
-/// <param name="target">Target Entity.</param>
-/// <returns></returns>
-bool Entity::CirclesIntersect(Entity& target)
+/// <param name="targetPosition">Target Vector3 position.</param>
+/// <param name="targetRadius">Target float radius.</param>
+/// <returns>bool</returns>
+bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 {
-	if (!Enabled || !target.Enabled)
-		return false;
+	Vector2 distance = { targetPosition.x - Position.x,
+		targetPosition.y - Position.y };
 
-	Vector2 distance = { target.Position.x - Position.x,
-		target.Position.y - Position.y };
+	float radius = Radius + targetRadius;
 
-	float radius = Radius + target.Radius;
-
-	if ((distance.x * distance.x) + (distance.y * distance.y) < radius * radius)
-		return true;
+	if ((distance.x * distance.x) + (distance.y * distance.y)
+		< radius * radius) return true;
 
 	return false;
+}
+
+/// <summary>
+/// Circle collusion detection. Target circle will be compared to this class's.
+/// Will return true of they intersect. Only for use with 2D Z plane.
+/// Only X and Y will be used.
+/// </summary>
+/// <param name="target">Target Entity.</param>
+/// <returns>bool</returns>
+bool Entity::CirclesIntersect(Entity& target)
+{
+	if (!Enabled || !target.Enabled) return false;
+
+	return CirclesIntersect(target.Position, target.Radius);
 }
 
 bool Entity::CirclesIntersectBullet(Entity& target)
