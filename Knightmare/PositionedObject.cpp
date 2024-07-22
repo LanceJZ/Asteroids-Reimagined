@@ -68,6 +68,11 @@ float PositionedObject::AngleFromVectorZ(Vector3 target)
 	return (atan2f(target.y - Position.y, target.x - Position.x));
 }
 
+float PositionedObject::AngleFromWorldVectorZ(Vector3 target)
+{
+	return (atan2f(target.y - GetWorldPosition().y, target.x - GetWorldPosition().x));
+}
+
 Vector3 PositionedObject::RandomVelocity(float magnitude)
 {
 	float ang = GetRandomFloat(0, PI * 2);
@@ -112,13 +117,11 @@ Vector3 PositionedObject::AccelerationToMaxAtRotation(float accelerationAmount, 
 
 Vector3 PositionedObject::GetWorldPosition()
 {
-	Vector3 worldPosition = { 0, 0, 0 };
-
-		BeforeCalculate();
-		CalculateWorldVectors();
-		CalculateWorldSpace();
-		worldPosition = WorldPosition;
-		AfterCalculate();
+	BeforeCalculate();
+	CalculateWorldVectors();
+	CalculateWorldSpace();
+	Vector3 worldPosition = WorldPosition;
+	AfterCalculate();
 
 	return worldPosition;
 }

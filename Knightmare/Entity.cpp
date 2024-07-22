@@ -56,6 +56,8 @@ bool Entity::GetBeenHit()
 /// <returns>bool</returns>
 bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 {
+	if (!Enabled) return false;
+
 	Vector2 distance = { targetPosition.x - Position.x,
 		targetPosition.y - Position.y };
 
@@ -76,7 +78,7 @@ bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 /// <returns>bool</returns>
 bool Entity::CirclesIntersect(Entity& target)
 {
-	if (!Enabled || !target.Enabled) return false;
+	if (!target.Enabled) return false;
 
 	return CirclesIntersect(target.Position, target.Radius);
 }

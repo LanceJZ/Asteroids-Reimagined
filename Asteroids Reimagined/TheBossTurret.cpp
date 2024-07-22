@@ -70,32 +70,39 @@ void TheBossTurret::Fire()
 
 	if (!Player->Enabled) return;
 
-	float percentChance = 0.02f - (Player->GetScore() * 0.00001f);
+	//if (!Player->GameOver) PlaySound(FireSound);
 
-	if (percentChance < 0)
+	bool spawnNewShot = true;
+	size_t shotNumber = Shots.size();
+
+	for (size_t check = 0; check < shotNumber; check++)
 	{
-		percentChance = 0;
-	}
-
-	float angle = AngleFromVectorZ(Player->Position) +
-		GetRandomFloat(-percentChance, percentChance);
-
-	//float angle = AngleFromVectorZ(Player->Position);
-
-	RotationZ = angle -Parents->at(0)->RotationZ;
-
-	float shotSpeed = 200;
-
-	for (const auto& shot : Shots)
-	{
-		if (!shot->Enabled)
+		if (!Shots[check]->Enabled)
 		{
-			//if (!Player->GameOver) PlaySound(FireSound);
-
-			Vector3 offset = Vector3Add(VelocityFromAngleZ(Radius), Position);
-			shot->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
-
+			spawnNewShot = false;
+			shotNumber = check;
 			break;
 		}
 	}
+
+	if (spawnNewShot)
+	{
+		Shots.push_back(DBG_NEW Shot());
+		Managers.EM.AddLineModel(Shots.back(), ShotModel);
+		Shots.back()->SetModel(ShotModel);
+		Shots.back()->Initialize(TheUtilities);
+		Shots.back()->BeginRun();
+	}
+
+	float percentChance = 0.5f - (Player->GetScore() * 0.00001f);
+
+	if (percentChance < 0) percentChance = 0;
+
+	float angle = AngleFromWorldVectorZ(Player->Position) +
+		GetRandomFloat(-percentChance, percentChance);
+	RotationZ = angle -Parents->at(0)->RotationZ;
+	float shotSpeed = 200;
+
+	Vector3 offset = Vector3Add(VelocityFromAngleZ(Radius), GetWorldPosition());
+	Shots[shotNumber]->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 4.75f);
 }

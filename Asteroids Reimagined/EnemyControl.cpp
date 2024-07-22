@@ -342,12 +342,12 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		bool spawnNewRock = true;
 		size_t rockNumber = Rocks.size();
 
-		for (size_t rockCheck = 0; rockCheck < rockNumber; rockCheck++)
+		for (size_t check = 0; check < rockNumber; check++)
 		{
-			if (!Rocks.at(rockCheck)->Enabled)
+			if (!Rocks.at(check)->Enabled)
 			{
 				spawnNewRock = false;
-				rockNumber = rockCheck;
+				rockNumber = check;
 				break;
 			}
 		}
@@ -357,11 +357,11 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
 			Managers.EM.AddLineModel(Rocks.back());
-			Rocks.back()->Initialize();
-			Rocks.back()->BeginRun();
 			Rocks.back()->SetModel((RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
+			Rocks.back()->Initialize();
+			Rocks.back()->BeginRun();
 		}
 
 		Rocks.at(rockNumber)->Spawn(position, size);
