@@ -66,6 +66,7 @@ void TheBossTurret::Destroy()
 
 void TheBossTurret::Fire()
 {
+	FireTimerSetting = GetRandomFloat(0.75f, 1.5f);
 	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting);
 
 	if (!Player->Enabled) return;
@@ -77,7 +78,7 @@ void TheBossTurret::Fire()
 
 	for (size_t check = 0; check < shotNumber; check++)
 	{
-		if (!Shots[check]->Enabled)
+		if (!Shots.at(check)->Enabled)
 		{
 			spawnNewShot = false;
 			shotNumber = check;
@@ -104,5 +105,5 @@ void TheBossTurret::Fire()
 	float shotSpeed = 200;
 
 	Vector3 offset = Vector3Add(VelocityFromAngleZ(Radius), GetWorldPosition());
-	Shots[shotNumber]->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 4.75f);
+	Shots.at(shotNumber)->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 4.75f);
 }

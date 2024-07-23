@@ -121,6 +121,7 @@ void TheBoss::Update(float deltaTime)
 
 	HeadToNextWaypoint();
 	ReachedWaypoint();
+	CheckCollisions();
 }
 
 void TheBoss::Draw3D()
@@ -186,4 +187,9 @@ void TheBoss::ReachedWaypoint()
 	{
 		NextWaypoint = GetRandomValue(0, Path.size() - 1);
 	}
+}
+
+void TheBoss::CheckCollisions()
+{
+
 }

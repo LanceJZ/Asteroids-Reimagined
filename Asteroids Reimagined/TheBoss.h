@@ -38,6 +38,7 @@ private:
 	int NextWaypoint = 0;
 
 	float ActualShipRadius = 0.0f;
+	float ShieldPoints = 100.0f;
 
 	std::vector<Vector3> Path;
 
@@ -56,4 +57,5 @@ private:
 
 	void HeadToNextWaypoint();
 	void ReachedWaypoint();
+	void CheckCollisions();
 };

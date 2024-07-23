@@ -101,8 +101,7 @@ private:
 
 	void CrosshairUpdate();
 
-	void RotateLeft(float amount);
-	void RotateRight(float amount);
+	void RotateShip(float amount);
 	void RotateStop();
 
 	void ThrustOn(float amount);

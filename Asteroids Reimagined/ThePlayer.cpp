@@ -410,12 +410,7 @@ void ThePlayer::CrosshairUpdate()
 	}
 }
 
-void ThePlayer::RotateLeft(float amount)
-{
-	RotationVelocityZ = (amount * 5.5f);
-}
-
-void ThePlayer::RotateRight(float amount)
+void ThePlayer::RotateShip(float amount)
 {
 	RotationVelocityZ = (amount * 5.5f);
 }
@@ -486,7 +481,7 @@ void ThePlayer::ShieldPowerDrain(float deltaTime)
 	}
 	else
 	{
-		ShieldPower += ShieldRechargeRate * deltaTime;
+		if (ShieldPower < 100.0f) ShieldPower += ShieldRechargeRate * deltaTime;
 	}
 }
 
@@ -585,44 +580,49 @@ void ThePlayer::TurretHeatMeterUpdate()
 
 void ThePlayer::Gamepad()
 {
-	//Button B is 6 for Shield //Button A is 7 for Fire //Button Y is 8 for Hyperspace
+	//Button B is 6 //Button A is 7 //Button Y is 8
 	//Button X is 5	//Left bumper is 9 //Right bumper is 11 //Left Trigger is 10
-	//Right Trigger is 12 for Shield //Dpad Up is 1 for	//Dpad Down is 3 for
-	//Dpad Left is 4 for rotate left //Dpad Right is 2 for rotate right
-	//Axis 1 is -1 for Up, 1 for Down on left stick.
+	//Right Trigger is 12 //Dpad Up is 1 for //Dpad Down is 3 for
+	//Dpad Left is 4 //Dpad Right is 2
 	//Axis 0 is -1 for Left, 1 for right on left stick.
-	//Axis 3 is -1 for Up, 1 for Down on right stick.
+	//Axis 1 is -1 for Up, 1 for Down on left stick.
 	//Axis 2 is -1 for Left, 1 for right on right stick.
+	//Axis 3 is -1 for Up, 1 for Down on right stick.
 
-	//Left Stick
+	//Button A
+	if (GetGamepadButtonPressed() == 7)
+	{
+
+	}
+
+	//Left Stick Left/Right
 	if (GetGamepadAxisMovement(0, 0) > 0.1f) //Right
 	{
-		RotateRight(GetGamepadAxisMovement(0, 0));
+		RotateShip(GetGamepadAxisMovement(0, 0));
 	}
 	else if (GetGamepadAxisMovement(0, 0) < -0.1f) //Left
 	{
-		RotateLeft(GetGamepadAxisMovement(0, 0));
+		RotateShip(GetGamepadAxisMovement(0, 0));
 	}
 	else
 	{
 		RotateStop();
 	}
 
+	//Left Stick Up/Down
 	if (GetGamepadAxisMovement(0, 1) > 0.1f) //Down
 	{
 	}
 	else if (GetGamepadAxisMovement(0, 1) < -0.1f) //Up
 	{
-		ThrustOn(-GetGamepadAxisMovement(0, 1));
 	}
 	else
 	{
-		ThrustOff();
 	}
 
-	//Right Stick
 	PointTurret(GetGamepadAxisMovement(0, 2), GetGamepadAxisMovement(0, 3));
 
+	//Right Stick
 	if (GetGamepadAxisMovement(0, 2) > 0.1f) //Right
 	{
 		FireTurret();
@@ -631,8 +631,7 @@ void ThePlayer::Gamepad()
 	{
 		FireTurret();
 	}
-
-	if (GetGamepadAxisMovement(0, 3) > 0.1f) //Down
+	else if (GetGamepadAxisMovement(0, 3) > 0.1f) //Down
 	{
 		FireTurret();
 	}
@@ -651,29 +650,14 @@ void ThePlayer::Gamepad()
 		ShieldOff();
 	}
 
-	if (IsGamepadButtonDown(0, 4) || GetGamepadAxisMovement(0, 0) < -0.25f)
+	//Left Trigger
+	if (GetGamepadAxisMovement(0, 4) > 0.1f)
 	{
-	}
-	else if (IsGamepadButtonDown(0, 2) || GetGamepadAxisMovement(0, 0) > 0.25f)
-	{
-	}
-
-	if (IsGamepadButtonPressed(0, 7))
-	{
-	}
-
-	if (IsGamepadButtonDown(0, 11) || IsGamepadButtonDown(0, 6))
-	{
+		ThrustOn(GetGamepadAxisMovement(0, 4));
 	}
 	else
 	{
-	}
-
-	if (IsGamepadButtonDown(0, 5) || IsGamepadButtonDown(0, 8)) //X button
-	{
-	}
-	else
-	{
+		ThrustOff();
 	}
 }
 
@@ -681,11 +665,11 @@ void ThePlayer::Keyboard()
 {
 	if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
 	{
-		RotateRight(1.0f);
+		RotateShip(1.0f);
 	}
 	else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
 	{
-		RotateLeft(-1.0f);
+		RotateShip(-1.0f);
 	}
 	else
 	{
@@ -701,13 +685,8 @@ void ThePlayer::Keyboard()
 		ThrustOff();
 	}
 
-	if (IsKeyPressed(KEY_RIGHT_CONTROL) || IsKeyPressed(KEY_LEFT_CONTROL) ||
-		IsKeyPressed(KEY_SPACE))
-	{
-	}
-
-	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_E) || IsKeyDown(KEY_S)
-		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT) || IsKeyPressed(KEY_SPACE))
+	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S) || IsKeyDown(KEY_SPACE)
+		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
 		ShieldOn();
 	}
@@ -716,10 +695,13 @@ void ThePlayer::Keyboard()
 		ShieldOff();
 	}
 
-	PointTurret(Crosshair->Position);
-
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
+		PointTurret(Crosshair->Position);
 		FireTurret();
+	}
+
+	if (IsKeyPressed(KEY_E)) //Special Weapon Key.
+	{
 	}
 }
