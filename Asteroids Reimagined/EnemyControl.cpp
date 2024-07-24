@@ -6,6 +6,7 @@ EnemyControl::EnemyControl()
 	DeathStarSpawnTimerID = Managers.EM.AddTimer(5.0f);
 	EnemyOneSpawnTimerID = Managers.EM.AddTimer(15.0f);
 	EnemyTwoSpawnTimerID = Managers.EM.AddTimer(12.0f);
+	BossExplodingTimerID = Managers.EM.AddTimer(5.0f);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -265,7 +266,7 @@ void EnemyControl::Update()
 
 		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 
-		if (Wave == 1)
+		if (Wave == 1 && !Player->GameOver)
 		{
 			ClearForBossWave = true;
 			return;
@@ -588,7 +589,19 @@ void EnemyControl::MakeReadyForBossWave()
 
 void EnemyControl::DoBossStuff()
 {
-	if (!Boss->Enabled) BossWave = false;
+	if (!Boss->Enabled && Managers.EM.TimerElapsed(BossExplodingTimerID))
+	{
+		BossWave = false;
+		Managers.EM.ResetTimer(UFOSpawnTimerID);
+		Managers.EM.ResetTimer(EnemyOneSpawnTimerID);
+		Managers.EM.ResetTimer(EnemyTwoSpawnTimerID);
+	}
+
+	if (Boss->GetBeenHit())
+	{
+		Boss->Destroy();
+		Managers.EM.ResetTimer(BossExplodingTimerID);
+	}
 
 	if (Player->GameOver)
 	{
@@ -640,6 +653,8 @@ void EnemyControl::SpawnBoss()
 
 void EnemyControl::Reset()
 {
+	BossWave = false;
+	ClearForBossWave = false;
 	Wave = 0;
 	UFOSpawnCount = 0;
 	RockSpawnCount = StartRockCount;

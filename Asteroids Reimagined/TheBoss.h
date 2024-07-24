@@ -28,6 +28,7 @@ public:
 
 	void Reset();
 	void Spawn(Vector3 position, float rotation);
+	void Hit();
 	void Destroy();
 
 private:
@@ -37,22 +38,26 @@ private:
 	int ShieldPower = 100;
 	int NextWaypoint = 0;
 
-	float ActualShipRadius = 0.0f;
 	float ShieldPoints = 100.0f;
+	float ShieldRegenRate = 1.0f;
 
-	std::vector<Vector3> Path;
+	float HitPoints = 100.0f;
 
 	LineModelPoints MissileModel;
 	LineModelPoints ShotModel;
 	LineModelPoints MineModel;
 	LineModelPoints TurretModel;
 
+	Entity* FireShotAtPlayerArea = nullptr;
+
 	LineModel* Shield = nullptr;
 	ThePlayer* Player = nullptr;
 
+	std::vector<Vector3> Path;
 	std::vector<TheMissile*> Missiles;
 	std::vector<TheMine*> Mines;
 	std::vector<Shot*> Shots;
+
 	TheBossTurret* Turrets[5] = { nullptr };
 
 	void HeadToNextWaypoint();

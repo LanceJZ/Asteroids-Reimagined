@@ -77,6 +77,7 @@ private:
 	size_t DeathStarSpawnTimerID;
 	size_t EnemyOneSpawnTimerID;
 	size_t EnemyTwoSpawnTimerID;
+	size_t BossExplodingTimerID;
 
 	int UFOSpawnCount = 0;
 	int StartRockCount = 4;

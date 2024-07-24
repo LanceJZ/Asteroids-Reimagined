@@ -58,6 +58,13 @@ void TheBossTurret::Spawn()
 	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting);
 }
 
+void TheBossTurret::Hit()
+{
+	LineModel::Hit();
+
+	Destroy();
+}
+
 void TheBossTurret::Destroy()
 {
 	Entity::Destroy();

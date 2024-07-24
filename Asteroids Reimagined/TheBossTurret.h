@@ -19,6 +19,7 @@ public:
 	void Draw3D();
 
 	void Spawn();
+	void Hit();
 	void Destroy();
 
 private:

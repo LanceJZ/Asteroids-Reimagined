@@ -474,10 +474,7 @@ void ThePlayer::ShieldPowerDrain(float deltaTime)
 	{
 		ShieldPower -= ShieldDrainRate * deltaTime;
 
-		if (ShieldPower < 0.0f)
-		{
-			ShieldPower = 0.0f;
-		}
+		if (ShieldPower < 0.0f)	ShieldPower = 0.0f;
 	}
 	else
 	{

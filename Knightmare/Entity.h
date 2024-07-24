@@ -5,6 +5,8 @@ class Entity : public PositionedObject
 {
 public:
 	bool EntityOnly = false;
+	bool ShowCollision = false;
+	bool HideCollision = false;
 	std::string EntityName = {};
 
 	virtual bool Initialize(Utilities* utilities);
