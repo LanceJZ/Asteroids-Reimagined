@@ -4,8 +4,11 @@ TheBoss::TheBoss()
 {
 	MissileFireTimerID = Managers.EM.AddTimer(1.25f);
 	MineDropTimerID = Managers.EM.AddTimer(1.5f);
+	FireTimerID = Managers.EM.AddTimer();
 
-	Managers.EM.AddEntity(Shield = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(LeftSpineMount = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(RightSpineMount = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(Shield = DBG_NEW LineModel());
 	Managers.EM.AddEntity(FireShotAtPlayerArea = DBG_NEW Entity());
 
 	for (int i = 0; i < 5; i++)
@@ -39,6 +42,16 @@ void TheBoss::SetTurretModel(LineModelPoints model)
 	{
 		Turrets[i]->SetModel(model);
 	}
+}
+
+void TheBoss::SetLeftSpineMountModel(LineModelPoints model)
+{
+	LeftSpineMount->SetModel(model);
+}
+
+void TheBoss::SetRightSpineMountModel(LineModelPoints model)
+{
+	RightSpineMount->SetModel(model);
 }
 
 void TheBoss::SetMissileModel(LineModelPoints model)
@@ -79,7 +92,7 @@ bool TheBoss::BeginRun()
 
 	Shield->SetParent(*this);
 	FireShotAtPlayerArea->SetParent(*this);
-	FireShotAtPlayerArea->X(300.0f);
+	FireShotAtPlayerArea->X(370.0f);
 	FireShotAtPlayerArea->Radius = 250.0f;
 	FireShotAtPlayerArea->EntityOnly = true;
 
@@ -94,6 +107,12 @@ bool TheBoss::BeginRun()
 	Turrets[3]->Position = { -29.0f * 2, 25.0f * 2, 0.0f };
 	Turrets[4]->Position = { -29.0f * 2, -25.0f * 2, 0.0f };
 
+	LeftSpineMount->SetParent(*this);
+	RightSpineMount->SetParent(*this);
+
+	LeftSpineMount->Position = { 19.0f * 2.0f, 30.0f * 2.0f, 0.0f };
+	RightSpineMount->Position = { 19.0f * 2.0f, -30.0f * 2.0f, 0.0f };
+
 	float edge = 0.666f;
 	float upper = WindowHeight * edge;
 	float lower = -WindowHeight * edge;
@@ -104,6 +123,8 @@ bool TheBoss::BeginRun()
 	Path.push_back({ right, upper, 0.0f });
 	Path.push_back({ right, lower, 0.0f });
 	Path.push_back({ left, lower, 0.0f });
+
+	FireTimerSetting = GetRandomFloat(0.75f, 1.5f);
 
 	Reset();
 
@@ -140,6 +161,8 @@ void TheBoss::Reset()
 	Destroy();
 
 	Shield->Enabled = false;
+	LeftSpineMount->Enabled = false;
+	RightSpineMount->Enabled = false;
 
 	for (const auto& shot : Shots)
 	{
@@ -164,6 +187,8 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 	RotationZ = rotation;
 	HideCollision = true;
 	Shield->Enabled = true;
+	LeftSpineMount->Enabled = true;
+	RightSpineMount->Enabled = true;
 	Shield->ShowCollision = true;
 	ShieldPower = 100;
 
@@ -206,6 +231,15 @@ void TheBoss::ReachedWaypoint()
 
 void TheBoss::CheckCollisions()
 {
+	if (Player->CirclesIntersect(FireShotAtPlayerArea->GetWorldPosition(),
+		FireShotAtPlayerArea->Radius) && Player->Enabled)
+	{
+		if (Managers.EM.TimerElapsed(FireTimerID))
+		{
+			FireShots();
+		}
+	}
+
 	for (const auto& shot : Player->Shots)
 	{
 		if (!shot->Enabled) continue;
@@ -267,4 +301,69 @@ void TheBoss::CheckCollisions()
 	}
 
 
+}
+
+void TheBoss::FireShots()
+{
+	FireTimerSetting = GetRandomFloat(0.25f, 0.75f);
+	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting);
+
+	if (!Player->Enabled) return;
+
+	//if (!Player->GameOver) PlaySound(FireSound);
+
+	bool spawnNewShotL = true;
+	size_t shotNumberL = Shots.size();
+
+	for (size_t check = 0; check < shotNumberL; check++)
+	{
+		if (!Shots.at(check)->Enabled)
+		{
+			spawnNewShotL = false;
+			shotNumberL = check;
+			break;
+		}
+	}
+
+	if (spawnNewShotL)
+	{
+		Shots.push_back(DBG_NEW Shot());
+		Managers.EM.AddLineModel(Shots.back(), ShotModel);
+		Shots.back()->SetModel(ShotModel);
+		Shots.back()->Initialize(TheUtilities);
+		Shots.back()->BeginRun();
+	}
+
+	float shotSpeed = 200;
+	Vector3 offset = Vector3Add(VelocityFromAngleZ(LeftSpineMount->Radius),
+		LeftSpineMount->GetWorldPosition());
+	Shots.at(shotNumberL)->Spawn(offset,
+		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
+
+	bool spawnNewShotR = true;
+	size_t shotNumberR = Shots.size();
+
+	for (size_t check = 0; check < shotNumberR; check++)
+	{
+		if (!Shots.at(check)->Enabled)
+		{
+			spawnNewShotR = false;
+			shotNumberR = check;
+			break;
+		}
+	}
+
+	if (spawnNewShotR)
+	{
+		Shots.push_back(DBG_NEW Shot());
+		Managers.EM.AddLineModel(Shots.back(), ShotModel);
+		Shots.back()->SetModel(ShotModel);
+		Shots.back()->Initialize(TheUtilities);
+		Shots.back()->BeginRun();
+	}
+
+	offset = Vector3Add(VelocityFromAngleZ(RightSpineMount->Radius),
+		RightSpineMount->GetWorldPosition());
+	Shots.at(shotNumberR)->Spawn(offset,
+		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
 }

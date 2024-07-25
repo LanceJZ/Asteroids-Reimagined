@@ -35,6 +35,8 @@ public:
 	void SetBossModel(LineModelPoints model);
 	void SetBossShieldModel(LineModelPoints model);
 	void SetBossTurretModel(LineModelPoints model);
+	void SetLeftSpineMountModel(LineModelPoints model);
+	void SetRightSpineMountModel(LineModelPoints model);
 	void SetEnemyMissileModel(LineModelPoints model);
 	void SetEnemyMineModel(LineModelPoints model);
 

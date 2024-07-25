@@ -96,6 +96,16 @@ void EnemyControl::SetBossTurretModel(LineModelPoints model)
 	Boss->SetTurretModel(model);
 }
 
+void EnemyControl::SetLeftSpineMountModel(LineModelPoints model)
+{
+	Boss->SetLeftSpineMountModel(model);
+}
+
+void EnemyControl::SetRightSpineMountModel(LineModelPoints model)
+{
+	Boss->SetRightSpineMountModel(model);
+}
+
 void EnemyControl::SetEnemyMissileModel(LineModelPoints model)
 {
 	EnemyOne->SetMissileModel(model);

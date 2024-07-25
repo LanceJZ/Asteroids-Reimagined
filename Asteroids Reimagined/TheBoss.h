@@ -16,6 +16,8 @@ public:
 
 	void SetShieldModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
+	void SetLeftSpineMountModel(LineModelPoints model);
+	void SetRightSpineMountModel(LineModelPoints model);
 	void SetMissileModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
 	void SetMineModel(LineModelPoints model);
@@ -34,13 +36,14 @@ public:
 private:
 	size_t MissileFireTimerID = 0;
 	size_t MineDropTimerID = 0;
+	size_t FireTimerID;
 
 	int ShieldPower = 100;
 	int NextWaypoint = 0;
 
 	float ShieldPoints = 100.0f;
 	float ShieldRegenRate = 1.0f;
-
+	float FireTimerSetting = 0;
 	float HitPoints = 100.0f;
 
 	LineModelPoints MissileModel;
@@ -51,6 +54,8 @@ private:
 	Entity* FireShotAtPlayerArea = nullptr;
 
 	LineModel* Shield = nullptr;
+	LineModel* RightSpineMount = nullptr;
+	LineModel* LeftSpineMount = nullptr;
 	ThePlayer* Player = nullptr;
 
 	std::vector<Vector3> Path;
@@ -63,4 +68,5 @@ private:
 	void HeadToNextWaypoint();
 	void ReachedWaypoint();
 	void CheckCollisions();
+	void FireShots();
 };

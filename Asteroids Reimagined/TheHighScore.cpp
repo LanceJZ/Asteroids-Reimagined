@@ -242,7 +242,15 @@ void TheHighScore::ConvertRawScoreListToArray()
 		{
 			if (character != 44) //44 for comma.
 			{
-				number.append(1, character);
+				if (character > 47 && character < 58)
+				{
+					number.append(1, character);
+				}
+				else
+				{
+					MakeNewScoreList();
+					return;
+				}
 			}
 			else
 			{

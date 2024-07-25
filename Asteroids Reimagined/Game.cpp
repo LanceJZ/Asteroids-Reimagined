@@ -58,6 +58,8 @@ bool Game::Load()
 	Enemies->SetBossModel(Managers.CM.LoadAndGetLineModel("BossShip"));
 	Enemies->SetBossShieldModel(Managers.CM.LoadAndGetLineModel("BossShield"));
 	Enemies->SetBossTurretModel(Managers.CM.LoadAndGetLineModel("BossTurret"));
+	Enemies->SetLeftSpineMountModel(Managers.CM.LoadAndGetLineModel("LeftSpineGun"));
+	Enemies->SetRightSpineMountModel(Managers.CM.LoadAndGetLineModel("RightSpineGun"));
 
 	Logic->SetPowerUpModel(Managers.CM.LoadAndGetLineModel("PowerUp"));
 
