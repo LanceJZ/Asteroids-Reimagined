@@ -218,25 +218,33 @@ void TheBoss::Destroy()
 
 void TheBoss::HeadToNextWaypoint()
 {
-	SetRotateVelocity(Path[NextWaypoint], 0.20, 20);
+	SetRotateVelocity(Path[NextWaypoint], 0.20f, 20.0f);
 }
 
 void TheBoss::ReachedWaypoint()
 {
 	if (CirclesIntersect(Path[NextWaypoint], 10.0f))
 	{
-		NextWaypoint = GetRandomValue(0, Path.size() - 1);
+		NextWaypoint = GetRandomValue(0, (int)Path.size() - 1);
 	}
 }
 
 void TheBoss::CheckCollisions()
 {
-	if (Player->CirclesIntersect(FireShotAtPlayerArea->GetWorldPosition(),
-		FireShotAtPlayerArea->Radius) && Player->Enabled)
+	if (Player->Enabled)
 	{
-		if (Managers.EM.TimerElapsed(FireTimerID))
+		if (Player->CirclesIntersect(FireShotAtPlayerArea->GetWorldPosition(),
+			FireShotAtPlayerArea->Radius))
 		{
-			FireShots();
+			if (Managers.EM.TimerElapsed(FireTimerID))
+			{
+				FireShots();
+			}
+		}
+
+		for (auto &turret : Turrets)
+		{
+			turret->CheckCollisions();
 		}
 	}
 

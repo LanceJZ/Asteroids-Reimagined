@@ -14,6 +14,11 @@ void PowerUp::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void PowerUp::SetEnemy(EnemyControl* enemies)
+{
+	Enemies = enemies;
+}
+
 void PowerUp::SetPickUpSound(Sound sound)
 {
 	PickUpSound = sound;
@@ -61,17 +66,58 @@ void PowerUp::Spawn(Vector3 position)
 	if (chance < 5)
 	{
 		ModelColor = BLUE;
-		Type = Blue;
+		Type = Blue; //Shield over charge.
 	}
 	else if (chance < 9)
 	{
 		ModelColor = RED;
-		Type = Red;
+		Type = Red; //Gun cooling over charge.
 	}
 	else
 	{
 		ModelColor = PURPLE;
-		Type = Purple;
+		Type = Purple; //Everything over charged for a time.
+	}
+
+	return; //For testing purposes.
+
+	if (Enemies->Wave > 2)
+	{
+		if (chance == 7)
+		{
+			ModelColor = GREEN;
+			Type = Green; //Larger Shots limited number.
+		}
+
+		if (chance == 8)
+		{
+			ModelColor = YELLOW;
+			Type = Yellow; //Double Shots limited number.
+		}
+	}
+
+	if (Enemies->Wave > 4)
+	{
+		if (chance == 1)
+		{
+			ModelColor = ORANGE;
+			Type = Orange; //Ion Mines limited number.
+		}
+
+		if (chance == 2)
+		{
+			ModelColor = VIOLET;
+			Type = Violet; //Homing missiles limited number.
+		}
+	}
+
+	if (Enemies->Wave > 6)
+	{
+		if (chance < 3)
+		{
+			ModelColor = MAGENTA;
+			Type = Magenta;
+		}
 	}
 }
 

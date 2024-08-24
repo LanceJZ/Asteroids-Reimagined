@@ -12,6 +12,7 @@ public:
 
 	bool NewLife = false;
 	bool GameOver = false;
+	bool Paused = false;
 
 	int Lives { 0 };
 

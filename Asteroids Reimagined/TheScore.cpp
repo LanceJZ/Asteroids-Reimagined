@@ -36,14 +36,14 @@ void TheScore::Draw2D()
 	OnScreenText::Draw2D();
 
 	DrawTextEx(TheFontLarge, const_cast<char*>(std::to_string(Score).c_str()),
-		Vector2(200, 5), 40, 0, WHITE);
+		Vector2(200.0f, 5.0f), 40.0f, 0, WHITE);
 
 	DrawTextEx(TheFontSmall, const_cast<char*>(std::to_string(HighScore).c_str()),
-		Vector2(GetScreenWidth() / 2, 5), 30, 0, WHITE);
+		Vector2((float)(GetScreenWidth() / 2), 5.0f), 30.0f, 0, WHITE);
 
 	DrawTextEx(TheFontTiny, "C  1 9 8 0  A T A R I  I N C",
-		Vector2((GetScreenWidth() / 2) - 70,
-		GetScreenHeight() - 20), 16, 0, WHITE);
+		Vector2((float)((GetScreenWidth() / 2) - 70),
+		(float)(GetScreenHeight() - 20)), 16.0f, 0, WHITE);
 }
 
 void TheScore::UpdateScore(int addToScore)

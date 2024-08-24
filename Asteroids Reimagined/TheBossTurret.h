@@ -18,6 +18,8 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
+	void CheckCollisions();
+
 	void Spawn();
 	void Hit();
 	void Destroy();

@@ -39,7 +39,6 @@ void TheBossTurret::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-
 	if (Managers.EM.TimerElapsed(FireTimerID))
 	{
 		Fire();
@@ -69,6 +68,19 @@ void TheBossTurret::Destroy()
 {
 	Entity::Destroy();
 	RotationZ = 0.0f;
+}
+
+void TheBossTurret::CheckCollisions()
+{
+	for (const auto& shot : Shots)
+	{
+		if (shot->Enabled && shot->CirclesIntersect(*Player) && Player->Enabled)
+		{
+			shot->Destroy();
+			Player->Hit(shot->Position, shot->Velocity);
+			break;
+		}
+	}
 }
 
 void TheBossTurret::Fire()

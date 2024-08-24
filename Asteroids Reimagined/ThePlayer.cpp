@@ -141,7 +141,7 @@ void ThePlayer::Input()
 {
 	LineModel::Input();
 
-	if (GameOver) return;
+	if (GameOver || Paused) return;
 
 
 	if (IsGamepadAvailable(0) && Enabled)
@@ -277,7 +277,7 @@ void ThePlayer::ExtraLife()
 void ThePlayer::ShieldPowerUp()
 {
 	ShieldOverCharge = true;
-	ShieldPower = 300;
+	ShieldPower += 200;
 	Shield->ModelColor = BLUE;
 	Shield->Alpha = 255.0f;
 }
@@ -286,10 +286,8 @@ void ThePlayer::GunPowerUp()
 {
 	GunOverCharge = true;
 	TurretOverHeat = false;
-	TurretHeat = -200;
-	TurretHeatMeter->Scale = 0.0f;
-	Turret->ModelColor = RED;
-	TurretHeatMeter->ModelColor = BLUE;
+	TurretHeat -= 150;
+	Turret->ModelColor = SKYBLUE;
 }
 
 void ThePlayer::FullPowerUp()
@@ -484,39 +482,39 @@ void ThePlayer::ShieldPowerDrain(float deltaTime)
 
 void ThePlayer::WeHaveThePower()
 {
-		ShieldPower = 100.0f;
-		TurretHeat = 0;
+	if (ShieldPower < 100.0f) ShieldPower = 100.0f;
+	if (TurretHeat > 0.0f) TurretHeat = 0.0f;
 
-		if (Managers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
+	if (Managers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
+	{
+		PoweredUpRundown = true;
+		Managers.EM.ResetTimer(PowerupRundownTimerID);
+		Managers.EM.ResetTimer(PowerUpBlinkTimerID);
+	}
+
+	if (PoweredUpRundown)
+	{
+		if (Managers.EM.TimerElapsed(PowerUpBlinkTimerID))
 		{
-			PoweredUpRundown = true;
-			Managers.EM.ResetTimer(PowerupRundownTimerID);
 			Managers.EM.ResetTimer(PowerUpBlinkTimerID);
-		}
 
-		if (PoweredUpRundown)
-		{
-			if (Managers.EM.TimerElapsed(PowerUpBlinkTimerID))
+			if (ModelColor.g == 255.0f)
 			{
-				Managers.EM.ResetTimer(PowerUpBlinkTimerID);
-
-				if (ModelColor.g == 255.0f)
-				{
-					ModelColor = PURPLE;
-				}
-				else
-				{
-					ModelColor = WHITE;
-				}
+				ModelColor = PURPLE;
+			}
+			else
+			{
+				ModelColor = WHITE;
 			}
 		}
+	}
 
-		if (Managers.EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
-		{
-			PoweredUp = false;
-			PoweredUpRundown = false;
-			ModelColor = WHITE;
-		}
+	if (Managers.EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
+	{
+		PoweredUp = false;
+		PoweredUpRundown = false;
+		ModelColor = WHITE;
+	}
 }
 
 void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
@@ -571,7 +569,7 @@ void ThePlayer::TurretHeatMeterUpdate()
 	else
 	{
 		TurretHeatMeter->ModelColor = SKYBLUE;
-		TurretHeatMeter->Scale = (TurretHeat * 0.01f) * -1.0f;
+		TurretHeatMeter->Scale = 1.0f;
 	}
 }
 

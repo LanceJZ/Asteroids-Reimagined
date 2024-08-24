@@ -123,18 +123,14 @@ void GameLogic::GameInput()
 {
 	if (State == Pause)
 	{
-		if (IsKeyPressed(KEY_P))
+		if (IsKeyPressed(KEY_P) || (IsGamepadAvailable(0)
+			&& IsGamepadButtonPressed(0, 13)))
 		{
 			State = InPlay;
+			Player->Paused = false;
 		}
 
-		if (IsGamepadAvailable(0))
-		{
-			if (IsGamepadButtonPressed(0, 13)) //Menu Button
-			{
-				State = InPlay;
-			}
-		}
+		return;
 	}
 	else if (State == MainMenu)
 	{
@@ -158,32 +154,18 @@ void GameLogic::GameInput()
 	}
 	else if (State == InPlay)
 	{
-		if (IsGamepadAvailable(0))
-		{
-			if (IsGamepadButtonPressed(0, 13)) //Menu Button
-			{
-				State = Pause;
-			}
-
-			if (IsGamepadButtonPressed(0, 8)) //X button
-			{
-				PlayBackgroundMusic = !PlayBackgroundMusic;
-			}
-		}
-
-		if (IsKeyPressed(KEY_M))
+		if (IsKeyPressed(KEY_M) || (IsGamepadAvailable(0) &&
+			IsGamepadButtonPressed(0, 8)))
 		{
 			PlayBackgroundMusic = !PlayBackgroundMusic;
 		}
 
 
-		if (IsKeyPressed(KEY_P))
+		if (IsKeyPressed(KEY_P) || (IsGamepadAvailable(0) &&
+			IsGamepadButtonPressed(0, 13)))
 		{
 			State = Pause;
-		}
-
-		if (IsKeyPressed(KEY_B))
-		{
+			Player->Paused = true;
 		}
 
 #if DEBUG
@@ -225,6 +207,7 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 		PowerUps.push_back(DBG_NEW PowerUp());
 		Managers.EM.AddEntity(PowerUps.back());
 		PowerUps.back()->SetPlayer(Player);
+		PowerUps.back()->SetEnemy(Enemies);
 		PowerUps.back()->SetModel(PowerUpModel);
 		PowerUps.back()->SetPickUpSound(PickUpSound);
 		PowerUps.back()->Initialize(TheUtilities);

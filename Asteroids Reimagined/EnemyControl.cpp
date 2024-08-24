@@ -276,7 +276,7 @@ void EnemyControl::Update()
 
 		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 
-		if (Wave == 1 && !Player->GameOver)
+		if (Wave % 5 == 0 && !Player->GameOver)
 		{
 			ClearForBossWave = true;
 			return;
@@ -624,8 +624,8 @@ void EnemyControl::SpawnBoss()
 {
 	Vector3 position = {0.0f, 0.0f, 0.0f };
 	float rotation = 0;
-	float width = Boss->WindowWidth * 0.75;
-	float height = Boss->WindowHeight * 0.75;
+	float width = Boss->WindowWidth * 0.75f;
+	float height = Boss->WindowHeight * 0.75f;
 
 	int option = GetRandomValue(0, 3);
 

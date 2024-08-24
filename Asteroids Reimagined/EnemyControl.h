@@ -16,6 +16,7 @@ public:
 	virtual ~EnemyControl();
 
 	bool SpawnPowerUp = false;
+	int Wave = 0;
 	Vector3 PowerUpSpawnPosition = {};
 
 	std::vector<TheRock*> Rocks;
@@ -85,7 +86,6 @@ private:
 	int StartRockCount = 4;
 	int RockSpawnCount = 0;
 	int RockCount = 0;
-	int Wave = 0;
 
 	Sound RockExplodeSound = {};
 	Sound UFOExplodeSound = {};
