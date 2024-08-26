@@ -47,6 +47,7 @@ void PowerUp::Update(float deltaTime)
 		Destroy();
 	}
 
+	DriftToPlayer();
 	CheckCollisions();
 }
 
@@ -79,9 +80,7 @@ void PowerUp::Spawn(Vector3 position)
 		Type = Purple; //Everything over charged for a time.
 	}
 
-	return; //For testing purposes.
-
-	if (Enemies->Wave > 2)
+	if (Enemies->Wave > 1)
 	{
 		if (chance == 7)
 		{
@@ -92,11 +91,11 @@ void PowerUp::Spawn(Vector3 position)
 		if (chance == 8)
 		{
 			ModelColor = YELLOW;
-			Type = Yellow; //Double Shots limited number.
+			Type = Yellow; //Two side by side shots limited number.
 		}
 	}
 
-	if (Enemies->Wave > 4)
+	if (Enemies->Wave > 2)
 	{
 		if (chance == 1)
 		{
@@ -111,12 +110,12 @@ void PowerUp::Spawn(Vector3 position)
 		}
 	}
 
-	if (Enemies->Wave > 6)
+	if (Enemies->Wave > 3)
 	{
-		if (chance < 3)
+		if (chance == 3)
 		{
 			ModelColor = MAGENTA;
-			Type = Magenta;
+			Type = Magenta; //Spread Shot limited number.
 		}
 	}
 }
@@ -144,10 +143,22 @@ void PowerUp::CheckCollisions()
 		case PowerUp::Purple:
 			Player->FullPowerUp();
 			break;
+		case PowerUp::Green:
+			Player->BigShotPowerUp();
+			break;
+		case PowerUp::Yellow:
+			Player->DoubleShotPowerUp();
+			break;
 		default:
 			break;
 		}
 
 		Destroy();
 	}
+}
+
+void PowerUp::DriftToPlayer()
+{
+	RotationZ = GetAngleFromVectors(Player->Position);
+	Velocity = VelocityFromAngleZ(36.666f);
 }

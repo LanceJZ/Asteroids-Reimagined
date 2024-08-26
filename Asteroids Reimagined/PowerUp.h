@@ -47,4 +47,5 @@ private:
 	EnemyControl* Enemies = nullptr;
 
 	void CheckCollisions();
+	void DriftToPlayer();
 };

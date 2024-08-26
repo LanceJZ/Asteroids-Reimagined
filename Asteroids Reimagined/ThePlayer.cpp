@@ -299,6 +299,16 @@ void ThePlayer::FullPowerUp()
 	TurretOverHeat = false;
 }
 
+void ThePlayer::BigShotPowerUp()
+{
+	BigShotPowerUpCount = 32;
+}
+
+void ThePlayer::DoubleShotPowerUp()
+{
+	DoubleShotPowerUpCount = 32;
+}
+
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
 {
 	if (stickDirectionX != 0 || stickDirectionY != 0)
@@ -374,6 +384,80 @@ void ThePlayer::TurretTimers()
 			if (TurretHeat > 2)	TurretHeat -= 2;
 			if (TurretHeat >= 1) TurretHeat -= 1;
 			TurretHeatMeterUpdate();
+		}
+	}
+}
+
+void ThePlayer::FireSecondary()
+{
+	if (BigShotPowerUpCount > 0)
+	{
+		BigShotPowerUpCount--;
+		FireBigShot();
+		return;
+	}
+
+	if (DoubleShotPowerUpCount > 0)
+	{
+		DoubleShotPowerUpCount--;
+		FireDoubleShot();
+		return;
+	}
+}
+
+void ThePlayer::FireBigShot()
+{
+	for (auto& shot : Shots)
+	{
+		if (!shot->Enabled)
+		{
+			PlaySound(FireSound);
+
+			Vector3 turretPosition = Turret->GetWorldPosition();
+			Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 400.0f);
+			shot->Spawn(turretPosition, velocity, 2.5f);
+			shot->Scale = 15.0f;
+			break;
+		}
+	}
+}
+
+void ThePlayer::FireDoubleShot()
+{
+	float spread = Radius;
+
+	for (auto& shot : Shots)
+	{
+		if (!shot->Enabled)
+		{
+			PlaySound(FireSound);
+
+			Vector3 offset =Turret->GetVelocityFromAngleZ(Turret->WorldRotation.z +
+					PI / 2.0f, spread);
+			Vector3 turretPosition = Vector3Add(Turret->GetWorldPosition(),
+				offset);
+			Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 400.0f);
+			shot->Spawn(turretPosition, velocity, 2.5f);
+			shot->Scale = 2.0f;
+			break;
+		}
+	}
+
+	for (auto& shot : Shots)
+	{
+		if (!shot->Enabled)
+		{
+			PlaySound(FireSound);
+
+			Vector3 offset =
+				Turret->GetVelocityFromAngleZ(Turret->WorldRotation.z +
+					-PI / 2.0f, spread);
+			Vector3 turretPosition = Vector3Add(Turret->GetWorldPosition(),
+				offset);
+			Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 400.0f);
+			shot->Spawn(turretPosition, velocity, 2.5f);
+			shot->Scale = 2.0f;
+			break;
 		}
 	}
 }
@@ -587,7 +671,7 @@ void ThePlayer::Gamepad()
 	//Button A
 	if (GetGamepadButtonPressed() == 7)
 	{
-
+		FireSecondary();
 	}
 
 	//Left Stick Left/Right
@@ -698,5 +782,7 @@ void ThePlayer::Keyboard()
 
 	if (IsKeyPressed(KEY_E)) //Special Weapon Key.
 	{
+		PointTurret(Crosshair->Position);
+		FireSecondary();
 	}
 }

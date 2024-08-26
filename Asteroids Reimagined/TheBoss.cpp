@@ -214,6 +214,9 @@ void TheBoss::Destroy()
 	{
 		turret->Destroy();
 	}
+
+	LeftSpineMount->Enabled = false;
+	RightSpineMount->Enabled = false;
 }
 
 void TheBoss::HeadToNextWaypoint()

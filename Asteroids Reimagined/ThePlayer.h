@@ -52,6 +52,9 @@ public:
 	void ShieldPowerUp();
 	void GunPowerUp();
 	void FullPowerUp();
+	void BigShotPowerUp();
+	void DoubleShotPowerUp();
+
 	int GetScore();
 	void SetHighScore(int highScore);
 
@@ -73,6 +76,8 @@ private:
 	int NextNewLifeScore = 10000;
 	int TurretHeat = 0;
 	int TurretHeatMax = 100;
+	int BigShotPowerUpCount = 0;
+	int DoubleShotPowerUpCount = 0;
 
 	float TurretDirection = 0.0f;
 	float ShieldPower = 0.0f;
@@ -99,6 +104,10 @@ private:
 	void PointTurret(Vector3 mouseLocation);
 	void FireTurret();
 	void TurretTimers();
+	void FireSecondary();
+
+	void FireBigShot();
+	void FireDoubleShot();
 
 	void CrosshairUpdate();
 

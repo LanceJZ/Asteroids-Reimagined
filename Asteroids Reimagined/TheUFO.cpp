@@ -246,8 +246,8 @@ void TheUFO::FireShot()
 		{
 			if (!Player->GameOver) PlaySound(FireSound);
 
-			Vector3 offset = Vector3Add(VelocityFromAngleZ(Radius), Position);
-			shot->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
+			Vector3 position = Vector3Add(VelocityFromAngleZ(Radius), Position);
+			shot->Spawn(position, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
 
 			break;
 		}
