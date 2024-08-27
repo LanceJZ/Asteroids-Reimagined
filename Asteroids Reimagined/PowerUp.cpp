@@ -95,6 +95,8 @@ void PowerUp::Spawn(Vector3 position)
 		}
 	}
 
+	return;
+
 	if (Enemies->Wave > 2)
 	{
 		if (chance == 1)

@@ -335,14 +335,6 @@ void ThePlayer::FireTurret()
 				PlaySound(FireSound);
 
 				Managers.EM.ResetTimer(FireRateTimerID);
-				TurretHeat += 5;
-				TurretHeatMeterUpdate();
-
-				if (TurretHeat > TurretHeatMax)
-				{
-					Managers.EM.ResetTimer(TurretCooldownTimerID);
-					TurretOverHeat = true;
-				}
 
 				if (GunOverCharge)
 				{
@@ -351,6 +343,17 @@ void ThePlayer::FireTurret()
 						GunOverCharge = false;
 						Turret->ModelColor = WHITE;
 						TurretHeatMeter->ModelColor = WHITE;
+					}
+				}
+				else
+				{
+					TurretHeat += 5;
+					TurretHeatMeterUpdate();
+
+					if (TurretHeat > TurretHeatMax)
+					{
+						Managers.EM.ResetTimer(TurretCooldownTimerID);
+						TurretOverHeat = true;
 					}
 				}
 
