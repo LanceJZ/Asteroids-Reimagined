@@ -1,17 +1,14 @@
 #pragma once
 #include "Globals.h"
-#include "ThePlayer.h"
 #include "ParticleManager.h"
 
-class TheMine : public LineModel
+class TheHomingMine : public LineModel
 {
 public:
-	TheMine();
-	virtual ~TheMine();
+	TheHomingMine();
+	virtual ~TheHomingMine();
 
-	void SetPlayer(ThePlayer* player);
 	void SetExplodeSound(Sound sound);
-
 	void SetParticleManager(ParticleManager* particles);
 
 	bool Initialize(Utilities* utilities);
@@ -20,11 +17,11 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position);
-	void Hit();
-	void Destroy();
+	void ChaseEnemy(Vector3 enemyPosition);
+	void LostEnemy();
 
-protected:
+	void Spawn(Vector3 position);
+	void Destroy();
 
 private:
 	size_t LifeTimerID = 0;
@@ -32,7 +29,7 @@ private:
 	Sound ExplodeSound = {};
 
 	ParticleManager* Particles = nullptr;
-	ThePlayer* Player = nullptr;
 
-	void CheckCollisions();
+	void CheckIsEnemyClose();
+	void CheckCollision();
 };

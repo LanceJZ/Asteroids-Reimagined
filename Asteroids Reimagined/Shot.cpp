@@ -60,6 +60,4 @@ void Shot::Spawn(Vector3 position, Vector3 velocity, float lifetime)
 void Shot::Destroy()
 {
 	Entity::Destroy();
-
-	Scale = 1;
 }

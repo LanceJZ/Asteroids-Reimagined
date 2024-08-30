@@ -71,8 +71,8 @@ void PowerUp::Spawn(Vector3 position)
 	}
 	else if (chance < 9)
 	{
-		ModelColor = RED;
-		Type = Red; //Gun cooling over charge.
+		ModelColor = SKYBLUE;
+		Type = Skyblue; //Gun cooling over charge.
 	}
 	else
 	{
@@ -84,8 +84,8 @@ void PowerUp::Spawn(Vector3 position)
 	{
 		if (chance == 7)
 		{
-			ModelColor = GREEN;
-			Type = Green; //Larger Shots limited number.
+			ModelColor = RED;
+			Type = Red; //Larger Shots limited number.
 		}
 
 		if (chance == 8)
@@ -95,22 +95,24 @@ void PowerUp::Spawn(Vector3 position)
 		}
 	}
 
-	return;
-
 	if (Enemies->Wave > 2)
 	{
 		if (chance == 1)
 		{
 			ModelColor = ORANGE;
-			Type = Orange; //Ion Mines limited number.
+			Type = Orange; //Ion paralyzing Mines limited number.
+			// Only works on enemy ships, rocks ignored. (Explodes on impact)
 		}
 
 		if (chance == 2)
 		{
 			ModelColor = VIOLET;
-			Type = Violet; //Homing missiles limited number.
+			Type = Violet; //Growing plasma shot limited number. Dies at edge of screen.
+			// Annihilates everything in it's path.
 		}
 	}
+
+	return;
 
 	if (Enemies->Wave > 3)
 	{
@@ -118,6 +120,12 @@ void PowerUp::Spawn(Vector3 position)
 		{
 			ModelColor = MAGENTA;
 			Type = Magenta; //Spread Shot limited number.
+		}
+
+		if (chance == 4)
+		{
+			ModelColor = MAROON;
+			Type = Maroon; //Homing missiles limited number.
 		}
 	}
 }
@@ -136,7 +144,7 @@ void PowerUp::CheckCollisions()
 
 		switch (Type)
 		{
-		case PowerUp::Red:
+		case PowerUp::Skyblue:
 			Player->GunPowerUp();
 			break;
 		case PowerUp::Blue:
@@ -145,11 +153,14 @@ void PowerUp::CheckCollisions()
 		case PowerUp::Purple:
 			Player->FullPowerUp();
 			break;
-		case PowerUp::Green:
+		case PowerUp::Red:
 			Player->BigShotPowerUp();
 			break;
 		case PowerUp::Yellow:
 			Player->DoubleShotPowerUp();
+			break;
+		case PowerUp::Orange:
+			Player->MinePowerUp();
 			break;
 		default:
 			break;

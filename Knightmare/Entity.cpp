@@ -23,6 +23,12 @@ void Entity::Draw3D()
 #endif
 }
 
+void Entity::SetScale(float scale)
+{
+	Scale = scale;
+	Radius = Radius * scale;
+}
+
 void Entity::Spawn(Vector3 position)
 {
 	Position = position;

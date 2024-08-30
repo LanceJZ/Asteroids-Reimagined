@@ -156,6 +156,28 @@ bool TheRock::CheckCollisions()
 		}
 	}
 
+	for (const auto& shot : Player->DoubleShots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			SendScoreToPlayer();
+			return true;
+		}
+	}
+
+	for (const auto& bigShot : Player->BigShots)
+	{
+		if (bigShot->Enabled && CirclesIntersect(*bigShot))
+		{
+			bigShot->Destroy();
+			Hit();
+			SendScoreToPlayer();
+			return true;
+		}
+	}
+
 	return false;
 }
 

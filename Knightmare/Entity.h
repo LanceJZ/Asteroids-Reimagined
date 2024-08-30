@@ -13,6 +13,8 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw3D();
 
+	void SetScale(float scale);
+
 	virtual void Spawn(Vector3 position);
 	virtual void Hit();
 	virtual void Destroy();

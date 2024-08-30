@@ -46,6 +46,8 @@ bool Game::Load()
 	Player->SetShotModel(Managers.CM.GetLineModel(shotModelID));
 	Player->SetCrosshairModel(Managers.CM.LoadAndGetLineModel("Cross"));
 	Player->SetTurretHeatModel(Managers.CM.LoadAndGetLineModel("HeatMeter"));
+	Player->SetBigShotModel(Managers.CM.LoadAndGetLineModel("PlayerBigShot"));
+	Player->SetMineModel(Managers.CM.LoadAndGetLineModel("HomingMine"));
 
 	Enemies->SetUFOModel(Managers.CM.LoadAndGetLineModel("UFO"));
 	Enemies->SetShotModel(Managers.CM.GetLineModel(shotModelID));

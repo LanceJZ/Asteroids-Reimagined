@@ -60,7 +60,7 @@ float PositionedObject::Chase(PositionedObject Chasing)
 
 void PositionedObject::RotateTowardsTargetZ(Vector3& target, float magnitude)
 {
-	RotationZ = Common::RotateTowardsTargetZ(Position, target, RotationZ, magnitude);
+	RotationZ = Common::GetRotationTowardsTargetZ(Position, target, RotationZ, magnitude);
 }
 
 float PositionedObject::AngleFromVectorZ(Vector3 target)
@@ -382,7 +382,7 @@ void PositionedObject::LeavePlay(float turnSpeed, float speed)
 
 void PositionedObject::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)
 {
-	RotationVelocityZ = Common::RotateTowardsTargetZ(Position, position, RotationZ,
+	RotationVelocityZ = Common::GetRotationTowardsTargetZ(Position, position, RotationZ,
 		turnSpeed);
 	Velocity = GetVelocityFromAngleZ(RotationZ, speed);
 }

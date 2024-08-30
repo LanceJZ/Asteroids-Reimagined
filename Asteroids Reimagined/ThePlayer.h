@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "Shot.h"
+#include "TheHomingMine.h"
 #include "TheScore.h"
 #include "ParticleManager.h"
 
@@ -17,6 +18,9 @@ public:
 	int Lives { 0 };
 
 	std::vector<Shot*> Shots = {};
+	std::vector<Shot*> DoubleShots = {};
+	std::vector<Shot*> BigShots = {};
+	std::vector<TheHomingMine*> Mines = {};
 
 	LineModel* Shield = {};
 
@@ -26,6 +30,8 @@ public:
 	void SetFlameModel(LineModelPoints model);
 	void SetShieldModel(LineModelPoints model);
 	void SetTurretHeatModel(LineModelPoints model);
+	void SetBigShotModel(LineModelPoints model);
+	void SetMineModel(LineModelPoints model);
 
 	void SetFireSound(Sound sound);
 	void SetExplodeSound(Sound sound);
@@ -34,6 +40,7 @@ public:
 	void SetThrustSound(Sound sound);
 	void SetSpawnSound(Sound sound);
 	void SetBonusSound(Sound sound);
+	void SetMineDropSound(Sound sound);
 
 	void SetParticleManager(ParticleManager* particleManager);
 
@@ -54,6 +61,7 @@ public:
 	void FullPowerUp();
 	void BigShotPowerUp();
 	void DoubleShotPowerUp();
+	void MinePowerUp();
 
 	int GetScore();
 	void SetHighScore(int highScore);
@@ -76,8 +84,10 @@ private:
 	int NextNewLifeScore = 10000;
 	int TurretHeat = 0;
 	int TurretHeatMax = 100;
-	int BigShotPowerUpCount = 0;
-	int DoubleShotPowerUpCount = 0;
+	int BigShotCount = 0;
+	int DoubleShotCount = 0;
+	int MineCount = 0;
+	int MissileCount = 0;
 
 	float TurretDirection = 0.0f;
 	float ShieldPower = 0.0f;
@@ -91,11 +101,16 @@ private:
 	Sound ThrustSound = {};
 	Sound SpawnSound = {};
 	Sound BonusSound = {};
+	Sound MineDropSound = {};
+	Sound MineExplodeSound = {};
 
 	LineModel* Flame = {};
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
 	LineModel* TurretHeatMeter = {};
+	LineModelPoints ShotModel;
+	LineModelPoints MineModel;
+	LineModelPoints BigShotModel;
 
 	TheScore* Score = {};
 	ParticleManager* Particles = {};
@@ -108,6 +123,7 @@ private:
 
 	void FireBigShot();
 	void FireDoubleShot();
+	void DropHomingMine();
 
 	void CrosshairUpdate();
 

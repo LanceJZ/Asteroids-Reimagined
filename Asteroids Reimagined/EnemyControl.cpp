@@ -301,6 +301,7 @@ void EnemyControl::Update()
 	}
 
 	CheckRockCollisions();
+	CheckHomingMineEnemyChase();
 
 	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
@@ -659,6 +660,93 @@ void EnemyControl::SpawnBoss()
 	}
 
 	Boss->Spawn(position, rotation);
+}
+
+void EnemyControl::CheckHomingMineEnemyChase()
+{
+	for (const auto& mine : Player->Mines)
+	{
+		if (!mine->Enabled) continue;
+
+		bool enemyToChase = false;
+		float distance = 400.0f;
+		Vector3 enemyPosition = { 0.0f, 0.0f, 0.0f };
+
+		for (const auto& ufo : UFOs)
+		{
+			if (!ufo->Enabled) continue;
+
+			float ufoDistance = Vector3Distance(ufo->Position, mine->Position);
+
+			if (ufoDistance < distance)
+			{
+				distance = ufoDistance;
+				enemyToChase = true;
+				enemyPosition = ufo->Position;
+			}
+		}
+
+		if (EnemyOne->Enabled)
+		{
+			float enemyOneDistance = Vector3Distance(EnemyOne->Position, mine->Position);
+
+			if (enemyOneDistance < distance)
+			{
+				distance = enemyOneDistance;
+				enemyToChase = true;
+				enemyPosition = EnemyOne->Position;
+			}
+		}
+
+		if (EnemyTwo->Enabled)
+		{
+			float enemyTwoDistance = Vector3Distance(EnemyTwo->Position, mine->Position);
+
+			if (enemyTwoDistance < distance)
+			{
+				distance = enemyTwoDistance;
+				enemyToChase = true;
+				enemyPosition = EnemyTwo->Position;
+			}
+		}
+
+		for (const auto& fighterPair : DeathStar->FighterPairs)
+		{
+			if (!fighterPair->Enabled) continue;
+
+			float fighterDistance = Vector3Distance(fighterPair->Position, mine->Position);
+
+			if (fighterDistance < distance)
+			{
+				distance = fighterDistance;
+				enemyToChase = true;
+				enemyPosition = fighterPair->Position;
+			}
+
+			for (const auto& fighter : fighterPair->Fighters)
+			{
+				if (!fighter->Enabled) continue;
+
+				float fighterDistance = Vector3Distance(fighter->Position, mine->Position);
+
+				if (fighterDistance < distance)
+				{
+					distance = fighterDistance;
+					enemyToChase = true;
+					enemyPosition = fighter->Position;
+				}
+			}
+		}
+
+		if (enemyToChase)
+		{
+			mine->ChaseEnemy(enemyPosition);
+		}
+		else
+		{
+			mine->LostEnemy();
+		}
+	}
 }
 
 void EnemyControl::Reset()

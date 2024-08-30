@@ -109,6 +109,7 @@ private:
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void SpawnBoss();
+	void CheckHomingMineEnemyChase();
 
 	void Reset();
 };

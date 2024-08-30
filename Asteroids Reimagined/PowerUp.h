@@ -8,18 +8,19 @@ class PowerUp : public LineModel
 public:
 	enum PowerUpType
 	{
-		Red,
+		Skyblue,
 		Blue,
 		Purple,
-		Green,
+		Red,
 		Yellow,
-		White,
+		Green,
 		Orange,
 		Violet,
-		Magenta
+		Magenta,
+		Maroon
 	};
 
-	PowerUpType Type = PowerUpType::Red;
+	PowerUpType Type = PowerUpType::Skyblue;
 
 	PowerUp();
 	virtual ~PowerUp();

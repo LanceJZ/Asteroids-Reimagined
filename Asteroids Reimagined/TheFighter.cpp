@@ -186,6 +186,42 @@ void TheFighter::CheckCollisions()
 		}
 	}
 
+	for (const auto& shot : Player->DoubleShots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return;
+		}
+	}
+
+	for (const auto& bigShot : Player->BigShots)
+	{
+		if (bigShot->Enabled && CirclesIntersect(*bigShot))
+		{
+			bigShot->Destroy();
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return;
+		}
+	}
+
+	for (const auto& mine : Player->Mines)
+	{
+		if (mine->Enabled && CirclesIntersect(*mine))
+		{
+			mine->Destroy();
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return;
+		}
+	}
+
 	for (const auto& ufo : UFOs)
 	{
 		if (ufo->Enabled && CirclesIntersect(*ufo))

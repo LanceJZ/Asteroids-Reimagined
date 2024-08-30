@@ -25,7 +25,7 @@ public:
 	float GetRandomScreenX();
 	float GetRandomFloat(float min, float max);
 	float GetRandomRadian();
-	float RotateTowardsTargetZ(Vector3& origin, Vector3& target, float facingAngle,
+	float GetRotationTowardsTargetZ(Vector3& origin, Vector3& target, float facingAngle,
 		float magnitude);
 	float GetAngleFromVectorsZ(Vector3& origin, Vector3& target);
 	Vector3 GetRandomVelocity(float speed);

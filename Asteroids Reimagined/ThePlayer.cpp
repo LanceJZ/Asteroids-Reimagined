@@ -38,6 +38,8 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 	{
 		shot->SetModel(model);
 	}
+
+	ShotModel = model;
 }
 
 void ThePlayer::SetFlameModel(LineModelPoints model)
@@ -53,6 +55,16 @@ void ThePlayer::SetShieldModel(LineModelPoints model)
 void ThePlayer::SetTurretHeatModel(LineModelPoints model)
 {
 	TurretHeatMeter->SetModel(model);
+}
+
+void ThePlayer::SetBigShotModel(LineModelPoints model)
+{
+	BigShotModel = model;
+}
+
+void ThePlayer::SetMineModel(LineModelPoints model)
+{
+	MineModel = model;
 }
 
 void ThePlayer::SetFireSound(Sound sound)
@@ -91,6 +103,11 @@ void ThePlayer::SetSpawnSound(Sound sound)
 void ThePlayer::SetBonusSound(Sound sound)
 {
 	BonusSound = sound;
+}
+
+void ThePlayer::SetMineDropSound(Sound sound)
+{
+	MineDropSound = sound;
 }
 
 void ThePlayer::SetParticleManager(ParticleManager* particleManager)
@@ -253,6 +270,9 @@ void ThePlayer::Spawn()
 	Shield->ModelColor = WHITE;
 	GunOverCharge = false;
 	ShieldOverCharge = false;
+	BigShotCount = 0;
+	DoubleShotCount = 0;
+	MineCount = 0;
 
 	PlaySound(SpawnSound);
 }
@@ -301,12 +321,17 @@ void ThePlayer::FullPowerUp()
 
 void ThePlayer::BigShotPowerUp()
 {
-	BigShotPowerUpCount = 32;
+	BigShotCount = 32;
 }
 
 void ThePlayer::DoubleShotPowerUp()
 {
-	DoubleShotPowerUpCount = 32;
+	DoubleShotCount = 32;
+}
+
+void ThePlayer::MinePowerUp()
+{
+	MineCount = 32;
 }
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
@@ -393,76 +418,152 @@ void ThePlayer::TurretTimers()
 
 void ThePlayer::FireSecondary()
 {
-	if (BigShotPowerUpCount > 0)
+	if (BigShotCount > 0)
 	{
-		BigShotPowerUpCount--;
+		BigShotCount--;
 		FireBigShot();
 		return;
 	}
 
-	if (DoubleShotPowerUpCount > 0)
+	if (DoubleShotCount > 0)
 	{
-		DoubleShotPowerUpCount--;
+		DoubleShotCount--;
 		FireDoubleShot();
+		return;
+	}
+
+	if (MineCount > 0)
+	{
+		MineCount--;
+		DropHomingMine();
 		return;
 	}
 }
 
 void ThePlayer::FireBigShot()
 {
-	for (auto& shot : Shots)
-	{
-		if (!shot->Enabled)
-		{
-			PlaySound(FireSound);
+	bool spawnNewBigShot = true;
+	size_t shotNumber = BigShots.size();
 
-			Vector3 turretPosition = Turret->GetWorldPosition();
-			Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 400.0f);
-			shot->Spawn(turretPosition, velocity, 2.5f);
-			shot->Scale = 15.0f;
+	if (!GameOver) PlaySound(FireSound);
+
+	for (size_t i = 0; i < shotNumber; i++)
+	{
+		if (BigShots.at(i)->Enabled == false)
+		{
+			spawnNewBigShot = false;
+			shotNumber = i;
 			break;
 		}
 	}
+
+	if (spawnNewBigShot)
+	{
+		BigShots.push_back(DBG_NEW Shot());
+		Managers.EM.AddLineModel(BigShots.back());
+		BigShots.back()->SetModel(BigShotModel);
+		BigShots.back()->Initialize(TheUtilities);
+		BigShots.back()->RotationVelocityZ = 20.0f;
+		BigShots.back()->BeginRun();
+		BigShots.back()->SetScale(3.0f);
+	}
+
+	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 375.0f);
+	BigShots.at(shotNumber)->Spawn(Position, velocity, 2.15f);
 }
 
 void ThePlayer::FireDoubleShot()
 {
 	float spread = Radius;
+	bool spawnNewDoubleShot = true;
+	size_t shotNumber = DoubleShots.size();
 
-	for (auto& shot : Shots)
+	if (!GameOver) PlaySound(FireSound);
+
+	for (size_t i = 0; i < shotNumber; i++)
 	{
-		if (!shot->Enabled)
+		if (DoubleShots.at(i)->Enabled == false)
 		{
-			PlaySound(FireSound);
-
-			Vector3 offset =Turret->GetVelocityFromAngleZ(Turret->WorldRotation.z +
-					PI / 2.0f, spread);
-			Vector3 turretPosition = Vector3Add(Turret->GetWorldPosition(),
-				offset);
-			Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 400.0f);
-			shot->Spawn(turretPosition, velocity, 2.5f);
-			shot->Scale = 2.0f;
+			spawnNewDoubleShot = false;
+			shotNumber = i;
 			break;
 		}
 	}
 
-	for (auto& shot : Shots)
+	if (spawnNewDoubleShot)
 	{
-		if (!shot->Enabled)
-		{
-			PlaySound(FireSound);
+		DoubleShots.push_back(DBG_NEW Shot());
+		Managers.EM.AddLineModel(DoubleShots.back());
+		DoubleShots.back()->SetModel(ShotModel);
+		DoubleShots.back()->Initialize(TheUtilities);
+		DoubleShots.back()->BeginRun();
+		DoubleShots.back()->SetScale(3.0f);
+	}
 
-			Vector3 offset =
-				Turret->GetVelocityFromAngleZ(Turret->WorldRotation.z +
-					-PI / 2.0f, spread);
-			Vector3 turretPosition = Vector3Add(Turret->GetWorldPosition(),
-				offset);
-			Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 400.0f);
-			shot->Spawn(turretPosition, velocity, 2.5f);
-			shot->Scale = 2.0f;
+	Vector3 offset = GetVelocityFromAngleZ(RotationZ + PI / 2.0f, spread);
+	Vector3 position = Vector3Add(Position,	offset);
+	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 400.0f);
+	DoubleShots.at(shotNumber)->Spawn(position, velocity, 2.15f);
+
+	spawnNewDoubleShot = true;
+	shotNumber = DoubleShots.size();
+
+	if (!GameOver) PlaySound(FireSound);
+
+	for (size_t i = 0; i < shotNumber; i++)
+	{
+		if (DoubleShots.at(i)->Enabled == false)
+		{
+			spawnNewDoubleShot = false;
+			shotNumber = i;
 			break;
 		}
 	}
+
+	if (spawnNewDoubleShot)
+	{
+		DoubleShots.push_back(DBG_NEW Shot());
+		Managers.EM.AddLineModel(DoubleShots.back());
+		DoubleShots.back()->SetModel(ShotModel);
+		DoubleShots.back()->Initialize(TheUtilities);
+		DoubleShots.back()->BeginRun();
+		DoubleShots.back()->SetScale(3.0f);
+	}
+
+	offset = GetVelocityFromAngleZ(RotationZ + -PI / 2.0f, spread);
+	position = Vector3Add(Position,	offset);
+	DoubleShots.at(shotNumber)->Spawn(position, velocity, 2.15f);
+}
+
+void ThePlayer::DropHomingMine()
+{
+	bool spawnNewMine = true;
+	size_t mineNumber = Mines.size();
+
+	if (!GameOver) PlaySound(MineDropSound);
+
+	for (size_t i = 0; i < mineNumber; i++)
+	{
+		if (Mines.at(i)->Enabled == false)
+		{
+			spawnNewMine = false;
+			mineNumber = i;
+			break;
+		}
+	}
+
+	if (spawnNewMine)
+	{
+		Mines.push_back(DBG_NEW TheHomingMine());
+		Managers.EM.AddLineModel(Mines.back());
+		Mines.back()->SetModel(MineModel);
+		Mines.back()->SetExplodeSound(MineExplodeSound);
+		Mines.back()->Initialize(TheUtilities);
+		Mines.back()->SetParticleManager(Particles);
+		Mines.back()->BeginRun();
+	}
+
+	Mines.at(mineNumber)->Spawn(Position);
 }
 
 void ThePlayer::CrosshairUpdate()
@@ -570,7 +671,7 @@ void ThePlayer::ShieldPowerDrain(float deltaTime)
 void ThePlayer::WeHaveThePower()
 {
 	if (ShieldPower < 100.0f) ShieldPower = 100.0f;
-	if (TurretHeat > 0.0f) TurretHeat = 0.0f;
+	if (TurretHeat > 0) TurretHeat = 0;
 
 	if (Managers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
 	{
