@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Shot.h"
 #include "TheHomingMine.h"
+#include "ThePlasmaShot.h"
 #include "TheScore.h"
 #include "ParticleManager.h"
 
@@ -21,6 +22,7 @@ public:
 	std::vector<Shot*> DoubleShots = {};
 	std::vector<Shot*> BigShots = {};
 	std::vector<TheHomingMine*> Mines = {};
+	std::vector<ThePlasmaShot*> PlasmaShots = {};
 
 	LineModel* Shield = {};
 
@@ -62,6 +64,7 @@ public:
 	void BigShotPowerUp();
 	void DoubleShotPowerUp();
 	void MinePowerUp();
+	void PlasmaShotPowerUp();
 
 	int GetScore();
 	void SetHighScore(int highScore);
@@ -87,6 +90,7 @@ private:
 	int BigShotCount = 0;
 	int DoubleShotCount = 0;
 	int MineCount = 0;
+	int PlasmaShotCount = 0;
 	int MissileCount = 0;
 
 	float TurretDirection = 0.0f;
@@ -124,6 +128,7 @@ private:
 	void FireBigShot();
 	void FireDoubleShot();
 	void DropHomingMine();
+	void FirePlasmaShot();
 
 	void CrosshairUpdate();
 

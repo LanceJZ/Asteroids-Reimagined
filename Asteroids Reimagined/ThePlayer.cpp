@@ -273,6 +273,8 @@ void ThePlayer::Spawn()
 	BigShotCount = 0;
 	DoubleShotCount = 0;
 	MineCount = 0;
+	PlasmaShotCount = 0;
+	MissileCount = 0;
 
 	PlaySound(SpawnSound);
 }
@@ -321,7 +323,7 @@ void ThePlayer::FullPowerUp()
 
 void ThePlayer::BigShotPowerUp()
 {
-	BigShotCount = 32;
+	BigShotCount = 22;
 }
 
 void ThePlayer::DoubleShotPowerUp()
@@ -331,7 +333,12 @@ void ThePlayer::DoubleShotPowerUp()
 
 void ThePlayer::MinePowerUp()
 {
-	MineCount = 32;
+	MineCount = 22;
+}
+
+void ThePlayer::PlasmaShotPowerUp()
+{
+	PlasmaShotCount = 12;
 }
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
@@ -436,6 +443,13 @@ void ThePlayer::FireSecondary()
 	{
 		MineCount--;
 		DropHomingMine();
+		return;
+	}
+
+	if (PlasmaShotCount > 0)
+	{
+		PlasmaShotCount--;
+		FirePlasmaShot();
 		return;
 	}
 }
@@ -564,6 +578,37 @@ void ThePlayer::DropHomingMine()
 	}
 
 	Mines.at(mineNumber)->Spawn(Position);
+}
+
+void ThePlayer::FirePlasmaShot()
+{
+	bool spawnNewBigShot = true;
+	size_t shotNumber = PlasmaShots.size();
+
+	if (!GameOver) PlaySound(FireSound);
+
+	for (size_t i = 0; i < shotNumber; i++)
+	{
+		if (PlasmaShots.at(i)->Enabled == false)
+		{
+			spawnNewBigShot = false;
+			shotNumber = i;
+			break;
+		}
+	}
+
+	if (spawnNewBigShot)
+	{
+		PlasmaShots.push_back(DBG_NEW ThePlasmaShot());
+		Managers.EM.AddLineModel(PlasmaShots.back());
+		PlasmaShots.back()->SetModel(BigShotModel);
+		PlasmaShots.back()->Initialize(TheUtilities);
+		PlasmaShots.back()->RotationVelocityZ = 20.0f;
+		PlasmaShots.back()->BeginRun();
+	}
+
+	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 375.0f);
+	PlasmaShots.at(shotNumber)->Spawn(Position, velocity);
 }
 
 void ThePlayer::CrosshairUpdate()

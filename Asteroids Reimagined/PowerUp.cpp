@@ -162,6 +162,9 @@ void PowerUp::CheckCollisions()
 		case PowerUp::Orange:
 			Player->MinePowerUp();
 			break;
+		case PowerUp::Violet:
+			Player->PlasmaShotPowerUp();
+			break;
 		default:
 			break;
 		}

@@ -19,14 +19,13 @@ void Entity::Draw3D()
 {
 #ifdef _DEBUG
 	if((Enabled && !IsChild && !HideCollision) || EntityOnly || ShowCollision)
-		DrawCircle3D(GetWorldPosition(), Radius, {0}, 0, {150, 50, 200, 200});
+		DrawCircle3D(GetWorldPosition(), Radius * Scale, {0}, 0, {150, 50, 200, 200});
 #endif
 }
 
 void Entity::SetScale(float scale)
 {
 	Scale = scale;
-	Radius = Radius * scale;
 }
 
 void Entity::Spawn(Vector3 position)
@@ -67,7 +66,7 @@ bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 	Vector2 distance = { targetPosition.x - Position.x,
 		targetPosition.y - Position.y };
 
-	float radius = Radius + targetRadius;
+	float radius = (Radius * Scale) + targetRadius;
 
 	if ((distance.x * distance.x) + (distance.y * distance.y)
 		< radius * radius) return true;
@@ -86,7 +85,7 @@ bool Entity::CirclesIntersect(Entity& target)
 {
 	if (!target.Enabled) return false;
 
-	return CirclesIntersect(target.Position, target.Radius);
+	return CirclesIntersect(target.Position, (target.Radius * target.Scale));
 }
 
 bool Entity::CirclesIntersectBullet(Entity& target)

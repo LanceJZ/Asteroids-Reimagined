@@ -166,7 +166,7 @@ void Enemy::Shoot(Vector3 velocity)
 
 bool Enemy::CheckCollisions()
 {
-	for (auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && shot->CirclesIntersect(*this))
 		{
@@ -179,7 +179,7 @@ bool Enemy::CheckCollisions()
 		}
 	}
 
-	for (auto& shot : Player->DoubleShots)
+	for (const auto& shot : Player->DoubleShots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
@@ -192,11 +192,36 @@ bool Enemy::CheckCollisions()
 		}
 	}
 
-	for (auto& bigShot : Player->BigShots)
+	for (const auto& bigShot : Player->BigShots)
 	{
 		if (bigShot->Enabled && CirclesIntersect(*bigShot))
 		{
 			bigShot->Destroy();
+			Hit();
+			Destroy();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	for (const auto& mine : Player->Mines)
+	{
+		if (mine->Enabled && CirclesIntersect(*mine))
+		{
+			mine->Destroy();
+			Hit();
+			Destroy();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	for (const auto& plasma : Player->PlasmaShots)
+	{
+		if (plasma->Enabled && CirclesIntersect(*plasma))
+		{
 			Hit();
 			Destroy();
 			Player->ScoreUpdate(Points);
@@ -216,40 +241,6 @@ bool Enemy::CheckCollisions()
 			Player->ScoreUpdate(Points);
 
 			return true;
-		}
-	}
-
-	for (const auto& mine : Player->Mines)
-	{
-		if (mine->Enabled && CirclesIntersect(*mine))
-		{
-			mine->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
-
-			return true;
-		}
-	}
-
-	for (auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && ufo->CirclesIntersect(*this))
-		{
-			ufo->Hit();
-			Hit();
-			Destroy();
-			return true;
-		}
-
-		for (auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && shot->CirclesIntersect(*this))
-			{
-				shot->Destroy();
-				Hit();
-				Destroy();
-				return true;
-			}
 		}
 	}
 

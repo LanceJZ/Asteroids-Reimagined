@@ -303,6 +303,11 @@ void EnemyControl::Update()
 	CheckRockCollisions();
 	CheckHomingMineEnemyChase();
 
+	for (const auto& ufo : UFOs)
+	{
+		ufo->CheckShotCollisions();
+	}
+
 	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
 		Managers.EM.ResetTimer(EnemyOneSpawnTimerID);
@@ -541,28 +546,6 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	{
 		EnemyTwo->Hit();
 		rock->Hit();
-		return;
-	}
-
-	if (EnemyOne->Enabled && EnemyTwo->Enabled && EnemyOne->CirclesIntersect(*EnemyTwo))
-	{
-		EnemyOne->Hit();
-		EnemyTwo->Hit();
-		return;
-	}
-
-	if (EnemyTwo->Enabled && EnemyOne->Enabled && EnemyTwo->CirclesIntersect(*EnemyOne))
-	{
-		EnemyTwo->Hit();
-		EnemyOne->Hit();
-		return;
-	}
-
-	if (EnemyOne->Missile->Enabled && EnemyTwo->Enabled
-		&& EnemyOne->Missile->CirclesIntersect(*EnemyTwo))
-	{
-		EnemyOne->Missile->Hit();
-		EnemyTwo->Hit();
 		return;
 	}
 }

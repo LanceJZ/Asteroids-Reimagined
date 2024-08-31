@@ -84,6 +84,9 @@
     <ClCompile Include="TheHomingMine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ThePlasmaShot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -153,6 +156,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TheHomingMine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThePlasmaShot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

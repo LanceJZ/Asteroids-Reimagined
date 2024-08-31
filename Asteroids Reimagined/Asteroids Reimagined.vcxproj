@@ -185,6 +185,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="ThePlasmaShot.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TheScore.cpp">
       <SubType>
       </SubType>
@@ -261,6 +265,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="TheHomingMine.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ThePlasmaShot.h">
       <SubType>
       </SubType>
     </ClInclude>

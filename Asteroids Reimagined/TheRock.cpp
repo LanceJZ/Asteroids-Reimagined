@@ -56,7 +56,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 
 	TheRock::Size = size;
 	float scale = 25;
-	float radius = 47.25f;
 	float change = 0;
 
 	switch (size)
@@ -64,7 +63,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case Small:
 		change = 4.5f;
 		Scale = scale / change;
-		Radius = radius / change;
 		maxVS = 3;
 		magnitude = GetRandomFloat(52.3f, 74.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
@@ -72,7 +70,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case Medium:
 		change = 2.75f;
 		Scale =  scale / change;
-		Radius = radius / change;
 		maxVS = 2;
 		magnitude = GetRandomFloat(43.2f, 63.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
@@ -80,7 +77,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case MediumLarge:
 		change = 1.85f;
 		Scale =  scale / change;
-		Radius = radius / change;
 		maxVS = 2;
 		magnitude = GetRandomFloat(36.1f, 56.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
@@ -88,7 +84,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case Large:
 		Y(GetRandomFloat(-WindowHeight, WindowHeight));
 		Scale = scale;
-		Radius = radius;
 		maxVS = 1;
 
 		magnitude = GetRandomFloat(20.35f, 40.1f);
@@ -172,6 +167,16 @@ bool TheRock::CheckCollisions()
 		if (bigShot->Enabled && CirclesIntersect(*bigShot))
 		{
 			bigShot->Destroy();
+			Hit();
+			SendScoreToPlayer();
+			return true;
+		}
+	}
+
+	for (const auto& plasmaShot : Player->PlasmaShots)
+	{
+		if (plasmaShot->Enabled && CirclesIntersect(*plasmaShot))
+		{
 			Hit();
 			SendScoreToPlayer();
 			return true;

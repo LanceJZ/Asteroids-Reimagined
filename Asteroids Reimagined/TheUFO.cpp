@@ -119,18 +119,25 @@ void TheUFO::CheckCollisions(TheRock* rock)
 			rock->Hit();
 			continue;
 		}
-
-		if (shot->Enabled && shot->CirclesIntersect(*Player) && Player->Enabled)
-		{
-			shot->Destroy();
-			Player->Hit(Position, Velocity);
-		}
 	}
 
 	if (Enabled && CirclesIntersect(*rock))
 	{
 		Hit();
 		rock->Hit();
+	}
+}
+
+void TheUFO::CheckShotCollisions()
+{
+	for (const auto& shot : Shots)
+	{
+		if (shot->Enabled && shot->CirclesIntersect(*Player) && Player->Enabled)
+		{
+			shot->Destroy();
+			Player->Hit(Position, Velocity);
+			break;
+		}
 	}
 }
 
@@ -417,6 +424,17 @@ bool TheUFO::CheckCollisions()
 		if (mine->Enabled && CirclesIntersect(*mine))
 		{
 			mine->Destroy();
+			Hit();
+			SendScoreToPlayer();
+
+			return true;
+		}
+	}
+
+	for (const auto& plasma : Player->PlasmaShots)
+	{
+		if (plasma->Enabled && CirclesIntersect(*plasma))
+		{
 			Hit();
 			SendScoreToPlayer();
 
