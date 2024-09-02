@@ -12,6 +12,8 @@ public:
 	TheBoss();
 	virtual ~TheBoss();
 
+	Entity* FireShotAtPlayerArea = nullptr;
+
 	void SetPlayer(ThePlayer* player);
 
 	void SetShieldModel(LineModelPoints model);
@@ -21,6 +23,14 @@ public:
 	void SetMissileModel(LineModelPoints model);
 	void SetShotModel(LineModelPoints model);
 	void SetMineModel(LineModelPoints model);
+
+	void SetExplodeSound(Sound sound);
+	void SetShieldHitSound(Sound sound);
+	void SetShieldDownSound(Sound sound);
+	void SetHitSound(Sound sound);
+	void SetTurretFireSound(Sound sound);
+	void SetTurretExplodeSound(Sound sound);
+	void SetSpineFireSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -46,12 +56,18 @@ private:
 	float FireTimerSetting = 0;
 	float HitPoints = 100.0f;
 
+	Sound ShieldHitSound = {};
+	Sound ShieldDownSound = {};
+	Sound HitSound = {};
+	Sound ExplodeSound = {};
+	Sound TurretFireSound = {};
+	Sound TurretExplodeSound = {};
+	Sound SpineFireSound = {};
+
 	LineModelPoints MissileModel;
 	LineModelPoints ShotModel;
 	LineModelPoints MineModel;
 	LineModelPoints TurretModel;
-
-	Entity* FireShotAtPlayerArea = nullptr;
 
 	LineModel* Shield = nullptr;
 	LineModel* RightSpineMount = nullptr;
@@ -69,4 +85,6 @@ private:
 	void ReachedWaypoint();
 	void CheckCollisions();
 	void FireShots();
+	void ShieldHit(float damage);
+	void ShieldDown(Entity* entity, float damage);
 };

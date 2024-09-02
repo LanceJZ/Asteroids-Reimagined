@@ -11,6 +11,8 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 	void SetShotModel(LineModelPoints model);
+	void SetFireSound(Sound sound);
+	void SetExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -28,6 +30,9 @@ private:
 	size_t FireTimerID;
 
 	float FireTimerSetting = 0;
+
+	Sound FireSound = {};
+	Sound ExplodeSound = {};
 
 	LineModelPoints ShotModel = {};
 	ThePlayer* Player = nullptr;

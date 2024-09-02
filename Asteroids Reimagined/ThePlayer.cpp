@@ -105,9 +105,31 @@ void ThePlayer::SetBonusSound(Sound sound)
 	BonusSound = sound;
 }
 
+void ThePlayer::SetBigShotSound(Sound sound)
+{
+	BigShotSound = sound;
+	SetSoundVolume(BigShotSound, 0.25f);
+}
+
+void ThePlayer::SetDoubleShotSound(Sound sound)
+{
+	DoubleShotSound = sound;
+	SetSoundVolume(DoubleShotSound, 0.5f);
+}
+
+void ThePlayer::SetPlasmaShotSound(Sound sound)
+{
+	PlasmaShotSound = sound;
+}
+
 void ThePlayer::SetMineDropSound(Sound sound)
 {
 	MineDropSound = sound;
+}
+
+void ThePlayer::SetMineExplodeSound(Sound sound)
+{
+	MineExplodeSound = sound;
 }
 
 void ThePlayer::SetParticleManager(ParticleManager* particleManager)
@@ -428,6 +450,7 @@ void ThePlayer::FireSecondary()
 	if (BigShotCount > 0)
 	{
 		BigShotCount--;
+		PlaySound(BigShotSound);
 		FireBigShot();
 		return;
 	}
@@ -435,6 +458,7 @@ void ThePlayer::FireSecondary()
 	if (DoubleShotCount > 0)
 	{
 		DoubleShotCount--;
+		PlaySound(DoubleShotSound);
 		FireDoubleShot();
 		return;
 	}
@@ -442,6 +466,7 @@ void ThePlayer::FireSecondary()
 	if (MineCount > 0)
 	{
 		MineCount--;
+		PlaySound(MineDropSound);
 		DropHomingMine();
 		return;
 	}
@@ -449,6 +474,7 @@ void ThePlayer::FireSecondary()
 	if (PlasmaShotCount > 0)
 	{
 		PlasmaShotCount--;
+		PlaySound(PlasmaShotSound);
 		FirePlasmaShot();
 		return;
 	}

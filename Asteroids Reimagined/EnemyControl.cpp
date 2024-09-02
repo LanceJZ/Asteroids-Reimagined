@@ -203,6 +203,41 @@ void EnemyControl::SetEnemyTwoMineExplodeSound(Sound sound)
 	EnemyTwo->SetMineExplodeSound(sound);
 }
 
+void EnemyControl::SetBossExplodeSound(Sound sound)
+{
+	Boss->SetExplodeSound(sound);
+}
+
+void EnemyControl::SetBossShieldHitSound(Sound sound)
+{
+	Boss->SetShieldHitSound(sound);
+}
+
+void EnemyControl::SetBossShieldDownSound(Sound sound)
+{
+	Boss->SetShieldDownSound(sound);
+}
+
+void EnemyControl::SetBossHitSound(Sound sound)
+{
+	Boss->SetHitSound(sound);
+}
+
+void EnemyControl::SetBossTurretFireSound(Sound sound)
+{
+	Boss->SetTurretFireSound(sound);
+}
+
+void EnemyControl::SetBossTurretExplodeSound(Sound sound)
+{
+	Boss->SetTurretExplodeSound(sound);
+}
+
+void EnemyControl::SetBossSpineFireSound(Sound sound)
+{
+	Boss->SetSpineFireSound(sound);
+}
+
 void EnemyControl::SetParticleManager(ParticleManager* particles)
 {
 	Particles = particles;

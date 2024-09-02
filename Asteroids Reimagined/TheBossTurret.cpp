@@ -19,6 +19,17 @@ void TheBossTurret::SetShotModel(LineModelPoints model)
 	ShotModel = model;
 }
 
+void TheBossTurret::SetFireSound(Sound sound)
+{
+	FireSound = sound;
+	SetSoundVolume(FireSound, 0.25f);
+}
+
+void TheBossTurret::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+}
+
 bool TheBossTurret::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -61,6 +72,8 @@ void TheBossTurret::Hit()
 {
 	LineModel::Hit();
 
+	PlaySound(ExplodeSound);
+
 	Destroy();
 }
 
@@ -90,7 +103,7 @@ void TheBossTurret::Fire()
 
 	if (!Player->Enabled) return;
 
-	//if (!Player->GameOver) PlaySound(FireSound);
+	if (!Player->GameOver) PlaySound(FireSound);
 
 	bool spawnNewShot = true;
 	size_t shotNumber = Shots.size();

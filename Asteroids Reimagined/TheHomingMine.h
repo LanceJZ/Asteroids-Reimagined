@@ -21,6 +21,7 @@ public:
 	void LostEnemy();
 
 	void Spawn(Vector3 position);
+	void Hit();
 	void Destroy();
 
 private:
@@ -30,6 +31,5 @@ private:
 
 	ParticleManager* Particles = nullptr;
 
-	void CheckIsEnemyClose();
 	void CheckCollision();
 };

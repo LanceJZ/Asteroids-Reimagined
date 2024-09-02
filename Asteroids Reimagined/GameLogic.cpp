@@ -299,6 +299,18 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
+	if (Enemies->Boss->Enabled && Enemies->Boss->CirclesIntersect(*PlayerClear))
+	{
+		return false;
+	}
+
+	if (Enemies->Boss->Enabled &&
+		PlayerClear->CirclesIntersect(Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
+			Enemies->Boss->FireShotAtPlayerArea->Radius))
+	{
+		return false;
+	}
+
 	if (Enemies->EnemyOne->Enabled &&
 		Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
 	{

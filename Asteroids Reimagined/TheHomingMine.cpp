@@ -37,9 +37,6 @@ void TheHomingMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	CheckIsEnemyClose();
-
-
 	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
 }
 
@@ -55,87 +52,19 @@ void TheHomingMine::Spawn(Vector3 position)
 	Managers.EM.ResetTimer(LifeTimerID, 30.0f);
 }
 
+void TheHomingMine::Hit()
+{
+	PlaySound(ExplodeSound);
+
+	Particles->SpawnLineParticles(Position, { 0.0f }, Radius * 0.25f, 50, 25, 1.0f, WHITE);
+
+	Destroy();
+}
+
 void TheHomingMine::Destroy()
 {
 	LineModel::Destroy();
 
-}
-
-void TheHomingMine::CheckIsEnemyClose()
-{
-	bool enemyToChase = false;
-	float distance = 600.0f;
-
-	//for (const auto& ufo : Enemies->UFOs)
-	//{
-	//	if (!ufo->Enabled) continue;
-
-	//	float ufoDistance = Vector3Distance(ufo->Position, Position);
-
-	//	if (ufoDistance < distance)
-	//	{
-	//		distance = ufoDistance;
-	//		enemyToChase = true;
-	//		EnemyPosition = ufo->Position;
-	//		EnemyRadius = ufo->Radius;
-	//	}
-	//}
-
-	//if (Enemies->EnemyOne->Enabled)
-	//{
-	//	float enemyOneDistance = Vector3Distance(Enemies->EnemyOne->Position, Position);
-
-	//	if (enemyOneDistance < distance)
-	//	{
-	//		distance = enemyOneDistance;
-	//		enemyToChase = true;
-	//		EnemyPosition = Enemies->EnemyOne->Position;
-	//		EnemyRadius = Enemies->EnemyOne->Radius;
-	//	}
-	//}
-
-	//if (Enemies->EnemyTwo->Enabled)
-	//{
-	//	float enemyTwoDistance = Vector3Distance(Enemies->EnemyTwo->Position, Position);
-
-	//	if (enemyTwoDistance < distance)
-	//	{
-	//		distance = enemyTwoDistance;
-	//		enemyToChase = true;
-	//		EnemyPosition = Enemies->EnemyTwo->Position;
-	//		EnemyRadius = Enemies->EnemyTwo->Radius;
-	//	}
-	//}
-
-	//for (const auto& fighterPair : Enemies->DeathStar->FighterPairs)
-	//{
-	//	if (!fighterPair->Enabled) continue;
-
-	//	float fighterDistance = Vector3Distance(fighterPair->Position, Position);
-
-	//	if (fighterDistance < distance)
-	//	{
-	//		distance = fighterDistance;
-	//		enemyToChase = true;
-	//		EnemyPosition = fighterPair->Position;
-	//		EnemyRadius = fighterPair->Radius;
-	//	}
-
-	//	for (const auto& fighter : fighterPair->Fighters)
-	//	{
-	//		if (!fighter->Enabled) continue;
-
-	//		float fighterDistance = Vector3Distance(fighter->Position, Position);
-
-	//		if (fighterDistance < distance)
-	//		{
-	//			distance = fighterDistance;
-	//			enemyToChase = true;
-	//			EnemyPosition = fighter->Position;
-	//			EnemyRadius = fighter->Radius;
-	//		}
-	//	}
-	//}
 }
 
 void TheHomingMine::ChaseEnemy(Vector3 enemyPosition)

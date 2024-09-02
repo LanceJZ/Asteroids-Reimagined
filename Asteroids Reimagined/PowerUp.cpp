@@ -100,15 +100,15 @@ void PowerUp::Spawn(Vector3 position)
 		if (chance == 1)
 		{
 			ModelColor = ORANGE;
-			Type = Orange; //Ion paralyzing Mines limited number.
+			Type = Orange; //Homing Mines limited number.
 			// Only works on enemy ships, rocks ignored. (Explodes on impact)
 		}
 
 		if (chance == 2)
 		{
 			ModelColor = VIOLET;
-			Type = Violet; //Growing plasma shot limited number. Dies at edge of screen.
-			// Annihilates everything in it's path.
+			Type = Violet; //Growing plasma shot limited number.
+			// Dies at edge of screen. Annihilates everything in it's path.
 		}
 	}
 

@@ -416,6 +416,8 @@ bool TheUFO::CheckCollisions()
 			bigShot->Destroy();
 			Hit();
 			SendScoreToPlayer();
+
+			return true;
 		}
 	}
 
@@ -423,7 +425,7 @@ bool TheUFO::CheckCollisions()
 	{
 		if (mine->Enabled && CirclesIntersect(*mine))
 		{
-			mine->Destroy();
+			mine->Hit();
 			Hit();
 			SendScoreToPlayer();
 

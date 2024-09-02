@@ -73,6 +73,11 @@ bool Game::Load()
 	Player->SetShieldOnSound(Managers.CM.LoadAndGetSound("PlayerShieldOn"));
 	Player->SetThrustSound(Managers.CM.LoadAndGetSound("PlayerThrust"));
 	Player->SetSpawnSound(Managers.CM.LoadAndGetSound("PlayerSpawn"));
+	Player->SetMineDropSound(Managers.CM.LoadAndGetSound("HomingMineDrop"));
+	Player->SetMineExplodeSound(Managers.CM.LoadAndGetSound("HomingMineExplode"));
+	Player->SetDoubleShotSound(Managers.CM.LoadAndGetSound("DoubleShotFire"));
+	Player->SetBigShotSound(Managers.CM.LoadAndGetSound("BigShotFire"));
+	Player->SetPlasmaShotSound(Managers.CM.LoadAndGetSound("PlayerPlasmaFire"));
 
 	Enemies->SetRockExplodeSound(Managers.CM.LoadAndGetSound("RockExplode"));
 	Enemies->SetUFOExplodeSound(Managers.CM.LoadAndGetSound("UFOExplode"));
@@ -90,6 +95,13 @@ bool Game::Load()
 	Enemies->SetEnemyTwoSpawnSound(Managers.CM.LoadAndGetSound("EnemyTwoSpawn"));
 	Enemies->SetEnemyTwoFireSound(Managers.CM.LoadAndGetSound("MineDrop"));
 	Enemies->SetEnemyTwoOnSound(Managers.CM.LoadAndGetSound("EnemyTwo"));
+	Enemies->SetBossExplodeSound(Managers.CM.LoadAndGetSound("BossExplode"));
+	Enemies->SetBossShieldHitSound(Managers.CM.LoadAndGetSound("BossShieldHit"));
+	Enemies->SetBossShieldDownSound(Managers.CM.LoadAndGetSound("BossShieldDown"));
+	Enemies->SetBossHitSound(Managers.CM.LoadAndGetSound("BossHitSound"));
+	Enemies->SetBossTurretFireSound(Managers.CM.LoadAndGetSound("BossTurretFire"));
+	Enemies->SetBossTurretExplodeSound(Managers.CM.LoadAndGetSound("BossTurretExplode"));
+	Enemies->SetBossSpineFireSound(Managers.CM.LoadAndGetSound("BossSpineFire"));
 
 	Logic->SetPowerUpSound(Managers.CM.LoadAndGetSound("PowerUp"));
 	Logic->SetPickUpSound(Managers.CM.LoadAndGetSound("PickUp"));

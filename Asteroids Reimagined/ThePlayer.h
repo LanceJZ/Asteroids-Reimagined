@@ -42,7 +42,11 @@ public:
 	void SetThrustSound(Sound sound);
 	void SetSpawnSound(Sound sound);
 	void SetBonusSound(Sound sound);
+	void SetBigShotSound(Sound sound);
+	void SetDoubleShotSound(Sound sound);
+	void SetPlasmaShotSound(Sound sound);
 	void SetMineDropSound(Sound sound);
+	void SetMineExplodeSound(Sound sound);
 
 	void SetParticleManager(ParticleManager* particleManager);
 
@@ -105,8 +109,11 @@ private:
 	Sound ThrustSound = {};
 	Sound SpawnSound = {};
 	Sound BonusSound = {};
+	Sound BigShotSound = {};
+	Sound DoubleShotSound = {};
 	Sound MineDropSound = {};
 	Sound MineExplodeSound = {};
+	Sound PlasmaShotSound = {};
 
 	LineModel* Flame = {};
 	LineModel* Turret = {};

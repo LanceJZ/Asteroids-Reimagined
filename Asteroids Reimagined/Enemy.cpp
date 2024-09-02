@@ -209,7 +209,7 @@ bool Enemy::CheckCollisions()
 	{
 		if (mine->Enabled && CirclesIntersect(*mine))
 		{
-			mine->Destroy();
+			mine->Hit();
 			Hit();
 			Destroy();
 			Player->ScoreUpdate(Points);

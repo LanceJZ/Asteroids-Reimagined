@@ -38,9 +38,9 @@ void TheBoss::SetShieldModel(LineModelPoints model)
 
 void TheBoss::SetTurretModel(LineModelPoints model)
 {
-	for (int i = 0; i < 5; i++)
+	for (const auto& turret : Turrets)
 	{
-		Turrets[i]->SetModel(model);
+		turret->SetModel(model);
 	}
 }
 
@@ -77,6 +77,51 @@ void TheBoss::SetMineModel(LineModelPoints model)
 	MineModel = model;
 }
 
+void TheBoss::SetExplodeSound(Sound sound)
+{
+	ExplodeSound = sound;
+}
+
+void TheBoss::SetShieldHitSound(Sound sound)
+{
+	ShieldHitSound = sound;
+}
+
+void TheBoss::SetShieldDownSound(Sound sound)
+{
+	ShieldDownSound = sound;
+}
+
+void TheBoss::SetHitSound(Sound sound)
+{
+	HitSound = sound;
+}
+
+void TheBoss::SetTurretFireSound(Sound sound)
+{
+	TurretFireSound = sound;
+
+	for (const auto& turret : Turrets)
+	{
+		turret->SetFireSound(TurretFireSound);
+	}
+}
+
+void TheBoss::SetTurretExplodeSound(Sound sound)
+{
+	TurretExplodeSound = sound;
+
+	for (const auto& turret : Turrets)
+	{
+		turret->SetExplodeSound(TurretExplodeSound);
+	}
+}
+
+void TheBoss::SetSpineFireSound(Sound sound)
+{
+	SpineFireSound = sound;
+}
+
 bool TheBoss::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -93,7 +138,7 @@ bool TheBoss::BeginRun()
 	Shield->SetParent(*this);
 	FireShotAtPlayerArea->SetParent(*this);
 	FireShotAtPlayerArea->X(370.0f);
-	FireShotAtPlayerArea->Radius = 250.0f;
+	FireShotAtPlayerArea->Radius = 280.0f;
 	FireShotAtPlayerArea->EntityOnly = true;
 
 	for (int i = 0; i < 5; i++)
@@ -245,9 +290,19 @@ void TheBoss::CheckCollisions()
 			}
 		}
 
-		for (auto &turret : Turrets)
+		for (const auto& turret : Turrets)
 		{
 			turret->CheckCollisions();
+		}
+
+		for (const auto& shot : Shots)
+		{
+			if (shot->CirclesIntersect(*Player))
+			{
+				shot->Destroy();
+				Player->Hit(shot->Position, shot->Velocity);
+				break;
+			}
 		}
 	}
 
@@ -260,58 +315,68 @@ void TheBoss::CheckCollisions()
 			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 			{
 				shot->Destroy();
-				ShieldPower -= 10;
-
-				Shield->Alpha = ShieldPower * 2.55f;
-
-				if (ShieldPower <= 0)
-				{
-					Shield->Enabled = false;
-				}
+				ShieldHit(2.0f);
 			}
 		}
 		else
 		{
-			bool turretsAllDead = true;
-
-			for (const auto& turret : Turrets)
-			{
-				if (!turret->Enabled) continue;
-
-				if (shot->CirclesIntersect(turret->GetWorldPosition(), turret->Radius))
-				{
-					shot->Destroy();
-					turret->Hit();
-
-				}
-
-				turretsAllDead = false;
-			}
-
-			if (turretsAllDead)
-			{
-				if (shot->CirclesIntersect(*this))
-				{
-					shot->Destroy();
-
-					HitPoints -= 10;
-
-					unsigned char color = (unsigned char)(HitPoints * 2.55);
-
-					ModelColor = { 255, color, color, 255 };
-
-					if (HitPoints <= 0)
-					{
-						Player->ScoreUpdate(5550);
-						Hit();
-					}
-				}
-			}
+			ShieldDown(shot, 2.0f);
 		}
-
 	}
 
+	for (const auto& shot : Player->BigShots)
+	{
+		if (!shot->Enabled) continue;
 
+		if (Shield->Enabled)
+		{
+			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+			{
+				shot->Destroy();
+				ShieldHit(10.0f);
+			}
+		}
+		else
+		{
+			ShieldDown(shot, 10.0f);
+		}
+	}
+
+	for (const auto& shot : Player->DoubleShots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (Shield->Enabled)
+		{
+			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+			{
+				shot->Destroy();
+				ShieldHit(5.0f);
+			}
+		}
+		else
+		{
+			ShieldDown(shot, 5.0f);
+		}
+	}
+
+	for (const auto& shot : Player->PlasmaShots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (Shield->Enabled)
+		{
+			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+			{
+				shot->Destroy();
+				ShieldHit(50.0f);
+			}
+		}
+		else
+		{
+			ShieldDown(shot, 50.0f);
+		}
+	}
 }
 
 void TheBoss::FireShots()
@@ -321,7 +386,7 @@ void TheBoss::FireShots()
 
 	if (!Player->Enabled) return;
 
-	//if (!Player->GameOver) PlaySound(FireSound);
+	if (!Player->GameOver) PlaySound(SpineFireSound);
 
 	bool spawnNewShotL = true;
 	size_t shotNumberL = Shots.size();
@@ -377,4 +442,59 @@ void TheBoss::FireShots()
 		RightSpineMount->GetWorldPosition());
 	Shots.at(shotNumberR)->Spawn(offset,
 		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
+}
+
+void TheBoss::ShieldHit(float damage)
+{
+	ShieldPower -= damage;
+	PlaySound(ShieldHitSound);
+	Shield->Alpha = ShieldPower * 2.55f;
+
+	if (ShieldPower <= 0)
+	{
+		Shield->Enabled = false;
+		PlaySound(ShieldDownSound);
+	}
+}
+
+void TheBoss::ShieldDown(Entity* entity, float damage)
+{
+	bool turretsAllDead = true;
+
+	for (const auto& turret : Turrets)
+	{
+		if (!turret->Enabled) continue;
+
+		if (entity->CirclesIntersect(turret->GetWorldPosition(), turret->Radius))
+		{
+			entity->Destroy();
+			turret->Hit();
+
+		}
+
+		turretsAllDead = false;
+	}
+
+	if (turretsAllDead)
+	{
+		if (entity->CirclesIntersect(*this))
+		{
+			entity->Destroy();
+
+			PlaySound(HitSound);
+
+			HitPoints -= damage;
+
+			unsigned char color = (unsigned char)(HitPoints * 2.55);
+
+			ModelColor = { 255, color, color, 255 };
+
+			if (HitPoints <= 0)
+			{
+				PlaySound(ExplodeSound);
+				Player->ScoreUpdate(5550);
+				Hit();
+			}
+		}
+	}
 }

@@ -58,6 +58,13 @@ public:
 	void SetEnemyTwoExplodeSound(Sound sound);
 	void SetEnemyTwoOnSound(Sound sound);
 	void SetEnemyTwoMineExplodeSound(Sound sound);
+	void SetBossExplodeSound(Sound sound);
+	void SetBossShieldHitSound(Sound sound);
+	void SetBossShieldDownSound(Sound sound);
+	void SetBossHitSound(Sound sound);
+	void SetBossTurretFireSound(Sound sound);
+	void SetBossTurretExplodeSound(Sound sound);
+	void SetBossSpineFireSound(Sound sound);
 
 	void SetParticleManager(ParticleManager* particles);
 
