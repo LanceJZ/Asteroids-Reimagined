@@ -785,6 +785,8 @@ void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 		Vector3Add(Vector3Multiply(velocity, {0.90f}),
 			GetVelocityFromAngleZ(GetAngleFromVectorsZ(location, Position),	196.666f)));
 
+	if (PoweredUp) return;
+
 	if (ShieldPower > 20)
 	{
 		ShieldPower -= 20;

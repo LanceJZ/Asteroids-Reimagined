@@ -372,17 +372,17 @@ bool TheUFO::CheckReachedSide()
 
 bool TheUFO::CheckCollisions()
 {
-	if (Player->Enabled)
+	if (Player->Enabled && CirclesIntersect(*Player))
 	{
-		if (CirclesIntersect(*Player))
+		if (!Player->Shield->Enabled)
 		{
-			if (!Player->Shield->Enabled) Hit();
-
-			Player->Hit(Position, Velocity);
+			Hit();
 			SendScoreToPlayer();
 
 			return true;
 		}
+
+		Player->Hit(Position, Velocity);
 	}
 
 	for (const auto& shot : Player->Shots)

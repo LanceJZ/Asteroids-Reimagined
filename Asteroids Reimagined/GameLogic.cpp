@@ -275,6 +275,8 @@ void GameLogic::NewGame()
 
 bool GameLogic::CheckPlayerClear()
 {
+
+
 	for (auto& rock : Enemies->Rocks)
 	{
 		if (rock->Enabled && rock->CirclesIntersect(*PlayerClear))

@@ -315,12 +315,12 @@ void TheBoss::CheckCollisions()
 			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 			{
 				shot->Destroy();
-				ShieldHit(2.0f);
+				ShieldHit(2);
 			}
 		}
 		else
 		{
-			ShieldDown(shot, 2.0f);
+			ShieldDown(shot, 2);
 		}
 	}
 
@@ -333,12 +333,12 @@ void TheBoss::CheckCollisions()
 			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 			{
 				shot->Destroy();
-				ShieldHit(10.0f);
+				ShieldHit(10);
 			}
 		}
 		else
 		{
-			ShieldDown(shot, 10.0f);
+			ShieldDown(shot, 10);
 		}
 	}
 
@@ -351,12 +351,12 @@ void TheBoss::CheckCollisions()
 			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 			{
 				shot->Destroy();
-				ShieldHit(5.0f);
+				ShieldHit(5);
 			}
 		}
 		else
 		{
-			ShieldDown(shot, 5.0f);
+			ShieldDown(shot, 5);
 		}
 	}
 
@@ -369,12 +369,12 @@ void TheBoss::CheckCollisions()
 			if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 			{
 				shot->Destroy();
-				ShieldHit(50.0f);
+				ShieldHit(50);
 			}
 		}
 		else
 		{
-			ShieldDown(shot, 50.0f);
+			ShieldDown(shot, 50);
 		}
 	}
 }
@@ -444,7 +444,7 @@ void TheBoss::FireShots()
 		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
 }
 
-void TheBoss::ShieldHit(float damage)
+void TheBoss::ShieldHit(int damage)
 {
 	ShieldPower -= damage;
 	PlaySound(ShieldHitSound);
@@ -457,7 +457,7 @@ void TheBoss::ShieldHit(float damage)
 	}
 }
 
-void TheBoss::ShieldDown(Entity* entity, float damage)
+void TheBoss::ShieldDown(Entity* entity, int damage)
 {
 	bool turretsAllDead = true;
 

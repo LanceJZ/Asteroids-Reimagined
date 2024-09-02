@@ -85,6 +85,6 @@ private:
 	void ReachedWaypoint();
 	void CheckCollisions();
 	void FireShots();
-	void ShieldHit(float damage);
-	void ShieldDown(Entity* entity, float damage);
+	void ShieldHit(int damage);
+	void ShieldDown(Entity* entity, int damage);
 };
