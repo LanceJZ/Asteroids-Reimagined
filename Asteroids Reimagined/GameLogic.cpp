@@ -79,7 +79,7 @@ void GameLogic::Update()
 		}
 	}
 
-	if (!Player->Enabled && State == InPlay)
+	if (State == InPlay)
 	{
 		if (Player->GetBeenHit())
 		{
@@ -87,13 +87,15 @@ void GameLogic::Update()
 			Player->Destroy();
 		}
 
-		if (Managers.EM.TimerElapsed(ExplodeTimerID))
+		if (!Player->Enabled && !Player->GetBeenHit() &&
+			Managers.EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
 
-			if (CheckPlayerClear())
+			if (CheckPlayerClear() || IsKeyPressed(KEY_ENTER))
 			{
 				Player->Spawn();
+				PlayerClear->Enabled = false;
 				PlayerShipDisplay();
 			}
 		}
@@ -154,6 +156,10 @@ void GameLogic::GameInput()
 	}
 	else if (State == InPlay)
 	{
+		if (!Player->Enabled)
+		{
+		}
+
 		if (IsKeyPressed(KEY_M) || (IsGamepadAvailable(0) &&
 			IsGamepadButtonPressed(0, 8)))
 		{
@@ -275,8 +281,6 @@ void GameLogic::NewGame()
 
 bool GameLogic::CheckPlayerClear()
 {
-
-
 	for (auto& rock : Enemies->Rocks)
 	{
 		if (rock->Enabled && rock->CirclesIntersect(*PlayerClear))

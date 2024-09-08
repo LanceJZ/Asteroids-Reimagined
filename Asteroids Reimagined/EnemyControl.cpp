@@ -280,7 +280,6 @@ bool EnemyControl::BeginRun()
 	}
 
 	EnemyOne->SetUFO(UFOs);
-	EnemyTwo->SetUFO(UFOs);
 
 	Reset();
 

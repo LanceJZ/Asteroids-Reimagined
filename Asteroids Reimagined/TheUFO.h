@@ -1,11 +1,12 @@
 #pragma once
 #include "Globals.h"
+#include "Enemy.h"
 #include "ThePlayer.h"
 #include "Shot.h"
 #include "TheRock.h"
 #include "ParticleManager.h"
 
-class TheUFO : public LineModel
+class TheUFO : public Enemy
 {
 public:
 	enum Size
@@ -63,8 +64,6 @@ private:
 
 	LineModelPoints ShotModel;
 
-	ThePlayer* Player = {};
-	ParticleManager* Particles = {};
 	std::vector<TheRock*> *Rocks;
 
 	void FireShot();

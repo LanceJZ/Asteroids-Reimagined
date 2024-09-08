@@ -14,14 +14,6 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void Enemy::SetUFO(TheUFO* ufos[2])
-{
-	for (int i = 0; i < 2; i++)
-	{
-		UFOs[i] = ufos[i];
-	}
-}
-
 void Enemy::SetShotModel(LineModelPoints model)
 {
 	ShotModel = model;
@@ -82,9 +74,6 @@ void Enemy::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-
-
-	//Player->ScoreUpdate(Points);
 	Destroy();
 
 	Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, {0.25f}),
@@ -172,7 +161,6 @@ bool Enemy::CheckCollisions()
 		{
 			shot->Destroy();
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -185,7 +173,6 @@ bool Enemy::CheckCollisions()
 		{
 			shot->Destroy();
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -198,7 +185,6 @@ bool Enemy::CheckCollisions()
 		{
 			bigShot->Destroy();
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -211,7 +197,6 @@ bool Enemy::CheckCollisions()
 		{
 			mine->Hit();
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -223,7 +208,6 @@ bool Enemy::CheckCollisions()
 		if (plasma->Enabled && CirclesIntersect(*plasma))
 		{
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -232,16 +216,15 @@ bool Enemy::CheckCollisions()
 
 	if (Player->Enabled && Player->CirclesIntersect(*this))
 	{
-		Player->Hit(Position, Velocity);
-
 		if (!Player->Shield->Enabled)
 		{
 			Hit();
-			Destroy();
 			Player->ScoreUpdate(Points);
 
 			return true;
 		}
+
+		Player->Hit(Position, Velocity);
 	}
 
 	return false;

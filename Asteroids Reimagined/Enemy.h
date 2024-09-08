@@ -1,7 +1,6 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
-#include "TheUFO.h"
 #include "Shot.h"
 #include "ParticleManager.h"
 
@@ -14,7 +13,6 @@ public:
 	std::vector<Shot*> Shots;
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(TheUFO* ufos[2]);
 	void SetShotModel(LineModelPoints model);
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);
@@ -41,7 +39,6 @@ protected:
 	Sound ExplodeSound = {};
 
 	ThePlayer* Player = nullptr;
-	TheUFO* UFOs[2] = { nullptr };
 	ParticleManager* Particles = nullptr;
 
 	void Shoot();

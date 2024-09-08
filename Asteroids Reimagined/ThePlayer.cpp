@@ -235,8 +235,8 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
 		Acceleration = { 0 };
 		Velocity = { 0 };
+		Position = { 0 };
 		Lives--;
-		Enabled = false;
 		Turret->Enabled = false;
 		Flame->Enabled = false;
 		Crosshair->Enabled = false;
@@ -247,7 +247,6 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 			GameOver = true;
 		}
 	}
-
 }
 
 void ThePlayer::ScoreUpdate(int addToScore)
@@ -275,7 +274,8 @@ void ThePlayer::SetHighScore(int highScore)
 
 void ThePlayer::Spawn()
 {
-	Position = { 0, 0, 0 };
+	Entity::Spawn({ 0, 0, 0 });
+
 	Velocity = { 0, 0, 0 };
 	Enabled = true;
 	Flame->Enabled = false;

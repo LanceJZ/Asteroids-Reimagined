@@ -9,6 +9,14 @@ TheMissile::~TheMissile()
 {
 }
 
+void TheMissile::SetUFO(TheUFO* ufos[2])
+{
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = ufos[i];
+	}
+}
+
 bool TheMissile::Initialize(Utilities* utilities)
 {
 	Enemy::Initialize(utilities);

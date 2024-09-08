@@ -109,7 +109,7 @@ void TheUFO::Draw3D()
 	LineModel::Draw3D();
 }
 
-void TheUFO::CheckCollisions(TheRock* rock)
+void TheUFO::CheckCollisions(TheRock* rock) //Move to Enemy class.
 {
 	for (const auto& shot : Shots)
 	{
@@ -128,7 +128,7 @@ void TheUFO::CheckCollisions(TheRock* rock)
 	}
 }
 
-void TheUFO::CheckShotCollisions()
+void TheUFO::CheckShotCollisions() //Move to Enemy class.
 {
 	for (const auto& shot : Shots)
 	{
@@ -372,77 +372,79 @@ bool TheUFO::CheckReachedSide()
 
 bool TheUFO::CheckCollisions()
 {
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		if (!Player->Shield->Enabled)
-		{
-			Hit();
-			SendScoreToPlayer();
+	Enemy::CheckCollisions();
 
-			return true;
-		}
+	//if (Player->Enabled && CirclesIntersect(*Player))
+	//{
+	//	if (!Player->Shield->Enabled)
+	//	{
+	//		Hit();
+	//		SendScoreToPlayer();
 
-		Player->Hit(Position, Velocity);
-	}
+	//		return true;
+	//	}
 
-	for (const auto& shot : Player->Shots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			SendScoreToPlayer();
+	//	Player->Hit(Position, Velocity);
+	//}
 
-			return true;
-		}
-	}
+	//for (const auto& shot : Player->Shots)
+	//{
+	//	if (shot->Enabled && CirclesIntersect(*shot))
+	//	{
+	//		shot->Destroy();
+	//		Hit();
+	//		SendScoreToPlayer();
 
-	for (const auto& shot : Player->DoubleShots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			SendScoreToPlayer();
+	//		return true;
+	//	}
+	//}
 
-			return true;
-		}
-	}
+	//for (const auto& shot : Player->DoubleShots)
+	//{
+	//	if (shot->Enabled && CirclesIntersect(*shot))
+	//	{
+	//		shot->Destroy();
+	//		Hit();
+	//		SendScoreToPlayer();
 
-	for (const auto& bigShot : Player->BigShots)
-	{
-		if (bigShot->Enabled && CirclesIntersect(*bigShot))
-		{
-			bigShot->Destroy();
-			Hit();
-			SendScoreToPlayer();
+	//		return true;
+	//	}
+	//}
 
-			return true;
-		}
-	}
+	//for (const auto& bigShot : Player->BigShots)
+	//{
+	//	if (bigShot->Enabled && CirclesIntersect(*bigShot))
+	//	{
+	//		bigShot->Destroy();
+	//		Hit();
+	//		SendScoreToPlayer();
 
-	for (const auto& mine : Player->Mines)
-	{
-		if (mine->Enabled && CirclesIntersect(*mine))
-		{
-			mine->Hit();
-			Hit();
-			SendScoreToPlayer();
+	//		return true;
+	//	}
+	//}
 
-			return true;
-		}
-	}
+	//for (const auto& mine : Player->Mines)
+	//{
+	//	if (mine->Enabled && CirclesIntersect(*mine))
+	//	{
+	//		mine->Hit();
+	//		Hit();
+	//		SendScoreToPlayer();
 
-	for (const auto& plasma : Player->PlasmaShots)
-	{
-		if (plasma->Enabled && CirclesIntersect(*plasma))
-		{
-			Hit();
-			SendScoreToPlayer();
+	//		return true;
+	//	}
+	//}
 
-			return true;
-		}
-	}
+	//for (const auto& plasma : Player->PlasmaShots)
+	//{
+	//	if (plasma->Enabled && CirclesIntersect(*plasma))
+	//	{
+	//		Hit();
+	//		SendScoreToPlayer();
+
+	//		return true;
+	//	}
+	//}
 
 	return false;
 }
