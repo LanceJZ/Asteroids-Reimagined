@@ -3,6 +3,8 @@ Power ups, blue one boost your shields, red ones give your gun cool boost, they 
 
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E for secondary weapon (Red, Yellow, Orange and Violet.)
 
+Enter key is now used for Forced Spawn when player is waiting for rocks to clear spawn area.
+
 Game also has controller support.
 
 To try it out, unzip this to your desktop or documents, or somewhere without write protection for saving the high score. Download the file Asteroids Reimagined.zip or the Update zip file if you already did the previous one.
