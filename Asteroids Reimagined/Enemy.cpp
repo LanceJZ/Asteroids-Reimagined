@@ -214,17 +214,17 @@ bool Enemy::CheckCollisions()
 		}
 	}
 
-	if (Player->Enabled && Player->CirclesIntersect(*this))
+	if (CirclesIntersect(*Player))
 	{
 		if (!Player->Shield->Enabled)
 		{
 			Hit();
 			Player->ScoreUpdate(Points);
-
-			return true;
 		}
 
 		Player->Hit(Position, Velocity);
+
+		return true;
 	}
 
 	return false;

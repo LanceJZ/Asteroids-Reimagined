@@ -339,7 +339,7 @@ void EnemyControl::Update()
 
 	for (const auto& ufo : UFOs)
 	{
-		ufo->CheckShotCollisions();
+		ufo->CheckShotPlayerCollisions();
 	}
 
 	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))

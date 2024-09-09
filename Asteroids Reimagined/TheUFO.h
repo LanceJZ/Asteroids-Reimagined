@@ -46,7 +46,7 @@ public:
 	void Draw3D();
 
 	void CheckCollisions(TheRock* rock);
-	void CheckShotCollisions();
+	void CheckShotPlayerCollisions();
 
 	void Spawn(int SpawnCount);
 	void Destroy();
