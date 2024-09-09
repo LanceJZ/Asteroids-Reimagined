@@ -2,8 +2,9 @@
 #include "Globals.h"
 #include "ThePlayer.h"
 #include "ParticleManager.h"
+#include "Enemy.h"
 
-class TheMine : public LineModel
+class TheMine : public Enemy
 {
 public:
 	TheMine();
@@ -31,8 +32,5 @@ private:
 
 	Sound ExplodeSound = {};
 
-	ParticleManager* Particles = nullptr;
-	ThePlayer* Player = nullptr;
-
-	void CheckCollisions();
+	bool CheckCollisions();
 };

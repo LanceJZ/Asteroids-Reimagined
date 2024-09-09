@@ -87,7 +87,7 @@ void TheBossTurret::CheckCollisions()
 {
 	for (const auto& shot : Shots)
 	{
-		if (shot->Enabled && shot->CirclesIntersect(*Player) && Player->Enabled)
+		if (shot->Enabled && shot->CirclesIntersect(*Player))
 		{
 			shot->Destroy();
 			Player->Hit(shot->Position, shot->Velocity);

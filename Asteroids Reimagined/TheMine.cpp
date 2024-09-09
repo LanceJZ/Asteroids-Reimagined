@@ -76,22 +76,9 @@ void TheMine::Destroy()
 
 }
 
-void TheMine::CheckCollisions()
+bool TheMine::CheckCollisions()
 {
-	for (auto& playerShot : Player->Shots)
-	{
-		if (playerShot->Enabled && playerShot->CirclesIntersect(*this))
-		{
-			playerShot->Destroy();
-			Hit();
-			break;
-		}
-	}
+	Enemy::CheckCollisions();
 
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		Player->Hit(Position, Velocity);
-
-		if (!Player->Shield->Enabled) Destroy();
-	}
+	return false;
 }
