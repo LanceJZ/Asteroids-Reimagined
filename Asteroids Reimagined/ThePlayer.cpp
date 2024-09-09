@@ -180,7 +180,7 @@ void ThePlayer::Input()
 {
 	LineModel::Input();
 
-	if (GameOver || Paused) return;
+	if (GameOver || Paused || !Enabled) return;
 
 
 	if (IsGamepadAvailable(0) && Enabled)
@@ -236,6 +236,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Acceleration = { 0 };
 		Velocity = { 0 };
 		Position = { 0 };
+		RotateStop();
 		Lives--;
 		Turret->Enabled = false;
 		Flame->Enabled = false;
@@ -277,6 +278,7 @@ void ThePlayer::Spawn()
 	Entity::Spawn({ 0, 0, 0 });
 
 	Velocity = { 0, 0, 0 };
+
 	Enabled = true;
 	Flame->Enabled = false;
 	Turret->Enabled = true;
@@ -679,6 +681,8 @@ void ThePlayer::RotateStop()
 
 void ThePlayer::ThrustOn(float amount)
 {
+	if (!Enabled || GetBeenHit()) return;
+
 	SetAccelerationToMaxAtRotation((amount * 50.25f), 350.0f);
 	Flame->Enabled = true;
 

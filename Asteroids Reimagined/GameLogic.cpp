@@ -55,7 +55,7 @@ bool GameLogic::BeginRun()
 	Common::BeginRun();
 
 	PlayerModel = Player->GetLineModel();
-
+	PlayerClear->Enabled = false;
 	GameEnded = true;
 
 	return true;
@@ -65,11 +65,6 @@ void GameLogic::Update()
 {
 	Common::Update();
 
-	if (Player->GameOver)
-	{
-		State = MainMenu;
-	}
-
 	if (State == MainMenu)
 	{
 		if (!GameEnded)
@@ -77,6 +72,16 @@ void GameLogic::Update()
 			HighScores->TheGameIsOver(Player->GetScore());
 			GameEnded = true;
 		}
+
+		return;
+	}
+
+	if (Player->GameOver)
+	{
+		State = MainMenu;
+		PlayerClear->Enabled = false;
+		Player->Destroy();
+		return;
 	}
 
 	if (State == InPlay)
