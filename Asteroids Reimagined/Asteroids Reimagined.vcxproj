@@ -252,6 +252,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TheBoss.h">
       <SubType>
       </SubType>
@@ -321,6 +322,9 @@
     <ProjectReference Include="..\raylib\projects\VS2022\raylib\raylib.vcxproj">
       <Project>{e89d61ac-55de-4482-afd4-df7242ebc859}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Asteroids Deluxe.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
