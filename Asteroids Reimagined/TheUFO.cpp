@@ -233,7 +233,6 @@ void TheUFO::FireShot()
 		if (GetRandomValue(1, 10) < 5 || !Player->Enabled)
 		{
 			angle = AimedShotAtRock();
-			angle = AimedShot();
 		}
 		else
 		{
