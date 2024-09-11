@@ -208,11 +208,7 @@ void ThePlayer::Update(float deltaTime)
 	CrosshairUpdate();
 	ShieldPowerDrain(deltaTime);
 
-	if (PoweredUp)
-	{
-		WeHaveThePower();
-		ShieldOn();
-	}
+	if (PoweredUp) WeHaveThePower();
 }
 
 void ThePlayer::Draw3D()
@@ -343,6 +339,7 @@ void ThePlayer::FullPowerUp()
 	PoweredUp = true;
 	PoweredUpRundown = false;
 	TurretOverHeat = false;
+	Shield->Alpha = 255.0f;
 }
 
 void ThePlayer::BigShotPowerUp()
@@ -725,6 +722,8 @@ void ThePlayer::ShieldOn()
 
 void ThePlayer::ShieldOff()
 {
+	if (PoweredUp) return;
+
 	StopSound(ShieldOnSound);
 	Shield->Enabled = false;
 }
@@ -746,7 +745,10 @@ void ThePlayer::ShieldPowerDrain(float deltaTime)
 void ThePlayer::WeHaveThePower()
 {
 	if (ShieldPower < 100.0f) ShieldPower = 100.0f;
+
 	if (TurretHeat > 0) TurretHeat = 0;
+
+	ShieldOn();
 
 	if (Managers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
 	{
@@ -945,7 +947,7 @@ void ThePlayer::Keyboard()
 		ThrustOff();
 	}
 
-	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S) || IsKeyDown(KEY_SPACE)
+	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_SPACE)
 		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
 		ShieldOn();

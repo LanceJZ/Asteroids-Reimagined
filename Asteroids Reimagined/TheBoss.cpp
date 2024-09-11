@@ -138,7 +138,7 @@ bool TheBoss::BeginRun()
 	Shield->SetParent(*this);
 	FireShotAtPlayerArea->SetParent(*this);
 	FireShotAtPlayerArea->X(370.0f);
-	FireShotAtPlayerArea->Radius = 280.0f;
+	FireShotAtPlayerArea->Radius = 300.0f;
 	FireShotAtPlayerArea->EntityOnly = true;
 
 	for (int i = 0; i < 5; i++)

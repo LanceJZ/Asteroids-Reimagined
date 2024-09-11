@@ -304,6 +304,8 @@ void EnemyControl::Update()
 		return;
 	}
 
+	CheckRockCollisions();
+
 	if (NoMoreRocks)
 	{
 		Wave++;
@@ -334,7 +336,6 @@ void EnemyControl::Update()
 		}
 	}
 
-	CheckRockCollisions();
 	CheckHomingMineEnemyChase();
 
 	for (const auto& ufo : UFOs)
@@ -648,6 +649,8 @@ void EnemyControl::DoBossStuff()
 		Boss->Reset();
 		BossWave = false;
 	}
+
+	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
 }
 
 void EnemyControl::SpawnBoss()

@@ -286,7 +286,7 @@ void GameLogic::NewGame()
 
 bool GameLogic::CheckPlayerClear()
 {
-	for (auto& rock : Enemies->Rocks)
+	for (const auto& rock : Enemies->Rocks)
 	{
 		if (rock->Enabled && rock->CirclesIntersect(*PlayerClear))
 		{
@@ -294,14 +294,14 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	for (auto& ufo : Enemies->UFOs)
+	for (const auto& ufo : Enemies->UFOs)
 	{
 		if (ufo->Enabled && ufo->CirclesIntersect(*PlayerClear))
 		{
 			return false;
 		}
 
-		for (auto& Shot : ufo->Shots)
+		for (const auto& Shot : ufo->Shots)
 		{
 			if (Shot->Enabled && Shot->CirclesIntersect(*PlayerClear))
 			{
@@ -346,7 +346,7 @@ bool GameLogic::CheckPlayerClear()
 		return false;
 	}
 
-	for (auto& mine : Enemies->EnemyTwo->Mines)
+	for (const auto& mine : Enemies->EnemyTwo->Mines)
 	{
 		if (mine->CirclesIntersect(*PlayerClear))
 		{
