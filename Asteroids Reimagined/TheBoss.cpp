@@ -237,7 +237,7 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 	Shield->ShowCollision = true;
 	ShieldPower = 100;
 	HitPoints = 100;
-	ModelColor = { 255 };
+	ModelColor = { 255, 255, 255, 255 };
 	Shield->Alpha = 255;
 
 	for (const auto& turret : Turrets)

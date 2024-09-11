@@ -382,7 +382,7 @@ void EnemyControl::NewGame()
 
 void EnemyControl::NextWave()
 {
-	Wave++;
+	Wave = 4;
 
 }
 
@@ -605,6 +605,18 @@ void EnemyControl::MakeReadyForBossWave()
 	for (const auto& mine : EnemyTwo->Mines)
 	{
 		if (mine->Enabled) allClear = false;
+	}
+
+	if (DeathStar->Enabled) allClear = false;
+
+	for (auto& fighterPair : DeathStar->FighterPairs)
+	{
+		if (fighterPair->Enabled) allClear = false;
+
+		for (const auto& fighter : fighterPair->Fighters)
+		{
+			if (fighter->Enabled) allClear = false;
+		}
 	}
 
 	if (allClear)

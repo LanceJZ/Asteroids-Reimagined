@@ -10,11 +10,6 @@ public:
 	TheMine();
 	virtual ~TheMine();
 
-	void SetPlayer(ThePlayer* player);
-	void SetExplodeSound(Sound sound);
-
-	void SetParticleManager(ParticleManager* particles);
-
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -29,8 +24,6 @@ protected:
 
 private:
 	size_t LifeTimerID = 0;
-
-	Sound ExplodeSound = {};
 
 	bool CheckCollisions();
 };

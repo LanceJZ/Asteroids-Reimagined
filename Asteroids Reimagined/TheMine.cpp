@@ -9,23 +9,6 @@ TheMine::~TheMine()
 {
 }
 
-void TheMine::SetPlayer(ThePlayer* player)
-{
-	Player = player;
-}
-
-void TheMine::SetExplodeSound(Sound sound)
-{
-	ExplodeSound = sound;
-
-	SetSoundVolume(ExplodeSound, 1.25f);
-}
-
-void TheMine::SetParticleManager(ParticleManager* particles)
-{
-	Particles = particles;
-}
-
 bool TheMine::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
