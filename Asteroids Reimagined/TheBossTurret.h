@@ -9,6 +9,8 @@ public:
 	TheBossTurret();
 	virtual ~TheBossTurret();
 
+	std::vector<Shot*> Shots;
+
 	void SetPlayer(ThePlayer* player);
 	void SetShotModel(LineModelPoints model);
 	void SetFireSound(Sound sound);
@@ -36,8 +38,6 @@ private:
 
 	LineModelPoints ShotModel = {};
 	ThePlayer* Player = nullptr;
-
-	std::vector<Shot*> Shots;
 
 	void Fire();
 };

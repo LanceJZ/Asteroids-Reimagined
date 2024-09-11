@@ -14,6 +14,11 @@ public:
 
 	Entity* FireShotAtPlayerArea = nullptr;
 
+	TheBossTurret* Turrets[5] = { nullptr };
+	std::vector<TheMissile*> Missiles;
+	std::vector<TheMine*> Mines;
+	std::vector<Shot*> Shots;
+
 	void SetPlayer(ThePlayer* player);
 
 	void SetShieldModel(LineModelPoints model);
@@ -75,11 +80,6 @@ private:
 	ThePlayer* Player = nullptr;
 
 	std::vector<Vector3> Path;
-	std::vector<TheMissile*> Missiles;
-	std::vector<TheMine*> Mines;
-	std::vector<Shot*> Shots;
-
-	TheBossTurret* Turrets[5] = { nullptr };
 
 	void HeadToNextWaypoint();
 	void ReachedWaypoint();

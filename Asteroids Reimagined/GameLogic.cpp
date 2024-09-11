@@ -104,16 +104,16 @@ void GameLogic::Update()
 				PlayerShipDisplay();
 			}
 		}
-	}
-	else
-	{
-		PlayerClear->Enabled = false;
 
 		if (Player->NewLife)
 		{
 			PlayerShipDisplay();
 			Player->NewLife = false;
 		}
+	}
+	else
+	{
+		PlayerClear->Enabled = false;
 	}
 
 	if (Player->Enabled)
@@ -230,10 +230,35 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 
 void GameLogic::PlayerShipDisplay()
 {
-	Vector2 location = { (-GetScreenWidth() / 2.25f) + Player->Radius,
+	Vector2 location = { (-GetScreenWidth() / 2.05f) + Player->Radius,
 		(-GetScreenHeight() / 2) + Player->Radius * 2.0f + 30.0f };
 
 	if (Player->Lives > PlayerShipModels.size())
+	{
+		AddPlayerShipModels(Player->Lives - PlayerShipModels.size());
+	}
+
+	if (Player->Lives > PlayerShipModels.size())
+	{
+		return;
+	}
+
+	for (const auto& model : PlayerShipModels)
+	{
+		model->Enabled = false;
+		model->Position = { location.x, location.y, 0.0f };
+		location.x += Player->Radius * 2.0f;
+	}
+
+	for (int i = 0; i < Player->Lives; i++)
+	{
+		PlayerShipModels.at(i)->Enabled = true;
+	}
+}
+
+void GameLogic::AddPlayerShipModels(float number)
+{
+	for (int i = 0; i < number; i++)
 	{
 		PlayerShipModels.push_back(DBG_NEW LineModel());
 		Managers.EM.AddLineModel(PlayerShipModels.back());
@@ -242,23 +267,6 @@ void GameLogic::PlayerShipDisplay()
 		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
 		PlayerShipModels.back()->Scale = 0.8f;
 		PlayerShipModels.back()->Radius = 0.0f;
-	}
-
-	for (int i = 0; i < PlayerShipModels.size(); i++)
-	{
-		PlayerShipModels[i]->Enabled = false;
-		PlayerShipModels[i]->Position = { location.x, location.y, 0.0f };
-		location.x += Player->Radius * 2.0f;
-	}
-
-	if (Player->Lives > PlayerShipModels.size())
-	{
-		return;
-	}
-
-	for (int i = 0; i < Player->Lives; i++)
-	{
-		PlayerShipModels.at(i)->Enabled = true;
 	}
 }
 
@@ -273,10 +281,7 @@ void GameLogic::NewGame()
 
 	Player->SetHighScore(HighScores->GetHighScore());
 
-	for (int i = 0; i < Player->Lives; i++)
-	{
-		PlayerShipDisplay();
-	}
+	PlayerShipDisplay();
 
 	for (const auto& powerUp : PowerUps)
 	{
@@ -310,16 +315,34 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	if (Enemies->Boss->Enabled && Enemies->Boss->CirclesIntersect(*PlayerClear))
+	if (Enemies->Boss->Enabled)
 	{
-		return false;
-	}
+		if (Enemies->Boss->CirclesIntersect(*PlayerClear)) return false;
 
-	if (Enemies->Boss->Enabled &&
-		PlayerClear->CirclesIntersect(Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
-			Enemies->Boss->FireShotAtPlayerArea->Radius))
-	{
-		return false;
+		if (PlayerClear->CirclesIntersect(Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
+				Enemies->Boss->FireShotAtPlayerArea->Radius))
+		{
+			return false;
+		}
+
+		for (const auto& shot : Enemies->Boss->Shots)
+		{
+			if (shot->Enabled && shot->CirclesIntersect(*PlayerClear))
+			{
+				return false;
+			}
+		}
+
+		for (const auto& turret : Enemies->Boss->Turrets)
+		{
+			for (const auto& shot : turret->Shots)
+			{
+				if (shot->Enabled && shot->CirclesIntersect(*PlayerClear))
+				{
+					return false;
+				}
+			}
+		}
 	}
 
 	if (Enemies->EnemyOne->Enabled &&
@@ -338,7 +361,27 @@ bool GameLogic::CheckPlayerClear()
 		Enemies->DeathStar->CirclesIntersect(*PlayerClear))
 	{
 		return false;
+
 	}
+
+	for (const auto& fighterPair : Enemies->DeathStar->FighterPairs)
+	{
+		if (fighterPair->Enabled &&
+			fighterPair->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
+
+		for (const auto& fighter : fighterPair->Fighters)
+		{
+			if (fighter->Enabled &&
+				fighter->CirclesIntersect(*PlayerClear))
+			{
+				return false;
+			}
+		}
+	}
+
 
 	if (Enemies->EnemyOne->Missile->Enabled &&
 		Enemies->EnemyOne->Missile->CirclesIntersect(*PlayerClear))
