@@ -524,7 +524,9 @@ void EnemyControl::CheckRockCollisions()
 
 				int count = 0;
 
-				if (ufoHitRock) count = GetRandomValue(5, 10);
+				int max = (int)(Wave * 0.5f) + 5;
+
+				if (ufoHitRock) count = GetRandomValue(4, max);
 				else count = GetRandomValue(1, 4);
 
 				if (Rocks.at(i)->Size == TheRock::Large)

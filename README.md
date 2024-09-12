@@ -1,4 +1,4 @@
-Asteroids Reimagined Alpha 4.23.00 released.
+Asteroids Reimagined Beta 4.23.00 released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E for secondary weapon (Red, Yellow, Orange and Violet.)
@@ -9,10 +9,12 @@ Enter key is now used for Forced Spawn when player is waiting for rocks to clear
 
 Game also has controller support.
 
+Made with raylib and my Knightmare engine in C++.
+
 To try it out, unzip this to your desktop or documents, or somewhere without write protection for saving the high score. Download the file Asteroids Reimagined.zip or the Update zip file if you already did the previous one.
 
-Bug Fixes. Player ship spawns after Game Over. Flame visible after hit if player was thrusting. Hitting UFO gave no score. Fixed Boss after wave five has HP, and correct color/alpha. Fixed Secondary shots not hitting mines. Boss does not spawn if Death Star or fighters are still active. Death Star does not spawn right after Boss defeated. PowerUp shield sound fixed. Player spawning on top of Boss shots fixed. Player ship count vanishing issues fixed. UFO shooting at player before spawn. Shield may still be visible if player hit right after shield depleted fixed. (If shield was turned on after hit, as input is separate from update.)
+Bug Fixes. Player ship spawns after Game Over. Flame visible after hit if player was thrusting. Hitting UFO gave no score. Fixed Boss after wave five has HP, and correct color/alpha. Fixed Secondary shots not hitting mines. Boss does not spawn if Death Star or fighters are still active. Death Star does not spawn right after Boss defeated. PowerUp shield sound fixed. Player spawning on top of Boss shots fixed. Player ship count vanishing issues fixed. UFO shooting at player before spawn. Shield may still be visible if player hit right after shield depleted fixed. (If shield was turned on after hit, as input is separate from update.) UFO when shooting at rock, shot at center of screen, fixed.
 
 Changes:
-When UFO hits rock, 5-10 rocks spawn if not a small rock.
+When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
 Player shot (Turret and secondary) now effected by ship velocity.

@@ -232,10 +232,12 @@ void TheUFO::FireShot()
 		if (GetRandomValue(1, 10) < 5 || !Player->Enabled)
 		{
 			angle = AimedShotAtRock();
+			//printf("UFO shot at rock\n");
 		}
 		else
 		{
 			angle = AimedShot();
+			//printf("UFO shot at player\n");
 		}
 	}
 
@@ -296,9 +298,13 @@ float TheUFO::AimedShotAtDeathStar()
 float TheUFO::AimedShotAtRock()
 {
 	bool noRocks = true;
+
+	//Vector3 closestRockPosition = { GetRandomFloat(-WindowWidth, WindowWidth),
+	//	GetRandomFloat(-WindowHeight, WindowHeight), 0 };
+
 	Vector3 closestRockPosition = { 0, 0, 0 };
 	Vector3 closestRockVelocity = { 0, 0, 0 };
-	float shortestDistance = 0.0f;
+	float shortestDistance = 1000.0f;
 
 	for (const auto &rock : *Rocks)
 	{
