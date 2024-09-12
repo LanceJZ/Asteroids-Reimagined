@@ -2,7 +2,7 @@
 
 EnemyControl::EnemyControl()
 {
-	UFOSpawnTimerID = Managers.EM.AddTimer(10.0f);
+	UFOSpawnTimerID = Managers.EM.AddTimer(20.0f);
 	DeathStarSpawnTimerID = Managers.EM.AddTimer(5.0f);
 	EnemyOneSpawnTimerID = Managers.EM.AddTimer(15.0f);
 	EnemyTwoSpawnTimerID = Managers.EM.AddTimer(12.0f);
@@ -427,7 +427,10 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 void EnemyControl::SpawnUFO()
 {
-	Managers.EM.ResetTimer(UFOSpawnTimerID);
+	float adjustedTime = 20 - (Wave * 0.15f);
+	float ufoTime = GetRandomFloat(adjustedTime / 2.0f, adjustedTime);
+
+	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoTime);
 
 	if (!Player->GameOver && !Player->Enabled) return;
 
@@ -487,6 +490,7 @@ void EnemyControl::CheckDeathStarStatus()
 
 void EnemyControl::CheckRockCollisions()
 {
+	bool ufoHitRock = false;
 	NoMoreRocks = true;
 	RockCount = 0;
 
@@ -497,7 +501,8 @@ void EnemyControl::CheckRockCollisions()
 			NoMoreRocks = false;
 			RockCount++;
 
-			CheckUFOCollisions(Rocks.at(i));
+			if (CheckUFOCollisions(Rocks.at(i))) ufoHitRock = true;
+
 			CheckEnemyCollisions(Rocks.at(i));
 
 			if (Rocks.at(i)->GetBeenHit())
@@ -517,7 +522,10 @@ void EnemyControl::CheckRockCollisions()
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 
-				int count = GetRandomValue(1, 4);
+				int count = 0;
+
+				if (ufoHitRock) count = GetRandomValue(5, 10);
+				else count = GetRandomValue(1, 4);
 
 				if (Rocks.at(i)->Size == TheRock::Large)
 				{
@@ -539,13 +547,21 @@ void EnemyControl::CheckRockCollisions()
 	}
 }
 
-void EnemyControl::CheckUFOCollisions(TheRock* rock)
+bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 {
+	bool ufoHitRock = false;
+
 	for (const auto& ufo : UFOs)
 	{
-		ufo->CheckCollisions(rock);
+		if (ufo->CheckShotCollisions(rock)) ufoHitRock = true;
 
 		if (!ufo->Enabled) continue;
+
+		if (ufo->CirclesIntersect(*rock))
+		{
+			ufo->Hit();
+			rock->Hit();
+		}
 
 		if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
 		{
@@ -559,6 +575,8 @@ void EnemyControl::CheckUFOCollisions(TheRock* rock)
 			EnemyTwo->Hit();
 		}
 	}
+
+	return ufoHitRock;
 }
 
 void EnemyControl::CheckEnemyCollisions(TheRock* rock)

@@ -45,7 +45,7 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void CheckCollisions(TheRock* rock);
+	bool CheckShotCollisions(TheRock* rock);
 	void CheckShotPlayerCollisions();
 
 	void Spawn(int SpawnCount);

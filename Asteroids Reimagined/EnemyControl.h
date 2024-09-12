@@ -111,7 +111,7 @@ private:
 	void SpawnDeathStar();
 	void CheckDeathStarStatus();
 	void CheckRockCollisions();
-	void CheckUFOCollisions(TheRock* rock);
+	bool CheckUFOCollisions(TheRock* rock);
 	void CheckEnemyCollisions(TheRock* rock);
 	void MakeReadyForBossWave();
 	void DoBossStuff();

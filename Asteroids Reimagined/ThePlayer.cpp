@@ -180,8 +180,7 @@ void ThePlayer::Input()
 {
 	LineModel::Input();
 
-	if (GameOver || Paused || !Enabled) return;
-
+	if (GameOver || Paused || !Enabled || GetBeenHit()) return;
 
 	if (IsGamepadAvailable(0) && Enabled)
 	{
@@ -236,6 +235,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Lives--;
 		Turret->Enabled = false;
 		Flame->Enabled = false;
+		Shield->Enabled = false;
 		Crosshair->Enabled = false;
 		TurretHeatMeter->Enabled = false;
 
@@ -412,6 +412,8 @@ void ThePlayer::FireTurret()
 
 				Vector3 turretPosition = Turret->GetWorldPosition();
 				Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 375.0f);
+				velocity = Vector3Add(Vector3Multiply(Velocity,
+					{ 0.5f, 0.5f, 0.0f }), velocity);
 				shot->Spawn(turretPosition, velocity, 2.15f);
 				break;
 			}
@@ -508,6 +510,8 @@ void ThePlayer::FireBigShot()
 	}
 
 	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 375.0f);
+	velocity = Vector3Add(Vector3Multiply(Velocity,
+		{ 0.5f, 0.5f, 0.0f }), velocity);
 	BigShots.at(shotNumber)->Spawn(Position, velocity, 2.15f);
 }
 
@@ -542,6 +546,8 @@ void ThePlayer::FireDoubleShot()
 	Vector3 offset = GetVelocityFromAngleZ(RotationZ + PI / 2.0f, spread);
 	Vector3 position = Vector3Add(Position,	offset);
 	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 400.0f);
+	velocity = Vector3Add(Vector3Multiply(Velocity,
+		{ 0.5f, 0.5f, 0.0f }), velocity);
 	DoubleShots.at(shotNumber)->Spawn(position, velocity, 2.15f);
 
 	spawnNewDoubleShot = true;
@@ -633,6 +639,8 @@ void ThePlayer::FirePlasmaShot()
 	}
 
 	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 375.0f);
+	velocity = Vector3Add(Vector3Multiply(Velocity,
+		{ 0.5f, 0.5f, 0.0f }), velocity);
 	PlasmaShots.at(shotNumber)->Spawn(Position, velocity);
 }
 

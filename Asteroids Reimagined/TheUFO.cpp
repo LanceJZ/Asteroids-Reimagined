@@ -107,23 +107,22 @@ void TheUFO::Draw3D()
 	LineModel::Draw3D();
 }
 
-void TheUFO::CheckCollisions(TheRock* rock) //Move to Enemy class.
+bool TheUFO::CheckShotCollisions(TheRock* rock)
 {
+	bool shotHit = false;
+
 	for (const auto& shot : Shots)
 	{
 		if (shot->Enabled && shot->CirclesIntersect(*rock))
 		{
 			shot->Destroy();
 			rock->Hit();
+			shotHit = true;
 			continue;
 		}
 	}
 
-	if (Enabled && CirclesIntersect(*rock))
-	{
-		Hit();
-		rock->Hit();
-	}
+	return shotHit;
 }
 
 void TheUFO::CheckShotPlayerCollisions() //Move to Enemy class.
