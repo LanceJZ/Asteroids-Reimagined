@@ -6,6 +6,14 @@
 #include "TheScore.h"
 #include "ParticleManager.h"
 
+enum SecondaryWeaponType
+{
+	Big,
+	Double,
+	Plasma,
+	Mine
+};
+
 class ThePlayer : public LineModel
 {
 public:
@@ -16,15 +24,17 @@ public:
 	bool GameOver = false;
 	bool Paused = false;
 
-	int Lives { 0 };
+	int Lives = 0;
+
+	SecondaryWeaponType SecondaryWeapon = SecondaryWeaponType::Big;
+
+	LineModel* Shield = {};
 
 	std::vector<Shot*> Shots = {};
 	std::vector<Shot*> DoubleShots = {};
 	std::vector<Shot*> BigShots = {};
 	std::vector<TheHomingMine*> Mines = {};
 	std::vector<ThePlasmaShot*> PlasmaShots = {};
-
-	LineModel* Shield = {};
 
 	void SetCrosshairModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
@@ -96,6 +106,7 @@ private:
 	int MineCount = 0;
 	int PlasmaShotCount = 0;
 	int MissileCount = 0;
+	int MouseWheelScroll = 0;
 
 	float TurretDirection = 0.0f;
 	float ShieldPower = 0.0f;
@@ -153,6 +164,7 @@ private:
 
 	void ShieldHit(Vector3 location, Vector3 velocity);
 	void TurretHeatMeterUpdate();
+	void AmmoMeterUpdate();
 
 	void Gamepad();
 	void Keyboard();

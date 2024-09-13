@@ -2,7 +2,7 @@
 
 TheHomingMine::TheHomingMine()
 {
-	LifeTimerID = Managers.EM.AddTimer(30.0f);
+	LifeTimerID = Managers.EM.AddTimer(90.0f);
 }
 
 TheHomingMine::~TheHomingMine()

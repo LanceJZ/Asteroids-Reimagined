@@ -233,12 +233,12 @@ void GameLogic::PlayerShipDisplay()
 	Vector2 location = { (-GetScreenWidth() / 2.05f) + Player->Radius,
 		(-GetScreenHeight() / 2) + Player->Radius * 2.0f + 30.0f };
 
-	if (Player->Lives > PlayerShipModels.size())
+	if (Player->Lives > (int)PlayerShipModels.size())
 	{
-		AddPlayerShipModels(Player->Lives - PlayerShipModels.size());
+		AddPlayerShipModels(Player->Lives - (int)PlayerShipModels.size());
 	}
 
-	if (Player->Lives > PlayerShipModels.size())
+	if (Player->Lives > (int)PlayerShipModels.size())
 	{
 		return;
 	}

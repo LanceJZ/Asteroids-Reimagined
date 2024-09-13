@@ -226,6 +226,7 @@ void TheUFO::FireShot()
 	if (DeathStarActive)
 	{
 		angle = AimedShotAtDeathStar();
+		//printf("UFO shot at Death Star\n");
 	}
 	else
 	{

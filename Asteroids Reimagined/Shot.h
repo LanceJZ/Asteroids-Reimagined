@@ -7,6 +7,8 @@ public:
 	Shot();
 	virtual ~Shot();
 
+	int HitPoints = 0;
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 

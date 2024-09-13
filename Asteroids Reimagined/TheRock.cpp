@@ -166,7 +166,10 @@ bool TheRock::CheckCollisions()
 	{
 		if (bigShot->Enabled && CirclesIntersect(*bigShot))
 		{
-			bigShot->Destroy();
+			bigShot->HitPoints -= 20;
+
+			if (bigShot->HitPoints <= 0) bigShot->Destroy();
+
 			Hit();
 			SendScoreToPlayer();
 			return true;

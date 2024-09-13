@@ -183,7 +183,11 @@ bool Enemy::CheckCollisions()
 	{
 		if (bigShot->Enabled && CirclesIntersect(*bigShot))
 		{
-			bigShot->Destroy();
+
+			bigShot->HitPoints -= 50;
+
+			if (bigShot->HitPoints <= 0) bigShot->Destroy();
+
 			Hit();
 			Player->ScoreUpdate(Points);
 

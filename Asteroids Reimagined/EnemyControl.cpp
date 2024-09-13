@@ -318,16 +318,27 @@ void EnemyControl::Update()
 			return;
 		}
 
-		SpawnRocks({ 0, 0, 0 }, RockSpawnCount++, TheRock::Large);
+		if (Wave > 5) RockSpawnCount += 2;
+		else RockSpawnCount++;
+
+		if (Wave > 10) RockSpawnCount += 3;
+		if (Wave > 15) RockSpawnCount += 4;
+		if (Wave > 20) RockSpawnCount += 5;
+		if (Wave > 25) RockSpawnCount += 6;
+
+		SpawnRocks({ 0, 0, 0 }, RockSpawnCount, TheRock::Large);
 	}
 
-	for (const auto& ufo : UFOs)
+	if (SpawnedDeathStar)
 	{
-		ufo->DeathStarActive = DeathStar->Enabled;
-		ufo->DeathStarPosition = DeathStar->Position;
-	}
+		CheckDeathStarStatus();
 
-	if (SpawnedDeathStar) CheckDeathStarStatus();
+		for (const auto& ufo : UFOs)
+		{
+			ufo->DeathStarActive = DeathStar->Enabled;
+			ufo->DeathStarPosition = DeathStar->Position;
+		}
+	}
 	else if (Wave > 1 && RockCount < 5)
 	{
 		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
@@ -772,22 +783,30 @@ void EnemyControl::CheckHomingMineEnemyChase()
 			{
 				distance = fighterDistance;
 				enemyToChase = true;
-				enemyPosition = fighterPair->Position;
+				enemyPosition = fighterPair->GetWorldPosition();
 			}
 
 			for (const auto& fighter : fighterPair->Fighters)
 			{
 				if (!fighter->Enabled) continue;
+				if (fighterPair->Enabled) continue;
 
-				float fighterDistance = Vector3Distance(fighter->Position, mine->Position);
+				float fighterDistance = Vector3Distance(fighter->GetWorldPosition(),
+					mine->Position);
 
 				if (fighterDistance < distance)
 				{
 					distance = fighterDistance;
 					enemyToChase = true;
-					enemyPosition = fighter->Position;
+					enemyPosition = fighter->GetWorldPosition();
 				}
 			}
+		}
+
+		if (DeathStar->Enabled)
+		{
+			enemyPosition = DeathStar->GetWorldPosition();
+			enemyToChase = true;
 		}
 
 		if (enemyToChase)

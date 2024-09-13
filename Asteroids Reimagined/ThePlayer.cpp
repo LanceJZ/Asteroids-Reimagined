@@ -290,10 +290,10 @@ void ThePlayer::Spawn()
 	Shield->ModelColor = WHITE;
 	GunOverCharge = false;
 	ShieldOverCharge = false;
-	BigShotCount = 0;
-	DoubleShotCount = 0;
-	MineCount = 0;
-	PlasmaShotCount = 0;
+	BigShotCount = 10;
+	DoubleShotCount = 10;
+	MineCount = 10;
+	PlasmaShotCount = 10;
 	MissileCount = 0;
 
 	PlaySound(SpawnSound);
@@ -448,7 +448,24 @@ void ThePlayer::TurretTimers()
 
 void ThePlayer::FireSecondary()
 {
-	if (BigShotCount > 0)
+	if (SecondaryWeapon == Big && BigShotCount == 0)
+	{
+		SecondaryWeapon = Double;
+	}
+	if (SecondaryWeapon == Double && DoubleShotCount == 0)
+	{
+		SecondaryWeapon = Plasma;
+	}
+	if (SecondaryWeapon == Plasma && PlasmaShotCount == 0)
+	{
+		SecondaryWeapon = Mine;
+	}
+	if (SecondaryWeapon == Mine && MineCount == 0)
+	{
+		SecondaryWeapon = Big;
+	}
+
+	if (BigShotCount > 0 && SecondaryWeapon == Big)
 	{
 		BigShotCount--;
 		PlaySound(BigShotSound);
@@ -456,7 +473,7 @@ void ThePlayer::FireSecondary()
 		return;
 	}
 
-	if (DoubleShotCount > 0)
+	if (DoubleShotCount > 0 && SecondaryWeapon == Double)
 	{
 		DoubleShotCount--;
 		PlaySound(DoubleShotSound);
@@ -464,7 +481,7 @@ void ThePlayer::FireSecondary()
 		return;
 	}
 
-	if (MineCount > 0)
+	if (MineCount > 0 && SecondaryWeapon == Mine)
 	{
 		MineCount--;
 		PlaySound(MineDropSound);
@@ -472,7 +489,7 @@ void ThePlayer::FireSecondary()
 		return;
 	}
 
-	if (PlasmaShotCount > 0)
+	if (PlasmaShotCount > 0 && SecondaryWeapon == Plasma)
 	{
 		PlasmaShotCount--;
 		PlaySound(PlasmaShotSound);
@@ -513,6 +530,7 @@ void ThePlayer::FireBigShot()
 	velocity = Vector3Add(Vector3Multiply(Velocity,
 		{ 0.5f, 0.5f, 0.0f }), velocity);
 	BigShots.at(shotNumber)->Spawn(Position, velocity, 2.15f);
+	BigShots.at(shotNumber)->HitPoints = 100;
 }
 
 void ThePlayer::FireDoubleShot()
@@ -848,6 +866,11 @@ void ThePlayer::TurretHeatMeterUpdate()
 	}
 }
 
+void ThePlayer::AmmoMeterUpdate()
+{
+
+}
+
 void ThePlayer::Gamepad()
 {
 	//Button B is 6 //Button A is 7 //Button Y is 8
@@ -971,9 +994,20 @@ void ThePlayer::Keyboard()
 		FireTurret();
 	}
 
-	if (IsKeyPressed(KEY_E)) //Special Weapon Key.
+	if (IsKeyPressed(KEY_E) || IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
 	{
-		PointTurret(Crosshair->Position);
 		FireSecondary();
 	}
+
+	MouseWheelScroll = SecondaryWeapon;
+
+	MouseWheelScroll -= (int)GetMouseWheelMove();
+
+	if (MouseWheelScroll < 0) MouseWheelScroll = 3;
+	if (MouseWheelScroll > 3) MouseWheelScroll = 0;
+
+	if (MouseWheelScroll == Big) SecondaryWeapon = Big;
+	if (MouseWheelScroll == Double) SecondaryWeapon = Double;
+	if (MouseWheelScroll == Plasma) SecondaryWeapon = Plasma;
+	if (MouseWheelScroll == Mine) SecondaryWeapon = Mine;
 }
