@@ -348,10 +348,10 @@ void ThePlayer::Spawn()
 	DoubleShotCount = 0;
 	MineCount = 0;
 	PlasmaShotCount = 0;
-	BigShotCount = 10;
-	DoubleShotCount = 10;
-	MineCount = 10;
-	PlasmaShotCount = 10;
+	//BigShotCount = 10;
+	//DoubleShotCount = 10;
+	//MineCount = 10;
+	//PlasmaShotCount = 10;
 	MissileCount = 0;
 
 	PlaySound(SpawnSound);
