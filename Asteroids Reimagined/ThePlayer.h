@@ -8,6 +8,7 @@
 
 enum SecondaryWeaponType
 {
+	None,
 	Big,
 	Double,
 	Plasma,
@@ -26,7 +27,7 @@ public:
 
 	int Lives = 0;
 
-	SecondaryWeaponType SecondaryWeapon = SecondaryWeaponType::Big;
+	SecondaryWeaponType SecondaryWeapon = SecondaryWeaponType::None;
 
 	LineModel* Shield = {};
 
@@ -130,6 +131,13 @@ private:
 	LineModel* Turret = {};
 	LineModel* Crosshair = {};
 	LineModel* TurretHeatMeter = {};
+	LineModel* AmmoMeter = {};
+	LineModel* WeaponTypeIconBig = {};
+	LineModel* WeaponTypeIconDoubleLeft = {};
+	LineModel* WeaponTypeIconDoubleRight = {};
+	LineModel* WeaponTypeIconPlasma = {};
+	LineModel* WeaponTypeIconMine = {};
+
 	LineModelPoints ShotModel;
 	LineModelPoints MineModel;
 	LineModelPoints BigShotModel;
@@ -165,6 +173,8 @@ private:
 	void ShieldHit(Vector3 location, Vector3 velocity);
 	void TurretHeatMeterUpdate();
 	void AmmoMeterUpdate();
+	void WeaponPlasmaIconUpdate(float deltaTime);
+	void SwitchSecondaryWeapon(SecondaryWeaponType type);
 
 	void Gamepad();
 	void Keyboard();

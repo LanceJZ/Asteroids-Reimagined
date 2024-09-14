@@ -256,7 +256,7 @@ void GameLogic::PlayerShipDisplay()
 	}
 }
 
-void GameLogic::AddPlayerShipModels(float number)
+void GameLogic::AddPlayerShipModels(int number)
 {
 	for (int i = 0; i < number; i++)
 	{

@@ -7,6 +7,12 @@ ThePlayer::ThePlayer()
 	Managers.EM.AddLineModel(Turret = DBG_NEW LineModel());
 	Managers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
 	Managers.EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(WeaponTypeIconDoubleLeft = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(WeaponTypeIconDoubleRight = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(WeaponTypeIconBig = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(WeaponTypeIconMine = DBG_NEW LineModel());
+	Managers.EM.AddLineModel(WeaponTypeIconPlasma = DBG_NEW LineModel());
+
 	Managers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
 
 	FireRateTimerID = Managers.EM.AddTimer(0.125f);
@@ -40,6 +46,9 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 	}
 
 	ShotModel = model;
+
+	WeaponTypeIconDoubleLeft->SetModel(model);
+	WeaponTypeIconDoubleRight->SetModel(model);
 }
 
 void ThePlayer::SetFlameModel(LineModelPoints model)
@@ -60,11 +69,14 @@ void ThePlayer::SetTurretHeatModel(LineModelPoints model)
 void ThePlayer::SetBigShotModel(LineModelPoints model)
 {
 	BigShotModel = model;
+	WeaponTypeIconBig->SetModel(model);
+	WeaponTypeIconPlasma->SetModel(model);
 }
 
 void ThePlayer::SetMineModel(LineModelPoints model)
 {
 	MineModel = model;
+	WeaponTypeIconMine->SetModel(model);
 }
 
 void ThePlayer::SetFireSound(Sound sound)
@@ -152,6 +164,11 @@ bool ThePlayer::Initialize(Utilities* utilities)
 	Shield->Enabled = false;
 	Turret->Enabled = false;
 	Crosshair->Enabled = false;
+	WeaponTypeIconBig->Enabled = false;
+	WeaponTypeIconDoubleLeft->Enabled = false;
+	WeaponTypeIconDoubleRight->Enabled = false;
+	WeaponTypeIconPlasma->Enabled = false;
+	WeaponTypeIconMine->Enabled = false;
 
 	GameOver = true;
 	Enabled = false;
@@ -172,6 +189,33 @@ bool ThePlayer::BeginRun()
 	TurretHeatMeter->Enabled = false;
 	TurretHeatMeter->Radius = 0.0f;
 	TurretHeatMeter->RotationLocked = true;
+
+	WeaponTypeIconBig->SetParent(*this);
+	WeaponTypeIconDoubleLeft->SetParent(*this);
+	WeaponTypeIconDoubleRight->SetParent(*this);
+	WeaponTypeIconPlasma->SetParent(*this);
+	WeaponTypeIconMine->SetParent(*this);
+
+	float iconX = - 15.0f;
+
+	WeaponTypeIconBig->X(iconX);
+	WeaponTypeIconDoubleLeft->X(iconX - 2.0f);
+	WeaponTypeIconDoubleRight->X(iconX + 2.0f);
+	WeaponTypeIconPlasma->X(iconX - 2.0f);
+	WeaponTypeIconMine->X(iconX + 2.0f);
+
+	float iconY = 30.0f;
+
+	WeaponTypeIconBig->Y(iconY);
+	WeaponTypeIconDoubleLeft->Y(iconY);
+	WeaponTypeIconDoubleRight->Y(iconY);
+	WeaponTypeIconPlasma->Y(iconY);
+	WeaponTypeIconMine->Y(iconY);
+
+	WeaponTypeIconBig->Scale = 0.5f;
+	WeaponTypeIconMine->Scale = 0.5f;
+	WeaponTypeIconDoubleLeft->Scale = 0.5f;
+	WeaponTypeIconDoubleRight->Scale = 0.5f;
 
 	return false;
 }
@@ -206,6 +250,7 @@ void ThePlayer::Update(float deltaTime)
 	TurretTimers();
 	CrosshairUpdate();
 	ShieldPowerDrain(deltaTime);
+	WeaponPlasmaIconUpdate(deltaTime);
 
 	if (PoweredUp) WeHaveThePower();
 }
@@ -238,6 +283,11 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Shield->Enabled = false;
 		Crosshair->Enabled = false;
 		TurretHeatMeter->Enabled = false;
+		WeaponTypeIconBig->Enabled = false;
+		WeaponTypeIconDoubleLeft->Enabled = false;
+		WeaponTypeIconDoubleRight->Enabled = false;
+		WeaponTypeIconPlasma->Enabled = false;
+		WeaponTypeIconMine->Enabled = false;
 
 		if (Lives < 0)
 		{
@@ -290,10 +340,14 @@ void ThePlayer::Spawn()
 	Shield->ModelColor = WHITE;
 	GunOverCharge = false;
 	ShieldOverCharge = false;
-	BigShotCount = 10;
-	DoubleShotCount = 10;
-	MineCount = 10;
-	PlasmaShotCount = 10;
+	BigShotCount = 0;
+	DoubleShotCount = 0;
+	MineCount = 0;
+	PlasmaShotCount = 0;
+	//BigShotCount = 10;
+	//DoubleShotCount = 10;
+	//MineCount = 10;
+	//PlasmaShotCount = 10;
 	MissileCount = 0;
 
 	PlaySound(SpawnSound);
@@ -448,23 +502,6 @@ void ThePlayer::TurretTimers()
 
 void ThePlayer::FireSecondary()
 {
-	if (SecondaryWeapon == Big && BigShotCount == 0)
-	{
-		SecondaryWeapon = Double;
-	}
-	if (SecondaryWeapon == Double && DoubleShotCount == 0)
-	{
-		SecondaryWeapon = Plasma;
-	}
-	if (SecondaryWeapon == Plasma && PlasmaShotCount == 0)
-	{
-		SecondaryWeapon = Mine;
-	}
-	if (SecondaryWeapon == Mine && MineCount == 0)
-	{
-		SecondaryWeapon = Big;
-	}
-
 	if (BigShotCount > 0 && SecondaryWeapon == Big)
 	{
 		BigShotCount--;
@@ -871,6 +908,49 @@ void ThePlayer::AmmoMeterUpdate()
 
 }
 
+void ThePlayer::WeaponPlasmaIconUpdate(float deltaTime)
+{
+	if (!WeaponTypeIconPlasma->Enabled) return;
+
+	WeaponTypeIconPlasma->Scale += deltaTime * 0.25f;
+
+	if (WeaponTypeIconPlasma->Scale > 0.5f)
+	{
+		WeaponTypeIconPlasma->Scale = 0.25f;
+	}
+}
+
+void ThePlayer::SwitchSecondaryWeapon(SecondaryWeaponType type)
+{
+	WeaponTypeIconBig->Enabled = false;
+	WeaponTypeIconDoubleLeft->Enabled = false;
+	WeaponTypeIconDoubleRight->Enabled = false;
+	WeaponTypeIconPlasma->Enabled = false;
+	WeaponTypeIconMine->Enabled = false;
+
+	if (type == Big && BigShotCount == 0) SecondaryWeapon = Double;
+	if (type == Double && DoubleShotCount == 0)	SecondaryWeapon = Plasma;
+	if (type == Plasma && PlasmaShotCount == 0)	SecondaryWeapon = Mine;
+	if (type == Mine && MineCount == 0)	SecondaryWeapon = Big;
+	if (type == Big && BigShotCount == 0) SecondaryWeapon = Double;
+	if (type == Double && DoubleShotCount == 0)	SecondaryWeapon = Plasma;
+
+	if (BigShotCount == 0 && DoubleShotCount == 0 &&
+		PlasmaShotCount == 0 && MineCount == 0)
+	{
+		type = None;
+	}
+
+	if (type == Big) WeaponTypeIconBig->Enabled = true;
+	if (type == Double) WeaponTypeIconDoubleLeft->Enabled = true;
+	if (type == Double) WeaponTypeIconDoubleRight->Enabled = true;
+	if (type == Plasma) WeaponTypeIconPlasma->Enabled = true;
+	if (type == Plasma)	WeaponTypeIconPlasma->Scale = 0.25f;
+	if (type == Mine) WeaponTypeIconMine->Enabled = true;
+
+	SecondaryWeapon = type;
+}
+
 void ThePlayer::Gamepad()
 {
 	//Button B is 6 //Button A is 7 //Button Y is 8
@@ -999,15 +1079,15 @@ void ThePlayer::Keyboard()
 		FireSecondary();
 	}
 
-	MouseWheelScroll = SecondaryWeapon;
+	if ((int)GetMouseWheelMove() != 0)
+	{
+		MouseWheelScroll = SecondaryWeapon;
 
-	MouseWheelScroll -= (int)GetMouseWheelMove();
+		MouseWheelScroll -= (int)GetMouseWheelMove();
 
-	if (MouseWheelScroll < 0) MouseWheelScroll = 3;
-	if (MouseWheelScroll > 3) MouseWheelScroll = 0;
+		if (MouseWheelScroll < 1) MouseWheelScroll = 4;
+		if (MouseWheelScroll > 4) MouseWheelScroll = 1;
 
-	if (MouseWheelScroll == Big) SecondaryWeapon = Big;
-	if (MouseWheelScroll == Double) SecondaryWeapon = Double;
-	if (MouseWheelScroll == Plasma) SecondaryWeapon = Plasma;
-	if (MouseWheelScroll == Mine) SecondaryWeapon = Mine;
+		SwitchSecondaryWeapon((SecondaryWeaponType)MouseWheelScroll);
+	}
 }
