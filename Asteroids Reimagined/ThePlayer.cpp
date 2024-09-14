@@ -289,6 +289,11 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		WeaponTypeIconPlasma->Enabled = false;
 		WeaponTypeIconMine->Enabled = false;
 
+		for (const auto& model : AmmoMeterModels)
+		{
+			model->Enabled = false;
+		}
+
 		if (Lives < 0)
 		{
 			GameOver = true;
@@ -343,10 +348,10 @@ void ThePlayer::Spawn()
 	DoubleShotCount = 0;
 	MineCount = 0;
 	PlasmaShotCount = 0;
-	//BigShotCount = 10;
-	//DoubleShotCount = 10;
-	//MineCount = 10;
-	//PlasmaShotCount = 10;
+	BigShotCount = 10;
+	DoubleShotCount = 10;
+	MineCount = 10;
+	PlasmaShotCount = 10;
 	MissileCount = 0;
 
 	PlaySound(SpawnSound);
