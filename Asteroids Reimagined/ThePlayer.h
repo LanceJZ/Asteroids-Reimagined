@@ -145,6 +145,8 @@ private:
 	TheScore* Score = {};
 	ParticleManager* Particles = {};
 
+	std::vector<LineModel*> AmmoMeterModels = {};
+
 	void PointTurret(float stickDirectionX, float stickDirectionY);
 	void PointTurret(Vector3 mouseLocation);
 	void FireTurret();
@@ -172,7 +174,8 @@ private:
 
 	void ShieldHit(Vector3 location, Vector3 velocity);
 	void TurretHeatMeterUpdate();
-	void AmmoMeterUpdate();
+	void AmmoMeterUpdate(int ammoCount);
+	void AddAmmoMeterModels(int count);
 	void WeaponPlasmaIconUpdate(float deltaTime);
 	void SwitchSecondaryWeapon(SecondaryWeaponType type);
 

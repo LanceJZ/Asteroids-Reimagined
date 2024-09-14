@@ -326,7 +326,6 @@ void ThePlayer::Spawn()
 	Velocity = { 0, 0, 0 };
 
 	Enabled = true;
-	Flame->Enabled = false;
 	Turret->Enabled = true;
 	TurretHeatMeter->Enabled = true;
 	ShieldPower = 100.0f;
@@ -507,6 +506,7 @@ void ThePlayer::FireSecondary()
 		BigShotCount--;
 		PlaySound(BigShotSound);
 		FireBigShot();
+		AmmoMeterUpdate(BigShotCount);
 		return;
 	}
 
@@ -515,6 +515,7 @@ void ThePlayer::FireSecondary()
 		DoubleShotCount--;
 		PlaySound(DoubleShotSound);
 		FireDoubleShot();
+		AmmoMeterUpdate(DoubleShotCount);
 		return;
 	}
 
@@ -523,6 +524,7 @@ void ThePlayer::FireSecondary()
 		MineCount--;
 		PlaySound(MineDropSound);
 		DropHomingMine();
+		AmmoMeterUpdate(MineCount);
 		return;
 	}
 
@@ -531,6 +533,7 @@ void ThePlayer::FireSecondary()
 		PlasmaShotCount--;
 		PlaySound(PlasmaShotSound);
 		FirePlasmaShot();
+		AmmoMeterUpdate(PlasmaShotCount);
 		return;
 	}
 }
@@ -903,9 +906,38 @@ void ThePlayer::TurretHeatMeterUpdate()
 	}
 }
 
-void ThePlayer::AmmoMeterUpdate()
+void ThePlayer::AmmoMeterUpdate(int ammoCount)
 {
+	if (AmmoMeterModels.size() < ammoCount)
+		AddAmmoMeterModels(ammoCount - AmmoMeterModels.size());
 
+	Vector2 position = { 0.0f, 30.0f };
+
+	for (const auto& model : AmmoMeterModels)
+	{
+		model->Enabled = false;
+		model->Position = { position.x, position.y, 0.0f };
+		position.x += 1.0f;
+	}
+
+	for (int i = 0; i < ammoCount; i++)
+	{
+		AmmoMeterModels[i]->Enabled = true;
+	}
+}
+
+void ThePlayer::AddAmmoMeterModels(int count)
+{
+	for (int i = 0; i < count; i++)
+	{
+		AmmoMeterModels.push_back(DBG_NEW LineModel());
+		Managers.EM.AddLineModel(AmmoMeterModels.back());
+		AmmoMeterModels.back()->SetModel(ShotModel);
+		AmmoMeterModels.back()->Initialize(TheUtilities);
+		AmmoMeterModels.back()->SetParent(*this);
+		AmmoMeterModels.back()->Scale = 0.5f;
+		AmmoMeterModels.back()->Radius = 0.0f;
+	}
 }
 
 void ThePlayer::WeaponPlasmaIconUpdate(float deltaTime)
@@ -942,11 +974,15 @@ void ThePlayer::SwitchSecondaryWeapon(SecondaryWeaponType type)
 	}
 
 	if (type == Big) WeaponTypeIconBig->Enabled = true;
+	if (type == Big) AmmoMeterUpdate(BigShotCount);
 	if (type == Double) WeaponTypeIconDoubleLeft->Enabled = true;
 	if (type == Double) WeaponTypeIconDoubleRight->Enabled = true;
+	if (type == Double) AmmoMeterUpdate(DoubleShotCount);
 	if (type == Plasma) WeaponTypeIconPlasma->Enabled = true;
 	if (type == Plasma)	WeaponTypeIconPlasma->Scale = 0.25f;
+	if (type == Plasma) AmmoMeterUpdate(PlasmaShotCount);
 	if (type == Mine) WeaponTypeIconMine->Enabled = true;
+	if (type == Mine) AmmoMeterUpdate(MineCount);
 
 	SecondaryWeapon = type;
 }

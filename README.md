@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.24.00 incoming.
+Asteroids Reimagined Beta 4.24.00 released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel to switch type if you have more than one.
