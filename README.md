@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.24.00 released.
+Asteroids Reimagined Beta 4.24.01 released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel to switch type if you have more than one.
@@ -15,6 +15,7 @@ To try it out, unzip this to your desktop or documents, or somewhere without wri
 
 Bug Fixes:
 Player homing mine went to center of screen when Death Star or fighters active. Fixed.
+High Score is not displayed when game started. Fixed.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.

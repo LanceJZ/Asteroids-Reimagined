@@ -57,6 +57,7 @@ bool GameLogic::BeginRun()
 	PlayerModel = Player->GetLineModel();
 	PlayerClear->Enabled = false;
 	GameEnded = true;
+	Player->SetHighScore(HighScores->GetHighScore());
 
 	return true;
 }
@@ -278,8 +279,6 @@ void GameLogic::NewGame()
 
 	State = InPlay;
 	GameEnded = false;
-
-	Player->SetHighScore(HighScores->GetHighScore());
 
 	PlayerShipDisplay();
 
