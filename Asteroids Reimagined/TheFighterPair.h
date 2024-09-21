@@ -1,8 +1,9 @@
 #pragma once
 #include "Globals.h"
-#include "ThePlayer.h"
 #include "TheFighter.h"
-#include "TheUFO.h"
+#include "Enemy.h"
+//#include "ThePlayer.h"
+//#include "TheUFO.h"
 
 class TheFighterPair : public Entity
 {
@@ -15,7 +16,7 @@ public:
 	TheFighter* Fighters[2] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(TheUFO* ufo[2]);
+	void SetUFO(Enemy* ufo[2]);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);
@@ -41,7 +42,7 @@ private:
 	Sound ExplodeSound;
 
 	ThePlayer* Player = nullptr;
-	TheUFO* UFOs[2] = { nullptr };
+	Enemy* UFOs[2] = { nullptr };
 
 	bool Separated = false;
 

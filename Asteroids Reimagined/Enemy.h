@@ -10,9 +10,13 @@ public:
 	Enemy();
 	virtual ~Enemy();
 
+	float Distance = 0.0f;
+
 	std::vector<Shot*> Shots;
+	Enemy* UFOs[2] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
+	void SetUFO(Enemy* ufo[2]);
 	void SetShotModel(LineModelPoints model);
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);

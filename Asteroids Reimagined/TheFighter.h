@@ -1,9 +1,10 @@
 #pragma once
 #include "Globals.h"
-#include "ThePlayer.h"
-#include "TheUFO.h"
+#include "Enemy.h"
+//#include "ThePlayer.h"
+//#include "TheUFO.h"
 
-class TheFighter : public LineModel
+class TheFighter : public Enemy
 {
 public:
 	TheFighter();
@@ -11,8 +12,7 @@ public:
 
 	bool NewWave = false;
 
-	void SetPlayer(ThePlayer* player);
-	void SetUFO(TheUFO* ufo[2]);
+	//void SetPlayer(ThePlayer* player);
 
 	void SetExplodeSound(Sound sound);
 
@@ -37,12 +37,11 @@ private:
 
 	Sound ExplodeSound;
 
-	ThePlayer* Player = nullptr;
-	TheUFO* UFOs[2] = { nullptr };
+	//ThePlayer* Player = nullptr;
 
 	void ChasePlayer();
 	void ChaseUFO();
 	void LeaveScreen();
-	void CheckCollisions();
+	bool CheckCollisions();
 	void Hit();
 };

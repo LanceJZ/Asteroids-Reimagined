@@ -14,6 +14,14 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void Enemy::SetUFO(Enemy* ufo[2])
+{
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = ufo[i];
+	}
+}
+
 void Enemy::SetShotModel(LineModelPoints model)
 {
 	ShotModel = model;
@@ -231,10 +239,27 @@ bool Enemy::CheckCollisions()
 		return true;
 	}
 
+	if (UFOs[0] == nullptr) return false;
+
+	for (const auto& ufo : UFOs)
+	{
+		if (!ufo->Enabled) continue;
+
+		if (ufo->CirclesIntersect(*this))
+		{
+			ufo->Hit();
+			Hit();
+		}
+	}
+
 	return false;
 }
 
 void Enemy::ChasePlayer()
 {
+	RotationVelocityZ = 0.0f;
+
+	if (!Player->Enabled) return;
+
 	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
 }

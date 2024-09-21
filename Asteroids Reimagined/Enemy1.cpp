@@ -17,14 +17,14 @@ void Enemy1::SetPlayer(ThePlayer* player)
 	Missile->SetPlayer(player);
 }
 
-void Enemy1::SetUFO(TheUFO* ufos[2])
-{
-	for (int i = 0; i < 2; i++)
-	{
-		UFOs[i] = ufos[i];
-	}
-}
-
+//void Enemy1::SetUFO(TheUFO* ufos[2])
+//{
+//	for (int i = 0; i < 2; i++)
+//	{
+//		UFOs[i] = ufos[i];
+//	}
+//}
+//
 void Enemy1::SetMissileModel(LineModelPoints model)
 {
 	Missile->SetModel(model);

@@ -8,18 +8,18 @@ TheFighter::~TheFighter()
 {
 }
 
-void TheFighter::SetPlayer(ThePlayer* player)
-{
-	Player = player;
-}
+//void TheFighter::SetPlayer(ThePlayer* player)
+//{
+//	Player = player;
+//}
 
-void TheFighter::SetUFO(TheUFO* ufo[2])
-{
-	for (int i = 0; i < 2; i++)
-	{
-		UFOs[i] = ufo[i];
-	}
-}
+//void TheFighter::SetUFO(Enemy* ufo[2])
+//{
+//	for (int i = 0; i < 2; i++)
+//	{
+//		UFOs[i] = ufo[i];
+//	}
+//}
 
 void TheFighter::SetExplodeSound(Sound sound)
 {
@@ -159,89 +159,93 @@ void TheFighter::LeaveScreen()
 	}
 }
 
-void TheFighter::CheckCollisions()
+bool TheFighter::CheckCollisions()
 {
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		Player->Hit(Position, Velocity);
+	Enemy::CheckCollisions();
 
-		if (!Player->Shield->Enabled)
-		{
-			Hit();
-			Player->ScoreUpdate(Points);
-		}
+	//if (Player->Enabled && CirclesIntersect(*Player))
+	//{
+	//	Player->Hit(Position, Velocity);
 
-		return;
-	}
+	//	if (!Player->Shield->Enabled)
+	//	{
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
+	//	}
 
-	for (const auto& shot : Player->Shots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
+	//	return;
+	//}
 
-			return;
-		}
-	}
+	//for (const auto& shot : Player->Shots)
+	//{
+	//	if (shot->Enabled && CirclesIntersect(*shot))
+	//	{
+	//		shot->Destroy();
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
 
-	for (const auto& shot : Player->DoubleShots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
+	//		return;
+	//	}
+	//}
 
-			return;
-		}
-	}
+	//for (const auto& shot : Player->DoubleShots)
+	//{
+	//	if (shot->Enabled && CirclesIntersect(*shot))
+	//	{
+	//		shot->Destroy();
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
 
-	for (const auto& bigShot : Player->BigShots)
-	{
-		if (bigShot->Enabled && CirclesIntersect(*bigShot))
-		{
-			bigShot->HitPoints -= 50;
+	//		return;
+	//	}
+	//}
 
-			if (bigShot->HitPoints <= 0) bigShot->Destroy();
+	//for (const auto& bigShot : Player->BigShots)
+	//{
+	//	if (bigShot->Enabled && CirclesIntersect(*bigShot))
+	//	{
+	//		bigShot->HitPoints -= 50;
 
-			Hit();
-			Player->ScoreUpdate(Points);
+	//		if (bigShot->HitPoints <= 0) bigShot->Destroy();
 
-			return;
-		}
-	}
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
 
-	for (const auto& mine : Player->Mines)
-	{
-		if (mine->Enabled && CirclesIntersect(*mine))
-		{
-			mine->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
+	//		return;
+	//	}
+	//}
 
-			return;
-		}
-	}
+	//for (const auto& mine : Player->Mines)
+	//{
+	//	if (mine->Enabled && CirclesIntersect(*mine))
+	//	{
+	//		mine->Destroy();
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
 
-	for (const auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && CirclesIntersect(*ufo))
-		{
-			ufo->Hit();
-			Hit();
-			return;
-		}
+	//		return;
+	//	}
+	//}
 
-		for (const auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && CirclesIntersect(*shot))
-			{
-				shot->Destroy();
-				Hit();
-				return;
-			}
-		}
-	}
+	//for (const auto& ufo : UFOs)
+	//{
+	//	if (ufo->Enabled && CirclesIntersect(*ufo))
+	//	{
+	//		ufo->Hit();
+	//		Hit();
+	//		return;
+	//	}
+
+	//	for (const auto& shot : ufo->Shots)
+	//	{
+	//		if (shot->Enabled && CirclesIntersect(*shot))
+	//		{
+	//			shot->Destroy();
+	//			Hit();
+	//			return;
+	//		}
+	//	}
+	//}
+
+	return false;
 }

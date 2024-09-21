@@ -914,7 +914,7 @@ void ThePlayer::TurretHeatMeterUpdate()
 void ThePlayer::AmmoMeterUpdate(int ammoCount)
 {
 	if (AmmoMeterModels.size() < ammoCount)
-		AddAmmoMeterModels(ammoCount - AmmoMeterModels.size());
+		AddAmmoMeterModels(ammoCount - (int)AmmoMeterModels.size());
 
 	Vector2 position = { 0.0f, 30.0f };
 

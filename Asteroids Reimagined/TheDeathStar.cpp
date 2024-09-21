@@ -45,16 +45,16 @@ void TheDeathStar::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheDeathStar::SetUFO(TheUFO* ufo[2])
+void TheDeathStar::SetUFO(Enemy* ufos[2])
 {
 	for (int i = 0; i < 2; i++)
 	{
-		UFOs[i] = ufo[i];
+		UFOs[i] = ufos[i];
 	}
 
 	for (const auto &fighterPair : FighterPairs)
 	{
-		fighterPair->SetUFO(ufo);
+		fighterPair->SetUFO(ufos);
 	}
 }
 

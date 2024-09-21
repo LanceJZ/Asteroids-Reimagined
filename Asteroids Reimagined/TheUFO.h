@@ -3,7 +3,7 @@
 #include "Enemy.h"
 #include "ThePlayer.h"
 #include "Shot.h"
-#include "TheRock.h"
+//#include "TheRock.h"
 #include "ParticleManager.h"
 
 class TheUFO : public Enemy
@@ -19,16 +19,16 @@ public:
 
 	bool DeathStarActive = false;
 	int Wave = 0;
-	float Distance = 0.0f;
 
 	Vector3 DeathStarPosition = { 0.0f, 0.0f, 0.0f };
 
 	Shot* Shots[2] = { nullptr };
+	std::vector<Entity*> Rocks;
 
 	TheUFO();
 	virtual ~TheUFO();
 
-	void SetRocks(std::vector<TheRock*> &rocks);
+	//void SetRocks(std::vector<Entity*> &rocks);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -45,7 +45,7 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	bool CheckShotCollisions(TheRock* rock);
+	bool CheckShotCollisions(Entity* rock);
 	void CheckShotPlayerCollisions();
 
 	void Spawn(int SpawnCount);
@@ -64,7 +64,6 @@ private:
 
 	LineModelPoints ShotModel;
 
-	std::vector<TheRock*> *Rocks;
 
 	void FireShot();
 	float AimedShot();

@@ -1,8 +1,8 @@
 #pragma once
 #include "Globals.h"
 #include "Enemy.h"
-#include "TheUFO.h"
 #include "TheMissile.h"
+//#include "TheUFO.h"
 
 class Enemy1 : public Enemy
 {
@@ -23,7 +23,7 @@ public:
 	virtual ~Enemy1();
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(TheUFO* ufos[2]);
+	//void SetUFO(TheUFO* ufos[2]);
 	void SetMissileModel(LineModelPoints model);
 
 	void SetSpawnSound(Sound sound);
@@ -53,7 +53,7 @@ private:
 	Sound SpawnSound = {};
 	Sound OnSound = {};
 
-	TheUFO* UFOs[2] = { nullptr };
+	//TheUFO* UFOs[2] = { nullptr };
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

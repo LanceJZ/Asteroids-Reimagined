@@ -16,10 +16,10 @@ TheUFO::~TheUFO()
 {
 }
 
-void TheUFO::SetRocks(std::vector<TheRock*> &rocks)
-{
-	Rocks = &rocks;
-}
+//void TheUFO::SetRocks(std::vector<Entity*> &rocks)
+//{
+//	Rocks = &rocks;
+//}
 
 bool TheUFO::Initialize(Utilities* utilities)
 {
@@ -107,7 +107,7 @@ void TheUFO::Draw3D()
 	LineModel::Draw3D();
 }
 
-bool TheUFO::CheckShotCollisions(TheRock* rock)
+bool TheUFO::CheckShotCollisions(Entity* rock)
 {
 	bool shotHit = false;
 
@@ -118,7 +118,6 @@ bool TheUFO::CheckShotCollisions(TheRock* rock)
 			shot->Destroy();
 			rock->Hit();
 			shotHit = true;
-			continue;
 		}
 	}
 
@@ -307,7 +306,7 @@ float TheUFO::AimedShotAtRock()
 	Vector3 closestRockVelocity = { 0, 0, 0 };
 	float shortestDistance = 1000.0f;
 
-	for (const auto &rock : *Rocks)
+	for (const auto &rock : Rocks)
 	{
 		if (rock->Enabled)
 		{

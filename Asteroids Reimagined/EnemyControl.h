@@ -105,6 +105,7 @@ private:
 
 	ThePlayer *Player = nullptr;
 	ParticleManager *Particles = nullptr;
+	Enemy* UFORefs[2] = { nullptr };
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

@@ -279,7 +279,12 @@ bool EnemyControl::BeginRun()
 		ufo->SetSmallSound(UFOSmallSound);
 	}
 
-	EnemyOne->SetUFO(UFOs);
+	for (int i = 0; i < 2; i++)
+	{
+		UFORefs[i] = UFOs[i];
+	}
+
+	EnemyOne->SetUFO(UFORefs);
 
 	Reset();
 
@@ -422,17 +427,20 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			Managers.EM.AddLineModel(Rocks.back());
 			Rocks.back()->SetModel((RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
+			Rocks.back()->SetUFO(UFORefs);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->Initialize();
 			Rocks.back()->BeginRun();
+			UFOs[0]->Rocks.push_back(Rocks.back());
+			UFOs[1]->Rocks.push_back(Rocks.back());
 		}
 
 		Rocks.at(rockNumber)->Spawn(position, size);
 
-		for (const auto& ufo : UFOs)
-		{
-			ufo->SetRocks(Rocks);
-		}
+		//for (const auto& ufo : UFOs)
+		//{
+		//	ufo->SetRocks(Rocks);
+		//}
 	}
 }
 
@@ -460,7 +468,7 @@ void EnemyControl::SpawnDeathStar()
 	if (!Player->GameOver && !Player->Enabled) return;
 
 	DeathStar->Spawn({ -500, -400, 0 });
-	DeathStar->SetUFO(UFOs);
+	DeathStar->SetUFO(UFORefs);
 	SpawnedDeathStar = true;
 }
 
@@ -566,26 +574,28 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 
 	for (const auto& ufo : UFOs)
 	{
-		if (ufo->CheckShotCollisions(rock)) ufoHitRock = true;
-
 		if (!ufo->Enabled) continue;
+
+		//if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
+		//{
+		//	ufo->Hit();
+		//	EnemyOne->Hit();
+		//}
+
+		//if (EnemyTwo->Enabled && ufo->CirclesIntersect(*EnemyTwo))
+		//{
+		//	ufo->Hit();
+		//	EnemyTwo->Hit();
+		//}
+
+		if (rock->Size == TheRock::Small) continue;
+
+		if (ufo->CheckShotCollisions(rock)) ufoHitRock = true;
 
 		if (ufo->CirclesIntersect(*rock))
 		{
 			ufo->Hit();
 			rock->Hit();
-		}
-
-		if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
-		{
-			ufo->Hit();
-			EnemyOne->Hit();
-		}
-
-		if (EnemyTwo->Enabled && ufo->CirclesIntersect(*EnemyTwo))
-		{
-			ufo->Hit();
-			EnemyTwo->Hit();
 		}
 	}
 
@@ -594,6 +604,8 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 
 void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 {
+	if (rock->Size == TheRock::Small) return;
+
 	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*rock))
 	{
 		EnemyOne->Hit();

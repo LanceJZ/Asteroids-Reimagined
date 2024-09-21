@@ -13,6 +13,14 @@ void TheRock::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheRock::SetUFO(Enemy* ufo[2])
+{
+	for (int i = 0; i < 2; i++)
+	{
+		UFOs[i] = ufo[i];
+	}
+}
+
 void TheRock::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;

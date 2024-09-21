@@ -22,7 +22,7 @@ void TheFighterPair::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheFighterPair::SetUFO(TheUFO* ufo[2])
+void TheFighterPair::SetUFO(Enemy* ufo[2])
 {
 	for (int i = 0; i < 2; i++)
 	{
