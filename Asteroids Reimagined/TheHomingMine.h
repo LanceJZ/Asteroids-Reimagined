@@ -30,6 +30,4 @@ private:
 	Sound ExplodeSound = {};
 
 	ParticleManager* Particles = nullptr;
-
-	void CheckCollision();
 };

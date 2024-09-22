@@ -178,6 +178,7 @@ private:
 	void AddAmmoMeterModels(int count);
 	void WeaponPlasmaIconUpdate(float deltaTime);
 	void SwitchSecondaryWeapon(SecondaryWeaponType type);
+	void CheckIfOnlySecondaryWeapon();
 
 	void Gamepad();
 	void Keyboard();

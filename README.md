@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.24.11 Released.
+Asteroids Reimagined Beta 4.24.12 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -30,5 +30,7 @@ Player can change active secondary weapon if they have more than one. UI for act
 Remade icon files. Remade player ship model.
 Enemy/UFOs don't hit small rocks. UFOs don't shoot other enemies, but they can hit each other.
 All twenty high score names are now shown on high score list.
-When secondary weapon runs out of ammo, None is selected.
+Secondary weapon power ups are accumulative now.
+When secondary weapon runs out of ammo, Only one with ammo or None is selected if multiple have ammo, or none do.
 Added F button for secondary weapon selection.
+If only secondary weapon power up, it is selected.

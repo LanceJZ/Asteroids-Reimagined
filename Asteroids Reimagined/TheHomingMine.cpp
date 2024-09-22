@@ -70,15 +70,10 @@ void TheHomingMine::Destroy()
 void TheHomingMine::ChaseEnemy(Vector3 enemyPosition)
 {
 	RotationZ = GetAngleFromVectors(enemyPosition);
-	Velocity = VelocityFromAngleZ(66.666f);
+	Velocity = VelocityFromAngleZ(80.666f);
 }
 
 void TheHomingMine::LostEnemy()
 {
 	Velocity = { 0.0f, 0.0f, 0.0f };
-}
-
-void TheHomingMine::CheckCollision()
-{
-	//The enemies will need to check this.
 }
