@@ -1047,36 +1047,31 @@ void ThePlayer::SwitchSecondaryWeapon(SecondaryWeaponType type)
 	SecondaryWeapon = type;
 }
 
-void ThePlayer::CheckIfOnlySecondaryWeapon()
+void ThePlayer::IsSecondaryWeaponSwitched(float next)
 {
-	SwitchSecondaryWeapon(Double);
 }
 
 void ThePlayer::Gamepad()
 {
-	//Button B is 6 //Button A is 7 //Button Y is 8
-	//Button X is 5	//Left bumper is 9 //Right bumper is 11 //Left Trigger is 10
-	//Right Trigger is 12 //Dpad Up is 1 for //Dpad Down is 3 for
-	//Dpad Left is 4 //Dpad Right is 2
 	//Axis 0 is -1 for Left, 1 for right on left stick.
 	//Axis 1 is -1 for Up, 1 for Down on left stick.
 	//Axis 2 is -1 for Left, 1 for right on right stick.
 	//Axis 3 is -1 for Up, 1 for Down on right stick.
 
 	//Button A
-	if (GetGamepadButtonPressed() == 7)
+	if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
 	{
 		FireSecondary();
 	}
 
 	//Left Stick Left/Right
-	if (GetGamepadAxisMovement(0, 0) > 0.1f) //Right
+	if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) > 0.1f) //Right
 	{
-		RotateShip(GetGamepadAxisMovement(0, 0));
+		RotateShip(GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X));
 	}
-	else if (GetGamepadAxisMovement(0, 0) < -0.1f) //Left
+	else if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) < -0.1f) //Left
 	{
-		RotateShip(GetGamepadAxisMovement(0, 0));
+		RotateShip(GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X));
 	}
 	else
 	{
@@ -1084,10 +1079,10 @@ void ThePlayer::Gamepad()
 	}
 
 	//Left Stick Up/Down
-	if (GetGamepadAxisMovement(0, 1) > 0.1f) //Down
+	if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) > 0.1f) //Down
 	{
 	}
-	else if (GetGamepadAxisMovement(0, 1) < -0.1f) //Up
+	else if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) < -0.1f) //Up
 	{
 	}
 	else
@@ -1114,8 +1109,8 @@ void ThePlayer::Gamepad()
 		FireTurret();
 	}
 
-	//Right Trigger
-	if (IsGamepadButtonDown(0, 12))
+	//Left Trigger
+	if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_TRIGGER_2))
 	{
 		ShieldOn();
 	}
@@ -1124,14 +1119,40 @@ void ThePlayer::Gamepad()
 		ShieldOff();
 	}
 
-	//Left Trigger
-	if (GetGamepadAxisMovement(0, 4) > 0.1f)
+	//Right Bumper
+	if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_1))
+	{
+		MouseWheelScroll = SecondaryWeapon;
+
+		MouseWheelScroll += 1;
+
+		if (MouseWheelScroll < 1) MouseWheelScroll = 4;
+		if (MouseWheelScroll > 4) MouseWheelScroll = 1;
+
+		SwitchSecondaryWeapon((SecondaryWeaponType)MouseWheelScroll);
+	}
+
+	//Right Trigger
+	if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_TRIGGER) > 0.1f)
 	{
 		ThrustOn(GetGamepadAxisMovement(0, 4));
 	}
 	else
 	{
 		ThrustOff();
+	}
+
+	//Left Bumper
+	if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_TRIGGER_1))
+	{
+		MouseWheelScroll = SecondaryWeapon;
+
+		MouseWheelScroll -= 1;
+
+		if (MouseWheelScroll < 1) MouseWheelScroll = 4;
+		if (MouseWheelScroll > 4) MouseWheelScroll = 1;
+
+		SwitchSecondaryWeapon((SecondaryWeaponType)MouseWheelScroll);
 	}
 }
 

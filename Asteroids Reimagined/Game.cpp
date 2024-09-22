@@ -136,6 +136,7 @@ void Game::ProcessInput()
 	if (IsGamepadAvailable(0) && CursorDisabled)
 	{
 		EnableCursor();
+		SetMousePosition(GetScreenWidth(), -GetScreenHeight());
 		CursorDisabled = false;
 	}
 	else if (!CursorDisabled && !IsGamepadAvailable(0))

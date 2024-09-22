@@ -175,6 +175,10 @@ void PowerUp::CheckCollisions()
 
 void PowerUp::DriftToPlayer()
 {
-	RotationZ = GetAngleFromVectors(Player->Position);
+	Vector3 pos = Player->Position;
+
+	if (!Player->Enabled) pos = { 0.0f, 0.0f, 0.0f };
+
+	RotationZ = GetAngleFromVectors(pos);
 	Velocity = VelocityFromAngleZ(36.666f);
 }

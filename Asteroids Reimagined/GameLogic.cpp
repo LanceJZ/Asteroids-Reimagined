@@ -98,7 +98,8 @@ void GameLogic::Update()
 		{
 			PlayerClear->Enabled = true;
 
-			if (CheckPlayerClear() || IsKeyPressed(KEY_ENTER))
+			if (CheckPlayerClear() || IsKeyPressed(KEY_ENTER) ||
+				(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
 			{
 				Player->Spawn();
 				PlayerClear->Enabled = false;
