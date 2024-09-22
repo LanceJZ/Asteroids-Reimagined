@@ -1,7 +1,7 @@
-Asteroids Reimagined Beta 4.24.10 Released.
+Asteroids Reimagined Beta 4.24.11 Released.
 
 Instructions:
-AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel to switch type if you have more than one.
+AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
 
 Power ups, blue one boost your shields, ice blue ones give your gun cool boost, they are both cumulative. Purple is a super power up that keeps the shield on, and gun cool, and is timed. Red is the Big Shot you get a limited number. Yellow is Double Shot, you get a limited number. Orange is Homing Mine, they seek out enemy ships, you get a limited number. Violet is Plasma Shot, it grows as it goes, destroying everything in its path. Ends at edge of screen.
 
@@ -16,7 +16,10 @@ To try it out, unzip this to your desktop or documents, or somewhere without wri
 Bug Fixes:
 Player homing mine went to center of screen when Death Star or fighters active. Fixed.
 High Score is not displayed when game started. Fixed.
-Enemy guided missile does not chase player if player not active.
+Enemy guided missile chased player if player not active. Fixed
+Player Ship sometimes visible for a frame in middle of window after being hit before spawning. Fixed.
+Fixed end of game, first letter of new high score is A.
+Fixed bug that allowed user to select secondary weapon that was not available.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -25,4 +28,7 @@ Player shot (Turret and secondary) now effected by ship velocity.
 Big Shot now takes out multiple rocks(5), enemies(2).
 Player can change active secondary weapon if they have more than one. UI for active secondary weapon added.
 Remade icon files. Remade player ship model.
-Enemys/UFOs don't hit small rocks. UFOs don't shoot other enemies, but they can hit each other.
+Enemy/UFOs don't hit small rocks. UFOs don't shoot other enemies, but they can hit each other.
+All twenty high score names are now shown on high score list.
+When secondary weapon runs out of ammo, None is selected.
+Added F button for secondary weapon selection.

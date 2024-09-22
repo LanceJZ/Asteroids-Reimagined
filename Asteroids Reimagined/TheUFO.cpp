@@ -130,7 +130,7 @@ void TheUFO::CheckShotPlayerCollisions() //Move to Enemy class.
 
 	for (const auto& shot : Shots)
 	{
-		if (shot->Enabled && shot->CirclesIntersect(*Player))
+		if (shot->CirclesIntersect(*Player))
 		{
 			shot->Destroy();
 			Player->Hit(Position, Velocity);

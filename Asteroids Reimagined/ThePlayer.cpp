@@ -275,7 +275,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
 		Acceleration = { 0 };
 		Velocity = { 0 };
-		Position = { 0 };
+		//Position = { 0 };
 		RotateStop();
 		Lives--;
 		Turret->Enabled = false;
@@ -353,6 +353,7 @@ void ThePlayer::Spawn()
 	//MineCount = 10;
 	//PlasmaShotCount = 10;
 	MissileCount = 0;
+	SecondaryWeapon = None;
 
 	PlaySound(SpawnSound);
 }
@@ -402,22 +403,26 @@ void ThePlayer::FullPowerUp()
 
 void ThePlayer::BigShotPowerUp()
 {
-	BigShotCount = 22;
+	BigShotCount += 22;
+	AmmoMeterUpdate(BigShotCount);
 }
 
 void ThePlayer::DoubleShotPowerUp()
 {
-	DoubleShotCount = 32;
+	DoubleShotCount += 32;
+	AmmoMeterUpdate(DoubleShotCount);
 }
 
 void ThePlayer::MinePowerUp()
 {
-	MineCount = 22;
+	MineCount += 22;
+	AmmoMeterUpdate(MineCount);
 }
 
 void ThePlayer::PlasmaShotPowerUp()
 {
-	PlasmaShotCount = 12;
+	PlasmaShotCount += 12;
+	AmmoMeterUpdate(PlasmaShotCount);
 }
 
 void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
@@ -913,6 +918,8 @@ void ThePlayer::TurretHeatMeterUpdate()
 
 void ThePlayer::AmmoMeterUpdate(int ammoCount)
 {
+	if (ammoCount <= 0)	SwitchSecondaryWeapon(None);
+
 	if (AmmoMeterModels.size() < ammoCount)
 		AddAmmoMeterModels(ammoCount - (int)AmmoMeterModels.size());
 
@@ -965,12 +972,12 @@ void ThePlayer::SwitchSecondaryWeapon(SecondaryWeaponType type)
 	WeaponTypeIconPlasma->Enabled = false;
 	WeaponTypeIconMine->Enabled = false;
 
-	if (type == Big && BigShotCount == 0) SecondaryWeapon = Double;
-	if (type == Double && DoubleShotCount == 0)	SecondaryWeapon = Plasma;
-	if (type == Plasma && PlasmaShotCount == 0)	SecondaryWeapon = Mine;
-	if (type == Mine && MineCount == 0)	SecondaryWeapon = Big;
-	if (type == Big && BigShotCount == 0) SecondaryWeapon = Double;
-	if (type == Double && DoubleShotCount == 0)	SecondaryWeapon = Plasma;
+	if (type == Big && BigShotCount == 0) type = Double;
+	if (type == Double && DoubleShotCount == 0)	type = Plasma;
+	if (type == Plasma && PlasmaShotCount == 0)	type = Mine;
+	if (type == Mine && MineCount == 0)	type = Big;
+	if (type == Big && BigShotCount == 0) type = Double;
+	if (type == Double && DoubleShotCount == 0)	type = Plasma;
 
 	if (BigShotCount == 0 && DoubleShotCount == 0 &&
 		PlasmaShotCount == 0 && MineCount == 0)
@@ -1118,6 +1125,18 @@ void ThePlayer::Keyboard()
 	if (IsKeyPressed(KEY_E) || IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
 	{
 		FireSecondary();
+	}
+
+	if (IsKeyPressed(KEY_F))
+	{
+		MouseWheelScroll = SecondaryWeapon;
+
+		MouseWheelScroll += 1;
+
+		if (MouseWheelScroll < 1) MouseWheelScroll = 4;
+		if (MouseWheelScroll > 4) MouseWheelScroll = 1;
+
+		SwitchSecondaryWeapon((SecondaryWeaponType)MouseWheelScroll);
 	}
 
 	if ((int)GetMouseWheelMove() != 0)

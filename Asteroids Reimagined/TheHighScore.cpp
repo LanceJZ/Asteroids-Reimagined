@@ -124,15 +124,7 @@ void TheHighScore::DisplayHighScoreList()
 
 	for (int i = 0; i < 20; i++)
 	{
-		if (i < 10)
-		{
-			name = HighScoreList[i].Name;
-		}
-		else
-		{
-			name = " ";
-		}
-
+		name = HighScoreList[i].Name;
 		score = std::to_string(HighScoreList[i].Score);
 
 		DrawTextEx(TheFontSmall, const_cast<char*>(name.c_str()),
@@ -289,6 +281,7 @@ void TheHighScore::CheckForNewHighScore(int score)
 			HighScoreEntryText = "_____";
 			NewHighScoreRank = rank;
 			NewHighScore = true;
+			HighScoreEntryText[HighScoreSelectedLetter] = (char)65;
 
 			break;
 		}
