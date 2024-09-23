@@ -95,6 +95,9 @@ void Enemy::Reset()
 		shot->Destroy();
 	}
 
+	Velocity = { 0.0f, 0.0f, 0.0f };
+	RotationVelocityZ = 0.0f;
+
 	Destroy();
 }
 
@@ -243,12 +246,26 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& ufo : UFOs)
 	{
+		for (const auto& shot : ufo->Shots)
+		{
+			if (!shot->Enabled) continue;
+
+			if (CirclesIntersect(*shot))
+			{
+				shot->Destroy();
+				Hit();
+				return true;
+			}
+		}
+
 		if (!ufo->Enabled) continue;
 
 		if (ufo->CirclesIntersect(*this))
 		{
 			ufo->Hit();
 			Hit();
+
+			return true;
 		}
 	}
 
@@ -262,4 +279,30 @@ void Enemy::ChasePlayer()
 	if (!Player->Enabled) return;
 
 	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseUFO()
+{
+	if (UFOs[0]->Enabled && UFOs[1]->Enabled)
+	{
+		UFOs[0]->Distance =	Vector3Distance(UFOs[0]->Position, Position);
+		UFOs[1]->Distance =	Vector3Distance(UFOs[1]->Position, Position);
+
+		if (UFOs[0]->Distance <	UFOs[1]->Distance && UFOs[0]->Enabled)
+		{
+			SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
+		}
+		else if (UFOs[1]->Distance < UFOs[0]->Distance && UFOs[1]->Enabled)
+		{
+			SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
+		}
+	}
+	else if (UFOs[0]->Enabled)
+	{
+		SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
+	}
+	else if (UFOs[1]->Enabled)
+	{
+		SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
+	}
 }

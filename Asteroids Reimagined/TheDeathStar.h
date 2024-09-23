@@ -1,11 +1,11 @@
 #pragma once
 #include "Globals.h"
-#include "Enemy.h"
+//#include "Enemy.h"
 #include "TheFighterPair.h"
 //#include "ThePlayer.h"
 //#include "TheUFO.h"
 
-class TheDeathStar : public Entity
+class TheDeathStar : public Enemy
 {
 public:
 	TheDeathStar();
@@ -14,10 +14,11 @@ public:
 	bool NewWave = false;
 
 	TheFighterPair* FighterPairs[3] = { nullptr };
-	Enemy* UFOs[2] = {nullptr};
+	//Enemy* UFOs[2] = {nullptr};
 
 	void SetPlayer(ThePlayer* player);
 	void SetUFO(Enemy* ufo[2]);
+	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);
@@ -40,13 +41,13 @@ private:
 	float WX = 0.0f;
 	float WY = 0.0f;
 
-	Sound ExplodeSound = {};
+	//Sound ExplodeSound = {};
 	Sound SpawnSound = {};
 
-	ThePlayer* Player = nullptr;
+	//ThePlayer* Player = nullptr;
 
-	void CheckCollisions();
 	void Hit();
 	void Destroy();
+	bool CheckCollisions();
 };
 

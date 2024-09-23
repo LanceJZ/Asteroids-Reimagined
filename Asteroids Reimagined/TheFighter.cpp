@@ -21,6 +21,12 @@ TheFighter::~TheFighter()
 //	}
 //}
 
+void TheFighter::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
+{
+		EnemyOne = enemyOne;
+		EnemyTwo = enemyTwo;
+}
+
 void TheFighter::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;
@@ -39,6 +45,11 @@ bool TheFighter::BeginRun()
 {
 	LineModel::BeginRun();
 
+	Points = 200;
+	Speed = 150.0f;
+	TurnSpeed = 0.45f;
+	RotateMagnitude = PI / 2;
+
 	return false;
 }
 
@@ -55,6 +66,14 @@ void TheFighter::Update(float deltaTime)
 		else if (UFOs[0]->Enabled || UFOs[1]->Enabled)
 		{
 			ChaseUFO();
+		}
+		else if (EnemyOne->Enabled || EnemyTwo->Enabled)
+		{
+			EnemyOne->Distance = Vector3Distance(EnemyOne->Position, Position);
+			EnemyTwo->Distance = Vector3Distance(EnemyTwo->Position, Position);
+
+			if (EnemyOne->Distance < EnemyTwo->Distance) ChaseEnemyOne();
+			else ChaseEnemyTwo();
 		}
 		else
 		{
@@ -89,9 +108,11 @@ void TheFighter::Separate()
 
 void TheFighter::Reset()
 {
-	Velocity = { 0.0f, 0.0f, 0.0f };
-	RotationVelocityZ = 0.0f;
-	Destroy();
+	Enemy::Reset();
+
+	//Velocity = { 0.0f, 0.0f, 0.0f };
+	//RotationVelocityZ = 0.0f;
+	//Destroy();
 }
 
 void TheFighter::Spawn(Vector3 position)
@@ -124,28 +145,40 @@ void TheFighter::ChasePlayer()
 
 void TheFighter::ChaseUFO()
 {
-	if (UFOs[0]->Enabled && UFOs[1]->Enabled)
-	{
-		UFOs[0]->Distance = Vector3Distance(UFOs[0]->Position, Position);
-		UFOs[1]->Distance = Vector3Distance(UFOs[1]->Position, Position);
+	Enemy::ChaseUFO();
 
-		if (UFOs[0]->Distance < UFOs[1]->Distance && UFOs[0]->Enabled)
-		{
-			SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
-		}
-		else if (UFOs[1]->Distance < UFOs[0]->Distance && UFOs[1]->Enabled)
-		{
-			SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
-		}
-	}
-	else if (UFOs[0]->Enabled)
-	{
-		SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
-	}
-	else if (UFOs[1]->Enabled)
-	{
-		SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
-	}
+	//if (UFOs[0]->Enabled && UFOs[1]->Enabled)
+	//{
+	//	UFOs[0]->Distance = Vector3Distance(UFOs[0]->Position, Position);
+	//	UFOs[1]->Distance = Vector3Distance(UFOs[1]->Position, Position);
+
+	//	if (UFOs[0]->Distance < UFOs[1]->Distance && UFOs[0]->Enabled)
+	//	{
+	//		SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
+	//	}
+	//	else if (UFOs[1]->Distance < UFOs[0]->Distance && UFOs[1]->Enabled)
+	//	{
+	//		SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
+	//	}
+	//}
+	//else if (UFOs[0]->Enabled)
+	//{
+	//	SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
+	//}
+	//else if (UFOs[1]->Enabled)
+	//{
+	//	SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
+	//}
+}
+
+void TheFighter::ChaseEnemyOne()
+{
+	SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
+}
+
+void TheFighter::ChaseEnemyTwo()
+{
+	SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
 }
 
 void TheFighter::LeaveScreen()
@@ -162,6 +195,8 @@ void TheFighter::LeaveScreen()
 bool TheFighter::CheckCollisions()
 {
 	Enemy::CheckCollisions();
+
+	return false;
 
 	//if (Player->Enabled && CirclesIntersect(*Player))
 	//{

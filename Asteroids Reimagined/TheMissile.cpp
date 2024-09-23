@@ -77,25 +77,25 @@ bool TheMissile::CheckCollisions()
 {
 	Enemy::CheckCollisions();
 
-	for (auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && ufo->CirclesIntersect(*this))
-		{
-			ufo->Hit();
-			Hit();
-			return true;
-		}
+	//for (auto& ufo : UFOs)
+	//{
+	//	if (ufo->Enabled && ufo->CirclesIntersect(*this))
+	//	{
+	//		ufo->Hit();
+	//		Hit();
+	//		return true;
+	//	}
 
-		for (auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && shot->CirclesIntersect(*this))
-			{
-				shot->Destroy();
-				Hit();
-				return true;
-			}
-		}
-	}
+	//	for (auto& shot : ufo->Shots)
+	//	{
+	//		if (shot->Enabled && shot->CirclesIntersect(*this))
+	//		{
+	//			shot->Destroy();
+	//			Hit();
+	//			return true;
+	//		}
+	//	}
+	//}
 
 	return false;
 }

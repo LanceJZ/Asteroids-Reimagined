@@ -58,6 +58,14 @@ void TheDeathStar::SetUFO(Enemy* ufos[2])
 	}
 }
 
+void TheDeathStar::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
+{
+	for (const auto &fighterPair : FighterPairs)
+	{
+		fighterPair->SetEnemies(enemyOne, enemyTwo);
+	}
+}
+
 bool TheDeathStar::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
@@ -75,6 +83,7 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 
 bool TheDeathStar::BeginRun()
 {
+	Entity::BeginRun();
 
 	return false;
 }
@@ -121,17 +130,18 @@ void TheDeathStar::NewWaveStart()
 
 void TheDeathStar::Reset()
 {
-	Enabled = false;
+	Enemy::Reset();
+	//Enabled = false;
 
 	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
-		fighterPair->Destroy();
+		//fighterPair->Destroy();
 
 		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->Reset();
-			fighter->Destroy();
+			//fighter->Destroy();
 		}
 	}
 }
@@ -182,78 +192,6 @@ void TheDeathStar::NewGame()
 	Reset();
 }
 
-void TheDeathStar::CheckCollisions()
-{
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		Player->Hit(Position, Velocity);
-
-		if (!Player->Shield->Enabled)
-		{
-			Hit();
-			Player->ScoreUpdate(Points);
-		}
-
-		return;
-	}
-
-	for (const auto& shot : Player->Shots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
-
-			return;
-		}
-	}
-
-	for (const auto& shot : Player->DoubleShots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
-
-			return;
-		}
-	}
-
-	for (const auto& bigShot : Player->BigShots)
-	{
-		if (bigShot->Enabled && CirclesIntersect(*bigShot))
-		{
-			bigShot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
-
-			return;
-		}
-	}
-
-	for (const auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && CirclesIntersect(*ufo))
-		{
-			ufo->Hit();
-			Hit();
-			return;
-		}
-
-		for (const auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && CirclesIntersect(*shot))
-			{
-				shot->Destroy();
-				Hit();
-				return;
-			}
-		}
-	}
-}
-
 void TheDeathStar::Hit()
 {
 	Entity::Destroy();
@@ -275,4 +213,80 @@ void TheDeathStar::Hit()
 void TheDeathStar::Destroy()
 {
 	Entity::Destroy();
+}
+
+bool TheDeathStar::CheckCollisions()
+{
+	Enemy::CheckCollisions();
+
+	return false;
+
+	//if (Player->Enabled && CirclesIntersect(*Player))
+	//{
+	//	Player->Hit(Position, Velocity);
+
+	//	if (!Player->Shield->Enabled)
+	//	{
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
+	//	}
+
+	//	return;
+	//}
+
+	//for (const auto& shot : Player->Shots)
+	//{
+	//	if (shot->Enabled && CirclesIntersect(*shot))
+	//	{
+	//		shot->Destroy();
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
+
+	//		return;
+	//	}
+	//}
+
+	//for (const auto& shot : Player->DoubleShots)
+	//{
+	//	if (shot->Enabled && CirclesIntersect(*shot))
+	//	{
+	//		shot->Destroy();
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
+
+	//		return;
+	//	}
+	//}
+
+	//for (const auto& bigShot : Player->BigShots)
+	//{
+	//	if (bigShot->Enabled && CirclesIntersect(*bigShot))
+	//	{
+	//		bigShot->Destroy();
+	//		Hit();
+	//		Player->ScoreUpdate(Points);
+
+	//		return;
+	//	}
+	//}
+
+	//for (const auto& ufo : UFOs)
+	//{
+	//	if (ufo->Enabled && CirclesIntersect(*ufo))
+	//	{
+	//		ufo->Hit();
+	//		Hit();
+	//		return;
+	//	}
+
+	//	for (const auto& shot : ufo->Shots)
+	//	{
+	//		if (shot->Enabled && CirclesIntersect(*shot))
+	//		{
+	//			shot->Destroy();
+	//			Hit();
+	//			return;
+	//		}
+	//	}
+	//}
 }

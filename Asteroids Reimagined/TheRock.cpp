@@ -136,7 +136,7 @@ void TheRock::Hit()
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 }
 
-bool TheRock::CheckCollisions()
+bool TheRock::CheckCollisions() // Move to Enemy class.
 {
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{

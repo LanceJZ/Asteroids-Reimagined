@@ -22,7 +22,7 @@ public:
 
 	Vector3 DeathStarPosition = { 0.0f, 0.0f, 0.0f };
 
-	Shot* Shots[2] = { nullptr };
+	//Shot* Shots[2] = { nullptr };
 	std::vector<Entity*> Rocks;
 
 	TheUFO();
@@ -33,37 +33,38 @@ public:
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
-	void SetPlayer(ThePlayer* player);
-	void SetShotModel(LineModelPoints model);
+	//void SetPlayer(ThePlayer* player);
+	//void SetShotModel(LineModelPoints model);
 
-	void SetExplodeSound(Sound sound);
-	void SetFireSound(Sound sound);
+	//void SetExplodeSound(Sound sound);
+	//void SetFireSound(Sound sound);
 	void SetBigSound(Sound sound);
 	void SetSmallSound(Sound sound);
-	void SetParticles(ParticleManager* particles);
+	//void SetParticles(ParticleManager* particles);
 
 	void Update(float deltaTime);
 	void Draw3D();
 
 	bool CheckShotCollisions(Entity* rock);
-	void CheckShotPlayerCollisions();
+	//void CheckShotPlayerCollisions();
 
 	void Spawn(int SpawnCount);
 	void Destroy();
 	void Hit();
 	void Reset();
 
+	void CheckShotsHitPlayer();
+
 private:
 	size_t FireTimerID = 0;
 	size_t ChangeVectorTimerID = 0;
 
-	Sound ExplodeSound;
-	Sound FireSound;
-	Sound BigSound;
-	Sound SmallSound;
+	//Sound ExplodeSound;
+	//Sound FireSound;
+	Sound BigSound = {};
+	Sound SmallSound = {};
 
-	LineModelPoints ShotModel;
-
+	//LineModelPoints ShotModel;
 
 	void FireShot();
 	float AimedShot();

@@ -244,7 +244,7 @@ void EnemyControl::SetParticleManager(ParticleManager* particles)
 
 	for (const auto& ufo : UFOs)
 	{
-		ufo->SetParticles(particles);
+		ufo->SetParticleManager(particles);
 	}
 
 	EnemyOne->SetParticleManager(particles);
@@ -344,7 +344,7 @@ void EnemyControl::Update()
 			ufo->DeathStarPosition = DeathStar->Position;
 		}
 	}
-	else if (Wave > 1 && RockCount < 5)
+	else if (Wave > 1 && RockCount < 6)
 	{
 		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
@@ -353,11 +353,6 @@ void EnemyControl::Update()
 	}
 
 	CheckHomingMineEnemyChase();
-
-	for (const auto& ufo : UFOs)
-	{
-		ufo->CheckShotPlayerCollisions();
-	}
 
 	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
@@ -384,6 +379,11 @@ void EnemyControl::Update()
 	}
 
 	if (Managers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->CheckShotsHitPlayer();
+	}
 }
 
 void EnemyControl::NewGame()
@@ -399,8 +399,7 @@ void EnemyControl::NewGame()
 
 void EnemyControl::NextWave()
 {
-	Wave = 4;
-
+	Wave++;
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
@@ -469,6 +468,7 @@ void EnemyControl::SpawnDeathStar()
 
 	DeathStar->Spawn({ -500, -400, 0 });
 	DeathStar->SetUFO(UFORefs);
+	DeathStar->SetEnemies(EnemyOne, EnemyTwo);
 	SpawnedDeathStar = true;
 }
 

@@ -13,7 +13,7 @@ public:
 	bool NewWave = false;
 
 	//void SetPlayer(ThePlayer* player);
-
+	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
@@ -28,20 +28,23 @@ public:
 
 	void Spawn(Vector3 position);
 
+	void ChasePlayer();
+	void ChaseUFO();
+	void ChaseEnemyOne();
+	void ChaseEnemyTwo();
+	void LeaveScreen();
+	bool CheckCollisions();
+
 private:
 	bool Separated = false;
-	int Points = 200;
-	float Speed = 150.0f;
-	float TurnSpeed = 0.45f;
-	float RotateMagnitude = PI / 2;
+	//int Points = 200;
+	//float Speed = 150.0f;
+	//float TurnSpeed = 0.45f;
+	//float RotateMagnitude = PI / 2;
 
-	Sound ExplodeSound;
+	//Sound ExplodeSound;
 
 	//ThePlayer* Player = nullptr;
 
-	void ChasePlayer();
-	void ChaseUFO();
-	void LeaveScreen();
-	bool CheckCollisions();
 	void Hit();
 };

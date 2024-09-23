@@ -1,11 +1,11 @@
 #pragma once
 #include "Globals.h"
 #include "TheFighter.h"
-#include "Enemy.h"
+//#include "Enemy.h"
 //#include "ThePlayer.h"
 //#include "TheUFO.h"
 
-class TheFighterPair : public Entity
+class TheFighterPair : public Enemy
 {
 public:
 	TheFighterPair();
@@ -17,6 +17,7 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 	void SetUFO(Enemy* ufo[2]);
+	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);
@@ -34,22 +35,22 @@ public:
 	void Spawn(Vector3 position);
 
 private:
-	int Points = 200;
-	float Speed = 100.0f;
-	float TurnSpeed = 0.5f;
-	float RotateMagnitude = PI / 2;
+	//int Points = 200;
+	//float Speed = 100.0f;
+	//float TurnSpeed = 0.5f;
+	//float RotateMagnitude = PI / 2;
 
-	Sound ExplodeSound;
+	//Sound ExplodeSound;
 
-	ThePlayer* Player = nullptr;
-	Enemy* UFOs[2] = { nullptr };
+	//ThePlayer* Player = nullptr;
+	//Enemy* UFOs[2] = { nullptr };
 
 	bool Separated = false;
 
 	void ChasePlayer();
 	void ChaseUFO();
 	void LeaveScreen();
-	void CheckCollisions();
+	bool CheckCollisions();
 	void Hit();
 };
 

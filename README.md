@@ -36,3 +36,4 @@ When secondary weapon runs out of ammo, Only one with ammo or None is selected i
 Added F button for secondary weapon selection.
 If only secondary weapon power up, it is selected.
 Added controller support for new features.
+UFO now fires more than two shots at once. Time between shots is greater but lessons as more UFOs spawn.

@@ -11,9 +11,15 @@ public:
 	virtual ~Enemy();
 
 	float Distance = 0.0f;
+	float ShotTimerAmount = 0.0f;
 
 	std::vector<Shot*> Shots;
 	Enemy* UFOs[2] = { nullptr };
+
+	ThePlayer* Player = nullptr;
+	ParticleManager* Particles = nullptr;
+
+	Sound ExplodeSound = {};
 
 	void SetPlayer(ThePlayer* player);
 	void SetUFO(Enemy* ufo[2]);
@@ -38,23 +44,20 @@ protected:
 	size_t ShotTimerID = 0;
 
 	int Points = 0;
+	float Speed = 200.0f;
+	float TurnSpeed = 1.45f;
+	float RotateMagnitude = PI / 2;
 
 	Sound FireSound = {};
-	Sound ExplodeSound = {};
-
-	ThePlayer* Player = nullptr;
-	ParticleManager* Particles = nullptr;
+	LineModelPoints ShotModel = {};
+	Enemy* EnemyOne = nullptr;
+	Enemy* EnemyTwo = nullptr;
 
 	void Shoot();
 	void Shoot(Vector3 velocity);
 	void ChasePlayer();
+	void ChaseUFO();
 	virtual bool CheckCollisions();
 
 private:
-	float Speed = 200.0f;
-	float TurnSpeed = 1.45f;
-
-	LineModelPoints ShotModel = {};
-
-
 };
