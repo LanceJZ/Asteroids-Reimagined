@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.24.24 Released.
+Asteroids Reimagined Beta 4.24.34 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -39,3 +39,4 @@ Added controller support for new features.
 UFO is now able fire more than two shots at once. Time between shots is greater but lessons as more UFOs spawn and each wave.
 It is now possible to have more than two UFOs active at once. Spawn times shortens by wave/spawn amount.
 Secondary weapon selection and ammo now stay at bottom of ship.
+Player now gets points for taking down the Boss Shields, and for each Turret.

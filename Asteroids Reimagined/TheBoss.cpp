@@ -457,6 +457,7 @@ void TheBoss::ShieldHit(int damage)
 	{
 		Shield->Enabled = false;
 		PlaySound(ShieldDownSound);
+		Player->ScoreUpdate(100);
 	}
 }
 
@@ -472,6 +473,7 @@ void TheBoss::ShieldDown(Entity* entity, int damage)
 		{
 			entity->Destroy();
 			turret->Hit();
+			Player->ScoreUpdate(500);
 
 		}
 
