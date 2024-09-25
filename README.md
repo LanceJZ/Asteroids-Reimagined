@@ -38,3 +38,4 @@ If only secondary weapon power up, it is selected.
 Added controller support for new features.
 UFO is now able fire more than two shots at once. Time between shots is greater but lessons as more UFOs spawn and each wave.
 It is now possible to have more than two UFOs active at once. Spawn times shortens by wave/spawn amount.
+Secondary weapon selection and ammo now stay at bottom of ship.

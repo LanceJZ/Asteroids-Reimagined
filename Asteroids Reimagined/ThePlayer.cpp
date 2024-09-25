@@ -196,6 +196,12 @@ bool ThePlayer::BeginRun()
 	WeaponTypeIconPlasma->SetParent(*this);
 	WeaponTypeIconMine->SetParent(*this);
 
+	WeaponTypeIconBig->RotationLocked = true;
+	WeaponTypeIconDoubleLeft->RotationLocked = true;
+	WeaponTypeIconDoubleRight->RotationLocked = true;
+	WeaponTypeIconPlasma->RotationLocked = true;
+	WeaponTypeIconMine->RotationLocked = true;
+
 	float iconX = - 15.0f;
 
 	WeaponTypeIconBig->X(iconX);
@@ -348,7 +354,7 @@ void ThePlayer::Spawn()
 	DoubleShotCount = 0;
 	MineCount = 0;
 	PlasmaShotCount = 0;
-	//BigShotCount = 10;
+	BigShotCount = 10;
 	//DoubleShotCount = 10;
 	//MineCount = 10;
 	//PlasmaShotCount = 10;
@@ -993,10 +999,12 @@ void ThePlayer::AddAmmoMeterModels(int count)
 		AmmoMeterModels.push_back(DBG_NEW LineModel());
 		Managers.EM.AddLineModel(AmmoMeterModels.back());
 		AmmoMeterModels.back()->SetModel(ShotModel);
-		AmmoMeterModels.back()->Initialize(TheUtilities);
 		AmmoMeterModels.back()->SetParent(*this);
+		AmmoMeterModels.back()->RotationLocked = true;
 		AmmoMeterModels.back()->Scale = 0.5f;
 		AmmoMeterModels.back()->Radius = 0.0f;
+		AmmoMeterModels.back()->Initialize(TheUtilities);
+		AmmoMeterModels.back()->BeginRun();
 	}
 }
 
