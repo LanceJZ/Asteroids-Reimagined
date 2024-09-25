@@ -334,7 +334,7 @@ bool PositionedObject::OffScreen()
 
 bool PositionedObject::OffScreenSide()
 {
-	if (X() > WindowWidth || X() < -WindowWidth)
+	if (X() - Radius > WindowWidth || X() + Radius < -WindowWidth)
 	{
 		return true;
 	}
@@ -344,7 +344,7 @@ bool PositionedObject::OffScreenSide()
 
 bool PositionedObject::OffScreenTopBottom()
 {
-	if (Y() > WindowHeight || Y() < -WindowHeight)
+	if (Y() - Radius > WindowHeight || Y() + Radius < -WindowHeight)
 	{
 		return true;
 	}

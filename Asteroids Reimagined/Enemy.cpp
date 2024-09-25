@@ -14,14 +14,6 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void Enemy::SetUFO(Enemy* ufo[2])
-{
-	for (int i = 0; i < 2; i++)
-	{
-		UFOs[i] = ufo[i];
-	}
-}
-
 void Enemy::SetShotModel(LineModelPoints model)
 {
 	ShotModel = model;
@@ -61,7 +53,6 @@ void Enemy::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	//CheckCollision();
 }
 
 void Enemy::Draw3D()
@@ -164,6 +155,85 @@ void Enemy::Shoot(Vector3 velocity)
 	Shots[spawnNumber]->Spawn(Position, velocity);
 }
 
+void Enemy::ChasePlayer()
+{
+	RotationVelocityZ = 0.0f;
+
+	if (!Player->Enabled) return;
+
+	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseUFO()
+{
+	Vector3 closestUFOPosition = { 0.0f, 0.0f, 0.0f };
+	float shortestDistance = 1000.0f;
+
+	for (const auto& ufo : UFORefs)
+	{
+		if (ufo->Enabled)
+		{
+			float distance = Vector3Distance(ufo->Position, Position);
+
+			if (distance < shortestDistance)
+			{
+				shortestDistance = distance;
+				closestUFOPosition = ufo->Position;
+			}
+		}
+	}
+
+	SetRotateVelocity(closestUFOPosition, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseEnemy()
+{
+	EnemyOne->Distance = Vector3Distance(EnemyOne->Position, Position);
+	EnemyTwo->Distance = Vector3Distance(EnemyTwo->Position, Position);
+
+	if (EnemyOne->Distance < EnemyTwo->Distance) ChaseEnemyOne();
+	else ChaseEnemyTwo();
+}
+
+bool Enemy::CheckUFOActive()
+{
+	bool ufoActive = false;
+
+	if (!Player->Enabled)
+	{
+		for (const auto& ufo : UFORefs)
+		{
+			if (ufo->Enabled) ufoActive = true;
+		}
+	}
+	else ChasePlayer();
+
+	return ufoActive;
+}
+
+bool Enemy::LeaveScreen()
+{
+	LeavePlay(TurnSpeed, Speed);
+
+	if (OffScreen())
+	{
+		Reset();
+		true;
+	}
+
+	return false;
+}
+
+void Enemy::ChaseEnemyOne()
+{
+	SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseEnemyTwo()
+{
+	SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
+}
+
 bool Enemy::CheckCollisions()
 {
 	for (const auto& shot : Player->Shots)
@@ -242,9 +312,9 @@ bool Enemy::CheckCollisions()
 		return true;
 	}
 
-	if (UFOs[0] == nullptr) return false;
+	if (!UFORefs.size()) return false;
 
-	for (const auto& ufo : UFOs)
+	for (const auto& ufo : UFORefs)
 	{
 		for (const auto& shot : ufo->Shots)
 		{
@@ -270,39 +340,4 @@ bool Enemy::CheckCollisions()
 	}
 
 	return false;
-}
-
-void Enemy::ChasePlayer()
-{
-	RotationVelocityZ = 0.0f;
-
-	if (!Player->Enabled) return;
-
-	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
-}
-
-void Enemy::ChaseUFO()
-{
-	if (UFOs[0]->Enabled && UFOs[1]->Enabled)
-	{
-		UFOs[0]->Distance =	Vector3Distance(UFOs[0]->Position, Position);
-		UFOs[1]->Distance =	Vector3Distance(UFOs[1]->Position, Position);
-
-		if (UFOs[0]->Distance <	UFOs[1]->Distance && UFOs[0]->Enabled)
-		{
-			SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
-		}
-		else if (UFOs[1]->Distance < UFOs[0]->Distance && UFOs[1]->Enabled)
-		{
-			SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
-		}
-	}
-	else if (UFOs[0]->Enabled)
-	{
-		SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
-	}
-	else if (UFOs[1]->Enabled)
-	{
-		SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
-	}
 }

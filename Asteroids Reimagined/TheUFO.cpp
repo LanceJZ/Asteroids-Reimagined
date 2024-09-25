@@ -4,22 +4,11 @@ TheUFO::TheUFO()
 {
 	FireTimerID = Managers.EM.AddTimer(1.75f);
 	ChangeVectorTimerID = Managers.EM.AddTimer(5.50f);
-
-	//for (int i = 0; i < 2; i++)
-	//{
-	//	Shots[i] = DBG_NEW Shot();
-	//	Managers.EM.AddLineModel(Shots[i]);
-	//}
 }
 
 TheUFO::~TheUFO()
 {
 }
-
-//void TheUFO::SetRocks(std::vector<Entity*> &rocks)
-//{
-//	Rocks = &rocks;
-//}
 
 bool TheUFO::Initialize(Utilities* utilities)
 {
@@ -37,33 +26,6 @@ bool TheUFO::BeginRun()
 	return false;
 }
 
-//void TheUFO::SetPlayer(ThePlayer* player)
-//{
-//	Player = player;
-//}
-//
-//void TheUFO::SetShotModel(LineModelPoints model)
-//{
-//	ShotModel = model;
-//
-//	for (const auto& shot : Shots)
-//	{
-//		shot->SetModel(model);
-//	}
-//}
-//
-//void TheUFO::SetExplodeSound(Sound sound)
-//{
-//	ExplodeSound = sound;
-//	SetSoundVolume(ExplodeSound, 0.5f);
-//}
-//
-//void TheUFO::SetFireSound(Sound sound)
-//{
-//	FireSound = sound;
-//	SetSoundVolume(FireSound, 0.5f);
-//}
-
 void TheUFO::SetBigSound(Sound sound)
 {
 	BigSound = sound;
@@ -75,11 +37,6 @@ void TheUFO::SetSmallSound(Sound sound)
 	SmallSound = sound;
 	SetSoundVolume(SmallSound, 0.5f);
 }
-
-//void TheUFO::SetParticles(ParticleManager* particles)
-//{
-//	Particles = particles;
-//}
 
 void TheUFO::Update(float deltaTime)
 {
@@ -129,21 +86,6 @@ bool TheUFO::CheckShotCollisions(Entity* rock)
 
 	return shotHit;
 }
-
-//void TheUFO::CheckShotPlayerCollisions() //Move to Enemy class.
-//{
-	//if (!Player->Enabled) return;
-//
-	//for (const auto& shot : Shots)
-	//{
-	//	if (shot->CirclesIntersect(*Player))
-	//	{
-	//		shot->Destroy();
-	//		Player->Hit(Position, Velocity);
-	//		break;
-	//	}
-	//}
-//}
 
 void TheUFO::Spawn(int spawnCount)
 {
@@ -273,8 +215,6 @@ void TheUFO::FireShot() //Move to Enemy class.
 		}
 	}
 
-	//PlaySound(FireSound);
-
 	Managers.EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
@@ -301,19 +241,6 @@ void TheUFO::FireShot() //Move to Enemy class.
 
 	Vector3 position = Vector3Add(VelocityFromAngleZ(Radius), Position);
 	Shots[spawnNumber]->Spawn(position, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
-
-	//for (const auto& shot : Shots)
-	//{
-	//	if (!shot->Enabled)
-	//	{
-	//		if (!Player->GameOver) PlaySound(FireSound);
-	//
-	//		Vector3 position = Vector3Add(VelocityFromAngleZ(Radius), Position);
-	//		shot->Spawn(position, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
-	//
-	//		break;
-	//	}
-	//}
 }
 
 float TheUFO::AimedShot()
@@ -351,9 +278,6 @@ float TheUFO::AimedShotAtDeathStar()
 float TheUFO::AimedShotAtRock()
 {
 	bool noRocks = true;
-
-	//Vector3 closestRockPosition = { GetRandomFloat(-WindowWidth, WindowWidth),
-	//	GetRandomFloat(-WindowHeight, WindowHeight), 0 };
 
 	Vector3 closestRockPosition = { 0, 0, 0 };
 	Vector3 closestRockVelocity = { 0, 0, 0 };

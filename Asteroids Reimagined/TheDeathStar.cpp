@@ -35,6 +35,21 @@ void TheDeathStar::SetSpawnSound(Sound sound)
 	SpawnSound = sound;
 }
 
+void TheDeathStar::SetParticleManager(ParticleManager* particleManager)
+{
+	Particles = particleManager;
+
+	for (const auto& fighterPair : FighterPairs)
+	{
+		fighterPair->SetParticleManager(particleManager);
+
+		for (const auto& fighter : fighterPair->Fighters)
+		{
+			fighter->SetParticleManager(particleManager);
+		}
+	}
+}
+
 void TheDeathStar::SetPlayer(ThePlayer* player)
 {
 	Player = player;
@@ -45,16 +60,11 @@ void TheDeathStar::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheDeathStar::SetUFO(Enemy* ufos[2])
+void TheDeathStar::SetUFO()
 {
-	for (int i = 0; i < 2; i++)
+	for (const auto& fighterPair : FighterPairs)
 	{
-		UFOs[i] = ufos[i];
-	}
-
-	for (const auto &fighterPair : FighterPairs)
-	{
-		fighterPair->SetUFO(ufos);
+		fighterPair->SetUFO(UFORefs);
 	}
 }
 
@@ -90,7 +100,7 @@ bool TheDeathStar::BeginRun()
 
 void TheDeathStar::Update(float deltaTime)
 {
-	Entity::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
 	CheckCollisions();
 

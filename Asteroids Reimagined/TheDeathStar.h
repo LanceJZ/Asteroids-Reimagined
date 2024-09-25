@@ -14,15 +14,15 @@ public:
 	bool NewWave = false;
 
 	TheFighterPair* FighterPairs[3] = { nullptr };
-	//Enemy* UFOs[2] = {nullptr};
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(Enemy* ufo[2]);
+	void SetUFO();
 	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);
 	void SetSpawnSound(Sound sound);
+	void SetParticleManager(ParticleManager* particleManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();

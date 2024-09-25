@@ -13,23 +13,15 @@ void TheRock::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void TheRock::SetUFO(Enemy* ufo[2])
-{
-	for (int i = 0; i < 2; i++)
-	{
-		UFOs[i] = ufo[i];
-	}
-}
-
 void TheRock::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;
 	SetSoundVolume(ExplodeSound, 0.333f);
 }
 
-bool TheRock::Initialize()
+bool TheRock::Initialize(Utilities* utilities)
 {
-	LineModel::Initialize(TheUtilities);
+	LineModel::Initialize(utilities);
 
 	return false;
 }

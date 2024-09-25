@@ -152,7 +152,13 @@ void Enemy1::Spawn(Vector3 position)
 
 	Enemy::Spawn(position);
 	RotationZ = AngleFromVectorZ(Destination);
-	Missile->SetUFO(UFOs);
+
+	Missile->UFORefs.clear();
+
+	for (const auto& ufo : UFORefs)
+	{
+		Missile->UFORefs.push_back(ufo);
+	}
 }
 
 void Enemy1::Hit()

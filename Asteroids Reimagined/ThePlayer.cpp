@@ -1059,7 +1059,8 @@ void ThePlayer::Gamepad()
 	//Axis 3 is -1 for Up, 1 for Down on right stick.
 
 	//Button A
-	if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
+	if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) ||
+		IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_THUMB))
 	{
 		FireSecondary();
 	}

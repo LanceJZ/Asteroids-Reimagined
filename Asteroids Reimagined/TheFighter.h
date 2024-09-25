@@ -1,8 +1,6 @@
 #pragma once
 #include "Globals.h"
 #include "Enemy.h"
-//#include "ThePlayer.h"
-//#include "TheUFO.h"
 
 class TheFighter : public Enemy
 {
@@ -12,9 +10,9 @@ public:
 
 	bool NewWave = false;
 
-	//void SetPlayer(ThePlayer* player);
 	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetExplodeSound(Sound sound);
+	void SetParticleManager(ParticleManager* particleManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -29,22 +27,10 @@ public:
 	void Spawn(Vector3 position);
 
 	void ChasePlayer();
-	void ChaseUFO();
-	void ChaseEnemyOne();
-	void ChaseEnemyTwo();
-	void LeaveScreen();
 	bool CheckCollisions();
 
 private:
 	bool Separated = false;
-	//int Points = 200;
-	//float Speed = 150.0f;
-	//float TurnSpeed = 0.45f;
-	//float RotateMagnitude = PI / 2;
-
-	//Sound ExplodeSound;
-
-	//ThePlayer* Player = nullptr;
 
 	void Hit();
 };

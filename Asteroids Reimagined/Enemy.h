@@ -14,7 +14,7 @@ public:
 	float ShotTimerAmount = 0.0f;
 
 	std::vector<Shot*> Shots;
-	Enemy* UFOs[2] = { nullptr };
+	std::vector<Enemy*> UFORefs;
 
 	ThePlayer* Player = nullptr;
 	ParticleManager* Particles = nullptr;
@@ -22,7 +22,6 @@ public:
 	Sound ExplodeSound = {};
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(Enemy* ufo[2]);
 	void SetShotModel(LineModelPoints model);
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);
@@ -36,9 +35,9 @@ public:
 	void Draw3D();
 
 	void Spawn(Vector3 position);
-	void Destroy();
-	void Hit();
-	void Reset();
+	virtual void Destroy();
+	virtual void Hit();
+	virtual void Reset();
 
 protected:
 	size_t ShotTimerID = 0;
@@ -57,7 +56,12 @@ protected:
 	void Shoot(Vector3 velocity);
 	void ChasePlayer();
 	void ChaseUFO();
+	void ChaseEnemy();
+	bool CheckUFOActive();
+	bool LeaveScreen();
 	virtual bool CheckCollisions();
 
 private:
+	void ChaseEnemyOne();
+	void ChaseEnemyTwo();
 };

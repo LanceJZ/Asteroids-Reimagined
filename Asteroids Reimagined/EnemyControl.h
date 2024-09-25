@@ -20,11 +20,14 @@ public:
 	Vector3 PowerUpSpawnPosition = {};
 
 	std::vector<TheRock*> Rocks;
-	TheUFO* UFOs[2] = { nullptr };
+	std::vector<TheUFO*> UFOs;
+
 	TheDeathStar *DeathStar = nullptr;
 	Enemy1 *EnemyOne = nullptr;
 	Enemy2 *EnemyTwo = nullptr;
 	TheBoss *Boss = nullptr;
+
+	LineModelPoints UFOModel = {};
 
 	void SetPlayer(ThePlayer* player);
 	void SetRockModels(LineModelPoints rockModels[4]);
@@ -94,6 +97,8 @@ private:
 	int RockSpawnCount = 0;
 	int RockCount = 0;
 
+	float UFOSpawnTimeAmount = 0.0f;
+
 	Sound RockExplodeSound = {};
 	Sound UFOExplodeSound = {};
 	Sound UFOFireSound = {};
@@ -105,7 +110,6 @@ private:
 
 	ThePlayer *Player = nullptr;
 	ParticleManager *Particles = nullptr;
-	Enemy* UFORefs[2] = { nullptr };
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

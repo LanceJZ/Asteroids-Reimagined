@@ -18,13 +18,11 @@ public:
 	virtual ~TheRock();
 
 	RockSize Size = Large;
-	Enemy* UFOs[2] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(Enemy* ufo[2]);
 	void SetExplodeSound(Sound sound);
 
-	bool Initialize();
+	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
 	void Update(float deltaTime);
