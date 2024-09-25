@@ -21,6 +21,7 @@ Player Ship sometimes visible for a frame in middle of window after being hit be
 Fixed end of game, first letter of new high score is A.
 Fixed bug that allowed user to select secondary weapon that was not available.
 Fixed bug that power ups headed to player after player hit, again.
+UFO was not getting hit by Enemy Missile fixed.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -40,3 +41,6 @@ UFO is now able fire more than two shots at once. Time between shots is greater 
 It is now possible to have more than two UFOs active at once. Spawn times shortens by wave/spawn amount.
 Secondary weapon selection and ammo now stay at bottom of ship.
 Player now gets points for taking down the Boss Shields, and for each Turret.
+UFO Changes direction more often in later waves.
+Missile Enemy now can shot more than one at a time. Starts out with more delay than before, but lessons each wave.
+Mine Enemy mine drop more often, starts out less often than before.

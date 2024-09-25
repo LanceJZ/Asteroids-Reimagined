@@ -61,7 +61,6 @@ void Enemy2::Update(float deltaTime)
 
 	if (Managers.EM.TimerElapsed(LayMineTimerID))
 	{
-		Managers.EM.ResetTimer(LayMineTimerID, GetRandomFloat(2.75f, 5.5f));
 		DropMine();
 	}
 
@@ -133,7 +132,6 @@ void Enemy2::Spawn(Vector3 position)
 	}
 
 	Entity::Spawn(position);
-
 }
 
 void Enemy2::Hit()
@@ -151,6 +149,8 @@ void Enemy2::Destroy()
 void Enemy2::Reset()
 {
 	Destroy();
+
+	Managers.EM.ResetTimer(LayMineTimerID, MineDropTimeAmount = 4.75f);
 
 	for (const auto& mine : Mines)
 	{
@@ -249,6 +249,11 @@ void Enemy2::DropMine()
 	size_t mineNumber = Mines.size();
 
 	if (!Player->GameOver) PlaySound(FireSound);
+
+	MineDropTimeAmount = 4 - (((float)Wave - 3) * 0.1f);
+	float dropTime = GetRandomFloat(MineDropTimeAmount / 2, MineDropTimeAmount);
+
+	Managers.EM.ResetTimer(LayMineTimerID, dropTime);
 
 	for (size_t i = 0; i < mineNumber; i++)
 	{

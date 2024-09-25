@@ -10,6 +10,7 @@ public:
 	Enemy();
 	virtual ~Enemy();
 
+	int Wave = 0;
 	float Distance = 0.0f;
 	float ShotTimerAmount = 0.0f;
 

@@ -2,8 +2,7 @@
 
 Enemy1::Enemy1()
 {
-	Managers.EM.AddLineModel(Missile = DBG_NEW TheMissile());
-	FireMissileTimerID = Managers.EM.AddTimer(2.0f);
+	FireMissileTimerID = Managers.EM.AddTimer(4.0f);
 }
 
 Enemy1::~Enemy1()
@@ -14,20 +13,11 @@ void Enemy1::SetPlayer(ThePlayer* player)
 {
 	Enemy::SetPlayer(player);
 
-	Missile->SetPlayer(player);
 }
 
-//void Enemy1::SetUFO(TheUFO* ufos[2])
-//{
-//	for (int i = 0; i < 2; i++)
-//	{
-//		UFOs[i] = ufos[i];
-//	}
-//}
-//
 void Enemy1::SetMissileModel(LineModelPoints model)
 {
-	Missile->SetModel(model);
+	MissileModel = model;
 }
 
 void Enemy1::SetSpawnSound(Sound sound)
@@ -46,7 +36,7 @@ void Enemy1::SetOnSound(Sound sound)
 
 void Enemy1::SetMissileExplodeSound(Sound sound)
 {
-	Missile->SetExplodeSound(sound);
+	MissileExplodeSound = sound;
 }
 
 bool Enemy1::Initialize(Utilities* utilities)
@@ -77,9 +67,7 @@ void Enemy1::Update(float deltaTime)
 
 	if (Managers.EM.TimerElapsed(FireMissileTimerID))
 	{
-		if (!Missile->Enabled && Player->Enabled) FireMissile();
-
-		Managers.EM.ResetTimer(FireMissileTimerID);
+		FireMissile();
 	}
 
 	DestinationTarget();
@@ -152,13 +140,6 @@ void Enemy1::Spawn(Vector3 position)
 
 	Enemy::Spawn(position);
 	RotationZ = AngleFromVectorZ(Destination);
-
-	Missile->UFORefs.clear();
-
-	for (const auto& ufo : UFORefs)
-	{
-		Missile->UFORefs.push_back(ufo);
-	}
 }
 
 void Enemy1::Hit()
@@ -176,7 +157,13 @@ void Enemy1::Destroy()
 void Enemy1::Reset()
 {
 	Destroy();
-	Missile->Destroy();
+
+	Managers.EM.SetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
+
+	for (const auto& missile : Missiles)
+	{
+		missile->Destroy();
+	}
 }
 
 bool Enemy1::CheckWentOffScreen()
@@ -266,8 +253,54 @@ void Enemy1::FireMissile()
 {
 	if (!Player->GameOver) PlaySound(FireSound);
 
-	Missile->Spawn(Position);
-	Missile->RotationZ = RotationZ;
+	MissileFireTimerAmount -= ((float)Wave * 0.1f) -
+		((MissilesFired++) * 0.01f);
+
+	float missileTime = GetRandomFloat(MissileFireTimerAmount -
+		(((float)Wave - 2) * 0.1f), MissileFireTimerAmount);
+
+	Managers.EM.ResetTimer(FireMissileTimerID, missileTime);
+
+	bool spawnMissile = true;
+	size_t missileNumber = Missiles.size();
+
+	for (size_t i = 0; i < missileNumber; i++)
+	{
+		if (!Missiles.at(i)->Enabled)
+		{
+			spawnMissile = false;
+			missileNumber = i;
+			break;
+		}
+	}
+
+	if (spawnMissile)
+	{
+		Missiles.push_back(DBG_NEW TheMissile());
+		Managers.EM.AddEntity(Missiles.back());
+		Missiles.back()->SetModel(MissileModel);
+		Missiles.back()->SetPlayer(Player);
+		Missiles.back()->SetParticleManager(Particles);
+		Missiles.back()->SetExplodeSound(MissileExplodeSound);
+		Missiles.back()->Initialize(TheUtilities);
+		Missiles.back()->BeginRun();
+	}
+
+	Missiles.at(missileNumber)->Spawn(Position);
+	Missiles.at(missileNumber)->RotationZ = RotationZ;
+
+	for (const auto& missile : Missiles)
+	{
+		missile->UFORefs.clear();
+	}
+
+	for (const auto& missiles : Missiles)
+	{
+		for (const auto& ufo : UFORefs)
+		{
+			missiles->UFORefs.push_back(ufo);
+		}
+	}
 }
 
 bool Enemy1::CheckCollisions()

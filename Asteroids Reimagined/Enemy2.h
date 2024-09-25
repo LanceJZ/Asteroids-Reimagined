@@ -44,6 +44,7 @@ private:
 	float Speed = 75.0f;
 	float TurnSpeed = 0.4666f;
 	float RotateMagnitude = PI / 2;
+	float MineDropTimeAmount = 0.0f;
 
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 

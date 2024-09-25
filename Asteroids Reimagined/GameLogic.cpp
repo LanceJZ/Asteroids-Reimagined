@@ -319,7 +319,8 @@ bool GameLogic::CheckPlayerClear()
 	{
 		if (Enemies->Boss->CirclesIntersect(*PlayerClear)) return false;
 
-		if (PlayerClear->CirclesIntersect(Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
+		if (PlayerClear->CirclesIntersect(
+			Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
 				Enemies->Boss->FireShotAtPlayerArea->Radius))
 		{
 			return false;
@@ -345,20 +346,17 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	if (Enemies->EnemyOne->Enabled &&
-		Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
+	if (Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 	}
 
-	if (Enemies->EnemyTwo->Enabled &&
-		Enemies->EnemyTwo->CirclesIntersect(*PlayerClear))
+	if (Enemies->EnemyTwo->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 	}
 
-	if (Enemies->DeathStar->Enabled &&
-		Enemies->DeathStar->CirclesIntersect(*PlayerClear))
+	if (Enemies->DeathStar->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 
@@ -366,27 +364,26 @@ bool GameLogic::CheckPlayerClear()
 
 	for (const auto& fighterPair : Enemies->DeathStar->FighterPairs)
 	{
-		if (fighterPair->Enabled &&
-			fighterPair->CirclesIntersect(*PlayerClear))
+		if (fighterPair->CirclesIntersect(*PlayerClear))
 		{
 			return false;
 		}
 
 		for (const auto& fighter : fighterPair->Fighters)
 		{
-			if (fighter->Enabled &&
-				fighter->CirclesIntersect(*PlayerClear))
+			if (fighter->CirclesIntersect(*PlayerClear))
 			{
 				return false;
 			}
 		}
 	}
 
-
-	if (Enemies->EnemyOne->Missile->Enabled &&
-		Enemies->EnemyOne->Missile->CirclesIntersect(*PlayerClear))
+	for (const auto& missile : Enemies->EnemyOne->Missiles)
 	{
-		return false;
+		if (missile->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
 	}
 
 	for (const auto& mine : Enemies->EnemyTwo->Mines)

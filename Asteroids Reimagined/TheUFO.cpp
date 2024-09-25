@@ -142,6 +142,8 @@ void TheUFO::Destroy()
 {
 	Entity::Destroy();
 
+	Managers.EM.ResetTimer(FireTimerID, 1.75f);
+	Managers.EM.ResetTimer(ChangeVectorTimerID, 5.50f);
 }
 
 void TheUFO::Hit()
@@ -313,7 +315,11 @@ float TheUFO::AimedShotAtRock()
 
 void TheUFO::ChangeVector()
 {
-	Managers.EM.ResetTimer(ChangeVectorTimerID, GetRandomFloat(3.1f, 7.5f));
+	float vectorTimer = GetRandomFloat(3.1f - (Wave * 0.1f), 7.5f);
+
+	if (vectorTimer < 0.25f) vectorTimer = 0.25f;
+
+	Managers.EM.ResetTimer(ChangeVectorTimerID,	vectorTimer);
 
 	if (GetRandomValue(1, 10) > 2)
 	{

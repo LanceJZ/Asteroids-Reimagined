@@ -2,7 +2,6 @@
 #include "Globals.h"
 #include "Enemy.h"
 #include "TheMissile.h"
-//#include "TheUFO.h"
 
 class Enemy1 : public Enemy
 {
@@ -17,13 +16,12 @@ public:
 
 	Edge EdgeSpawnedFrom = Top;
 
-	TheMissile* Missile = nullptr;
+	std::vector<TheMissile*> Missiles;
 
 	Enemy1();
 	virtual ~Enemy1();
 
 	void SetPlayer(ThePlayer* player);
-	//void SetUFO(TheUFO* ufos[2]);
 	void SetMissileModel(LineModelPoints model);
 
 	void SetSpawnSound(Sound sound);
@@ -43,7 +41,8 @@ public:
 
 private:
 	size_t FireMissileTimerID = 0;
-	//int Score = 1250;
+	int MissilesFired = 0;
+	float MissileFireTimerAmount = 0.0f;
 	float Speed = 133.666f;
 	float TurnSpeed = 0.666f;
 	float RotateMagnitude = PI / 2;
@@ -52,8 +51,9 @@ private:
 
 	Sound SpawnSound = {};
 	Sound OnSound = {};
+	Sound MissileExplodeSound = {};
 
-	//TheUFO* UFOs[2] = { nullptr };
+	LineModelPoints MissileModel = {};
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

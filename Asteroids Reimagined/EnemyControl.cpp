@@ -225,7 +225,7 @@ void EnemyControl::SetParticleManager(ParticleManager* particles)
 	Particles = particles;
 
 	EnemyOne->SetParticleManager(particles);
-	EnemyOne->Missile->SetParticleManager(particles);
+	//EnemyOne->Missile->SetParticleManager(particles);
 	EnemyTwo->SetParticleManager(particles);
 	DeathStar->SetParticleManager(particles);
 }
@@ -325,6 +325,14 @@ void EnemyControl::Update()
 		if (!EnemyOne->Enabled && Wave > 2)
 		{
 			EnemyOne->Spawn({ 0, 0, 0 });
+			EnemyOne->Wave = Wave;
+
+			EnemyOne->UFORefs.clear();
+
+			for (const auto& ufo : UFOs)
+			{
+				EnemyOne->UFORefs.push_back(ufo);
+			}
 		}
 	}
 
@@ -337,6 +345,14 @@ void EnemyControl::Update()
 		if (!EnemyTwo->Enabled && Wave > 3)
 		{
 			EnemyTwo->Spawn({ 0, 0, 0 });
+			EnemyTwo->Wave = Wave;
+
+			EnemyTwo->UFORefs.clear();
+
+			for (const auto& ufo : UFOs)
+			{
+				EnemyTwo->UFORefs.push_back(ufo);
+			}
 		}
 	}
 
@@ -356,6 +372,14 @@ void EnemyControl::NewGame()
 	for (const auto& rock : Rocks)
 	{
 		rock->Destroy();
+	}
+
+	EnemyOne->Reset();
+	EnemyTwo->Reset();
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->Reset();
 	}
 }
 
@@ -437,8 +461,8 @@ void EnemyControl::SpawnUFO()
 		UFOs.back()->SetFireSound(UFOFireSound);
 		UFOs.back()->SetBigSound(UFOBigSound);
 		UFOs.back()->SetSmallSound(UFOSmallSound);
-		UFOs.back()->BeginRun();
 		UFOs.back()->Initialize(TheUtilities);
+		UFOs.back()->BeginRun();
 
 		EnemyOne->UFORefs.push_back(UFOs.back());
 		DeathStar->UFORefs.push_back(UFOs.back());
@@ -560,18 +584,6 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 	{
 		if (!ufo->Enabled) continue;
 
-		//if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
-		//{
-		//	ufo->Hit();
-		//	EnemyOne->Hit();
-		//}
-		//
-		//if (EnemyTwo->Enabled && ufo->CirclesIntersect(*EnemyTwo))
-		//{
-		//	ufo->Hit();
-		//	EnemyTwo->Hit();
-		//}
-
 		if (rock->Size == TheRock::Small) continue;
 
 		if (ufo->CheckShotCollisions(rock)) ufoHitRock = true;
@@ -597,12 +609,12 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		return;
 	}
 
-	if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
-	{
-		EnemyOne->Missile->Hit();
-		rock->Hit();
-		return;
-	}
+	//if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
+	//{
+	//	EnemyOne->Missile->Hit();
+	//	rock->Hit();
+	//	return;
+	//}
 
 	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*rock))
 	{
@@ -628,7 +640,7 @@ void EnemyControl::MakeReadyForBossWave()
 
 	if (EnemyOne->Enabled || EnemyTwo->Enabled) allClear = false;
 
-	if (EnemyOne->Missile->Enabled) allClear = false;
+//	if (EnemyOne->Missile->Enabled) allClear = false;
 
 	for (const auto& mine : EnemyTwo->Mines)
 	{
