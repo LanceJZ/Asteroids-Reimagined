@@ -53,6 +53,7 @@ public:
 	void SetDeathStarExplodeSound(Sound sound);
 	void SetEnemyOneSpawnSound(Sound sound);
 	void SetEnemyOneFireSound(Sound sound);
+	void SetEnemyOneMissileOnSound(Sound sound);
 	void SetEnemyOneExplodeSound(Sound sound);
 	void SetEnemyOneOnSound(Sound sound);
 	void SetEnemyOneMissileExplodeSound(Sound sound);

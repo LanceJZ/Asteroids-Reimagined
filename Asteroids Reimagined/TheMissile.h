@@ -8,6 +8,8 @@ public:
 	TheMissile();
 	virtual ~TheMissile();
 
+	void SetOnSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -20,6 +22,8 @@ public:
 
 private:
 	size_t LifeTimerID = 0;
+
+	Sound OnSound = {};
 
 	bool CheckCollisions();
 };

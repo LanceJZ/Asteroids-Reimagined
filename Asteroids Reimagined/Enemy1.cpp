@@ -34,6 +34,11 @@ void Enemy1::SetOnSound(Sound sound)
 	SetSoundVolume(OnSound, 0.25f);
 }
 
+void Enemy1::SetMissileOnSound(Sound sound)
+{
+	MissileOnSound = sound;
+}
+
 void Enemy1::SetMissileExplodeSound(Sound sound)
 {
 	MissileExplodeSound = sound;
@@ -281,6 +286,7 @@ void Enemy1::FireMissile()
 		Missiles.back()->SetModel(MissileModel);
 		Missiles.back()->SetPlayer(Player);
 		Missiles.back()->SetParticleManager(Particles);
+		Missiles.back()->SetOnSound(MissileOnSound);
 		Missiles.back()->SetExplodeSound(MissileExplodeSound);
 		Missiles.back()->Initialize(TheUtilities);
 		Missiles.back()->BeginRun();

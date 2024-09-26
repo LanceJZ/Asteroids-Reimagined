@@ -73,10 +73,11 @@ void Enemy::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	Destroy();
-
-	Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, {0.25f}),
+	if (Particles != nullptr) Particles->SpawnLineParticles(Position,
+		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
+
+	Destroy();
 }
 
 void Enemy::Reset()
@@ -96,7 +97,6 @@ void Enemy::Destroy()
 {
 	Entity::Destroy();
 
-	Enabled = false;
 }
 
 void Enemy::Shoot()

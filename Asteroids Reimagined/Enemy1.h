@@ -26,6 +26,7 @@ public:
 
 	void SetSpawnSound(Sound sound);
 	void SetOnSound(Sound sound);
+	void SetMissileOnSound(Sound sound);
 	void SetMissileExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
@@ -51,6 +52,7 @@ private:
 
 	Sound SpawnSound = {};
 	Sound OnSound = {};
+	Sound MissileOnSound = {};
 	Sound MissileExplodeSound = {};
 
 	LineModelPoints MissileModel = {};

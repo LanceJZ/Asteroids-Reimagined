@@ -145,6 +145,11 @@ void EnemyControl::SetEnemyOneFireSound(Sound sound)
 	EnemyOne->SetFireSound(sound);
 }
 
+void EnemyControl::SetEnemyOneMissileOnSound(Sound sound)
+{
+	EnemyOne->SetMissileOnSound(sound);
+}
+
 void EnemyControl::SetEnemyOneExplodeSound(Sound sound)
 {
 	EnemyOne->SetExplodeSound(sound);
@@ -225,7 +230,6 @@ void EnemyControl::SetParticleManager(ParticleManager* particles)
 	Particles = particles;
 
 	EnemyOne->SetParticleManager(particles);
-	//EnemyOne->Missile->SetParticleManager(particles);
 	EnemyTwo->SetParticleManager(particles);
 	DeathStar->SetParticleManager(particles);
 }

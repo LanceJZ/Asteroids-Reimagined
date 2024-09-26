@@ -87,9 +87,10 @@ bool Game::Load()
 	Enemies->SetDeathStarSpawnSound(Managers.CM.LoadAndGetSound("DeathStarSpawn"));
 	Enemies->SetDeathStarExplodeSound(Managers.CM.LoadAndGetSound("DeathStarExplode"));
 	Enemies->SetEnemyOneSpawnSound(Managers.CM.LoadAndGetSound("EnemyOneSpawn"));
+	Enemies->SetEnemyOneOnSound(Managers.CM.LoadAndGetSound("EnemyOne"));
 	Enemies->SetEnemyOneExplodeSound(Managers.CM.LoadAndGetSound("EnemyOneExplode"));
 	Enemies->SetEnemyOneFireSound(Managers.CM.LoadAndGetSound("MissileLaunch"));
-	Enemies->SetEnemyOneOnSound(Managers.CM.LoadAndGetSound("EnemyOne"));
+	Enemies->SetEnemyOneMissileOnSound(Managers.CM.LoadAndGetSound("MissileOn"));
 	Enemies->SetEnemyOneMissileExplodeSound(Managers.CM.LoadAndGetSound("MissileExplode"));
 	Enemies->SetEnemyTwoExplodeSound(Managers.CM.LoadAndGetSound("EnemyTwoExplode"));
 	Enemies->SetEnemyTwoSpawnSound(Managers.CM.LoadAndGetSound("EnemyTwoSpawn"));

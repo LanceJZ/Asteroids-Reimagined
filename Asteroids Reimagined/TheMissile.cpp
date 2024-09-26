@@ -9,6 +9,11 @@ TheMissile::~TheMissile()
 {
 }
 
+void TheMissile::SetOnSound(Sound sound)
+{
+	OnSound = sound;
+}
+
 bool TheMissile::Initialize(Utilities* utilities)
 {
 	Enemy::Initialize(utilities);
@@ -40,6 +45,8 @@ void TheMissile::Update(float deltaTime)
 	ChasePlayer();
 	CheckScreenEdge();
 	CheckCollisions();
+
+	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void TheMissile::Draw3D()

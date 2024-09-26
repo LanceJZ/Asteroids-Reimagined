@@ -107,9 +107,7 @@ void TheFighter::Spawn(Vector3 position)
 
 void TheFighter::Hit()
 {
-	Entity::Hit();
-
-	if (!Player->GameOver) PlaySound(ExplodeSound);
+	Enemy::Hit();
 
 	Reset();
 }
