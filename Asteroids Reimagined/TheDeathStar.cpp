@@ -22,7 +22,7 @@ void TheDeathStar::SetWedgeModel(LineModelPoints model)
 
 void TheDeathStar::SetExplodeSound(Sound sound)
 {
-	ExplodeSound = sound;
+	Enemy::SetExplodeSound(sound);
 
 	for (const auto &fighterPair : FighterPairs)
 	{

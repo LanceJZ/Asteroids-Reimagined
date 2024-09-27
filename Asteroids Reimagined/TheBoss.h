@@ -20,6 +20,7 @@ public:
 	std::vector<Shot*> Shots;
 
 	void SetPlayer(ThePlayer* player);
+	void SetParticleManager(ParticleManager* particleManager);
 
 	void SetShieldModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
@@ -47,6 +48,8 @@ public:
 	void Spawn(Vector3 position, float rotation);
 	void Hit();
 	void Destroy();
+
+	void Hit(Entity* entity, int damage);
 
 private:
 	size_t MissileFireTimerID = 0;
@@ -77,6 +80,8 @@ private:
 	LineModel* Shield = nullptr;
 	LineModel* RightSpineMount = nullptr;
 	LineModel* LeftSpineMount = nullptr;
+
+	ParticleManager* Particles = nullptr;
 	ThePlayer* Player = nullptr;
 
 	std::vector<Vector3> Path;

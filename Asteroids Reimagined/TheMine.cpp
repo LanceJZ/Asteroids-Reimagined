@@ -46,9 +46,10 @@ void TheMine::Spawn(Vector3 position)
 
 void TheMine::Hit()
 {
-	PlaySound(ExplodeSound);
+	Enemy::Hit();
+	//PlaySound(ExplodeSound);
 
-	Particles->SpawnLineParticles(Position, { 0.0f }, Radius * 0.25f, 50, 25, 1.0f, WHITE);
+	//Particles->SpawnLineParticles(Position, { 0.0f }, Radius * 0.25f, 50, 25, 1.0f, WHITE);
 
 	Destroy();
 }

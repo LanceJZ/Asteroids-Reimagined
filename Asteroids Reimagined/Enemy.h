@@ -17,17 +17,13 @@ public:
 	std::vector<Shot*> Shots;
 	std::vector<Enemy*> UFORefs;
 
-	ThePlayer* Player = nullptr;
-	ParticleManager* Particles = nullptr;
-
-	Sound ExplodeSound = {};
-
 	void SetPlayer(ThePlayer* player);
+	void SetParticleManager(ParticleManager* particleManager);
+
 	void SetShotModel(LineModelPoints model);
+
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);
-
-	void SetParticleManager(ParticleManager* particleManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -48,7 +44,10 @@ protected:
 	float TurnSpeed = 1.45f;
 	float RotateMagnitude = PI / 2;
 
+	ThePlayer* Player = nullptr;
+	ParticleManager* Particles = nullptr;
 	Sound FireSound = {};
+	Sound ExplodeSound = {};
 	LineModelPoints ShotModel = {};
 	Enemy* EnemyOne = nullptr;
 	Enemy* EnemyTwo = nullptr;

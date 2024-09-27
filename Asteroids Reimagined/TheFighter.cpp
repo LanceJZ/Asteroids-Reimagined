@@ -16,12 +16,12 @@ void TheFighter::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
 
 void TheFighter::SetExplodeSound(Sound sound)
 {
-	ExplodeSound = sound;
+	Enemy::SetExplodeSound(sound);
 }
 
 void TheFighter::SetParticleManager(ParticleManager* particleManager)
 {
-	Particles = particleManager;
+	Enemy::SetParticleManager(particleManager);
 }
 
 bool TheFighter::Initialize(Utilities* utilities)

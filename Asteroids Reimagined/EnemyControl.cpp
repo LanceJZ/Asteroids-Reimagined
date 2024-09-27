@@ -232,6 +232,7 @@ void EnemyControl::SetParticleManager(ParticleManager* particles)
 	EnemyOne->SetParticleManager(particles);
 	EnemyTwo->SetParticleManager(particles);
 	DeathStar->SetParticleManager(particles);
+	Boss->SetParticleManager(particles);
 }
 
 bool EnemyControl::Initialize(Utilities* utilities)

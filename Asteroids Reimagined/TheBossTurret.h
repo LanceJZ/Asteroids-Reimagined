@@ -12,7 +12,10 @@ public:
 	std::vector<Shot*> Shots;
 
 	void SetPlayer(ThePlayer* player);
+	void SetParticleManager(ParticleManager* particleManager);
+
 	void SetShotModel(LineModelPoints model);
+
 	void SetFireSound(Sound sound);
 	void SetExplodeSound(Sound sound);
 
@@ -37,6 +40,8 @@ private:
 	Sound ExplodeSound = {};
 
 	LineModelPoints ShotModel = {};
+
+	ParticleManager* Particles = nullptr;
 	ThePlayer* Player = nullptr;
 
 	void Fire();

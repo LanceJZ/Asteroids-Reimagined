@@ -14,6 +14,11 @@ void TheBossTurret::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheBossTurret::SetParticleManager(ParticleManager* particleManager)
+{
+	Particles = particleManager;
+}
+
 void TheBossTurret::SetShotModel(LineModelPoints model)
 {
 	ShotModel = model;
@@ -72,7 +77,11 @@ void TheBossTurret::Hit()
 {
 	LineModel::Hit();
 
-	PlaySound(ExplodeSound);
+	if (!Player->GameOver) PlaySound(ExplodeSound);
+
+	Particles->SpawnLineParticles(GetWorldPosition(),
+		Vector3Multiply(Velocity, {0.25f}),
+		20, 100, 20, 2.0f, WHITE);
 
 	Destroy();
 }
