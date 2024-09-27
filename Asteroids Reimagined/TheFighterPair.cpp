@@ -192,15 +192,11 @@ void TheFighterPair::Hit()
 {
 	Enemy::Hit();
 
-	if (!Player->GameOver) PlaySound(ExplodeSound);
-
 	for (const auto &fighter : Fighters)
 	{
 		fighter->Separate();
 		fighter->RemoveParent(this);
 	}
-
-	Destroy();
 }
 
 void TheFighterPair::Destroy()

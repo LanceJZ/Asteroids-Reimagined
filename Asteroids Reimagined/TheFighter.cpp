@@ -109,7 +109,6 @@ void TheFighter::Hit()
 {
 	Enemy::Hit();
 
-	Reset();
 }
 
 void TheFighter::Destroy()

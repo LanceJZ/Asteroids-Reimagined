@@ -197,9 +197,7 @@ void TheDeathStar::NewGame()
 
 void TheDeathStar::Hit()
 {
-	Entity::Destroy();
-
-	if (!Player->GameOver) PlaySound(ExplodeSound);
+	Enemy::Hit();
 
 	for (const auto &fighterPair : FighterPairs)
 	{
@@ -215,7 +213,7 @@ void TheDeathStar::Hit()
 
 void TheDeathStar::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 }
 
 bool TheDeathStar::CheckCollisions()
