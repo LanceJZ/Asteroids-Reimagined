@@ -159,9 +159,18 @@ void Enemy::ChasePlayer()
 {
 	RotationVelocityZ = 0.0f;
 
-	if (!Player->Enabled) return;
+	Vector3 target = Player->Position;
 
-	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
+	if (!Player->Enabled)
+	{
+		if (X() > 0.0f) target.x = (float)WindowWidth;
+		else target.x = (float)-WindowWidth;
+
+		if (Y() > 0.0f) target.y = (float)WindowHeight;
+		else target.y = (float)-WindowHeight;
+	}
+
+	SetRotateVelocity(target, TurnSpeed, Speed);
 }
 
 void Enemy::ChaseUFO()

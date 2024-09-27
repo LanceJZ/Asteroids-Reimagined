@@ -132,8 +132,9 @@ void TheUFO::Spawn(int spawnCount)
 		Velocity.x = MaxSpeed;
 	}
 
-	if (ShotTimerAmount > 0.2f) ShotTimerAmount = 1.75f -
-		(spawnCount * 0.01f) - (Wave * 0.1f);
+	ShotTimerAmount = 1.75f - (spawnCount * 0.01f) - (Wave * 0.1f);
+
+	if (ShotTimerAmount < 0.2f) ShotTimerAmount = 0.2f;
 
 	Entity::Spawn(position);
 }

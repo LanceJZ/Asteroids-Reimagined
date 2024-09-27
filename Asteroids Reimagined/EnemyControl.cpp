@@ -242,6 +242,7 @@ bool EnemyControl::Initialize(Utilities* utilities)
 	EnemyOne->Initialize(TheUtilities);
 	EnemyTwo->Initialize(TheUtilities);
 	DeathStar->Initialize(TheUtilities);
+	Boss->Initialize(TheUtilities);
 
 	return false;
 }
@@ -251,7 +252,10 @@ bool EnemyControl::BeginRun()
 	Common::BeginRun();
 
 	DeathStar->SetEnemies(EnemyOne, EnemyTwo);
+	EnemyOne->BeginRun();
+	EnemyTwo->BeginRun();
 	DeathStar->BeginRun();
+	Boss->BeginRun();
 
 	Reset();
 
@@ -436,7 +440,10 @@ void EnemyControl::SpawnUFO()
 	bool spawnUFO = true;
 	size_t ufoNumber = UFOs.size();
 
-	UFOSpawnTimeAmount -= (Wave * 0.1f) - (UFOSpawnCount * 0.01f);
+	UFOSpawnTimeAmount = (Wave * 0.1f) - (UFOSpawnCount * 0.01f);
+
+	if (UFOSpawnTimeAmount < 0.5f) UFOSpawnTimeAmount = 0.5f;
+
 	float ufoTime = GetRandomFloat(UFOSpawnTimeAmount / ((Wave * 0.1f) + 1),
 		UFOSpawnTimeAmount);
 

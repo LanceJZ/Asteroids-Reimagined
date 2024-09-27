@@ -261,6 +261,8 @@ void Enemy1::FireMissile()
 	MissileFireTimerAmount -= ((float)Wave * 0.1f) -
 		((MissilesFired++) * 0.01f);
 
+	if (MissileFireTimerAmount < 0.2f) MissileFireTimerAmount = 0.2f;
+
 	float missileTime = GetRandomFloat(MissileFireTimerAmount -
 		(((float)Wave - 2) * 0.1f), MissileFireTimerAmount);
 
