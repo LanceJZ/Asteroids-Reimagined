@@ -99,7 +99,7 @@ void TheDeathStar::Update(float deltaTime)
 
 	if (NewWave)
 	{
-		if (OffScreen())
+		if (IsOffScreen())
 		{
 			Reset();
 		}

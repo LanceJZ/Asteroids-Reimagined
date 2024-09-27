@@ -131,11 +131,11 @@ void TheBossTurret::Fire()
 
 	if (percentChance < 0) percentChance = 0;
 
-	float angle = AngleFromWorldVectorZ(Player->Position) +
+	float angle = GetAngleFromWorldVectorZ(Player->Position) +
 		GetRandomFloat(-percentChance, percentChance);
 	RotationZ = angle -Parents->at(0)->RotationZ;
 	float shotSpeed = 200;
 
-	Vector3 offset = Vector3Add(VelocityFromAngleZ(Radius), GetWorldPosition());
+	Vector3 offset = Vector3Add(GetVelocityFromAngleZ(Radius), GetWorldPosition());
 	Shots.at(shotNumber)->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 4.75f);
 }

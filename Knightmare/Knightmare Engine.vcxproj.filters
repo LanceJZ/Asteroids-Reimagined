@@ -24,9 +24,6 @@
     <ClCompile Include="LineModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PositionedObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ContentManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LineModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PositionedObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContentManager.h">

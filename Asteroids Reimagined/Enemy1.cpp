@@ -144,7 +144,7 @@ void Enemy1::Spawn(Vector3 position)
 	}
 
 	Enemy::Spawn(position);
-	RotationZ = AngleFromVectorZ(Destination);
+	RotationZ = GetAngleFromVectorZ(Destination);
 }
 
 void Enemy1::Hit()

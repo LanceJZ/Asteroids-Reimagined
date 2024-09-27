@@ -32,7 +32,7 @@ void ThePlasmaShot::Update(float deltaTime)
 		Enabled = false;
 	}
 
-	if (OffScreen())
+	if (IsOffScreen())
 	{
 		Enabled = false;
 	}

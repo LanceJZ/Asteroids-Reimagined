@@ -414,7 +414,7 @@ void TheBoss::FireShots()
 	}
 
 	float shotSpeed = 200;
-	Vector3 offset = Vector3Add(VelocityFromAngleZ(LeftSpineMount->Radius),
+	Vector3 offset = Vector3Add(GetVelocityFromAngleZ(LeftSpineMount->Radius),
 		LeftSpineMount->GetWorldPosition());
 	Shots.at(shotNumberL)->Spawn(offset,
 		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
@@ -441,7 +441,7 @@ void TheBoss::FireShots()
 		Shots.back()->BeginRun();
 	}
 
-	offset = Vector3Add(VelocityFromAngleZ(RightSpineMount->Radius),
+	offset = Vector3Add(GetVelocityFromAngleZ(RightSpineMount->Radius),
 		RightSpineMount->GetWorldPosition());
 	Shots.at(shotNumberR)->Spawn(offset,
 		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);

@@ -241,7 +241,7 @@ void TheUFO::FireShot() //Move to Enemy class.
 
 	if (!Player->GameOver) PlaySound(FireSound);
 
-	Vector3 position = Vector3Add(VelocityFromAngleZ(Radius), Position);
+	Vector3 position = Vector3Add(GetVelocityFromAngleZ(Radius), Position);
 	Shots[spawnNumber]->Spawn(position, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
 }
 
@@ -268,13 +268,13 @@ float TheUFO::AimedShot()
 
 	percentChance += GetRandomFloat(minP, maxP);
 
-	return AngleFromVectorZ(Player->Position) +
+	return GetAngleFromVectorZ(Player->Position) +
 		GetRandomFloat(-percentChance, percentChance);
 }
 
 float TheUFO::AimedShotAtDeathStar()
 {
-	return AngleFromVectorZ(DeathStarPosition);
+	return GetAngleFromVectorZ(DeathStarPosition);
 }
 
 float TheUFO::AimedShotAtRock()
@@ -306,10 +306,10 @@ float TheUFO::AimedShotAtRock()
 		return GetRandomRadian();
 	}
 
-	Vector3 compensation = GetVelocityFromAngleZ(AngleFromVectorZ(closestRockVelocity),
+	Vector3 compensation = GetVelocityFromAngleZ(GetAngleFromVectorZ(closestRockVelocity),
 		shortestDistance);
 
-	return AngleFromVectorZ(Vector3Add(closestRockPosition,
+	return GetAngleFromVectorZ(Vector3Add(closestRockPosition,
 		Vector3Add(closestRockVelocity, compensation)));
 }
 

@@ -158,10 +158,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="EnemyCollisions.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="EnemyControl.cpp">
       <SubType>
       </SubType>
@@ -242,10 +238,6 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Enemy2.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="EnemyCollisions.h">
       <SubType>
       </SubType>
     </ClInclude>

@@ -215,7 +215,7 @@ bool Enemy::LeaveScreen()
 {
 	LeavePlay(TurnSpeed, Speed);
 
-	if (OffScreen())
+	if (IsOffScreen())
 	{
 		Reset();
 		true;

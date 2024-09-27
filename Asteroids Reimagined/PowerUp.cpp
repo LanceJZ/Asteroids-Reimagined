@@ -180,5 +180,5 @@ void PowerUp::DriftToPlayer()
 	if (!Player->Enabled) pos = { 0.0f, 0.0f, 0.0f };
 
 	RotationZ = GetAngleFromVectors(pos);
-	Velocity = VelocityFromAngleZ(36.666f);
+	Velocity = GetVelocityFromAngleZ(36.666f);
 }

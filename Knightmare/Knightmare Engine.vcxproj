@@ -191,7 +191,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="PositionedObject.cpp" />
     <ClCompile Include="Scene.cpp">
       <SubType>
       </SubType>
@@ -231,7 +230,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="PositionedObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h">
       <SubType>

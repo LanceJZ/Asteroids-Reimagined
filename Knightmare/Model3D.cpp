@@ -8,13 +8,11 @@ Model3D::~Model3D()
 {
 	if (IsChild)
 	{
-		//Children.clear();
 		IsChild = false;
 	}
 
 	if (IsParent)
 	{
-		//Parents.clear();
 		IsParent = false;
 	}
 }
@@ -131,20 +129,6 @@ void Model3D::Draw3D()
 	CalculateWorldSpace();
 	AfterCalculate();
 }
-
-//void Model3D::AddChild(Model3D* child)
-//{
-//	for (auto parent : Parents)
-//	{
-//		parent->AddChildren(child);
-//	}
-//
-//	Children.push_back(child);
-//	child->Parents.push_back(this);
-//	child->IsChild = true;
-//	IsParent = true;
-//
-//}
 
 void Model3D::SetModel(Model &model, float scale)
 {

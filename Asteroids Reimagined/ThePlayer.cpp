@@ -451,7 +451,7 @@ void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
 
 void ThePlayer::PointTurret(Vector3 mouseLocation)
 {
-	Turret->RotationZ = AngleFromVectorZ(mouseLocation) - RotationZ;
+	Turret->RotationZ = GetAngleFromVectorZ(mouseLocation) - RotationZ;
 }
 
 void ThePlayer::FireTurret()
