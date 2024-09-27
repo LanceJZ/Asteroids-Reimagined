@@ -809,7 +809,6 @@ void EnemyControl::CheckHomingMineEnemyChase()
 			for (const auto& fighter : fighterPair->Fighters)
 			{
 				if (!fighter->Enabled) continue;
-				if (fighterPair->Enabled) continue;
 
 				float fighterDistance = Vector3Distance(fighter->GetWorldPosition(),
 					mine->Position);
