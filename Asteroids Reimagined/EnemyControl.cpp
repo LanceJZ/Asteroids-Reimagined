@@ -753,7 +753,7 @@ void EnemyControl::CheckHomingMineEnemyChase()
 		if (!mine->Enabled) continue;
 
 		bool enemyToChase = false;
-		float distance = 400.0f;
+		float distance = 450.0f;
 		Vector3 enemyPosition = { 0.0f, 0.0f, 0.0f };
 
 		for (const auto& ufo : UFOs)
@@ -794,39 +794,17 @@ void EnemyControl::CheckHomingMineEnemyChase()
 			}
 		}
 
-		for (const auto& fighterPair : DeathStar->FighterPairs)
-		{
-			if (!fighterPair->Enabled) continue;
-
-			float fighterDistance = Vector3Distance(fighterPair->Position, mine->Position);
-
-			if (fighterDistance < distance)
-			{
-				distance = fighterDistance;
-				enemyToChase = true;
-				enemyPosition = fighterPair->GetWorldPosition();
-			}
-
-			for (const auto& fighter : fighterPair->Fighters)
-			{
-				if (!fighter->Enabled) continue;
-
-				float fighterDistance = Vector3Distance(fighter->GetWorldPosition(),
-					mine->Position);
-
-				if (fighterDistance < distance)
-				{
-					distance = fighterDistance;
-					enemyToChase = true;
-					enemyPosition = fighter->GetWorldPosition();
-				}
-			}
-		}
-
 		if (DeathStar->Enabled)
 		{
-			enemyPosition = DeathStar->GetWorldPosition();
-			enemyToChase = true;
+			float deathStarDistance =
+				Vector3Distance(DeathStar->GetWorldPosition(), mine->Position);
+
+			if (deathStarDistance < distance)
+			{
+				enemyPosition = DeathStar->GetWorldPosition();
+				enemyToChase = true;
+			}
+
 		}
 
 		if (enemyToChase)

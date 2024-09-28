@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.24.50 Released.
+Asteroids Reimagined Beta 4.24.51 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -24,6 +24,7 @@ Fixed bug that power ups headed to player after player hit, again.
 UFO was not getting hit by Enemy Missile fixed.
 Fixed Fighter had no VFX but had audio when hit, Fighter pair had VFX, but no audio when hit. Removed VFX from fighter pair hit, fixed audio.
 Fixed UFO shot not getting destroyed when player hit/shield hit.
+Fixed player homing mines chasing Death Star no matter how far away it was.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -48,3 +49,5 @@ Missile Enemy now can shot more than one at a time. Starts out with more delay t
 Mine Enemy mine drop more often, starts out less often than before.
 Missile now has sound when active.
 PowerUp time is now additive.
+Removed Player homing mines going after fighter/fighter pair.
+Increased the range and speed of player homing mines.
