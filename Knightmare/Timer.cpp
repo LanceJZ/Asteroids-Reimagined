@@ -25,3 +25,13 @@ bool Timer::Elapsed()
 {
     return SecondsElapsed > TimerAmount;
 }
+
+float Timer::GetAmount()
+{
+    return TimerAmount;
+}
+
+float Timer::GetAmountElapsed()
+{
+    return SecondsElapsed;
+}

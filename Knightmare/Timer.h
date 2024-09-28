@@ -9,8 +9,10 @@ public:
 	void Reset(float amoutInSeconds);
 	bool Elapsed();
 
+	float GetAmount();
+	float GetAmountElapsed();
+
 private:
 	float SecondsElapsed = 0.0f;
 	float TimerAmount = 0.0f;
 };
-

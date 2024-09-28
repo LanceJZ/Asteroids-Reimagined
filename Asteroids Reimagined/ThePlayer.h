@@ -113,6 +113,7 @@ private:
 	float ShieldPower = 0.0f;
 	float ShieldDrainRate = 0.0f;
 	float ShieldRechargeRate = 0.0f;
+	float PowerUpTimerAmount = 0.0f;
 
 	Sound FireSound = {};
 	Sound ExplodeSound = {};

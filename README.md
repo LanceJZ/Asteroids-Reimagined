@@ -46,3 +46,4 @@ UFO Changes direction more often in later waves.
 Missile Enemy now can shot more than one at a time. Starts out with more delay than before, but lessons each wave.
 Mine Enemy mine drop more often, starts out less often than before.
 Missile now has sound when active.
+PowerUp time is now additive.

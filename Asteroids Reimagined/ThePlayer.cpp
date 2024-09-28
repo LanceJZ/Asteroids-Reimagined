@@ -18,7 +18,7 @@ ThePlayer::ThePlayer()
 	FireRateTimerID = Managers.EM.AddTimer(0.125f);
 	TurretCooldownTimerID = Managers.EM.AddTimer(2.0f);
 	TurretHeatTimerID = Managers.EM.AddTimer(0.15f);
-	PowerupTimerID = Managers.EM.AddTimer(8.0f);
+	PowerupTimerID = Managers.EM.AddTimer();
 	PowerupRundownTimerID = Managers.EM.AddTimer(2.0f);
 	PowerUpBlinkTimerID = Managers.EM.AddTimer(0.25f);
 
@@ -169,6 +169,8 @@ bool ThePlayer::Initialize(Utilities* utilities)
 	WeaponTypeIconDoubleRight->Enabled = false;
 	WeaponTypeIconPlasma->Enabled = false;
 	WeaponTypeIconMine->Enabled = false;
+
+	PowerUpTimerAmount = 8.0f;
 
 	GameOver = true;
 	Enabled = false;
@@ -401,7 +403,8 @@ void ThePlayer::GunPowerUp()
 
 void ThePlayer::FullPowerUp()
 {
-	Managers.EM.ResetTimer(PowerupTimerID);
+	Managers.EM.ResetTimer(PowerupTimerID,
+		Managers.EM.GetTimerAmount(PowerupTimerID) + PowerUpTimerAmount);
 	ModelColor = PURPLE;
 	PoweredUp = true;
 	PoweredUpRundown = false;
@@ -911,6 +914,7 @@ void ThePlayer::WeHaveThePower()
 		PoweredUp = false;
 		PoweredUpRundown = false;
 		ModelColor = WHITE;
+		Managers.EM.SetTimer(PowerupTimerID, 0.0f);
 	}
 }
 

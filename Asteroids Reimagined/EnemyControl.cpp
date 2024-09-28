@@ -440,14 +440,15 @@ void EnemyControl::SpawnUFO()
 	bool spawnUFO = true;
 	size_t ufoNumber = UFOs.size();
 
-	UFOSpawnTimeAmount = (Wave * 0.1f) - (UFOSpawnCount * 0.01f);
+	float ufoTimeAmountAdjust = (Wave * 0.1f) - (UFOSpawnCount * 0.01f);
 
-	if (UFOSpawnTimeAmount < 0.5f) UFOSpawnTimeAmount = 0.5f;
+	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
+		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
 
-	float ufoTime = GetRandomFloat(UFOSpawnTimeAmount / ((Wave * 0.1f) + 1),
-		UFOSpawnTimeAmount);
+	float ufoSpawnTime = GetRandomFloat(UFOSpawnTimeAmount / ((Wave * 0.1f) + 1),
+		UFOSpawnTimeAmount - ufoTimeAmountAdjust);
 
-	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoTime);
+	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
 
 	if (!Player->GameOver && !Player->Enabled) return;
 
