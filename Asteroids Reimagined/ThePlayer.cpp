@@ -416,6 +416,8 @@ void ThePlayer::BigShotPowerUp()
 {
 	BigShotCount += 22;
 
+	if (SecondaryWeapon == Big) AmmoMeterUpdate(BigShotCount);
+
 	if (DoubleShotCount == 0 && MineCount == 0 &&
 		PlasmaShotCount == 0) SwitchSecondaryWeapon(Big);
 }
@@ -423,6 +425,8 @@ void ThePlayer::BigShotPowerUp()
 void ThePlayer::DoubleShotPowerUp()
 {
 	DoubleShotCount += 32;
+
+	if (SecondaryWeapon == Double) AmmoMeterUpdate(DoubleShotCount);
 
 	if (BigShotCount == 0 && MineCount == 0 &&
 		PlasmaShotCount == 0) SwitchSecondaryWeapon(Double);
@@ -432,6 +436,8 @@ void ThePlayer::MinePowerUp()
 {
 	MineCount += 22;
 
+	if (SecondaryWeapon == Mine) AmmoMeterUpdate(MineCount);
+
 	if (BigShotCount == 0 && DoubleShotCount == 0 &&
 		PlasmaShotCount == 0) SwitchSecondaryWeapon(Mine);
 }
@@ -439,6 +445,8 @@ void ThePlayer::MinePowerUp()
 void ThePlayer::PlasmaShotPowerUp()
 {
 	PlasmaShotCount += 12;
+
+	if (SecondaryWeapon == Plasma) AmmoMeterUpdate(PlasmaShotCount);
 
 	if (BigShotCount == 0 && MineCount == 0 &&
 		DoubleShotCount == 0) SwitchSecondaryWeapon(Plasma);

@@ -440,7 +440,7 @@ void EnemyControl::SpawnUFO()
 	bool spawnUFO = true;
 	size_t ufoNumber = UFOs.size();
 
-	float ufoTimeAmountAdjust = (Wave * 0.1f) - (UFOSpawnCount * 0.01f);
+	float ufoTimeAmountAdjust = (Wave * 0.1f) + (UFOSpawnCount * 0.01f);
 
 	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
 		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
