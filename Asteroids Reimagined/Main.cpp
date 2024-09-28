@@ -32,7 +32,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Beta 4.24.49");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Beta 4.24.50");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -55,7 +55,7 @@ int WinMain()
 	TheCamera.target = { 0.0f, 0.0f, 0.0f };
 	// Camera up vector (rotation towards target)
 	TheCamera.up = { 0.0f, -1.0f, 0.0f };
-	//Camera/World space is screen space.
+	//Camera/World space is 1:1 screen space.
 	TheCamera.fovy = (float)GetScreenHeight();
 	// Camera mode type
 	TheCamera.projection = CAMERA_ORTHOGRAPHIC;

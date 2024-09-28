@@ -151,12 +151,6 @@ void TheUFO::Hit()
 {
 	Enemy::Hit();
 
-	//if (!Player->GameOver) PlaySound(ExplodeSound);
-
-	//Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
-	//	Radius * 0.25f, 20.0f, 30, 2.0f, WHITE);
-
-	//Destroy();
 }
 
 void TheUFO::Reset()
@@ -178,7 +172,7 @@ void TheUFO::CheckShotsHitPlayer()
 		if (shot->CirclesIntersect(*Player))
 		{
 			Player->Hit(shot->Position, shot->Velocity);
-			shot->Hit();
+			shot->Destroy();
 			break;
 		}
 	}
