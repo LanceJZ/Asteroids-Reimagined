@@ -122,7 +122,7 @@ private:
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void SpawnBoss();
-	void CheckHomingMineEnemyChase();
+	void HaveHomingMineChaseEnemy();
 
 	void Reset();
 };

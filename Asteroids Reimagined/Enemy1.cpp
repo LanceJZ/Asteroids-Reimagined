@@ -95,6 +95,7 @@ void Enemy1::Spawn(Vector3 position)
 	if (!Player->GameOver) PlaySound(SpawnSound);
 
 	MaxSpeed = 133.666f;
+	MissilesFired = 0;
 
 	int width = (int)(WindowWidth / 1.25f);
 	int height = (int)(WindowHeight / 1.25f);
@@ -256,17 +257,20 @@ void Enemy1::DestinationRight()
 
 void Enemy1::FireMissile()
 {
-	if (!Player->GameOver) PlaySound(FireSound);
+	float missileTimeAmountAdjust = ((float)(Wave - 3) * 0.1f) +
+		((((float)MissilesFired++)) * 0.1f);
 
-	MissileFireTimerAmount -= ((float)Wave * 0.1f) -
-		((MissilesFired++) * 0.01f);
+	if (MissileFireTimerAmount < missileTimeAmountAdjust - 0.2f)
+		missileTimeAmountAdjust = MissileFireTimerAmount - 0.2f;
 
-	if (MissileFireTimerAmount < 0.2f) MissileFireTimerAmount = 0.2f;
+	float min = MissileFireTimerAmount / ((((float)Wave - 3) * 0.1f) + 1.0f);
+	float max = MissileFireTimerAmount - missileTimeAmountAdjust;
 
-	float missileTime = GetRandomFloat(MissileFireTimerAmount -
-		(((float)Wave - 2) * 0.1f), MissileFireTimerAmount);
+	float missileTime = GetRandomFloat(min,	max);
 
 	Managers.EM.ResetTimer(FireMissileTimerID, missileTime);
+
+	if (!Player->GameOver) PlaySound(FireSound);
 
 	bool spawnMissile = true;
 	size_t missileNumber = Missiles.size();

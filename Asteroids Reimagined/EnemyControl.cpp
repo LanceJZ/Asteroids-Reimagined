@@ -323,7 +323,7 @@ void EnemyControl::Update()
 		}
 	}
 
-	CheckHomingMineEnemyChase();
+	HaveHomingMineChaseEnemy();
 
 	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
@@ -437,20 +437,21 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 void EnemyControl::SpawnUFO()
 {
-	bool spawnUFO = true;
-	size_t ufoNumber = UFOs.size();
-
-	float ufoTimeAmountAdjust = (Wave * 0.1f) + (UFOSpawnCount * 0.01f);
+	float ufoTimeAmountAdjust = ((float)Wave * 0.1f) + ((float)UFOSpawnCount * 0.01f);
 
 	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
 		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
 
-	float ufoSpawnTime = GetRandomFloat(UFOSpawnTimeAmount / ((Wave * 0.1f) + 1),
+	float ufoSpawnTime = GetRandomFloat((UFOSpawnTimeAmount /
+		(((float)Wave * 0.1f) + 1.0f)),
 		UFOSpawnTimeAmount - ufoTimeAmountAdjust);
 
 	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
 
 	if (!Player->GameOver && !Player->Enabled) return;
+
+	bool spawnUFO = true;
+	size_t ufoNumber = UFOs.size();
 
 	for (size_t check = 0; check < ufoNumber; check++)
 	{
@@ -746,7 +747,7 @@ void EnemyControl::SpawnBoss()
 	Boss->Spawn(position, rotation);
 }
 
-void EnemyControl::CheckHomingMineEnemyChase()
+void EnemyControl::HaveHomingMineChaseEnemy()
 {
 	for (const auto& mine : Player->Mines)
 	{
@@ -767,10 +768,11 @@ void EnemyControl::CheckHomingMineEnemyChase()
 				distance = ufoDistance;
 				enemyToChase = true;
 				enemyPosition = ufo->Position;
+				break;
 			}
 		}
 
-		if (EnemyOne->Enabled)
+		if (EnemyOne->Enabled && !enemyToChase)
 		{
 			float enemyOneDistance = Vector3Distance(EnemyOne->Position, mine->Position);
 
@@ -782,7 +784,7 @@ void EnemyControl::CheckHomingMineEnemyChase()
 			}
 		}
 
-		if (EnemyTwo->Enabled)
+		if (EnemyTwo->Enabled && !enemyToChase)
 		{
 			float enemyTwoDistance = Vector3Distance(EnemyTwo->Position, mine->Position);
 
