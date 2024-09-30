@@ -196,7 +196,15 @@ LineModelPoints ContentManager::LoadLineModel(std::string fileName)
 	if (FileExists(nameVEC.c_str()))
 	{
 		std::string linesTemp = LoadFileText(nameVEC.c_str());
-		points.linePoints = ConvertStringToPoints(linesTemp);
+
+		if (linesTemp[1] == 88)
+		{
+			points.linePoints = ConvertStringToPoints(linesTemp);
+		}
+		else
+		{
+			points.linePoints = ConvertStringToPointsNew(linesTemp);
+		}
 	}
 	else
 	{
@@ -257,6 +265,57 @@ std::vector<Vector3>  ContentManager::ConvertStringToPoints(std::string linesStr
 				line.z = stof(number);
 				number = "";
 
+				linesConverted.push_back(line);
+			}
+		}
+	}
+
+	return linesConverted;
+}
+
+std::vector<Vector3> ContentManager::ConvertStringToPointsNew(std::string linesString)
+{
+	std::string number;
+	Vector3 line = { 0 };
+	std::vector<Vector3> linesConverted;
+
+	enum OnAxis
+	{
+		X,
+		Y,
+		Z
+	};
+
+	OnAxis onAxis = X;
+
+	for (const auto& character : linesString)
+	{
+		if (character > 44 && character < 58)
+		{
+			number.append(1, character);
+		}
+		else
+		{
+			if (character == 40)
+			{
+				onAxis = X;
+			}
+			else if (character == 44 && onAxis == X)
+			{
+				onAxis = Y;
+				line.x = stof(number);
+				number = "";
+			}
+			else if (character == 44 && onAxis == Y)
+			{
+				onAxis = Z;
+				line.y = stof(number);
+				number = "";
+			}
+			else if (character == 41 && onAxis == Z)
+			{
+				line.z = stof(number);
+				number = "";
 				linesConverted.push_back(line);
 			}
 		}

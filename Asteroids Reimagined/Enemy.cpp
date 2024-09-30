@@ -2,7 +2,7 @@
 
 Enemy::Enemy()
 {
-	ShotTimerID = TheManagers.EM.AddTimer();
+	ShotTimerID = Managers.EM.AddTimer();
 }
 
 Enemy::~Enemy()
@@ -12,14 +12,6 @@ Enemy::~Enemy()
 void Enemy::SetPlayer(ThePlayer* player)
 {
 	Player = player;
-}
-
-void Enemy::SetUFO(TheUFO* ufos[2])
-{
-	for (int i = 0; i < 2; i++)
-	{
-		UFOs[i] = ufos[i];
-	}
 }
 
 void Enemy::SetShotModel(LineModelPoints model)
@@ -61,7 +53,7 @@ void Enemy::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	//CheckCollision();
+	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void Enemy::Draw3D()
@@ -73,7 +65,7 @@ void Enemy::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
+	Managers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
 }
 
 void Enemy::Hit()
@@ -82,13 +74,11 @@ void Enemy::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-
-
-	//Player->ScoreUpdate(Points);
-	Destroy();
-
-	Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, {0.25f}),
+	if (Particles != nullptr) Particles->SpawnLineParticles(Position,
+		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
+
+	Destroy();
 }
 
 void Enemy::Reset()
@@ -98,6 +88,9 @@ void Enemy::Reset()
 		shot->Destroy();
 	}
 
+	Velocity = { 0.0f, 0.0f, 0.0f };
+	RotationVelocityZ = 0.0f;
+
 	Destroy();
 }
 
@@ -105,14 +98,13 @@ void Enemy::Destroy()
 {
 	Entity::Destroy();
 
-	Enabled = false;
 }
 
 void Enemy::Shoot()
 {
 	PlaySound(FireSound);
 
-	TheManagers.EM.ResetTimer(ShotTimerID);
+	Managers.EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -130,7 +122,7 @@ void Enemy::Shoot()
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 
@@ -139,7 +131,7 @@ void Enemy::Shoot()
 
 void Enemy::Shoot(Vector3 velocity)
 {
-	TheManagers.EM.ResetTimer(ShotTimerID);
+	Managers.EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -157,68 +149,205 @@ void Enemy::Shoot(Vector3 velocity)
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		TheManagers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 
 	Shots[spawnNumber]->Spawn(Position, velocity);
 }
 
-bool Enemy::CheckCollisions()
+void Enemy::ChasePlayer()
 {
-	for (auto& playerShot : Player->Shots)
-	{
-		if (playerShot->Enabled && playerShot->CirclesIntersect(*this))
-		{
-			playerShot->Destroy();
-			Hit();
-			Destroy();
-			Player->ScoreUpdate(Points);
+	RotationVelocityZ = 0.0f;
 
-			return true;
-		}
+	Vector3 target = Player->Position;
+
+	if (!Player->Enabled)
+	{
+		if (X() > 0.0f) target.x = (float)WindowWidth;
+		else target.x = (float)-WindowWidth;
+
+		if (Y() > 0.0f) target.y = (float)WindowHeight;
+		else target.y = (float)-WindowHeight;
 	}
 
-	if (Player->Enabled && Player->CirclesIntersect(*this))
+	SetRotateVelocity(target, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseUFO()
+{
+	Vector3 closestUFOPosition = { 0.0f, 0.0f, 0.0f };
+	float shortestDistance = 1000.0f;
+
+	for (const auto& ufo : UFORefs)
 	{
-		Player->Hit(Position, Velocity);
-
-		if (!Player->Shield->Enabled)
+		if (ufo->Enabled)
 		{
-			Hit();
-			Destroy();
-			Player->ScoreUpdate(Points);
-		}
+			float distance = Vector3Distance(ufo->Position, Position);
 
-		return true;
-	}
-
-	for (auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && ufo->CirclesIntersect(*this))
-		{
-			ufo->Hit();
-			Hit();
-			Destroy();
-			return true;
-		}
-
-		for (auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && shot->CirclesIntersect(*this))
+			if (distance < shortestDistance)
 			{
-				shot->Destroy();
-				Hit();
-				Destroy();
-				return true;
+				shortestDistance = distance;
+				closestUFOPosition = ufo->Position;
 			}
 		}
+	}
+
+	SetRotateVelocity(closestUFOPosition, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseEnemy()
+{
+	EnemyOne->Distance = Vector3Distance(EnemyOne->Position, Position);
+	EnemyTwo->Distance = Vector3Distance(EnemyTwo->Position, Position);
+
+	if (EnemyOne->Distance < EnemyTwo->Distance) ChaseEnemyOne();
+	else ChaseEnemyTwo();
+}
+
+bool Enemy::CheckUFOActive()
+{
+	bool ufoActive = false;
+
+	if (!Player->Enabled)
+	{
+		for (const auto& ufo : UFORefs)
+		{
+			if (ufo->Enabled) ufoActive = true;
+		}
+	}
+	else ChasePlayer();
+
+	return ufoActive;
+}
+
+bool Enemy::LeaveScreen()
+{
+	LeavePlay(TurnSpeed, Speed);
+
+	if (IsOffScreen())
+	{
+		Reset();
+		true;
 	}
 
 	return false;
 }
 
-void Enemy::ChasePlayer()
+void Enemy::ChaseEnemyOne()
 {
-	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
+	SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
+}
+
+void Enemy::ChaseEnemyTwo()
+{
+	SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
+}
+
+bool Enemy::CheckCollisions()
+{
+	for (const auto& shot : Player->Shots)
+	{
+		if (shot->Enabled && shot->CirclesIntersect(*this))
+		{
+			shot->Destroy();
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	for (const auto& shot : Player->DoubleShots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	for (const auto& bigShot : Player->BigShots)
+	{
+		if (bigShot->Enabled && CirclesIntersect(*bigShot))
+		{
+
+			bigShot->HitPoints -= 50;
+
+			if (bigShot->HitPoints <= 0) bigShot->Destroy();
+
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	for (const auto& mine : Player->Mines)
+	{
+		if (mine->Enabled && CirclesIntersect(*mine))
+		{
+			mine->Hit();
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	for (const auto& plasma : Player->PlasmaShots)
+	{
+		if (plasma->Enabled && CirclesIntersect(*plasma))
+		{
+			Hit();
+			Player->ScoreUpdate(Points);
+
+			return true;
+		}
+	}
+
+	if (CirclesIntersect(*Player))
+	{
+		if (!Player->Shield->Enabled)
+		{
+			Hit();
+			Player->ScoreUpdate(Points);
+		}
+
+		Player->Hit(Position, Velocity);
+
+		return true;
+	}
+
+	if (!UFORefs.size()) return false;
+
+	for (const auto& ufo : UFORefs)
+	{
+		for (const auto& shot : ufo->Shots)
+		{
+			if (!shot->Enabled) continue;
+
+			if (CirclesIntersect(*shot))
+			{
+				shot->Destroy();
+				Hit();
+				return true;
+			}
+		}
+
+		if (!ufo->Enabled) continue;
+
+		if (ufo->CirclesIntersect(*this))
+		{
+			ufo->Hit();
+			Hit();
+
+			return true;
+		}
+	}
+
+	return false;
 }

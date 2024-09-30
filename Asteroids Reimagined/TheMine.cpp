@@ -2,28 +2,11 @@
 
 TheMine::TheMine()
 {
-	LifeTimerID = TheManagers.EM.AddTimer(10.0f);
+	LifeTimerID = Managers.EM.AddTimer(10.0f);
 }
 
 TheMine::~TheMine()
 {
-}
-
-void TheMine::SetPlayer(ThePlayer* player)
-{
-	Player = player;
-}
-
-void TheMine::SetExplodeSound(Sound sound)
-{
-	ExplodeSound = sound;
-
-	SetSoundVolume(ExplodeSound, 1.25f);
-}
-
-void TheMine::SetParticleManager(ParticleManager* particles)
-{
-	Particles = particles;
 }
 
 bool TheMine::Initialize(Utilities* utilities)
@@ -44,7 +27,7 @@ void TheMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (TheManagers.EM.TimerElapsed(LifeTimerID)) Destroy();
+	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	CheckCollisions();
 }
@@ -58,14 +41,12 @@ void TheMine::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(LifeTimerID);
+	Managers.EM.ResetTimer(LifeTimerID);
 }
 
 void TheMine::Hit()
 {
-	PlaySound(ExplodeSound);
-
-	Particles->SpawnLineParticles(Position, { 0.0f }, Radius * 0.25f, 50, 25, 1.0f, WHITE);
+	Enemy::Hit();
 
 	Destroy();
 }
@@ -76,22 +57,9 @@ void TheMine::Destroy()
 
 }
 
-void TheMine::CheckCollisions()
+bool TheMine::CheckCollisions()
 {
-	for (auto& playerShot : Player->Shots)
-	{
-		if (playerShot->Enabled && playerShot->CirclesIntersect(*this))
-		{
-			playerShot->Destroy();
-			Hit();
-			break;
-		}
-	}
+	Enemy::CheckCollisions();
 
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		Player->Hit(Position, Velocity);
-
-		if (!Player->Shield->Enabled) Destroy();
-	}
+	return false;
 }

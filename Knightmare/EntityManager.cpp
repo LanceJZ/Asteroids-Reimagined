@@ -204,6 +204,16 @@ bool EntityManager::TimerElapsed(size_t id)
 	return Timers[id]->Elapsed();
 }
 
+float EntityManager::GetTimerAmount(size_t id)
+{
+	return Timers[id]->GetAmount();
+}
+
+float EntityManager::GetTimerAmountElapsed(size_t id)
+{
+	return Timers[id]->GetAmountElapsed();
+}
+
 size_t EntityManager::AddEntity(Entity* entity)
 {
 	size_t entityNumber = Entities.size();

@@ -32,6 +32,7 @@ private:
 	size_t PlayerID = 0;
 	size_t EnemiesID = 0;
 	size_t ParticlesID = 0;
+
 	//When adding classes to EM, must be heap pointer.
 	GameLogic* Logic = {};
 	TheBackground* BackGround = {};

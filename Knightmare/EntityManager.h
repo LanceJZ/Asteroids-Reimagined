@@ -37,6 +37,8 @@ public:
 	void ResetTimer(size_t id, float amount);
 	void SetTimer(size_t id, float amount);
 	bool TimerElapsed(size_t id);
+	float GetTimerAmount(size_t id);
+	float GetTimerAmountElapsed(size_t id);
 
 	size_t AddEntity(Entity* entity);
 	size_t AddEntity();

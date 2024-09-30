@@ -8,6 +8,8 @@ public:
 	TheMissile();
 	virtual ~TheMissile();
 
+	void SetOnSound(Sound sound);
+
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 

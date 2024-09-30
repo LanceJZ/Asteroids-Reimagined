@@ -1,23 +1,32 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "EnemyControl.h"
 
 class PowerUp : public LineModel
 {
 public:
 	enum PowerUpType
 	{
-		Red,
+		Skyblue,
 		Blue,
-		Purple
+		Purple,
+		Red,
+		Yellow,
+		Green,
+		Orange,
+		Violet,
+		Magenta,
+		Maroon
 	};
 
-	PowerUpType Type = PowerUpType::Red;
+	PowerUpType Type = PowerUpType::Skyblue;
 
 	PowerUp();
 	virtual ~PowerUp();
 
 	void SetPlayer(ThePlayer* player);
+	void SetEnemy(EnemyControl* enemy);
 
 	void SetPickUpSound(Sound sound);
 
@@ -36,6 +45,8 @@ private:
 	Sound PickUpSound = {};
 
 	ThePlayer* Player = nullptr;
+	EnemyControl* Enemies = nullptr;
 
 	void CheckCollisions();
+	void DriftToPlayer();
 };

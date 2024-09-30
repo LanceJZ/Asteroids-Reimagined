@@ -1,10 +1,8 @@
 #pragma once
 #include "Globals.h"
-#include "ThePlayer.h"
 #include "TheFighter.h"
-#include "TheUFO.h"
 
-class TheFighterPair : public Entity
+class TheFighterPair : public Enemy
 {
 public:
 	TheFighterPair();
@@ -15,10 +13,12 @@ public:
 	TheFighter* Fighters[2] = { nullptr };
 
 	void SetPlayer(ThePlayer* player);
-	void SetUFO(TheUFO* ufo[2]);
+	void SetUFO(std::vector<Enemy*> ufos);
+	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);
+	void SetParticleManager(ParticleManager* particleManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -33,22 +33,11 @@ public:
 	void Spawn(Vector3 position);
 
 private:
-	int Points = 200;
-	float Speed = 100.0f;
-	float TurnSpeed = 0.5f;
-	float RotateMagnitude = PI / 2;
-
-	Sound ExplodeSound;
-
-	ThePlayer* Player = nullptr;
-	TheUFO* UFOs[2] = { nullptr };
 
 	bool Separated = false;
 
 	void ChasePlayer();
-	void ChaseUFO();
-	void LeaveScreen();
-	void CheckCollisions();
+	bool CheckCollisions();
 	void Hit();
 };
 

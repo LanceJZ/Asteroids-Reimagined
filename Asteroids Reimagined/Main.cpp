@@ -17,7 +17,7 @@
 	#define DBG_NEW new
 #endif
 
-Managers TheManagers = {};
+TheManagers Managers = {};
 Camera TheCamera = {};
 Vector2 FieldSize = {};
 
@@ -32,7 +32,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Alpha 3.51");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Beta 4.24.53");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -46,7 +46,7 @@ int WinMain()
 	static Utilities TheUtilities = {};
 	static GameLogic* Logic = {};
 
-	TheManagers.EM.SetUtilities(&TheUtilities);
+	Managers.EM.SetUtilities(&TheUtilities);
 
 	// Define the camera to look into our 3D world
 	// Camera position
@@ -55,12 +55,12 @@ int WinMain()
 	TheCamera.target = { 0.0f, 0.0f, 0.0f };
 	// Camera up vector (rotation towards target)
 	TheCamera.up = { 0.0f, -1.0f, 0.0f };
-	//Camera/World space is screen space.
+	//Camera/World space is 1:1 screen space.
 	TheCamera.fovy = (float)GetScreenHeight();
 	// Camera mode type
 	TheCamera.projection = CAMERA_ORTHOGRAPHIC;
 	// The Managers needs a reference to The Camera
-	TheManagers.SetCamera(TheCamera);
+	Managers.SetCamera(TheCamera);
 
 	game.Initialize();
 	game.Load();

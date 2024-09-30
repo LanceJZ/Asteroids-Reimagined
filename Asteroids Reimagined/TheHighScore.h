@@ -6,14 +6,13 @@ class TheHighScore : public OnScreenText
 {
 	struct ScoreList
 	{
-		std::string Name;
-		int Score;
+		std::string Name = "";
+		int Score = 0;
 	};
 
 public:
 	TheHighScore();
 	virtual ~TheHighScore();
-
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -44,6 +43,9 @@ private:
 
 	std::string HighScoreEntryText = "";
 	std::string HighScoreListRaw = "";
+
+	Font TheFontLarge = {};
+	Font TheFontSmall = {};
 
 	ScoreList HighScoreList[50];
 

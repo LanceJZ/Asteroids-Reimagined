@@ -2,11 +2,16 @@
 
 TheMissile::TheMissile()
 {
-	LifeTimerID = TheManagers.EM.AddTimer(5.0f);
+	LifeTimerID = Managers.EM.AddTimer(5.0f);
 }
 
 TheMissile::~TheMissile()
 {
+}
+
+void TheMissile::SetOnSound(Sound sound)
+{
+	OnSound = sound;
 }
 
 bool TheMissile::Initialize(Utilities* utilities)
@@ -32,7 +37,7 @@ void TheMissile::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
-	if (TheManagers.EM.TimerElapsed(LifeTimerID))
+	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
@@ -51,7 +56,7 @@ void TheMissile::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	TheManagers.EM.ResetTimer(LifeTimerID);
+	Managers.EM.ResetTimer(LifeTimerID);
 }
 
 void TheMissile::Hit()
@@ -68,26 +73,6 @@ void TheMissile::Destroy()
 bool TheMissile::CheckCollisions()
 {
 	Enemy::CheckCollisions();
-
-	for (auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && ufo->CirclesIntersect(*this))
-		{
-			ufo->Hit();
-			Hit();
-			return true;
-		}
-
-		for (auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && shot->CirclesIntersect(*this))
-			{
-				shot->Destroy();
-				Hit();
-				return true;
-			}
-		}
-	}
 
 	return false;
 }

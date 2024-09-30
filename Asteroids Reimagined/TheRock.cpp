@@ -19,9 +19,9 @@ void TheRock::SetExplodeSound(Sound sound)
 	SetSoundVolume(ExplodeSound, 0.333f);
 }
 
-bool TheRock::Initialize()
+bool TheRock::Initialize(Utilities* utilities)
 {
-	LineModel::Initialize(TheUtilities);
+	LineModel::Initialize(utilities);
 
 	return false;
 }
@@ -56,17 +56,13 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 
 	TheRock::Size = size;
 	float scale = 25;
-	float radius = 47.25f;
 	float change = 0;
-	Enabled = true;
-	BeenHit = false;
 
 	switch (size)
 	{
 	case Small:
 		change = 4.5f;
 		Scale = scale / change;
-		Radius = radius / change;
 		maxVS = 3;
 		magnitude = GetRandomFloat(52.3f, 74.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
@@ -74,7 +70,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case Medium:
 		change = 2.75f;
 		Scale =  scale / change;
-		Radius = radius / change;
 		maxVS = 2;
 		magnitude = GetRandomFloat(43.2f, 63.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
@@ -82,7 +77,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case MediumLarge:
 		change = 1.85f;
 		Scale =  scale / change;
-		Radius = radius / change;
 		maxVS = 2;
 		magnitude = GetRandomFloat(36.1f, 56.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
@@ -90,7 +84,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	case Large:
 		Y(GetRandomFloat(-WindowHeight, WindowHeight));
 		Scale = scale;
-		Radius = radius;
 		maxVS = 1;
 
 		magnitude = GetRandomFloat(20.35f, 40.1f);
@@ -135,7 +128,7 @@ void TheRock::Hit()
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 }
 
-bool TheRock::CheckCollisions()
+bool TheRock::CheckCollisions() // Move to Enemy class.
 {
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{
@@ -152,6 +145,41 @@ bool TheRock::CheckCollisions()
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
 			shot->Destroy();
+			Hit();
+			SendScoreToPlayer();
+			return true;
+		}
+	}
+
+	for (const auto& shot : Player->DoubleShots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			SendScoreToPlayer();
+			return true;
+		}
+	}
+
+	for (const auto& bigShot : Player->BigShots)
+	{
+		if (bigShot->Enabled && CirclesIntersect(*bigShot))
+		{
+			bigShot->HitPoints -= 20;
+
+			if (bigShot->HitPoints <= 0) bigShot->Destroy();
+
+			Hit();
+			SendScoreToPlayer();
+			return true;
+		}
+	}
+
+	for (const auto& plasmaShot : Player->PlasmaShots)
+	{
+		if (plasmaShot->Enabled && CirclesIntersect(*plasmaShot))
+		{
 			Hit();
 			SendScoreToPlayer();
 			return true;

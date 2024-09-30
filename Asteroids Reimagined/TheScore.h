@@ -23,5 +23,9 @@ public:
 private:
 	int Score = 0;
 	int HighScore = 0;
+
+	Font TheFontLarge = {};
+	Font TheFontSmall = {};
+	Font TheFontTiny = {};
 };
 

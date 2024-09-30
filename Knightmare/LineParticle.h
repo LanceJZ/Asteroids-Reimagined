@@ -1,6 +1,6 @@
 #pragma once
 #include "LineModel.h"
-#include "Managers.h"
+#include "TheManagers.h"
 
 class LineParticle : public LineModel
 {
@@ -8,7 +8,7 @@ public:
 	LineParticle();
 	virtual ~LineParticle();
 
-	void SetManagers(Managers* managers);
+	void SetManagers(TheManagers* managers);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -22,5 +22,5 @@ public:
 private:
 	size_t LifeTimerID = 0;
 
-	Managers* Man = nullptr;
+	TheManagers* Managers = nullptr;
 };

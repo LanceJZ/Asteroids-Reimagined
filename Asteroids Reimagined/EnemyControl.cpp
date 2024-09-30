@@ -2,19 +2,16 @@
 
 EnemyControl::EnemyControl()
 {
-	UFOSpawnTimerID = TheManagers.EM.AddTimer(10.0f);
-	DeathStarSpawnTimerID = TheManagers.EM.AddTimer(5.0f);
-	EnemyOneSpawnTimerID = TheManagers.EM.AddTimer(15.0f);
-	EnemyTwoSpawnTimerID = TheManagers.EM.AddTimer(12.0f);
+	UFOSpawnTimerID = Managers.EM.AddTimer(20.0f);
+	DeathStarSpawnTimerID = Managers.EM.AddTimer(5.0f);
+	EnemyOneSpawnTimerID = Managers.EM.AddTimer(15.0f);
+	EnemyTwoSpawnTimerID = Managers.EM.AddTimer(12.0f);
+	BossExplodingTimerID = Managers.EM.AddTimer(5.0f);
 
-	for (int i = 0; i < 2; i++)
-	{
-		TheManagers.EM.AddLineModel(UFOs[i] = DBG_NEW TheUFO());
-	}
-
-	TheManagers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
-	TheManagers.EM.AddLineModel(EnemyOne = DBG_NEW Enemy1());
-	TheManagers.EM.AddLineModel(EnemyTwo = DBG_NEW Enemy2());
+	Managers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
+	Managers.EM.AddLineModel(EnemyOne = DBG_NEW Enemy1());
+	Managers.EM.AddLineModel(EnemyTwo = DBG_NEW Enemy2());
+	Managers.EM.AddLineModel(Boss = DBG_NEW TheBoss());
 }
 
 EnemyControl::~EnemyControl()
@@ -25,14 +22,10 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 {
 	Player = player;
 
-	for (const auto &ufo : UFOs)
-	{
-		ufo->SetPlayer(player);
-	}
-
 	DeathStar->SetPlayer(player);
 	EnemyOne->SetPlayer(player);
 	EnemyTwo->SetPlayer(player);
+	Boss->SetPlayer(player);
 }
 
 void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
@@ -45,18 +38,12 @@ void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
 
 void EnemyControl::SetUFOModel(LineModelPoints model)
 {
-	for (auto &ufo : UFOs)
-	{
-		ufo->SetModel(model);
-	}
+	UFOModel = model;
 }
 
 void EnemyControl::SetShotModel(LineModelPoints model)
 {
-	for (auto &ufo : UFOs)
-	{
-		ufo->SetShotModel(model);
-	}
+	Boss->SetShotModel(model);
 
 	ShotModel = model;
 }
@@ -76,14 +63,41 @@ void EnemyControl::SetEnemy2Model(LineModelPoints model)
 	EnemyTwo->SetModel(model);
 }
 
+void EnemyControl::SetBossModel(LineModelPoints model)
+{
+	Boss->SetModel(model);
+}
+
+void EnemyControl::SetBossShieldModel(LineModelPoints model)
+{
+	Boss->SetShieldModel(model);
+}
+
+void EnemyControl::SetBossTurretModel(LineModelPoints model)
+{
+	Boss->SetTurretModel(model);
+}
+
+void EnemyControl::SetLeftSpineMountModel(LineModelPoints model)
+{
+	Boss->SetLeftSpineMountModel(model);
+}
+
+void EnemyControl::SetRightSpineMountModel(LineModelPoints model)
+{
+	Boss->SetRightSpineMountModel(model);
+}
+
 void EnemyControl::SetEnemyMissileModel(LineModelPoints model)
 {
 	EnemyOne->SetMissileModel(model);
+	Boss->SetMissileModel(model);
 }
 
 void EnemyControl::SetEnemyMineModel(LineModelPoints model)
 {
 	EnemyTwo->SetMineModel(model);
+	Boss->SetMineModel(model);
 }
 
 void EnemyControl::SetRockExplodeSound(Sound sound)
@@ -131,6 +145,11 @@ void EnemyControl::SetEnemyOneFireSound(Sound sound)
 	EnemyOne->SetFireSound(sound);
 }
 
+void EnemyControl::SetEnemyOneMissileOnSound(Sound sound)
+{
+	EnemyOne->SetMissileOnSound(sound);
+}
+
 void EnemyControl::SetEnemyOneExplodeSound(Sound sound)
 {
 	EnemyOne->SetExplodeSound(sound);
@@ -171,49 +190,72 @@ void EnemyControl::SetEnemyTwoMineExplodeSound(Sound sound)
 	EnemyTwo->SetMineExplodeSound(sound);
 }
 
+void EnemyControl::SetBossExplodeSound(Sound sound)
+{
+	Boss->SetExplodeSound(sound);
+}
+
+void EnemyControl::SetBossShieldHitSound(Sound sound)
+{
+	Boss->SetShieldHitSound(sound);
+}
+
+void EnemyControl::SetBossShieldDownSound(Sound sound)
+{
+	Boss->SetShieldDownSound(sound);
+}
+
+void EnemyControl::SetBossHitSound(Sound sound)
+{
+	Boss->SetHitSound(sound);
+}
+
+void EnemyControl::SetBossTurretFireSound(Sound sound)
+{
+	Boss->SetTurretFireSound(sound);
+}
+
+void EnemyControl::SetBossTurretExplodeSound(Sound sound)
+{
+	Boss->SetTurretExplodeSound(sound);
+}
+
+void EnemyControl::SetBossSpineFireSound(Sound sound)
+{
+	Boss->SetSpineFireSound(sound);
+}
+
 void EnemyControl::SetParticleManager(ParticleManager* particles)
 {
 	Particles = particles;
 
-	for (const auto& ufo : UFOs)
-	{
-		ufo->SetParticles(particles);
-	}
-
 	EnemyOne->SetParticleManager(particles);
-	EnemyOne->Missile->SetParticleManager(particles);
 	EnemyTwo->SetParticleManager(particles);
+	DeathStar->SetParticleManager(particles);
+	Boss->SetParticleManager(particles);
 }
 
 bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
 
-	for (const auto &ufo : UFOs)
-	{
-		ufo->Initialize(TheUtilities);
-	}
-
+	EnemyOne->Initialize(TheUtilities);
+	EnemyTwo->Initialize(TheUtilities);
 	DeathStar->Initialize(TheUtilities);
+	Boss->Initialize(TheUtilities);
 
 	return false;
 }
 
 bool EnemyControl::BeginRun()
 {
+	Common::BeginRun();
 
+	DeathStar->SetEnemies(EnemyOne, EnemyTwo);
+	EnemyOne->BeginRun();
+	EnemyTwo->BeginRun();
 	DeathStar->BeginRun();
-
-	for (const auto& ufo : UFOs)
-	{
-		ufo->SetExplodeSound(UFOExplodeSound);
-		ufo->SetFireSound(UFOFireSound);
-		ufo->SetBigSound(UFOBigSound);
-		ufo->SetSmallSound(UFOSmallSound);
-	}
-
-	EnemyOne->SetUFO(UFOs);
-	EnemyTwo->SetUFO(UFOs);
+	Boss->BeginRun();
 
 	Reset();
 
@@ -224,54 +266,110 @@ void EnemyControl::Update()
 {
 	Common::Update();
 
-	if (TheManagers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
+	if (ClearForBossWave && !Player->GameOver)
+	{
+		MakeReadyForBossWave();
+
+		return;
+	}
+
+	if (BossWave)
+	{
+		DoBossStuff();
+
+		return;
+	}
+
+	CheckRockCollisions();
 
 	if (NoMoreRocks)
 	{
-		SpawnRocks({ 0, 0, 0 }, RockSpawnCount++, TheRock::Large);
-		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 		Wave++;
+
+		if (SpawnedDeathStar) DeathStar->NewWaveStart();
+
+		if (Wave % 5 == 0 && !Player->GameOver)
+		{
+			ClearForBossWave = true;
+			return;
+		}
+
+		if (Wave > 5) RockSpawnCount += 2;
+		else RockSpawnCount++;
+
+		if (Wave > 10) RockSpawnCount += 3;
+		if (Wave > 15) RockSpawnCount += 4;
+		if (Wave > 20) RockSpawnCount += 5;
+		if (Wave > 25) RockSpawnCount += 6;
+
+		SpawnRocks({ 0, 0, 0 }, RockSpawnCount, TheRock::Large);
 	}
 
-	for (const auto& ufo : UFOs)
+	if (SpawnedDeathStar)
 	{
-		ufo->DeathStarActive = DeathStar->Enabled;
-		ufo->DeathStarPosition = DeathStar->Position;
-	}
+		CheckDeathStarStatus();
 
-	if (SpawnedDeathStar) CheckDeathStarStatus();
-	else if (Wave > 1 && RockCount < 5)
+		for (const auto& ufo : UFOs)
+		{
+			ufo->DeathStarActive = DeathStar->Enabled;
+			ufo->DeathStarPosition = DeathStar->Position;
+		}
+	}
+	else if (Wave > 1 && RockCount < 6)
 	{
-		if (TheManagers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
 			SpawnDeathStar();
 		}
 	}
 
-	CheckRockCollisions();
+	HaveHomingMineChaseEnemy();
 
-	if (TheManagers.EM.TimerElapsed(EnemyOneSpawnTimerID))
+	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
-		TheManagers.EM.ResetTimer(EnemyOneSpawnTimerID);
+		Managers.EM.ResetTimer(EnemyOneSpawnTimerID);
 
 		if (!Player->GameOver && !Player->Enabled) return;
 
 		if (!EnemyOne->Enabled && Wave > 2)
 		{
 			EnemyOne->Spawn({ 0, 0, 0 });
+			EnemyOne->Wave = Wave;
+
+			EnemyOne->UFORefs.clear();
+
+			for (const auto& ufo : UFOs)
+			{
+				EnemyOne->UFORefs.push_back(ufo);
+			}
 		}
 	}
 
-	if (TheManagers.EM.TimerElapsed(EnemyTwoSpawnTimerID))
+	if (Managers.EM.TimerElapsed(EnemyTwoSpawnTimerID))
 	{
-		TheManagers.EM.ResetTimer(EnemyTwoSpawnTimerID);
+		Managers.EM.ResetTimer(EnemyTwoSpawnTimerID);
 
 		if (!Player->GameOver && !Player->Enabled) return;
 
 		if (!EnemyTwo->Enabled && Wave > 3)
 		{
 			EnemyTwo->Spawn({ 0, 0, 0 });
+			EnemyTwo->Wave = Wave;
+
+			EnemyTwo->UFORefs.clear();
+
+			for (const auto& ufo : UFOs)
+			{
+				EnemyTwo->UFORefs.push_back(ufo);
+			}
 		}
+	}
+
+	if (Managers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->CheckShotsHitPlayer();
 	}
 }
 
@@ -284,12 +382,19 @@ void EnemyControl::NewGame()
 	{
 		rock->Destroy();
 	}
+
+	EnemyOne->Reset();
+	EnemyTwo->Reset();
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->Reset();
+	}
 }
 
 void EnemyControl::NextWave()
 {
 	Wave++;
-
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
@@ -299,12 +404,12 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		bool spawnNewRock = true;
 		size_t rockNumber = Rocks.size();
 
-		for (size_t rockCheck = 0; rockCheck < rockNumber; rockCheck++)
+		for (size_t check = 0; check < rockNumber; check++)
 		{
-			if (!Rocks.at(rockCheck)->Enabled)
+			if (!Rocks.at(check)->Enabled)
 			{
 				spawnNewRock = false;
-				rockNumber = rockCheck;
+				rockNumber = check;
 				break;
 			}
 		}
@@ -313,37 +418,73 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		{
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
-			TheManagers.EM.AddLineModel(Rocks.back());
-			Rocks.back()->Initialize();
-			Rocks.back()->BeginRun();
+			Managers.EM.AddLineModel(Rocks.back());
 			Rocks.back()->SetModel((RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
+			Rocks.back()->Initialize(TheUtilities);
+			Rocks.back()->BeginRun();
+
+			for (const auto& ufo : UFOs)
+			{
+				ufo->Rocks.push_back(Rocks.back());
+			}
 		}
 
 		Rocks.at(rockNumber)->Spawn(position, size);
-
-		for (const auto& ufo : UFOs)
-		{
-			ufo->SetRocks(Rocks);
-		}
 	}
 }
 
 void EnemyControl::SpawnUFO()
 {
-	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
+	float ufoTimeAmountAdjust = ((float)Wave * 0.1f) + ((float)UFOSpawnCount * 0.01f);
+
+	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
+		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
+
+	float min = UFOSpawnTimeAmount / (((float)Wave * 0.1f) + 1.0f);
+	float max = UFOSpawnTimeAmount - ufoTimeAmountAdjust;
+
+	float ufoSpawnTime = GetRandomFloat(min, max);
+
+	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
 
 	if (!Player->GameOver && !Player->Enabled) return;
 
-	for (const auto &ufo : UFOs)
+	bool spawnUFO = true;
+	size_t ufoNumber = UFOs.size();
+
+	for (size_t check = 0; check < ufoNumber; check++)
 	{
-		if (!ufo->Enabled)
+		if (!UFOs.at(check)->Enabled)
 		{
-			ufo->Spawn(UFOSpawnCount++);
+			spawnUFO = false;
+			ufoNumber = check;
 			break;
 		}
 	}
+
+	if (spawnUFO)
+	{
+		UFOs.push_back(DBG_NEW TheUFO());
+		Managers.EM.AddLineModel(UFOs.back());
+		UFOs.back()->SetModel(UFOModel);
+		UFOs.back()->SetShotModel(ShotModel);
+		UFOs.back()->SetPlayer(Player);
+		UFOs.back()->SetParticleManager(Particles);
+		UFOs.back()->SetExplodeSound(UFOExplodeSound);
+		UFOs.back()->SetFireSound(UFOFireSound);
+		UFOs.back()->SetBigSound(UFOBigSound);
+		UFOs.back()->SetSmallSound(UFOSmallSound);
+		UFOs.back()->Initialize(TheUtilities);
+		UFOs.back()->BeginRun();
+
+		EnemyOne->UFORefs.push_back(UFOs.back());
+		DeathStar->UFORefs.push_back(UFOs.back());
+		DeathStar->SetUFO();
+	}
+
+	UFOs.at(ufoNumber)->Spawn(UFOSpawnCount++);
 }
 
 void EnemyControl::SpawnDeathStar()
@@ -351,7 +492,6 @@ void EnemyControl::SpawnDeathStar()
 	if (!Player->GameOver && !Player->Enabled) return;
 
 	DeathStar->Spawn({ -500, -400, 0 });
-	DeathStar->SetUFO(UFOs);
 	SpawnedDeathStar = true;
 }
 
@@ -385,13 +525,14 @@ void EnemyControl::CheckDeathStarStatus()
 	if (deadJim)
 	{
 		SpawnedDeathStar = false;
-		TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
+		Managers.EM.ResetTimer(DeathStarSpawnTimerID);
 		return;
 	}
 }
 
 void EnemyControl::CheckRockCollisions()
 {
+	bool ufoHitRock = false;
 	NoMoreRocks = true;
 	RockCount = 0;
 
@@ -402,10 +543,11 @@ void EnemyControl::CheckRockCollisions()
 			NoMoreRocks = false;
 			RockCount++;
 
-			CheckUFOCollisions(Rocks.at(i));
+			if (CheckUFOCollisions(Rocks.at(i))) ufoHitRock = true;
+
 			CheckEnemyCollisions(Rocks.at(i));
 
-			if (Rocks.at(i)->BeenHit)
+			if (Rocks.at(i)->GetBeenHit())
 			{
 				if (Player->Enabled)
 				{
@@ -417,12 +559,17 @@ void EnemyControl::CheckRockCollisions()
 				}
 
 				Rocks.at(i)->Destroy();
-				TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
+				Managers.EM.ResetTimer(DeathStarSpawnTimerID);
 				Particles->SpawnLineParticles(Rocks.at(i)->Position,
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 
-				int count = GetRandomValue(1, 4);
+				int count = 0;
+
+				int max = (int)(Wave * 0.5f) + 5;
+
+				if (ufoHitRock) count = GetRandomValue(4, max);
+				else count = GetRandomValue(1, 4);
 
 				if (Rocks.at(i)->Size == TheRock::Large)
 				{
@@ -444,40 +591,35 @@ void EnemyControl::CheckRockCollisions()
 	}
 }
 
-void EnemyControl::CheckUFOCollisions(TheRock* rock)
+bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 {
+	bool ufoHitRock = false;
+
 	for (const auto& ufo : UFOs)
 	{
-		ufo->CheckCollisions(rock);
-
 		if (!ufo->Enabled) continue;
 
-		if (EnemyOne->Enabled && ufo->CirclesIntersect(*EnemyOne))
-		{
-			ufo->Hit();
-			EnemyOne->Hit();
-		}
+		if (rock->Size == TheRock::Small) continue;
 
-		if (EnemyTwo->Enabled && ufo->CirclesIntersect(*EnemyTwo))
+		if (ufo->CheckShotCollisions(rock)) ufoHitRock = true;
+
+		if (ufo->CirclesIntersect(*rock))
 		{
 			ufo->Hit();
-			EnemyTwo->Hit();
+			rock->Hit();
 		}
 	}
+
+	return ufoHitRock;
 }
 
 void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 {
+	if (rock->Size == TheRock::Small) return;
+
 	if (EnemyOne->Enabled && EnemyOne->CirclesIntersect(*rock))
 	{
 		EnemyOne->Hit();
-		rock->Hit();
-		return;
-	}
-
-	if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
-	{
-		EnemyOne->Missile->Hit();
 		rock->Hit();
 		return;
 	}
@@ -488,37 +630,200 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		rock->Hit();
 		return;
 	}
+}
 
-	if (EnemyOne->Enabled && EnemyTwo->Enabled && EnemyOne->CirclesIntersect(*EnemyTwo))
+void EnemyControl::MakeReadyForBossWave()
+{
+	bool allClear = true;
+
+	for (const auto& ufo : UFOs)
 	{
-		EnemyOne->Hit();
-		EnemyTwo->Hit();
-		return;
+		if (ufo->Enabled) allClear = false;
+
+		for (const auto& shot : ufo->Shots)
+		{
+			if (shot->Enabled) allClear = false;
+		}
 	}
 
-	if (EnemyTwo->Enabled && EnemyOne->Enabled && EnemyTwo->CirclesIntersect(*EnemyOne))
+	if (EnemyOne->Enabled || EnemyTwo->Enabled) allClear = false;
+
+	for (const auto& mine : EnemyTwo->Mines)
 	{
-		EnemyTwo->Hit();
-		EnemyOne->Hit();
-		return;
+		if (mine->Enabled) allClear = false;
 	}
 
-	if (EnemyOne->Missile->Enabled && EnemyTwo->Enabled
-		&& EnemyOne->Missile->CirclesIntersect(*EnemyTwo))
+	if (DeathStar->Enabled) allClear = false;
+
+	for (auto& fighterPair : DeathStar->FighterPairs)
 	{
-		EnemyOne->Missile->Hit();
-		EnemyTwo->Hit();
-		return;
+		if (fighterPair->Enabled) allClear = false;
+
+		for (const auto& fighter : fighterPair->Fighters)
+		{
+			if (fighter->Enabled) allClear = false;
+		}
+	}
+
+	if (allClear)
+	{
+		ClearForBossWave = false;
+		BossWave = true;
+		SpawnBoss();
+	}
+}
+
+void EnemyControl::DoBossStuff()
+{
+	if (!Boss->Enabled && Managers.EM.TimerElapsed(BossExplodingTimerID))
+	{
+		BossWave = false;
+		Managers.EM.ResetTimer(UFOSpawnTimerID);
+		Managers.EM.ResetTimer(EnemyOneSpawnTimerID);
+		Managers.EM.ResetTimer(EnemyTwoSpawnTimerID);
+	}
+
+	if (Boss->GetBeenHit())
+	{
+		Boss->Destroy();
+		Managers.EM.ResetTimer(BossExplodingTimerID);
+	}
+
+	if (Player->GameOver)
+	{
+		Boss->Reset();
+		BossWave = false;
+	}
+
+	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+}
+
+void EnemyControl::SpawnBoss()
+{
+	Vector3 position = {0.0f, 0.0f, 0.0f };
+	float rotation = 0;
+	float width = Boss->WindowWidth * 0.75f;
+	float height = Boss->WindowHeight * 0.75f;
+
+	int option = GetRandomValue(0, 3);
+
+	if (option == 0)
+	{
+		position.x = GetRandomFloat(-width, width);
+		position.y = -Boss->WindowHeight;
+
+		rotation = PI / 2.0f;
+	}
+	else if (option == 1)
+	{
+		position.x = GetRandomFloat(-width, width);
+		position.y = Boss->WindowHeight;
+
+		rotation = PI + PI / 2.0f;
+	}
+	else if (option == 2)
+	{
+		position.x = -Boss->WindowWidth;
+		position.y = GetRandomFloat(-height, height);
+
+		rotation = 0;
+	}
+	else if (option == 3)
+	{
+		position.x = Boss->WindowWidth;
+		position.y = GetRandomFloat(-height, height);
+
+		rotation = PI;
+	}
+
+	Boss->Spawn(position, rotation);
+}
+
+void EnemyControl::HaveHomingMineChaseEnemy()
+{
+	for (const auto& mine : Player->Mines)
+	{
+		if (!mine->Enabled) continue;
+
+		bool enemyToChase = false;
+		float distance = 450.0f;
+		Vector3 enemyPosition = { 0.0f, 0.0f, 0.0f };
+
+		for (const auto& ufo : UFOs)
+		{
+			if (!ufo->Enabled) continue;
+
+			float ufoDistance = Vector3Distance(ufo->Position, mine->Position);
+
+			if (ufoDistance < distance)
+			{
+				distance = ufoDistance;
+				enemyToChase = true;
+				enemyPosition = ufo->Position;
+				break;
+			}
+		}
+
+		if (EnemyOne->Enabled && !enemyToChase)
+		{
+			float enemyOneDistance = Vector3Distance(EnemyOne->Position, mine->Position);
+
+			if (enemyOneDistance < distance)
+			{
+				distance = enemyOneDistance;
+				enemyToChase = true;
+				enemyPosition = EnemyOne->Position;
+			}
+		}
+
+		if (EnemyTwo->Enabled && !enemyToChase)
+		{
+			float enemyTwoDistance = Vector3Distance(EnemyTwo->Position, mine->Position);
+
+			if (enemyTwoDistance < distance)
+			{
+				distance = enemyTwoDistance;
+				enemyToChase = true;
+				enemyPosition = EnemyTwo->Position;
+			}
+		}
+
+		if (DeathStar->Enabled)
+		{
+			float deathStarDistance =
+				Vector3Distance(DeathStar->GetWorldPosition(), mine->Position);
+
+			if (deathStarDistance < distance)
+			{
+				enemyPosition = DeathStar->GetWorldPosition();
+				enemyToChase = true;
+			}
+
+		}
+
+		if (enemyToChase)
+		{
+			mine->ChaseEnemy(enemyPosition);
+		}
+		else
+		{
+			mine->LostEnemy();
+		}
 	}
 }
 
 void EnemyControl::Reset()
 {
+	BossWave = false;
+	ClearForBossWave = false;
 	Wave = 0;
 	UFOSpawnCount = 0;
 	RockSpawnCount = StartRockCount;
-	TheManagers.EM.ResetTimer(UFOSpawnTimerID);
-	TheManagers.EM.ResetTimer(DeathStarSpawnTimerID);
+
+	Managers.EM.ResetTimer(UFOSpawnTimerID, 35.0f);
+	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+
+	UFOSpawnTimeAmount = 30.0f;
 
 	for (auto& ufo : UFOs)
 	{

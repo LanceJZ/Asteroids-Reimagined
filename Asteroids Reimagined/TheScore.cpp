@@ -18,6 +18,9 @@ bool TheScore::Initialize(Utilities* utilities)
 
 bool TheScore::BeginRun()
 {
+	TheFontTiny = LoadFontEx("font/asteroids-display.otf", 16, 0, 250);
+	TheFontSmall = LoadFontEx("font/asteroids-display.otf", 30, 0, 250);
+	TheFontLarge = LoadFontEx("font/asteroids-display.otf", 40, 0, 250);
 
 	return false;
 }
@@ -32,11 +35,15 @@ void TheScore::Draw2D()
 {
 	OnScreenText::Draw2D();
 
-	DrawText(const_cast<char*>(std::to_string(Score).c_str()), 200, 5, 45, WHITE);
-	DrawText(const_cast<char*>(std::to_string(HighScore).c_str()),
-		GetScreenWidth() / 2, 4, 20, WHITE);
-	DrawText("(C) 1980 ATARI INC", (GetScreenWidth() / 2) - 35,
-		GetScreenHeight() - 12, 8, WHITE);
+	DrawTextEx(TheFontLarge, const_cast<char*>(std::to_string(Score).c_str()),
+		Vector2(200.0f, 5.0f), 40.0f, 0, WHITE);
+
+	DrawTextEx(TheFontSmall, const_cast<char*>(std::to_string(HighScore).c_str()),
+		Vector2((float)(GetScreenWidth() / 2), 5.0f), 30.0f, 0, WHITE);
+
+	DrawTextEx(TheFontTiny, "C  1 9 8 0  A T A R I  I N C",
+		Vector2((float)((GetScreenWidth() / 2) - 70),
+		(float)(GetScreenHeight() - 20)), 16.0f, 0, WHITE);
 }
 
 void TheScore::UpdateScore(int addToScore)

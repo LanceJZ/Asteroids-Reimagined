@@ -60,12 +60,17 @@ float PositionedObject::Chase(PositionedObject Chasing)
 
 void PositionedObject::RotateTowardsTargetZ(Vector3& target, float magnitude)
 {
-	RotationZ = Common::RotateTowardsTargetZ(Position, target, RotationZ, magnitude);
+	RotationZ = Common::GetRotationTowardsTargetZ(Position, target, RotationZ, magnitude);
 }
 
 float PositionedObject::AngleFromVectorZ(Vector3 target)
 {
 	return (atan2f(target.y - Position.y, target.x - Position.x));
+}
+
+float PositionedObject::AngleFromWorldVectorZ(Vector3 target)
+{
+	return (atan2f(target.y - GetWorldPosition().y, target.x - GetWorldPosition().x));
 }
 
 Vector3 PositionedObject::RandomVelocity(float magnitude)
@@ -112,13 +117,11 @@ Vector3 PositionedObject::AccelerationToMaxAtRotation(float accelerationAmount, 
 
 Vector3 PositionedObject::GetWorldPosition()
 {
-	Vector3 worldPosition = { 0, 0, 0 };
-
-		BeforeCalculate();
-		CalculateWorldVectors();
-		CalculateWorldSpace();
-		worldPosition = WorldPosition;
-		AfterCalculate();
+	BeforeCalculate();
+	CalculateWorldVectors();
+	CalculateWorldSpace();
+	Vector3 worldPosition = WorldPosition;
+	AfterCalculate();
 
 	return worldPosition;
 }
@@ -379,7 +382,7 @@ void PositionedObject::LeavePlay(float turnSpeed, float speed)
 
 void PositionedObject::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)
 {
-	RotationVelocityZ = Common::RotateTowardsTargetZ(Position, position, RotationZ,
+	RotationVelocityZ = Common::GetRotationTowardsTargetZ(Position, position, RotationZ,
 		turnSpeed);
 	Velocity = GetVelocityFromAngleZ(RotationZ, speed);
 }

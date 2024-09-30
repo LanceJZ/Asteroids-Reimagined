@@ -43,7 +43,7 @@ float Common::GetRandomRadian()
 	return GetRandomFloat(0, PI * 2);
 }
 
-float Common::RotateTowardsTargetZ(Vector3& origin, Vector3& target,
+float Common::GetRotationTowardsTargetZ(Vector3& origin, Vector3& target,
 	float facingAngle, float magnitude)
 {
 	float turnVelocity = 0;

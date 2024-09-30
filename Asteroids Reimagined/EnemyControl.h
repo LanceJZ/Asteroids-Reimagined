@@ -6,6 +6,7 @@
 #include "TheDeathStar.h"
 #include "Enemy1.h"
 #include "Enemy2.h"
+#include "TheBoss.h"
 #include "ParticleManager.h"
 
 class EnemyControl : public Common
@@ -15,13 +16,18 @@ public:
 	virtual ~EnemyControl();
 
 	bool SpawnPowerUp = false;
+	int Wave = 0;
 	Vector3 PowerUpSpawnPosition = {};
 
 	std::vector<TheRock*> Rocks;
-	TheUFO* UFOs[2] = { nullptr };
+	std::vector<TheUFO*> UFOs;
+
 	TheDeathStar *DeathStar = nullptr;
 	Enemy1 *EnemyOne = nullptr;
 	Enemy2 *EnemyTwo = nullptr;
+	TheBoss *Boss = nullptr;
+
+	LineModelPoints UFOModel = {};
 
 	void SetPlayer(ThePlayer* player);
 	void SetRockModels(LineModelPoints rockModels[4]);
@@ -30,6 +36,11 @@ public:
 	void SetWedgeModel(LineModelPoints model);
 	void SetEnemy1Model(LineModelPoints model);
 	void SetEnemy2Model(LineModelPoints model);
+	void SetBossModel(LineModelPoints model);
+	void SetBossShieldModel(LineModelPoints model);
+	void SetBossTurretModel(LineModelPoints model);
+	void SetLeftSpineMountModel(LineModelPoints model);
+	void SetRightSpineMountModel(LineModelPoints model);
 	void SetEnemyMissileModel(LineModelPoints model);
 	void SetEnemyMineModel(LineModelPoints model);
 
@@ -42,6 +53,7 @@ public:
 	void SetDeathStarExplodeSound(Sound sound);
 	void SetEnemyOneSpawnSound(Sound sound);
 	void SetEnemyOneFireSound(Sound sound);
+	void SetEnemyOneMissileOnSound(Sound sound);
 	void SetEnemyOneExplodeSound(Sound sound);
 	void SetEnemyOneOnSound(Sound sound);
 	void SetEnemyOneMissileExplodeSound(Sound sound);
@@ -50,6 +62,13 @@ public:
 	void SetEnemyTwoExplodeSound(Sound sound);
 	void SetEnemyTwoOnSound(Sound sound);
 	void SetEnemyTwoMineExplodeSound(Sound sound);
+	void SetBossExplodeSound(Sound sound);
+	void SetBossShieldHitSound(Sound sound);
+	void SetBossShieldDownSound(Sound sound);
+	void SetBossHitSound(Sound sound);
+	void SetBossTurretFireSound(Sound sound);
+	void SetBossTurretExplodeSound(Sound sound);
+	void SetBossSpineFireSound(Sound sound);
 
 	void SetParticleManager(ParticleManager* particles);
 
@@ -65,17 +84,21 @@ private:
 	bool NoMoreRocks = false;
 	bool SpawnedDeathStar = false;
 	bool NewWave = false;
+	bool BossWave = false;
+	bool ClearForBossWave = false;
 
 	size_t UFOSpawnTimerID;
 	size_t DeathStarSpawnTimerID;
 	size_t EnemyOneSpawnTimerID;
 	size_t EnemyTwoSpawnTimerID;
+	size_t BossExplodingTimerID;
 
 	int UFOSpawnCount = 0;
 	int StartRockCount = 4;
 	int RockSpawnCount = 0;
 	int RockCount = 0;
-	int Wave = 0;
+
+	float UFOSpawnTimeAmount = 0.0f;
 
 	Sound RockExplodeSound = {};
 	Sound UFOExplodeSound = {};
@@ -94,8 +117,12 @@ private:
 	void SpawnDeathStar();
 	void CheckDeathStarStatus();
 	void CheckRockCollisions();
-	void CheckUFOCollisions(TheRock* rock);
+	bool CheckUFOCollisions(TheRock* rock);
 	void CheckEnemyCollisions(TheRock* rock);
+	void MakeReadyForBossWave();
+	void DoBossStuff();
+	void SpawnBoss();
+	void HaveHomingMineChaseEnemy();
 
 	void Reset();
 };

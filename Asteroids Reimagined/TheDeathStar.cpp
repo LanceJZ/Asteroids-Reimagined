@@ -4,7 +4,7 @@ TheDeathStar::TheDeathStar()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		TheManagers.EM.AddEntity(FighterPairs[i] = DBG_NEW TheFighterPair());
+		Managers.EM.AddEntity(FighterPairs[i] = DBG_NEW TheFighterPair());
 	}
 }
 
@@ -22,7 +22,7 @@ void TheDeathStar::SetWedgeModel(LineModelPoints model)
 
 void TheDeathStar::SetExplodeSound(Sound sound)
 {
-	ExplodeSound = sound;
+	Enemy::SetExplodeSound(sound);
 
 	for (const auto &fighterPair : FighterPairs)
 	{
@@ -35,6 +35,14 @@ void TheDeathStar::SetSpawnSound(Sound sound)
 	SpawnSound = sound;
 }
 
+void TheDeathStar::SetParticleManager(ParticleManager* particleManager)
+{
+	for (const auto& fighterPair : FighterPairs)
+	{
+		fighterPair->SetParticleManager(particleManager);
+	}
+}
+
 void TheDeathStar::SetPlayer(ThePlayer* player)
 {
 	Player = player;
@@ -45,16 +53,19 @@ void TheDeathStar::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheDeathStar::SetUFO(TheUFO* ufo[2])
+void TheDeathStar::SetUFO()
 {
-	for (int i = 0; i < 2; i++)
+	for (const auto& fighterPair : FighterPairs)
 	{
-		UFOs[i] = ufo[i];
+		fighterPair->SetUFO(UFORefs);
 	}
+}
 
+void TheDeathStar::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
+{
 	for (const auto &fighterPair : FighterPairs)
 	{
-		fighterPair->SetUFO(ufo);
+		fighterPair->SetEnemies(enemyOne, enemyTwo);
 	}
 }
 
@@ -75,19 +86,20 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 
 bool TheDeathStar::BeginRun()
 {
+	Entity::BeginRun();
 
 	return false;
 }
 
 void TheDeathStar::Update(float deltaTime)
 {
-	Entity::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
 	CheckCollisions();
 
 	if (NewWave)
 	{
-		if (OffScreen())
+		if (IsOffScreen())
 		{
 			Reset();
 		}
@@ -121,17 +133,18 @@ void TheDeathStar::NewWaveStart()
 
 void TheDeathStar::Reset()
 {
-	Enabled = false;
+	Enemy::Reset();
+	//Enabled = false;
 
 	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
-		fighterPair->Destroy();
+		//fighterPair->Destroy();
 
 		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->Reset();
-			fighter->Destroy();
+			//fighter->Destroy();
 		}
 	}
 }
@@ -182,59 +195,9 @@ void TheDeathStar::NewGame()
 	Reset();
 }
 
-void TheDeathStar::CheckCollisions()
-{
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		Player->Hit(Position, Velocity);
-
-		if (!Player->Shield->Enabled)
-		{
-			Hit();
-			Player->ScoreUpdate(Points);
-		}
-
-		return;
-	}
-
-	for (const auto& shot : Player->Shots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
-
-			return;
-		}
-	}
-
-	for (const auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && CirclesIntersect(*ufo))
-		{
-			ufo->Hit();
-			Hit();
-			return;
-		}
-
-		for (const auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && CirclesIntersect(*shot))
-			{
-				shot->Destroy();
-				Hit();
-				return;
-			}
-		}
-	}
-}
-
 void TheDeathStar::Hit()
 {
-	Entity::Destroy();
-
-	if (!Player->GameOver) PlaySound(ExplodeSound);
+	Enemy::Hit();
 
 	for (const auto &fighterPair : FighterPairs)
 	{
@@ -250,5 +213,12 @@ void TheDeathStar::Hit()
 
 void TheDeathStar::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
+}
+
+bool TheDeathStar::CheckCollisions()
+{
+	Enemy::CheckCollisions();
+
+	return false;
 }

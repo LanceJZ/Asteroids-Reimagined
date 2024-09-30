@@ -16,7 +16,7 @@ public:
 
 	Edge EdgeSpawnedFrom = Top;
 
-	TheMissile* Missile = nullptr;
+	std::vector<TheMissile*> Missiles;
 
 	Enemy1();
 	virtual ~Enemy1();
@@ -26,6 +26,7 @@ public:
 
 	void SetSpawnSound(Sound sound);
 	void SetOnSound(Sound sound);
+	void SetMissileOnSound(Sound sound);
 	void SetMissileExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
@@ -41,15 +42,18 @@ public:
 
 private:
 	size_t FireMissileTimerID = 0;
-	//int Score = 1250;
+	int MissilesFired = 0;
+	float MissileFireTimerAmount = 0.0f;
 	float Speed = 133.666f;
 	float TurnSpeed = 0.666f;
 	float RotateMagnitude = PI / 2;
 
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
-	Sound SpawnSound = {};
-	Sound OnSound = {};
+	Sound MissileOnSound = {};
+	Sound MissileExplodeSound = {};
+
+	LineModelPoints MissileModel = {};
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

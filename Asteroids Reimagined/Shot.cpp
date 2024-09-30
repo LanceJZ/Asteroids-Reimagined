@@ -2,7 +2,7 @@
 
 Shot::Shot()
 {
-	LifeTimerID = TheManagers.EM.AddTimer();
+	LifeTimerID = Managers.EM.AddTimer();
 }
 
 Shot::~Shot()
@@ -27,7 +27,7 @@ void Shot::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (TheManagers.EM.TimerElapsed(LifeTimerID))
+	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
@@ -53,7 +53,7 @@ void Shot::Spawn(Vector3 position, Vector3 velocity)
 
 void Shot::Spawn(Vector3 position, Vector3 velocity, float lifetime)
 {
-	TheManagers.EM.ResetTimer(LifeTimerID, lifetime);
+	Managers.EM.ResetTimer(LifeTimerID, lifetime);
 	Spawn(position, velocity);
 }
 

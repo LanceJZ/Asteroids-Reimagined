@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "Enemy.h"
 
 class TheRock : public LineModel
 {
@@ -21,7 +22,7 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetExplodeSound(Sound sound);
 
-	bool Initialize();
+	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
 	void Update(float deltaTime);

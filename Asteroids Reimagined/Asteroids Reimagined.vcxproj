@@ -169,7 +169,23 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheBoss.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TheBossTurret.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TheHighScore.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TheHomingMine.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ThePlasmaShot.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -236,7 +252,24 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="TheBoss.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheBossTurret.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TheHighScore.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheHomingMine.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ThePlasmaShot.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -289,6 +322,9 @@
     <ProjectReference Include="..\raylib\projects\VS2022\raylib\raylib.vcxproj">
       <Project>{e89d61ac-55de-4482-afd4-df7242ebc859}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Asteroids Deluxe.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -62,6 +62,7 @@ private:
 	TheHighScore* HighScores = {};
 
 	void PlayerShipDisplay();
+	void AddPlayerShipModels(int number);
 	void NewGame();
 	bool CheckPlayerClear();
 };

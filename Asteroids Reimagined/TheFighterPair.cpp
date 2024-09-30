@@ -4,7 +4,7 @@ TheFighterPair::TheFighterPair()
 {
 	for (int i = 0; i < 2; i++)
 	{
-		TheManagers.EM.AddLineModel(Fighters[i] = DBG_NEW TheFighter());
+		Managers.EM.AddLineModel(Fighters[i] = DBG_NEW TheFighter());
 	}
 }
 
@@ -22,16 +22,34 @@ void TheFighterPair::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheFighterPair::SetUFO(TheUFO* ufo[2])
+void TheFighterPair::SetUFO(std::vector<Enemy*> ufos)
 {
-	for (int i = 0; i < 2; i++)
+	UFORefs.clear();
+
+	for (const auto& ufo : ufos)
 	{
-		UFOs[i] = ufo[i];
+		UFORefs.push_back(ufo);
 	}
+
+	for (const auto& fighter : Fighters)
+	{
+		fighter->UFORefs.clear();
+
+		for (const auto& ufo : ufos)
+		{
+			fighter->UFORefs.push_back(ufo);
+		}
+	}
+}
+
+void TheFighterPair::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
+{
+	EnemyOne = enemyOne;
+	EnemyTwo = enemyTwo;
 
 	for (const auto &fighter : Fighters)
 	{
-		fighter->SetUFO(ufo);
+		fighter->SetEnemies(enemyOne, enemyTwo);
 	}
 }
 
@@ -53,6 +71,14 @@ void TheFighterPair::SetExplodeSound(Sound sound)
 	ExplodeSound = sound;
 }
 
+void TheFighterPair::SetParticleManager(ParticleManager* particleManager)
+{
+	for (const auto& fighter : Fighters)
+	{
+		fighter->SetParticleManager(particleManager);
+	}
+}
+
 bool TheFighterPair::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
@@ -69,30 +95,40 @@ bool TheFighterPair::Initialize(Utilities* utilities)
 
 bool TheFighterPair::BeginRun()
 {
+	Entity::BeginRun();
+
+	Points = 200;
+	Speed = 100.0f;
+	TurnSpeed = 0.5f;
+	RotateMagnitude = PI / 2;
 
 	return false;
 }
 
 void TheFighterPair::Update(float deltaTime)
 {
-	Entity::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
 	if (Separated)
 	{
-		if (Player->Enabled)
-		{
-			ChasePlayer();
-		}
-		else if (UFOs[0]->Enabled || UFOs[1]->Enabled)
+		CheckCollisions();
+
+		if (CheckUFOActive())
 		{
 			ChaseUFO();
 		}
-		else
+		else if (EnemyOne->Enabled || EnemyTwo->Enabled)
 		{
-			LeaveScreen();
+			ChaseEnemy();
 		}
+		else if (!Player->Enabled)
+		{
+			//if (LeaveScreen()) Destroy();
 
-		CheckCollisions();
+			LeaveScreen();
+
+			return;
+		}
 
 		if (NewWave)
 		{
@@ -100,7 +136,6 @@ void TheFighterPair::Update(float deltaTime)
 		}
 		else
 		{
-
 			CheckScreenEdge();
 		}
 	}
@@ -122,9 +157,12 @@ void TheFighterPair::Separate()
 
 void TheFighterPair::Reset()
 {
-	Velocity = { 0.0f, 0.0f, 0.0f };
-	RotationVelocityZ = 0.0f;
-	Destroy();
+	Enemy::Reset();
+
+	for (const auto& fighter : Fighters)
+	{
+		fighter->Reset();
+	}
 }
 
 void TheFighterPair::Spawn(Vector3 position)
@@ -152,23 +190,18 @@ void TheFighterPair::Spawn(Vector3 position)
 
 void TheFighterPair::Hit()
 {
-	Entity::Hit();
-
-	if (!Player->GameOver) PlaySound(ExplodeSound);
+	Enemy::Hit();
 
 	for (const auto &fighter : Fighters)
 	{
 		fighter->Separate();
 		fighter->RemoveParent(this);
 	}
-
-	Reset();
-	Destroy();
 }
 
 void TheFighterPair::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 
 	ClearParents();
 }
@@ -178,93 +211,9 @@ void TheFighterPair::ChasePlayer()
 	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
 }
 
-void TheFighterPair::ChaseUFO()
+bool TheFighterPair::CheckCollisions()
 {
-	if (UFOs[0]->Enabled && UFOs[1]->Enabled)
-	{
-		UFOs[0]->Distance = Vector3Distance(UFOs[0]->Position, Position);
-		UFOs[1]->Distance = Vector3Distance(UFOs[1]->Position, Position);
+	Enemy::CheckCollisions();
 
-		if (UFOs[0]->Distance < UFOs[1]->Distance && UFOs[0]->Enabled)
-		{
-			SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
-		}
-		else if (UFOs[1]->Distance < UFOs[0]->Distance && UFOs[1]->Enabled)
-		{
-			SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
-		}
-	}
-	else if (UFOs[0]->Enabled)
-	{
-		SetRotateVelocity(UFOs[0]->Position, TurnSpeed, Speed);
-	}
-	else if (UFOs[1]->Enabled)
-	{
-		SetRotateVelocity(UFOs[1]->Position, TurnSpeed, Speed);
-	}
-}
-
-void TheFighterPair::LeaveScreen()
-{
-	LeavePlay(TurnSpeed, Speed);
-
-	if (OffScreen())
-	{
-		Reset();
-		Destroy();
-
-		for (const auto &fighter : Fighters)
-		{
-			fighter->Reset();
-			fighter->Destroy();
-		}
-	}
-}
-
-void TheFighterPair::CheckCollisions()
-{
-	if (Player->Enabled && CirclesIntersect(*Player))
-	{
-		Player->Hit(Position, Velocity);
-
-		if (!Player->Shield->Enabled)
-		{
-			Hit();
-			Player->ScoreUpdate(Points);
-		}
-
-		return;
-	}
-
-	for (const auto& shot : Player->Shots)
-	{
-		if (shot->Enabled && CirclesIntersect(*shot))
-		{
-			shot->Destroy();
-			Hit();
-			Player->ScoreUpdate(Points);
-
-			return;
-		}
-	}
-
-	for (const auto& ufo : UFOs)
-	{
-		if (ufo->Enabled && CirclesIntersect(*ufo))
-		{
-			ufo->Hit();
-			Hit();
-			return;
-		}
-
-		for (const auto& shot : ufo->Shots)
-		{
-			if (shot->Enabled && CirclesIntersect(*shot))
-			{
-				shot->Destroy();
-				Hit();
-				return;
-			}
-		}
-	}
+	return false;
 }

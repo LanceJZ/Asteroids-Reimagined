@@ -181,7 +181,7 @@
     </ClCompile>
     <ClCompile Include="ExplosionControl.cpp" />
     <ClCompile Include="LineModel.cpp" />
-    <ClCompile Include="Managers.cpp">
+    <ClCompile Include="TheManagers.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -191,7 +191,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="PositionedObject.cpp" />
     <ClCompile Include="Scene.cpp">
       <SubType>
       </SubType>
@@ -221,7 +220,7 @@
     </ClInclude>
     <ClInclude Include="ExplosionControl.h" />
     <ClInclude Include="LineModel.h" />
-    <ClInclude Include="Managers.h">
+    <ClInclude Include="TheManagers.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -231,7 +230,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="PositionedObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h">
       <SubType>

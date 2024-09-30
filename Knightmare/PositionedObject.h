@@ -64,6 +64,7 @@ public:
 	bool OffScreenTopBottom();
 	float Chase(PositionedObject Chasing);
 	float AngleFromVectorZ(Vector3 target);
+	float AngleFromWorldVectorZ(Vector3 target);
 	float GetAngleFromVectors(Vector3& target);
 	Vector3 RandomVelocity(float magnitude);
 	Vector3 VelocityFromAngleZ(float magnitude);

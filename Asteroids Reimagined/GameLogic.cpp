@@ -2,10 +2,10 @@
 
 GameLogic::GameLogic()
 {
-	TheManagers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
-	TheManagers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
+	Managers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
+	Managers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
 
-	ExplodeTimerID = TheManagers.EM.AddTimer(3.1f);
+	ExplodeTimerID = Managers.EM.AddTimer(3.1f);
 }
 
 GameLogic::~GameLogic()
@@ -55,8 +55,9 @@ bool GameLogic::BeginRun()
 	Common::BeginRun();
 
 	PlayerModel = Player->GetLineModel();
-
+	PlayerClear->Enabled = false;
 	GameEnded = true;
+	Player->SetHighScore(HighScores->GetHighScore());
 
 	return true;
 }
@@ -65,11 +66,6 @@ void GameLogic::Update()
 {
 	Common::Update();
 
-	if (Player->GameOver)
-	{
-		State = MainMenu;
-	}
-
 	if (State == MainMenu)
 	{
 		if (!GameEnded)
@@ -77,36 +73,49 @@ void GameLogic::Update()
 			HighScores->TheGameIsOver(Player->GetScore());
 			GameEnded = true;
 		}
+
+		return;
 	}
 
-	if (!Player->Enabled && State == InPlay)
+	if (Player->GameOver)
 	{
-		if (Player->BeenHit)
+		State = MainMenu;
+		PlayerClear->Enabled = false;
+		Player->Destroy();
+		return;
+	}
+
+	if (State == InPlay)
+	{
+		if (Player->GetBeenHit())
 		{
-			TheManagers.EM.ResetTimer(ExplodeTimerID);
-			Player->BeenHit = false;
+			Managers.EM.ResetTimer(ExplodeTimerID);
+			Player->Destroy();
 		}
 
-		if (TheManagers.EM.TimerElapsed(ExplodeTimerID))
+		if (!Player->Enabled && !Player->GetBeenHit() &&
+			Managers.EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
 
-			if (CheckPlayerClear())
+			if (CheckPlayerClear() || IsKeyPressed(KEY_ENTER) ||
+				(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
 			{
 				Player->Spawn();
+				PlayerClear->Enabled = false;
 				PlayerShipDisplay();
 			}
 		}
-	}
-	else
-	{
-		PlayerClear->Enabled = false;
 
 		if (Player->NewLife)
 		{
 			PlayerShipDisplay();
 			Player->NewLife = false;
 		}
+	}
+	else
+	{
+		PlayerClear->Enabled = false;
 	}
 
 	if (Player->Enabled)
@@ -123,18 +132,14 @@ void GameLogic::GameInput()
 {
 	if (State == Pause)
 	{
-		if (IsKeyPressed(KEY_P))
+		if (IsKeyPressed(KEY_P) || (IsGamepadAvailable(0)
+			&& IsGamepadButtonPressed(0, 13)))
 		{
 			State = InPlay;
+			Player->Paused = false;
 		}
 
-		if (IsGamepadAvailable(0))
-		{
-			if (IsGamepadButtonPressed(0, 13)) //Menu Button
-			{
-				State = InPlay;
-			}
-		}
+		return;
 	}
 	else if (State == MainMenu)
 	{
@@ -158,32 +163,22 @@ void GameLogic::GameInput()
 	}
 	else if (State == InPlay)
 	{
-		if (IsGamepadAvailable(0))
+		if (!Player->Enabled)
 		{
-			if (IsGamepadButtonPressed(0, 13)) //Menu Button
-			{
-				State = Pause;
-			}
-
-			if (IsGamepadButtonPressed(0, 8)) //X button
-			{
-				PlayBackgroundMusic = !PlayBackgroundMusic;
-			}
 		}
 
-		if (IsKeyPressed(KEY_M))
+		if (IsKeyPressed(KEY_M) || (IsGamepadAvailable(0) &&
+			IsGamepadButtonPressed(0, 8)))
 		{
 			PlayBackgroundMusic = !PlayBackgroundMusic;
 		}
 
 
-		if (IsKeyPressed(KEY_P))
+		if (IsKeyPressed(KEY_P) || (IsGamepadAvailable(0) &&
+			IsGamepadButtonPressed(0, 13)))
 		{
 			State = Pause;
-		}
-
-		if (IsKeyPressed(KEY_B))
-		{
+			Player->Paused = true;
 		}
 
 #if DEBUG
@@ -223,8 +218,9 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 	if (spawnNewPowerUp)
 	{
 		PowerUps.push_back(DBG_NEW PowerUp());
-		TheManagers.EM.AddEntity(PowerUps.back());
+		Managers.EM.AddEntity(PowerUps.back());
 		PowerUps.back()->SetPlayer(Player);
+		PowerUps.back()->SetEnemy(Enemies);
 		PowerUps.back()->SetModel(PowerUpModel);
 		PowerUps.back()->SetPickUpSound(PickUpSound);
 		PowerUps.back()->Initialize(TheUtilities);
@@ -236,35 +232,43 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 
 void GameLogic::PlayerShipDisplay()
 {
-	Vector2 location = { (-GetScreenWidth() / 2.25f) + Player->Radius,
+	Vector2 location = { (-GetScreenWidth() / 2.05f) + Player->Radius,
 		(-GetScreenHeight() / 2) + Player->Radius * 2.0f + 30.0f };
 
-	if (Player->Lives > PlayerShipModels.size())
+	if (Player->Lives > (int)PlayerShipModels.size())
 	{
-		PlayerShipModels.push_back(DBG_NEW LineModel());
-		TheManagers.EM.AddLineModel(PlayerShipModels.back());
-		PlayerShipModels.back()->SetModel(PlayerModel);
-		PlayerShipModels.back()->Initialize(TheUtilities);
-		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
-		PlayerShipModels.back()->Scale = 0.8f;
-		PlayerShipModels.back()->Radius = 0.0f;
+		AddPlayerShipModels(Player->Lives - (int)PlayerShipModels.size());
 	}
 
-	for (int i = 0; i < PlayerShipModels.size(); i++)
-	{
-		PlayerShipModels[i]->Enabled = false;
-		PlayerShipModels[i]->Position = { location.x, location.y, 0.0f };
-		location.x += Player->Radius * 2.0f;
-	}
-
-	if (Player->Lives > PlayerShipModels.size())
+	if (Player->Lives > (int)PlayerShipModels.size())
 	{
 		return;
+	}
+
+	for (const auto& model : PlayerShipModels)
+	{
+		model->Enabled = false;
+		model->Position = { location.x, location.y, 0.0f };
+		location.x += Player->Radius * 2.0f;
 	}
 
 	for (int i = 0; i < Player->Lives; i++)
 	{
 		PlayerShipModels.at(i)->Enabled = true;
+	}
+}
+
+void GameLogic::AddPlayerShipModels(int number)
+{
+	for (int i = 0; i < number; i++)
+	{
+		PlayerShipModels.push_back(DBG_NEW LineModel());
+		Managers.EM.AddLineModel(PlayerShipModels.back());
+		PlayerShipModels.back()->SetModel(PlayerModel);
+		PlayerShipModels.back()->Initialize(TheUtilities);
+		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
+		PlayerShipModels.back()->Scale = 0.8f;
+		PlayerShipModels.back()->Radius = 0.0f;
 	}
 }
 
@@ -277,12 +281,7 @@ void GameLogic::NewGame()
 	State = InPlay;
 	GameEnded = false;
 
-	Player->SetHighScore(HighScores->GetHighScore());
-
-	for (int i = 0; i < Player->Lives; i++)
-	{
-		PlayerShipDisplay();
-	}
+	PlayerShipDisplay();
 
 	for (const auto& powerUp : PowerUps)
 	{
@@ -292,7 +291,7 @@ void GameLogic::NewGame()
 
 bool GameLogic::CheckPlayerClear()
 {
-	for (auto& rock : Enemies->Rocks)
+	for (const auto& rock : Enemies->Rocks)
 	{
 		if (rock->Enabled && rock->CirclesIntersect(*PlayerClear))
 		{
@@ -300,14 +299,14 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	for (auto& ufo : Enemies->UFOs)
+	for (const auto& ufo : Enemies->UFOs)
 	{
 		if (ufo->Enabled && ufo->CirclesIntersect(*PlayerClear))
 		{
 			return false;
 		}
 
-		for (auto& Shot : ufo->Shots)
+		for (const auto& Shot : ufo->Shots)
 		{
 			if (Shot->Enabled && Shot->CirclesIntersect(*PlayerClear))
 			{
@@ -316,31 +315,78 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	if (Enemies->EnemyOne->Enabled &&
-		Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
+	if (Enemies->Boss->Enabled)
+	{
+		if (Enemies->Boss->CirclesIntersect(*PlayerClear)) return false;
+
+		if (PlayerClear->CirclesIntersect(
+			Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
+				Enemies->Boss->FireShotAtPlayerArea->Radius))
+		{
+			return false;
+		}
+
+		for (const auto& shot : Enemies->Boss->Shots)
+		{
+			if (shot->Enabled && shot->CirclesIntersect(*PlayerClear))
+			{
+				return false;
+			}
+		}
+
+		for (const auto& turret : Enemies->Boss->Turrets)
+		{
+			for (const auto& shot : turret->Shots)
+			{
+				if (shot->Enabled && shot->CirclesIntersect(*PlayerClear))
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	if (Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 	}
 
-	if (Enemies->EnemyTwo->Enabled &&
-		Enemies->EnemyTwo->CirclesIntersect(*PlayerClear))
+	if (Enemies->EnemyTwo->CirclesIntersect(*PlayerClear))
 	{
 		return false;
 	}
 
-	if (Enemies->DeathStar->Enabled &&
-		Enemies->DeathStar->CirclesIntersect(*PlayerClear))
+	if (Enemies->DeathStar->CirclesIntersect(*PlayerClear))
 	{
 		return false;
+
 	}
 
-	if (Enemies->EnemyOne->Missile->Enabled &&
-		Enemies->EnemyOne->Missile->CirclesIntersect(*PlayerClear))
+	for (const auto& fighterPair : Enemies->DeathStar->FighterPairs)
 	{
-		return false;
+		if (fighterPair->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
+
+		for (const auto& fighter : fighterPair->Fighters)
+		{
+			if (fighter->CirclesIntersect(*PlayerClear))
+			{
+				return false;
+			}
+		}
 	}
 
-	for (auto& mine : Enemies->EnemyTwo->Mines)
+	for (const auto& missile : Enemies->EnemyOne->Missiles)
+	{
+		if (missile->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
+	}
+
+	for (const auto& mine : Enemies->EnemyTwo->Mines)
 	{
 		if (mine->CirclesIntersect(*PlayerClear))
 		{

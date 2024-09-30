@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Managers.h"
+#include "TheManagers.h"
 #include "ParticleCube.h"
 #include "LineParticle.h"
 
@@ -18,7 +18,7 @@ public:
 	ParticleManager();
 	virtual ~ParticleManager();
 
-	virtual void SetManagers(Managers& managers);
+	virtual void SetManagers(TheManagers& managers);
 	virtual void SetCubeModel(Model model);
 
 	virtual bool Initialize(Utilities* utilities);
@@ -35,7 +35,7 @@ public:
 protected:
 	Model CubeModel = {};
 	LineModelPoints ParticleModel = {};
-	Managers* Man = {};
+	TheManagers* Managers = {};
 
 private:
 	std::vector<ParticleCube*> CubeParticles;
