@@ -442,9 +442,10 @@ void EnemyControl::SpawnUFO()
 	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
 		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
 
-	float ufoSpawnTime = GetRandomFloat((UFOSpawnTimeAmount /
-		(((float)Wave * 0.1f) + 1.0f)),
-		UFOSpawnTimeAmount - ufoTimeAmountAdjust);
+	float min = UFOSpawnTimeAmount / (((float)Wave * 0.1f) + 1.0f);
+	float max = UFOSpawnTimeAmount - ufoTimeAmountAdjust;
+
+	float ufoSpawnTime = GetRandomFloat(min, max);
 
 	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
 
@@ -623,13 +624,6 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		return;
 	}
 
-	//if (EnemyOne->Missile->Enabled && EnemyOne->Missile->CirclesIntersect(*rock))
-	//{
-	//	EnemyOne->Missile->Hit();
-	//	rock->Hit();
-	//	return;
-	//}
-
 	if (EnemyTwo->Enabled && EnemyTwo->CirclesIntersect(*rock))
 	{
 		EnemyTwo->Hit();
@@ -653,8 +647,6 @@ void EnemyControl::MakeReadyForBossWave()
 	}
 
 	if (EnemyOne->Enabled || EnemyTwo->Enabled) allClear = false;
-
-//	if (EnemyOne->Missile->Enabled) allClear = false;
 
 	for (const auto& mine : EnemyTwo->Mines)
 	{

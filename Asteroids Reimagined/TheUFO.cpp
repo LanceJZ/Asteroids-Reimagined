@@ -178,7 +178,7 @@ void TheUFO::CheckShotsHitPlayer()
 	}
 }
 
-void TheUFO::FireShot() //Move to Enemy class.
+void TheUFO::FireShot() //Move or integrate to/with Enemy class.
 {
 	float angle = 0;
 	float shotSpeed = 325;

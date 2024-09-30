@@ -23,7 +23,5 @@ public:
 private:
 	size_t LifeTimerID = 0;
 
-	Sound OnSound = {};
-
 	bool CheckCollisions();
 };

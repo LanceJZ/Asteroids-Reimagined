@@ -45,8 +45,6 @@ void TheMissile::Update(float deltaTime)
 	ChasePlayer();
 	CheckScreenEdge();
 	CheckCollisions();
-
-	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void TheMissile::Draw3D()

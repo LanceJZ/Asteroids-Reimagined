@@ -48,6 +48,8 @@ protected:
 	ParticleManager* Particles = nullptr;
 	Sound FireSound = {};
 	Sound ExplodeSound = {};
+	Sound OnSound = {};
+	Sound SpawnSound = {};
 	LineModelPoints ShotModel = {};
 	Enemy* EnemyOne = nullptr;
 	Enemy* EnemyTwo = nullptr;

@@ -41,10 +41,7 @@ private:
 	float WX = 0.0f;
 	float WY = 0.0f;
 
-	//Sound ExplodeSound = {};
 	Sound SpawnSound = {};
-
-	//ThePlayer* Player = nullptr;
 
 	void Hit();
 	void Destroy();

@@ -53,6 +53,7 @@ void Enemy::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void Enemy::Draw3D()

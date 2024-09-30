@@ -50,8 +50,6 @@ private:
 
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
-	Sound SpawnSound = {};
-	Sound OnSound = {};
 	Sound MissileOnSound = {};
 	Sound MissileExplodeSound = {};
 

@@ -79,8 +79,6 @@ void Enemy1::Update(float deltaTime)
 	CheckCollisions();
 
 	if (CheckWentOffScreen()) Enabled = false;
-
-	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 }
 
 void Enemy1::Draw3D()
