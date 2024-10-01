@@ -86,9 +86,11 @@ void Enemy1::Draw3D()
 	LineModel::Draw3D();
 }
 
-void Enemy1::Spawn(Vector3 position)
+void Enemy1::Spawn() //move common to Enemy.cpp
 {
-	Managers.EM.ResetTimer(FireMissileTimerID);
+	Vector3 position = { 0.0f, 0.0f, 0.0f };
+
+	Managers.EM.ResetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
 
 	if (!Player->GameOver) PlaySound(SpawnSound);
 
@@ -142,8 +144,13 @@ void Enemy1::Spawn(Vector3 position)
 		}
 	}
 
-	Enemy::Spawn(position);
+	Spawn(position);
 	RotationZ = GetAngleFromVectorZ(Destination);
+}
+
+void Enemy1::Spawn(Vector3 position)
+{
+	Enemy::Spawn(position);
 }
 
 void Enemy1::Hit()
@@ -286,7 +293,7 @@ void Enemy1::FireMissile()
 	if (spawnMissile)
 	{
 		Missiles.push_back(DBG_NEW TheMissile());
-		Managers.EM.AddEntity(Missiles.back());
+		Managers.EM.AddLineModel(Missiles.back());
 		Missiles.back()->SetModel(MissileModel);
 		Missiles.back()->SetPlayer(Player);
 		Missiles.back()->SetParticleManager(Particles);

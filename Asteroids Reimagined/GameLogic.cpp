@@ -346,9 +346,12 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	if (Enemies->EnemyOne->CirclesIntersect(*PlayerClear))
+	for (const auto& enemy : Enemies->EnemyOnes)
 	{
-		return false;
+		if (enemy->CirclesIntersect(*PlayerClear))
+		{
+			return false;
+		}
 	}
 
 	if (Enemies->EnemyTwo->CirclesIntersect(*PlayerClear))
@@ -378,11 +381,14 @@ bool GameLogic::CheckPlayerClear()
 		}
 	}
 
-	for (const auto& missile : Enemies->EnemyOne->Missiles)
+	for (const auto& enemy : Enemies->EnemyOnes)
 	{
-		if (missile->CirclesIntersect(*PlayerClear))
+		for (const auto& missile : enemy->Missiles)
 		{
-			return false;
+			if (missile->CirclesIntersect(*PlayerClear))
+			{
+				return false;
+			}
 		}
 	}
 

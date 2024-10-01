@@ -21,9 +21,11 @@ public:
 
 	std::vector<TheRock*> Rocks;
 	std::vector<TheUFO*> UFOs;
+	std::vector<Enemy1*> EnemyOnes;
+	std::vector<Enemy2*> EnemyTwos;
 
 	TheDeathStar *DeathStar = nullptr;
-	Enemy1 *EnemyOne = nullptr;
+	//Enemy1 *EnemyOne = nullptr;
 	Enemy2 *EnemyTwo = nullptr;
 	TheBoss *Boss = nullptr;
 
@@ -97,7 +99,9 @@ private:
 	int StartRockCount = 4;
 	int RockSpawnCount = 0;
 	int RockCount = 0;
+	int EnemyOneSpawnCount = 0;
 
+	float EnemyOneSpawnTimeAmount = 0;
 	float UFOSpawnTimeAmount = 0.0f;
 
 	Sound RockExplodeSound = {};
@@ -105,9 +109,24 @@ private:
 	Sound UFOFireSound = {};
 	Sound UFOSmallSound = {};
 	Sound UFOBigSound = {};
+	Sound EnemyOneSpawnSound = {};
+	Sound EnemyOneFireSound = {};
+	Sound EnemyOneMissileOnSound = {};
+	Sound EnemyOneExplodeSound = {};
+	Sound EnemyOneOnSound = {};
+	Sound EnemyOneMissileExplodeSound = {};
+	Sound EnemyTwoSpawnSound = {};
+	Sound EnemyTwoFireSound = {};
+	Sound EnemyTwoExplodeSound = {};
+	Sound EnemyTwoOnSound = {};
+	Sound EnemyTwoMineExplodeSound = {};
 
 	LineModelPoints ShotModel;
 	LineModelPoints RockModels[4];
+	LineModelPoints EnemyOneModel;
+	LineModelPoints EnemyTwoModel;
+	LineModelPoints MissileModel;
+	LineModelPoints MineModel;
 
 	ThePlayer *Player = nullptr;
 	ParticleManager *Particles = nullptr;
@@ -122,6 +141,7 @@ private:
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void SpawnBoss();
+	void SpawnEnemyOne();
 	void HaveHomingMineChaseEnemy();
 
 	void Reset();

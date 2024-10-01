@@ -35,6 +35,7 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
+	void Spawn();
 	void Spawn(Vector3 position);
 	void Hit();
 	void Destroy();
