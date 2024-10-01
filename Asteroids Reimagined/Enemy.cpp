@@ -198,11 +198,11 @@ void Enemy::ChaseUFO()
 
 void Enemy::ChaseEnemy()
 {
-	EnemyOne->Distance = Vector3Distance(EnemyOne->Position, Position);
-	EnemyTwo->Distance = Vector3Distance(EnemyTwo->Position, Position);
+	//EnemyOne->Distance = Vector3Distance(EnemyOne->Position, Position);
+	//EnemyTwo->Distance = Vector3Distance(EnemyTwo->Position, Position);
 
-	if (EnemyOne->Distance < EnemyTwo->Distance) ChaseEnemyOne();
-	else ChaseEnemyTwo();
+	//if (EnemyOne->Distance < EnemyTwo->Distance) ChaseEnemyOne();
+	//else ChaseEnemyTwo();
 }
 
 bool Enemy::CheckUFOActive()
@@ -236,12 +236,12 @@ bool Enemy::LeaveScreen()
 
 void Enemy::ChaseEnemyOne()
 {
-	SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
+	//SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
 }
 
 void Enemy::ChaseEnemyTwo()
 {
-	SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
+	//SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
 }
 
 bool Enemy::CheckCollisions()

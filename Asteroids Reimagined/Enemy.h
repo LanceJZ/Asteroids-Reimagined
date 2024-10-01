@@ -51,8 +51,8 @@ protected:
 	Sound OnSound = {};
 	Sound SpawnSound = {};
 	LineModelPoints ShotModel = {};
-	Enemy* EnemyOne = nullptr;
-	Enemy* EnemyTwo = nullptr;
+	//Enemy* EnemyOne = nullptr;
+	//Enemy* EnemyTwo = nullptr;
 
 	void Shoot();
 	void Shoot(Vector3 velocity);

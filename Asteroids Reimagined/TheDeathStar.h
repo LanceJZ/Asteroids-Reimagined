@@ -17,7 +17,6 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 	void SetUFO();
-	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);

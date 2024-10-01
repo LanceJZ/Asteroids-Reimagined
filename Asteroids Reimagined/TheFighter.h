@@ -10,7 +10,6 @@ public:
 
 	bool NewWave = false;
 
-	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetExplodeSound(Sound sound);
 	void SetParticleManager(ParticleManager* particleManager);
 

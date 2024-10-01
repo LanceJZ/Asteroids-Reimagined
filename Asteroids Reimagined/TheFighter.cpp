@@ -8,12 +8,6 @@ TheFighter::~TheFighter()
 {
 }
 
-void TheFighter::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
-{
-	EnemyOne = enemyOne;
-	EnemyTwo = enemyTwo;
-}
-
 void TheFighter::SetExplodeSound(Sound sound)
 {
 	Enemy::SetExplodeSound(sound);
@@ -56,10 +50,6 @@ void TheFighter::Update(float deltaTime)
 		if (CheckUFOActive())
 		{
 			ChaseUFO();
-		}
-		else if (EnemyOne->Enabled || EnemyTwo->Enabled)
-		{
-			ChaseEnemy();
 		}
 		else if (!Player->Enabled)
 		{

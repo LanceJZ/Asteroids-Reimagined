@@ -42,17 +42,6 @@ void TheFighterPair::SetUFO(std::vector<Enemy*> ufos)
 	}
 }
 
-void TheFighterPair::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
-{
-	EnemyOne = enemyOne;
-	EnemyTwo = enemyTwo;
-
-	for (const auto &fighter : Fighters)
-	{
-		fighter->SetEnemies(enemyOne, enemyTwo);
-	}
-}
-
 void TheFighterPair::SetWedgeModel(LineModelPoints model)
 {
 	for (const auto &fighter : Fighters)
@@ -116,10 +105,6 @@ void TheFighterPair::Update(float deltaTime)
 		if (CheckUFOActive())
 		{
 			ChaseUFO();
-		}
-		else if (EnemyOne->Enabled || EnemyTwo->Enabled)
-		{
-			ChaseEnemy();
 		}
 		else if (!Player->Enabled)
 		{

@@ -13,9 +13,7 @@ public:
 	Game();
 	virtual ~Game();
 
-	bool Paused = false;
-
-	bool Initialize();
+	bool Initialize(Utilities* utilities);
 	bool Load();
 	bool BeginRun();
 	void ProcessInput();

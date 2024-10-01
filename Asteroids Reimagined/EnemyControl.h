@@ -25,7 +25,6 @@ public:
 	std::vector<Enemy2*> EnemyTwos;
 
 	TheDeathStar *DeathStar = nullptr;
-	//Enemy1 *EnemyOne = nullptr;
 	Enemy2 *EnemyTwo = nullptr;
 	TheBoss *Boss = nullptr;
 

@@ -32,7 +32,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Beta 4.25.52");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Beta 4.25.62");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -62,7 +62,7 @@ int WinMain()
 	// The Managers needs a reference to The Camera
 	Managers.SetCamera(TheCamera);
 
-	game.Initialize();
+	game.Initialize(&TheUtilities);
 	game.Load();
 	game.BeginRun();
 

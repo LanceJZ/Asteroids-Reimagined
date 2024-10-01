@@ -239,8 +239,6 @@ void EnemyControl::SetParticleManager(ParticleManager* particles)
 
 bool EnemyControl::Initialize(Utilities* utilities)
 {
-	TheUtilities = utilities;
-
 	Common::Initialize(TheUtilities);
 
 	EnemyTwo->Initialize(TheUtilities);
@@ -481,7 +479,54 @@ void EnemyControl::SpawnDeathStar()
 {
 	if (!Player->GameOver && !Player->Enabled) return;
 
-	DeathStar->Spawn({ -500, -400, 0 }); //TODO: make random corner.
+	Vector3 position = { 0.0f, 0.0f, 0.0f };
+	int width = (int)(GetScreenWidth() / 1.25f);
+	int height = (int)(GetScreenHeight() / 1.25f);
+	int windowHeight = GetScreenHeight();
+	int windowWidth = GetScreenWidth();
+	float maxSpeed = 20.0f;
+
+	if (GetRandomValue(1, 10) < 5)
+	{
+		if (GetRandomValue(1, 10) < 5)
+		{
+			// Top
+			position.y = (float)-windowHeight;
+			position.x = (float)GetRandomValue(-width, width);
+			DeathStar->Velocity.y = maxSpeed;
+			DeathStar->Velocity.x = maxSpeed;
+		}
+		else
+		{
+			//Bottom
+			position.y = (float)windowHeight;
+			position.x = (float)GetRandomValue(-width, width);
+			DeathStar->Velocity.y = -maxSpeed;
+			DeathStar->Velocity.x = -maxSpeed;
+		}
+
+	}
+	else
+	{
+		if (GetRandomValue(1, 10) < 5)
+		{
+			//Left
+			position.x = (float)-windowWidth;
+			position.y = (float)GetRandomValue(-height, height);
+			DeathStar->Velocity.x = maxSpeed;
+			DeathStar->Velocity.y = maxSpeed;
+		}
+		else
+		{
+			//Right
+			position.x = (float)windowWidth;
+			position.y = (float)GetRandomValue(-height, height);
+			DeathStar->Velocity.x = -maxSpeed;
+			DeathStar->Velocity.y = -maxSpeed;
+		}
+	}
+
+	DeathStar->Spawn(position);
 	SpawnedDeathStar = true;
 }
 

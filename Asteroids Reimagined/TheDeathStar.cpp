@@ -61,14 +61,6 @@ void TheDeathStar::SetUFO()
 	}
 }
 
-void TheDeathStar::SetEnemies(Enemy* enemyOne, Enemy* enemyTwo)
-{
-	for (const auto &fighterPair : FighterPairs)
-	{
-		fighterPair->SetEnemies(enemyOne, enemyTwo);
-	}
-}
-
 bool TheDeathStar::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);
@@ -155,7 +147,7 @@ void TheDeathStar::Spawn(Vector3 position)
 
 	if (!Player->GameOver) PlaySound(SpawnSound);
 
-	Velocity = { 20.0f, 20.0f, 0.0f };
+	//Velocity = { 20.0f, 20.0f, 0.0f };
 	NewWave = false;
 
 	for (const auto &fighterPair : FighterPairs)

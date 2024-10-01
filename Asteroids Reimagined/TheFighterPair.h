@@ -14,7 +14,6 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 	void SetUFO(std::vector<Enemy*> ufos);
-	void SetEnemies(Enemy* enemyOne, Enemy* enemyTwo);
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);

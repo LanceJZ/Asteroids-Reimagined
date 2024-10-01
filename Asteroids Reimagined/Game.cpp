@@ -15,9 +15,15 @@ Game::~Game()
 {
 }
 
-bool Game::Initialize() //Initialize
+bool Game::Initialize(Utilities* utilities) //Initialize
 {
-	Common::Initialize(TheUtilities);
+	Common::Initialize(utilities);
+
+	BackGround->Initialize(utilities);
+	Enemies->Initialize(utilities);
+	Logic->Initialize(utilities);
+	Player->Initialize(utilities);
+	Particles->Initialize(utilities);
 
 	DisableCursor();
 
@@ -186,10 +192,5 @@ void Game::Draw2D()
 
 void Game::GameInput()
 {
-	if (IsKeyPressed(KEY_P))
-	{
-		Paused = !Paused;
-	}
-
 	Logic->GameInput();
 }

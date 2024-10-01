@@ -88,8 +88,6 @@ void Enemy1::Draw3D()
 
 void Enemy1::Spawn() //move common to Enemy.cpp
 {
-	Vector3 position = { 0.0f, 0.0f, 0.0f };
-
 	Managers.EM.ResetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
 
 	if (!Player->GameOver) PlaySound(SpawnSound);
@@ -97,6 +95,7 @@ void Enemy1::Spawn() //move common to Enemy.cpp
 	MaxSpeed = 133.666f;
 	MissilesFired = 0;
 
+	Vector3 position = { 0.0f, 0.0f, 0.0f };
 	int width = (int)(WindowWidth / 1.25f);
 	int height = (int)(WindowHeight / 1.25f);
 
