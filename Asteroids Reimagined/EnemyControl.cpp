@@ -793,6 +793,8 @@ void EnemyControl::SpawnEnemyOne()
 	float min = EnemyOneSpawnTimeAmount / (((float)(Wave - 3) * 0.1f) + 1.0f);
 	float max = EnemyOneSpawnTimeAmount - enemyTimeAmountAdjust;
 
+	if (max < min) min = max;
+
 	float enemyTime = GetRandomFloat(min, max);
 
 	Managers.EM.ResetTimer(EnemyOneSpawnTimerID, enemyTime);
