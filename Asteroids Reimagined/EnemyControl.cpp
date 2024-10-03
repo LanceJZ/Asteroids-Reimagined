@@ -784,7 +784,7 @@ void EnemyControl::SpawnBoss()
 
 void EnemyControl::SpawnEnemyOne()
 {
-	float enemyTimeAmountAdjust = ((float)Wave * 0.1f) +
+	float enemyTimeAmountAdjust = ((float)(Wave - 3) * 0.1f) +
 		(((float)(EnemyOneSpawnCount++)) * 0.01f);
 
 	if (EnemyOneSpawnTimeAmount < enemyTimeAmountAdjust - 0.5f)
