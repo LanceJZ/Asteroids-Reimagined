@@ -790,7 +790,8 @@ void EnemyControl::SpawnEnemyOne()
 	if (EnemyOneSpawnTimeAmount < enemyTimeAmountAdjust - 0.5f)
 		enemyTimeAmountAdjust = EnemyOneSpawnTimeAmount - 0.5f;
 
-	float min = EnemyOneSpawnTimeAmount / (((float)(Wave - 3) * 0.1f) + 1.0f);
+	float min = (EnemyOneSpawnTimeAmount - enemyTimeAmountAdjust) /
+		(((float)(Wave - 3) * 0.1f) + 1.0f);
 	float max = EnemyOneSpawnTimeAmount - enemyTimeAmountAdjust;
 
 	if (max < min) min = max;
