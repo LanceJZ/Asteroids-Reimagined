@@ -261,13 +261,13 @@ void Enemy1::DestinationRight()
 
 void Enemy1::FireMissile()
 {
-	float missileTimeAmountAdjust = ((float)(Wave - 3) * 0.1f) +
-		((((float)MissilesFired++)) * 0.1f);
+	float missileTimeAmountAdjust = ((float)(Wave - 3) * 0.5f) +
+		((((float)MissilesFired++)) * 0.05f);
 
 	if (MissileFireTimerAmount < missileTimeAmountAdjust - 0.2f)
 		missileTimeAmountAdjust = MissileFireTimerAmount - 0.2f;
 
-	float min = MissileFireTimerAmount / ((((float)Wave - 3) * 0.1f) + 1.0f);
+	float min = MissileFireTimerAmount / ((((float)Wave - 3) * 0.5f) + 1.0f);
 	float max = MissileFireTimerAmount - missileTimeAmountAdjust;
 
 	float missileTime = GetRandomFloat(min,	max);

@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.25.62 Released.
+Asteroids Reimagined Beta 4.26.63 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -54,3 +54,4 @@ Removed Player homing mines going after fighter/fighter pair.
 Increased the range and speed of player homing mines.
 Enemy One that fires missiles, now can spawn more than one at a time in later waves.
 Death Star now spawns at random location, direction.
+Enemy Two that lays mines, now can spawn more than one at a time in later waves.

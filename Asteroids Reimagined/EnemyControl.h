@@ -25,7 +25,6 @@ public:
 	std::vector<Enemy2*> EnemyTwos;
 
 	TheDeathStar *DeathStar = nullptr;
-	Enemy2 *EnemyTwo = nullptr;
 	TheBoss *Boss = nullptr;
 
 	LineModelPoints UFOModel = {};
@@ -99,8 +98,10 @@ private:
 	int RockSpawnCount = 0;
 	int RockCount = 0;
 	int EnemyOneSpawnCount = 0;
+	int EnemyTwoSpawnCount = 0;
 
 	float EnemyOneSpawnTimeAmount = 0;
+	float EnemyTwoSpawnTimeAmount = 0;
 	float UFOSpawnTimeAmount = 0.0f;
 
 	Sound RockExplodeSound = {};
@@ -132,15 +133,16 @@ private:
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();
+	void SpawnEnemyOne();
+	void SpawnEnemyTwo();
 	void SpawnDeathStar();
+	void SpawnBoss();
 	void CheckDeathStarStatus();
 	void CheckRockCollisions();
 	bool CheckUFOCollisions(TheRock* rock);
 	void CheckEnemyCollisions(TheRock* rock);
 	void MakeReadyForBossWave();
 	void DoBossStuff();
-	void SpawnBoss();
-	void SpawnEnemyOne();
 	void HaveHomingMineChaseEnemy();
 
 	void Reset();

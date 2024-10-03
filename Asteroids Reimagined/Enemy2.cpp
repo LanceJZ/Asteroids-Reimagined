@@ -74,12 +74,13 @@ void Enemy2::Draw3D()
 	LineModel::Draw3D();
 }
 
-void Enemy2::Spawn(Vector3 position)
+void Enemy2::Spawn() //Move to base class Enemey.cpp.
 {
 	Managers.EM.ResetTimer(LayMineTimerID);
 
 	if (!Player->GameOver) PlaySound(SpawnSound);
 
+	Vector3 position = { 0.0f, 0.0f, 0.0f };
 	int width = (int)(WindowWidth / 1.25f);
 	int height = (int)(WindowHeight / 1.25f);
 
@@ -129,6 +130,11 @@ void Enemy2::Spawn(Vector3 position)
 		}
 	}
 
+	Spawn(position);
+}
+
+void Enemy2::Spawn(Vector3 position)
+{
 	Entity::Spawn(position);
 }
 
@@ -248,7 +254,7 @@ void Enemy2::DropMine()
 
 	if (!Player->GameOver) PlaySound(FireSound);
 
-	MineDropTimeAmount = 4 - (((float)Wave - 3) * 0.1f);
+	MineDropTimeAmount = 4 - (((float)Wave - 3) * 0.5f);
 	float dropTime = GetRandomFloat(MineDropTimeAmount / 2, MineDropTimeAmount);
 
 	Managers.EM.ResetTimer(LayMineTimerID, dropTime);
