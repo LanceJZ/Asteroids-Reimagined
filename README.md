@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.26.64 Released.
+Asteroids Reimagined Beta 4.26.65 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -26,7 +26,8 @@ Fixed Fighter had no VFX but had audio when hit, Fighter pair had VFX, but no au
 Fixed UFO shot not getting destroyed when player hit/shield hit.
 Fixed player homing mines chasing Death Star no matter how far away it was.
 Fixed Enemy firing many missiles at once suddenly.
-Boss did not spawn for wave 5, game in unable to complete.
+Fixed Boss did not spawn for wave 5, game in unable to complete.
+Fixed Enemy Two that drops mines, after wave ten would drop a mine every frame after the first time.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.

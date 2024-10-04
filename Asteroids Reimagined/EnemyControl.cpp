@@ -524,14 +524,14 @@ void EnemyControl::SpawnEnemyOne()
 
 void EnemyControl::SpawnEnemyTwo()
 {
-	float enemyTimeAmountAdjust = ((float)(Wave - 3) * 0.5f) +
+	float enemyTimeAmountAdjust = ((float)(Wave - 4) * 0.5f) +
 		(((float)(EnemyTwoSpawnCount++)) * 0.05f);
 
 	if (EnemyTwoSpawnTimeAmount < enemyTimeAmountAdjust - 0.5f)
 		enemyTimeAmountAdjust = EnemyTwoSpawnTimeAmount - 0.5f;
 
 	float min = (EnemyTwoSpawnTimeAmount - enemyTimeAmountAdjust) /
-		(((float)(Wave - 3) * 0.1f) + 1.0f);
+		(((float)(Wave - 4) * 0.1f) + 1.0f);
 	float max = EnemyTwoSpawnTimeAmount - enemyTimeAmountAdjust;
 
 	if (max < min) min = max;

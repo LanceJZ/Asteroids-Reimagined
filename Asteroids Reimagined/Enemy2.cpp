@@ -129,8 +129,14 @@ void Enemy2::DropMine()
 
 	if (!Player->GameOver) PlaySound(FireSound);
 
-	MineDropTimeAmount = 4 - (((float)Wave - 3) * 0.5f);
-	float dropTime = GetRandomFloat(MineDropTimeAmount / 2, MineDropTimeAmount);
+	float dropTimeAdjust = ((float)Wave - 4) * 0.25f;
+
+	float min = (MineDropTimeAmount - dropTimeAdjust) / (((float)Wave - 4) * 0.5f);
+	float max = MineDropTimeAmount - dropTimeAdjust;
+
+	if (max < min) min = max;
+
+	float dropTime = GetRandomFloat(min, max);
 
 	Managers.EM.ResetTimer(LayMineTimerID, dropTime);
 
