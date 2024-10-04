@@ -46,18 +46,12 @@ private:
 	float RotateMagnitude = PI / 2;
 	float MineDropTimeAmount = 0.0f;
 
-	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
-
 	Sound MineExplodeSound = {};
 
 	LineModelPoints MineModel = {};
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();
-	void DestinationTop();
-	void DestinationBottom();
-	void DestinationLeft();
-	void DestinationRight();
 	void DropMine();
 	bool CheckCollisions();
 };

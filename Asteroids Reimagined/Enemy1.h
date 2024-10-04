@@ -44,12 +44,11 @@ public:
 private:
 	size_t FireMissileTimerID = 0;
 	int MissilesFired = 0;
+
 	float MissileFireTimerAmount = 0.0f;
 	float Speed = 133.666f;
 	float TurnSpeed = 0.666f;
 	float RotateMagnitude = PI / 2;
-
-	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
 	Sound MissileOnSound = {};
 	Sound MissileExplodeSound = {};
@@ -58,10 +57,6 @@ private:
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();
-	void DestinationTop();
-	void DestinationBottom();
-	void DestinationLeft();
-	void DestinationRight();
 	void FireMissile();
 	bool CheckCollisions();
 };

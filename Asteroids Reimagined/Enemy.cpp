@@ -61,6 +61,64 @@ void Enemy::Draw3D()
 	LineModel::Draw3D();
 }
 
+void Enemy::Spawn()
+{
+	if (!Player->GameOver) PlaySound(SpawnSound);
+
+	MaxSpeed = 133.666f;
+
+	Vector3 position = { 0.0f, 0.0f, 0.0f };
+	int width = (int)(WindowWidth / 1.25f);
+	int height = (int)(WindowHeight / 1.25f);
+
+	if (GetRandomValue(1, 10) < 5)
+	{
+		if (GetRandomValue(1, 10) < 5)
+		{
+			// Top
+			EdgeSpawnedFrom = Edge::Top;
+			position.y = (float)-WindowHeight;
+			position.x = (float)GetRandomValue(-width, width);
+			Velocity.y = MaxSpeed;
+			Destination = { position.x, (float)WindowHeight, 0 };
+		}
+		else
+		{
+			//Bottom
+			EdgeSpawnedFrom = Edge::Bottom;
+			position.y = (float)WindowHeight;
+			position.x = (float)GetRandomValue(-width, width);
+			Velocity.y = -MaxSpeed;
+			Destination = { position.x, (float) -WindowHeight, 0};
+		}
+
+	}
+	else
+	{
+		if (GetRandomValue(1, 10) < 5)
+		{
+			//Left
+			EdgeSpawnedFrom = Edge::Left;
+			position.x = (float)-WindowWidth;
+			position.y = (float)GetRandomValue(-height, height);
+			Velocity.x = MaxSpeed;
+			Destination = { (float)WindowWidth, position.y, 0 };
+		}
+		else
+		{
+			//Right
+			EdgeSpawnedFrom = Edge::Right;
+			position.x = (float)WindowWidth;
+			position.y = (float)GetRandomValue(-height, height);
+			Velocity.x = -MaxSpeed;
+			Destination = { (float) -WindowWidth, position.y, 0};
+		}
+	}
+
+	Spawn(position);
+	RotationZ = GetAngleFromVectorZ(Destination);
+}
+
 void Enemy::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
@@ -234,6 +292,25 @@ bool Enemy::LeaveScreen()
 	return false;
 }
 
+void Enemy::DestinationTarget()
+{
+	switch (EdgeSpawnedFrom)
+	{
+	case Edge::Top:
+		DestinationTopBottom();
+		break;
+	case Edge::Bottom:
+		DestinationTopBottom();
+		break;
+	case Edge::Left:
+		DestinationLeftRight();
+		break;
+	case Edge::Right:
+		DestinationLeftRight();
+		break;
+	}
+}
+
 void Enemy::ChaseEnemyOne()
 {
 	//SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
@@ -242,6 +319,60 @@ void Enemy::ChaseEnemyOne()
 void Enemy::ChaseEnemyTwo()
 {
 	//SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
+}
+
+void Enemy::DestinationTopBottom()
+{
+	if (Player->X() > X())
+	{
+		Destination.x = (-WindowWidth * 0.5f) + (Player->X() - (WindowWidth * 0.25f));
+	}
+	else
+	{
+		Destination.x = (WindowWidth * 0.5f) - (Player->X() - (WindowWidth * 0.25f));
+	}
+}
+
+void Enemy::DestinationLeftRight()
+{
+	if (Player->Y() > Y())
+	{
+		Destination.y = (-WindowHeight * 0.5f) + (Player->Y() - (WindowHeight * 0.25f));
+	}
+	else
+	{
+		Destination.y = (WindowHeight * 0.5f) - (Player->Y() - (WindowHeight * 0.25f));
+	}
+}
+
+bool Enemy::CheckWentOffScreen()
+{
+	if (EdgeSpawnedFrom == Edge::Right || EdgeSpawnedFrom == Edge::Left)
+	{
+		if (X() < -WindowWidth)
+		{
+			return true;
+		}
+		if (X() > WindowWidth)
+		{
+			return true;
+		}
+	}
+	else if (EdgeSpawnedFrom == Edge::Top || EdgeSpawnedFrom == Edge::Bottom)
+	{
+		if (Y() < -WindowHeight)
+		{
+			return true;
+		}
+		if (Y() > WindowHeight)
+		{
+			return true;
+		}
+	}
+
+	CheckScreenEdge();
+
+	return false;
 }
 
 bool Enemy::CheckCollisions()

@@ -836,7 +836,7 @@ void EnemyControl::MakeReadyForBossWave()
 
 	for (const auto& enemy : EnemyOnes)
 	{
-		allClear = false;
+		if (enemy->Enabled) allClear = false;
 
 		for (const auto& shot : enemy->Shots)
 		{
@@ -851,7 +851,7 @@ void EnemyControl::MakeReadyForBossWave()
 
 	for (const auto& enemy : EnemyTwos)
 	{
-		allClear = false;
+		if (enemy->Enabled) allClear = false;
 
 		for (const auto& mine : enemy->Mines)
 		{
@@ -1004,11 +1004,6 @@ void EnemyControl::Reset()
 	UFOSpawnTimeAmount = 30.0f;
 	EnemyOneSpawnTimeAmount = 15.0f;
 	EnemyTwoSpawnTimeAmount = 20.0f;
-
-	for (auto& ufo : UFOs)
-	{
-		ufo->Reset();
-	}
 
 	for (const auto& enemy : EnemyOnes)
 	{

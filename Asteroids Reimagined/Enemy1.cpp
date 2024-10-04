@@ -86,65 +86,14 @@ void Enemy1::Draw3D()
 	LineModel::Draw3D();
 }
 
-void Enemy1::Spawn() //move common to Enemy.cpp
+void Enemy1::Spawn()
 {
 	Managers.EM.ResetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
-
-	if (!Player->GameOver) PlaySound(SpawnSound);
 
 	MaxSpeed = 133.666f;
 	MissilesFired = 0;
 
-	Vector3 position = { 0.0f, 0.0f, 0.0f };
-	int width = (int)(WindowWidth / 1.25f);
-	int height = (int)(WindowHeight / 1.25f);
-
-	if (GetRandomValue(1, 10) < 5)
-	{
-		if (GetRandomValue(1, 10) < 5)
-		{
-			// Top
-			EdgeSpawnedFrom = Edge::Top;
-			position.y = (float)-WindowHeight;
-			position.x = (float)GetRandomValue(-width, width);
-			Velocity.y = MaxSpeed;
-			Destination = { position.x, (float)WindowHeight, 0 };
-		}
-		else
-		{
-			//Bottom
-			EdgeSpawnedFrom = Edge::Bottom;
-			position.y = (float)WindowHeight;
-			position.x = (float)GetRandomValue(-width, width);
-			Velocity.y = -MaxSpeed;
-			Destination = { position.x, (float) -WindowHeight, 0};
-		}
-
-	}
-	else
-	{
-		if (GetRandomValue(1, 10) < 5)
-		{
-			//Left
-			EdgeSpawnedFrom = Edge::Left;
-			position.x = (float)-WindowWidth;
-			position.y = (float)GetRandomValue(-height, height);
-			Velocity.x = MaxSpeed;
-			Destination = { (float)WindowWidth, position.y, 0 };
-		}
-		else
-		{
-			//Right
-			EdgeSpawnedFrom = Edge::Right;
-			position.x = (float)WindowWidth;
-			position.y = (float)GetRandomValue(-height, height);
-			Velocity.x = -MaxSpeed;
-			Destination = { (float) -WindowWidth, position.y, 0};
-		}
-	}
-
-	Spawn(position);
-	RotationZ = GetAngleFromVectorZ(Destination);
+	Enemy::Spawn();
 }
 
 void Enemy1::Spawn(Vector3 position)
@@ -178,88 +127,17 @@ void Enemy1::Reset()
 
 bool Enemy1::CheckWentOffScreen()
 {
-	if (EdgeSpawnedFrom == Edge::Right || EdgeSpawnedFrom == Edge::Left)
-	{
-		if (X() < -WindowWidth)
-		{
-			return true;
-		}
-		if (X() > WindowWidth)
-		{
-			return true;
-		}
-	}
-	else if (EdgeSpawnedFrom == Edge::Top || EdgeSpawnedFrom == Edge::Bottom)
-	{
-		if (Y() < -WindowHeight)
-		{
-			return true;
-		}
-		if (Y() > WindowHeight)
-		{
-			return true;
-		}
-	}
+	return Enemy::CheckWentOffScreen();
 
-	CheckScreenEdge();
-
-	return false;
 }
 
 void Enemy1::DestinationTarget()
 {
-	switch (EdgeSpawnedFrom)
-	{
-	case Edge::Top:
-		DestinationBottom();
-		break;
-	case Edge::Bottom:
-		DestinationTop();
-		break;
-	case Edge::Left:
-		DestinationRight();
-		break;
-	case Edge::Right:
-		DestinationLeft();
-		break;
-	}
+	Enemy::DestinationTarget();
+
 }
 
-void Enemy1::DestinationTop()
-{
-	if (Player->X() > X())
-	{
-		Destination.x = (-WindowWidth * 0.5f) + (Player->X() - (WindowWidth * 0.25f));
-	}
-	else
-	{
-		Destination.x = (WindowWidth * 0.5f) - (Player->X() - (WindowWidth * 0.25f));
-	}
-}
-
-void Enemy1::DestinationBottom()
-{
-	DestinationTop();
-}
-
-void Enemy1::DestinationLeft()
-{
-	if (Player->Y() > Y())
-	{
-		Destination.y = (-WindowHeight * 0.5f) + (Player->Y() - (WindowHeight * 0.25f));
-	}
-	else
-	{
-		Destination.y = (WindowHeight * 0.5f) - (Player->Y() - (WindowHeight * 0.25f));
-	}
-}
-
-void Enemy1::DestinationRight()
-{
-	DestinationLeft();
-}
-
-void Enemy1::FireMissile()
+void Enemy1::FireMissile() //TODO: Move common parts to Enemy class.
 {
 	float missileTimeAmountAdjust = ((float)(Wave - 3) * 0.5f) +
 		((((float)MissilesFired++)) * 0.05f);
@@ -267,8 +145,11 @@ void Enemy1::FireMissile()
 	if (MissileFireTimerAmount < missileTimeAmountAdjust - 0.2f)
 		missileTimeAmountAdjust = MissileFireTimerAmount - 0.2f;
 
-	float min = MissileFireTimerAmount / ((((float)Wave - 3) * 0.5f) + 1.0f);
+	float min = (MissileFireTimerAmount - missileTimeAmountAdjust) /
+		((((float)Wave - 3) * 0.5f) + 1.0f);
 	float max = MissileFireTimerAmount - missileTimeAmountAdjust;
+
+	if (min > max) min = max;
 
 	float missileTime = GetRandomFloat(min,	max);
 

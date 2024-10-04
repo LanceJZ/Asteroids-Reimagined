@@ -31,18 +31,31 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position);
+	virtual void Spawn();
+	virtual void Spawn(Vector3 position);
 	virtual void Destroy();
 	virtual void Hit();
 	virtual void Reset();
 
 protected:
+	enum Edge
+	{
+		Top,
+		Bottom,
+		Left,
+		Right
+	};
+
+	Edge EdgeSpawnedFrom = Top;
+
 	size_t ShotTimerID = 0;
 
 	int Points = 0;
 	float Speed = 200.0f;
 	float TurnSpeed = 1.45f;
 	float RotateMagnitude = PI / 2;
+
+	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
 	ThePlayer* Player = nullptr;
 	ParticleManager* Particles = nullptr;
@@ -51,8 +64,6 @@ protected:
 	Sound OnSound = {};
 	Sound SpawnSound = {};
 	LineModelPoints ShotModel = {};
-	//Enemy* EnemyOne = nullptr;
-	//Enemy* EnemyTwo = nullptr;
 
 	void Shoot();
 	void Shoot(Vector3 velocity);
@@ -61,9 +72,13 @@ protected:
 	void ChaseEnemy();
 	bool CheckUFOActive();
 	bool LeaveScreen();
+	virtual void DestinationTarget();
+	virtual bool CheckWentOffScreen();
 	virtual bool CheckCollisions();
 
 private:
 	void ChaseEnemyOne();
 	void ChaseEnemyTwo();
+	void DestinationTopBottom();
+	void DestinationLeftRight();
 };
