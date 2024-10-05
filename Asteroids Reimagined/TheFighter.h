@@ -25,7 +25,6 @@ public:
 
 	void Spawn(Vector3 position);
 
-	void ChasePlayer();
 	bool CheckCollisions();
 
 private:

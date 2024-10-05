@@ -278,13 +278,12 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 	else
 	{
 		Entity::Hit();
+
 		PlaySound(ExplodeSound);
 		Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
 			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
 		Acceleration = { 0 };
 		Velocity = { 0 };
-		//Position = { 0 };
-		RotateStop();
 		Lives--;
 		Turret->Enabled = false;
 		Flame->Enabled = false;
@@ -296,6 +295,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		WeaponTypeIconDoubleRight->Enabled = false;
 		WeaponTypeIconPlasma->Enabled = false;
 		WeaponTypeIconMine->Enabled = false;
+		RotateStop();
 
 		for (const auto& model : AmmoMeterModels)
 		{
@@ -620,7 +620,7 @@ void ThePlayer::FireBigShot()
 	bool spawnNewBigShot = true;
 	size_t shotNumber = BigShots.size();
 
-	if (!GameOver) PlaySound(FireSound);
+	PlaySound(FireSound);
 
 	for (size_t i = 0; i < shotNumber; i++)
 	{
@@ -656,7 +656,7 @@ void ThePlayer::FireDoubleShot()
 	bool spawnNewDoubleShot = true;
 	size_t shotNumber = DoubleShots.size();
 
-	if (!GameOver) PlaySound(FireSound);
+	PlaySound(FireSound);
 
 	for (size_t i = 0; i < shotNumber; i++)
 	{
@@ -688,7 +688,7 @@ void ThePlayer::FireDoubleShot()
 	spawnNewDoubleShot = true;
 	shotNumber = DoubleShots.size();
 
-	if (!GameOver) PlaySound(FireSound);
+	PlaySound(FireSound);
 
 	for (size_t i = 0; i < shotNumber; i++)
 	{
@@ -720,7 +720,7 @@ void ThePlayer::DropHomingMine()
 	bool spawnNewMine = true;
 	size_t mineNumber = Mines.size();
 
-	if (!GameOver) PlaySound(MineDropSound);
+	PlaySound(MineDropSound);
 
 	for (size_t i = 0; i < mineNumber; i++)
 	{
@@ -751,7 +751,7 @@ void ThePlayer::FirePlasmaShot()
 	bool spawnNewBigShot = true;
 	size_t shotNumber = PlasmaShots.size();
 
-	if (!GameOver) PlaySound(FireSound);
+	PlaySound(FireSound);
 
 	for (size_t i = 0; i < shotNumber; i++)
 	{

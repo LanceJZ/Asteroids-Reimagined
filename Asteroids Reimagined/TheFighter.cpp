@@ -47,15 +47,26 @@ void TheFighter::Update(float deltaTime)
 	{
 		CheckCollisions();
 
-		if (CheckUFOActive())
+		if (!Player->Enabled)
 		{
-			ChaseUFO();
-		}
-		else if (!Player->Enabled)
-		{
+			if (CheckUFOActive())
+			{
+				ChaseUFO();
+				return;
+			}
+			else if (CheckEnemyActive())
+			{
+				ChaseEnemy();
+				return;
+			}
+
 			if (LeaveScreen()) Destroy();
 
 			return;
+		}
+		else
+		{
+			ChasePlayer();
 		}
 
 		if (NewWave)
@@ -106,11 +117,6 @@ void TheFighter::Destroy()
 	Entity::Destroy();
 
 	ClearParents();
-}
-
-void TheFighter::ChasePlayer()
-{
-	SetRotateVelocity(Player->Position, TurnSpeed, Speed);
 }
 
 bool TheFighter::CheckCollisions()

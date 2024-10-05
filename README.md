@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.26.66 Released.
+Asteroids Reimagined Beta 4.26.76 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -29,6 +29,8 @@ Fixed Enemy firing many missiles at once suddenly.
 Fixed Boss did not spawn for wave 5, game in unable to complete.
 Fixed Enemy Two that drops mines, after wave ten would drop a mine every frame after the first time.
 Fixed Death Star flicker on spawn. Was starting on opposite side of screen.
+Fixed High Score instruction text.
+Fixed if Player hit by Fighter Pair, Player lost two lives.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -58,3 +60,4 @@ Increased the range and speed of player homing mines.
 Enemy One that fires missiles, now can spawn more than one at a time in later waves.
 Death Star now spawns at random location, direction.
 Enemy Two that lays mines, now can spawn more than one at a time in later waves.
+Changed Fighter/Fighter Pairs behavior.

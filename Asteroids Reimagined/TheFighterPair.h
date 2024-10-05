@@ -35,7 +35,6 @@ private:
 
 	bool Separated = false;
 
-	void ChasePlayer();
 	bool CheckCollisions();
 	void Hit();
 };

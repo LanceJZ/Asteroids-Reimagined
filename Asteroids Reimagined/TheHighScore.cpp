@@ -59,10 +59,10 @@ void TheHighScore::Draw2D()
 	{
 		if (NewHighScore)
 		{
-			DrawTextEx(TheFontSmall, "Left/Right arrow keys",
+			DrawTextEx(TheFontSmall, "Left or Right arrow keys",
 				Vector2((float)(GetScreenWidth() / 2) - 150,
 				(float)(GetScreenHeight() / 2) - 280), 30, 0, color);
-			DrawTextEx(TheFontSmall, "to change letter, down arrow key",
+			DrawTextEx(TheFontSmall, "to change letter. Down arrow key",
 				Vector2((float)(GetScreenWidth() / 2) - 230,
 				(float)(GetScreenHeight() / 2) - 200), 30, 0, color);
 			DrawTextEx(TheFontSmall, "to go to next letter.",

@@ -16,6 +16,8 @@ public:
 
 	std::vector<Shot*> Shots;
 	std::vector<Enemy*> UFORefs;
+	std::vector<Enemy*> Enemy1Refs;
+	std::vector<Enemy*> Enemy2Refs;
 
 	void SetPlayer(ThePlayer* player);
 	void SetParticleManager(ParticleManager* particleManager);
@@ -71,14 +73,13 @@ protected:
 	void ChaseUFO();
 	void ChaseEnemy();
 	bool CheckUFOActive();
+	bool CheckEnemyActive();
 	bool LeaveScreen();
 	virtual void DestinationTarget();
 	virtual bool CheckWentOffScreen();
 	virtual bool CheckCollisions();
 
 private:
-	void ChaseEnemyOne();
-	void ChaseEnemyTwo();
 	void DestinationTopBottom();
 	void DestinationLeftRight();
 };

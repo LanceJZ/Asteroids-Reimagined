@@ -1,9 +1,6 @@
 #pragma once
 #include "Globals.h"
-//#include "Enemy.h"
 #include "TheFighterPair.h"
-//#include "ThePlayer.h"
-//#include "TheUFO.h"
 
 class TheDeathStar : public Enemy
 {

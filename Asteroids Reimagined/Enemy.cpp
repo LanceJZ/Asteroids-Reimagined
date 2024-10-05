@@ -256,11 +256,38 @@ void Enemy::ChaseUFO()
 
 void Enemy::ChaseEnemy()
 {
-	//EnemyOne->Distance = Vector3Distance(EnemyOne->Position, Position);
-	//EnemyTwo->Distance = Vector3Distance(EnemyTwo->Position, Position);
+	Vector3 closestEnemyPosition = { 0.0f, 0.0f, 0.0f };
+	float shortestDistance = 1000.0f;
 
-	//if (EnemyOne->Distance < EnemyTwo->Distance) ChaseEnemyOne();
-	//else ChaseEnemyTwo();
+	for (const auto& enemy : Enemy1Refs)
+	{
+		if (enemy->Enabled)
+		{
+			float distance = Vector3Distance(enemy->Position, Position);
+
+			if (distance < shortestDistance)
+			{
+				shortestDistance = distance;
+				closestEnemyPosition = enemy->Position;
+			}
+		}
+	}
+
+	for (const auto& enemy : Enemy2Refs)
+	{
+		if (enemy->Enabled)
+		{
+			float distance = Vector3Distance(enemy->Position, Position);
+
+			if (distance < shortestDistance)
+			{
+				shortestDistance = distance;
+				closestEnemyPosition = enemy->Position;
+			}
+		}
+	}
+
+	SetRotateVelocity(closestEnemyPosition, TurnSpeed, Speed);
 }
 
 bool Enemy::CheckUFOActive()
@@ -274,9 +301,28 @@ bool Enemy::CheckUFOActive()
 			if (ufo->Enabled) ufoActive = true;
 		}
 	}
-	else ChasePlayer();
 
 	return ufoActive;
+}
+
+bool Enemy::CheckEnemyActive()
+{
+	bool enemyActive = false;
+
+	if (!Player->Enabled)
+	{
+		for (const auto& enemy : Enemy1Refs)
+		{
+			if (enemy->Enabled) enemyActive = true;
+		}
+
+		for (const auto& enemy : Enemy2Refs)
+		{
+			if (enemy->Enabled) enemyActive = true;
+		}
+	}
+
+	return enemyActive;
 }
 
 bool Enemy::LeaveScreen()
@@ -309,16 +355,6 @@ void Enemy::DestinationTarget()
 		DestinationLeftRight();
 		break;
 	}
-}
-
-void Enemy::ChaseEnemyOne()
-{
-	//SetRotateVelocity(EnemyOne->Position, TurnSpeed, Speed);
-}
-
-void Enemy::ChaseEnemyTwo()
-{
-	//SetRotateVelocity(EnemyTwo->Position, TurnSpeed, Speed);
 }
 
 void Enemy::DestinationTopBottom()
@@ -448,7 +484,7 @@ bool Enemy::CheckCollisions()
 			Player->ScoreUpdate(Points);
 		}
 
-		Player->Hit(Position, Velocity);
+		if (!Player->GetBeenHit()) Player->Hit(Position, Velocity);
 
 		return true;
 	}

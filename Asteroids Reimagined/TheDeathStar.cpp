@@ -126,17 +126,14 @@ void TheDeathStar::NewWaveStart()
 void TheDeathStar::Reset()
 {
 	Enemy::Reset();
-	//Enabled = false;
 
 	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
-		//fighterPair->Destroy();
 
 		for (const auto &fighter : fighterPair->Fighters)
 		{
 			fighter->Reset();
-			//fighter->Destroy();
 		}
 	}
 }
@@ -147,7 +144,6 @@ void TheDeathStar::Spawn(Vector3 position)
 
 	if (!Player->GameOver) PlaySound(SpawnSound);
 
-	//Velocity = { 20.0f, 20.0f, 0.0f };
 	NewWave = false;
 
 	for (const auto &fighterPair : FighterPairs)
