@@ -478,13 +478,15 @@ bool Enemy::CheckCollisions()
 
 	if (CirclesIntersect(*Player))
 	{
+		if (Player->GetBeenHit()) return false;
+
 		if (!Player->Shield->Enabled)
 		{
 			Hit();
 			Player->ScoreUpdate(Points);
 		}
 
-		if (!Player->GetBeenHit()) Player->Hit(Position, Velocity);
+		Player->Hit(Position, Velocity);
 
 		return true;
 	}
