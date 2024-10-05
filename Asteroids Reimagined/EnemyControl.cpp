@@ -586,19 +586,20 @@ void EnemyControl::SpawnDeathStar()
 	if (!Player->GameOver && !Player->Enabled) return;
 
 	Vector3 position = { 0.0f, 0.0f, 0.0f };
-	int width = (int)(GetScreenWidth() / 1.25f);
-	int height = (int)(GetScreenHeight() / 1.25f);
-	int windowHeight = GetScreenHeight();
-	int windowWidth = GetScreenWidth();
+	int width = (int)(GetScreenWidth() / 2.25f);
+	int height = (int)(GetScreenHeight() / 2.25f);
+	int windowHeight = GetScreenHeight() / 2;
+	int windowWidth = GetScreenWidth() / 2;
 	float maxSpeed = 20.0f;
 
 	if (GetRandomValue(1, 10) < 5)
 	{
+		position.x = (float)GetRandomValue(-width, width);
+
 		if (GetRandomValue(1, 10) < 5)
 		{
 			// Top
 			position.y = (float)-windowHeight;
-			position.x = (float)GetRandomValue(-width, width);
 			DeathStar->Velocity.y = maxSpeed;
 			DeathStar->Velocity.x = maxSpeed;
 		}
@@ -606,7 +607,6 @@ void EnemyControl::SpawnDeathStar()
 		{
 			//Bottom
 			position.y = (float)windowHeight;
-			position.x = (float)GetRandomValue(-width, width);
 			DeathStar->Velocity.y = -maxSpeed;
 			DeathStar->Velocity.x = -maxSpeed;
 		}
@@ -614,11 +614,12 @@ void EnemyControl::SpawnDeathStar()
 	}
 	else
 	{
+		position.y = (float)GetRandomValue(-height, height);
+
 		if (GetRandomValue(1, 10) < 5)
 		{
 			//Left
 			position.x = (float)-windowWidth;
-			position.y = (float)GetRandomValue(-height, height);
 			DeathStar->Velocity.x = maxSpeed;
 			DeathStar->Velocity.y = maxSpeed;
 		}
@@ -626,7 +627,6 @@ void EnemyControl::SpawnDeathStar()
 		{
 			//Right
 			position.x = (float)windowWidth;
-			position.y = (float)GetRandomValue(-height, height);
 			DeathStar->Velocity.x = -maxSpeed;
 			DeathStar->Velocity.y = -maxSpeed;
 		}
