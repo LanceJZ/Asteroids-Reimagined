@@ -22,6 +22,8 @@ public:
 
 	PowerUpType Type = PowerUpType::Skyblue;
 
+	int Wave = 0;
+
 	PowerUp();
 	virtual ~PowerUp();
 

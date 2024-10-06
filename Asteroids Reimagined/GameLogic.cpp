@@ -227,6 +227,7 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 		PowerUps.back()->BeginRun();
 	}
 
+	PowerUps.at(powerUpNumber)->Wave = Enemies->Wave;
 	PowerUps.at(powerUpNumber)->Spawn(position);
 }
 

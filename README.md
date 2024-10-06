@@ -1,4 +1,4 @@
-Asteroids Reimagined Beta 4.26.76 Released.
+Asteroids Reimagined RC 4.27.87 Released.
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -12,6 +12,7 @@ Game also has controller support.
 Made with raylib and my Knightmare arcade engine in C++.
 
 To try it out, unzip this to your desktop or documents, or somewhere without write protection for saving the high score. Download the file Asteroids Reimagined.zip or the Update zip file if you already did the previous one.
+Purple PowerUp is limited after wave Five. All Power Drops are limited after wave five as well.
 
 Bug Fixes:
 Player homing mine went to center of screen when Death Star or fighters active. Fixed.
@@ -31,6 +32,7 @@ Fixed Enemy Two that drops mines, after wave ten would drop a mine every frame a
 Fixed Death Star flicker on spawn. Was starting on opposite side of screen.
 Fixed High Score instruction text.
 Fixed if Player hit by Fighter Pair, Player lost two lives.
+Fixed Double Shot and Plasma shot not hitting Boss after shield down.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -61,3 +63,5 @@ Enemy One that fires missiles, now can spawn more than one at a time in later wa
 Death Star now spawns at random location, direction.
 Enemy Two that lays mines, now can spawn more than one at a time in later waves.
 Changed Fighter/Fighter Pairs behavior.
+Total rework of Drop chance of Power Ups. Now way more drops on first wave. Fewer drops over all past that, and fewer Purple/Full Power Ups.
+New life score amount now 2 * Wave * 10000 after the first new life.

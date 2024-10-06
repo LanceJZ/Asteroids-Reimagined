@@ -32,7 +32,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - Beta 4.26.76");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.27.87");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");

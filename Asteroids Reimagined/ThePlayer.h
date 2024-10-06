@@ -29,6 +29,8 @@ public:
 
 	SecondaryWeaponType SecondaryWeapon = SecondaryWeaponType::None;
 
+	int Wave = 0;
+
 	LineModel* Shield = {};
 
 	std::vector<Shot*> Shots = {};

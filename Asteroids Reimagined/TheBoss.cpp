@@ -364,7 +364,6 @@ void TheBoss::CheckCollisions()
 
 		if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 		{
-			shot->Destroy();
 			Hit(shot, 5);
 		}
 	}
@@ -375,22 +374,8 @@ void TheBoss::CheckCollisions()
 
 		if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
 		{
-			shot->Destroy();
 			Hit(shot, 50);
 		}
-
-		//if (Shield->Enabled)
-		//{
-		//	if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
-		//	{
-		//		shot->Destroy();
-		//		ShieldHit(50);
-		//	}
-		//}
-		//else
-		//{
-		//	ShieldDown(shot, 50);
-		//}
 	}
 }
 
@@ -473,7 +458,7 @@ void TheBoss::ShieldHit(int damage)
 	}
 }
 
-void TheBoss::ShieldDown(Entity* entity, int damage)
+void TheBoss::ShieldDown(Entity* shot, int damage)
 {
 	bool turretsAllDead = true;
 
@@ -481,9 +466,9 @@ void TheBoss::ShieldDown(Entity* entity, int damage)
 	{
 		if (!turret->Enabled) continue;
 
-		if (entity->CirclesIntersect(turret->GetWorldPosition(), turret->Radius))
+		if (shot->CirclesIntersect(turret->GetWorldPosition(), turret->Radius))
 		{
-			entity->Destroy();
+			shot->Destroy();
 			turret->Hit();
 			Player->ScoreUpdate(500);
 
@@ -494,9 +479,9 @@ void TheBoss::ShieldDown(Entity* entity, int damage)
 
 	if (turretsAllDead)
 	{
-		if (entity->CirclesIntersect(*this))
+		if (shot->CirclesIntersect(*this))
 		{
-			entity->Destroy();
+			shot->Destroy();
 
 			PlaySound(HitSound);
 

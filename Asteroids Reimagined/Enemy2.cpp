@@ -134,7 +134,9 @@ void Enemy2::DropMine()
 	float min = (MineDropTimeAmount - dropTimeAdjust) / (((float)Wave - 4) * 0.5f);
 	float max = MineDropTimeAmount - dropTimeAdjust;
 
-	if (max < min) min = max;
+	if (min < 0.15f) min = 0.15f;
+
+	if (min > max) max = min * 2.0f;
 
 	float dropTime = GetRandomFloat(min, max);
 

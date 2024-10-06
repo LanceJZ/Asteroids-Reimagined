@@ -315,7 +315,7 @@ void ThePlayer::ScoreUpdate(int addToScore)
 
 	if (Score->GetScore() > NextNewLifeScore)
 	{
-		NextNewLifeScore += 10000;
+		NextNewLifeScore += ((10000 * (Wave + 1)) * 4);
 		Lives++;
 		NewLife = true;
 		PlaySound(BonusSound);
@@ -639,8 +639,8 @@ void ThePlayer::FireBigShot()
 		BigShots.back()->SetModel(BigShotModel);
 		BigShots.back()->Initialize(TheUtilities);
 		BigShots.back()->RotationVelocityZ = 20.0f;
-		BigShots.back()->BeginRun();
 		BigShots.back()->SetScale(3.0f);
+		BigShots.back()->BeginRun();
 	}
 
 	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 375.0f);
@@ -674,8 +674,8 @@ void ThePlayer::FireDoubleShot()
 		Managers.EM.AddLineModel(DoubleShots.back());
 		DoubleShots.back()->SetModel(ShotModel);
 		DoubleShots.back()->Initialize(TheUtilities);
-		DoubleShots.back()->BeginRun();
 		DoubleShots.back()->SetScale(3.0f);
+		DoubleShots.back()->BeginRun();
 	}
 
 	Vector3 offset = GetVelocityFromAngleZ(RotationZ + PI / 2.0f, spread);

@@ -473,7 +473,9 @@ void EnemyControl::SpawnEnemyOne()
 		(((float)(Wave - 3) * 0.1f) + 1.0f);
 	float max = EnemyOneSpawnTimeAmount - enemyTimeAmountAdjust;
 
-	if (max < min) min = max;
+	if (min < 0.15f) min = 0.15f;
+
+	if (min > max) max = min * 2.0f;
 
 	float enemyTime = GetRandomFloat(min, max);
 
@@ -534,7 +536,9 @@ void EnemyControl::SpawnEnemyTwo()
 		(((float)(Wave - 4) * 0.1f) + 1.0f);
 	float max = EnemyTwoSpawnTimeAmount - enemyTimeAmountAdjust;
 
-	if (max < min) min = max;
+	if (min < 0.15f) min = 0.15f;
+
+	if (min > max) max = min * 2.0f;
 
 	float enemyTime = GetRandomFloat(min, max);
 
@@ -731,9 +735,15 @@ void EnemyControl::CheckRockCollisions()
 
 			if (Rocks.at(i)->GetBeenHit())
 			{
-				if (Player->Enabled)
+				if (!Player->GameOver)
 				{
-					if (GetRandomValue(0, 100) < 10)
+					int chance = 30;
+
+					chance -= (int)((Wave + 1) * 3.5f);
+
+					if (chance < 1) chance = 1;
+
+					if ((float)GetRandomValue(0, 100) < chance)
 					{
 						SpawnPowerUp = true;
 						PowerUpSpawnPosition = Rocks.at(i)->Position;
@@ -743,7 +753,7 @@ void EnemyControl::CheckRockCollisions()
 				Rocks.at(i)->Destroy();
 				Managers.EM.ResetTimer(DeathStarSpawnTimerID);
 				Particles->SpawnLineParticles(Rocks.at(i)->Position,
-					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f }),
+					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f, 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 
 				int count = 0;

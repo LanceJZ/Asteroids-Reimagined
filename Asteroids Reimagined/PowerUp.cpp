@@ -62,7 +62,7 @@ void PowerUp::Spawn(Vector3 position)
 
 	Managers.EM.ResetTimer(LifeTimerID);
 
-	int chance = GetRandomValue(1, 10);
+	int chance = GetRandomValue(1, 10); //Rework this. Later waves limit Purple.
 
 	if (chance < 5)
 	{
@@ -76,6 +76,11 @@ void PowerUp::Spawn(Vector3 position)
 	}
 	else
 	{
+		if (Wave > 1)
+		{
+			if (GetRandomValue(1, 100) < (100 - (int)(Wave * 4.75f))) return;
+		}
+
 		ModelColor = PURPLE;
 		Type = Purple; //Everything over charged for a time.
 	}

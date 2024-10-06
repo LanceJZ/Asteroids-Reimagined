@@ -149,7 +149,9 @@ void Enemy1::FireMissile() //TODO: Move common parts to Enemy class.
 		((((float)Wave - 3) * 0.5f) + 1.0f);
 	float max = MissileFireTimerAmount - missileTimeAmountAdjust;
 
-	if (min > max) min = max;
+	if (min < 0.15f) min = 0.15f;
+
+	if (min > max) max = min * 2.0f;
 
 	float missileTime = GetRandomFloat(min,	max);
 
