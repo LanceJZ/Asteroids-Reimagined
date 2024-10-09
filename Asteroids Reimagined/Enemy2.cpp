@@ -159,7 +159,6 @@ void Enemy2::DropMine()
 		Mines.back()->SetPlayer(Player);
 		Mines.back()->SetModel(MineModel);
 		Mines.back()->SetExplodeSound(ExplodeSound);
-		Mines.back()->Initialize(TheUtilities);
 		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();
 	}

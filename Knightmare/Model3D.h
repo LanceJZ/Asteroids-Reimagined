@@ -5,7 +5,6 @@ class Model3D : public Entity
 {
 public:
 	bool Cull = true;
-	float ModelScale = 1;
 	Vector2 ViewableArea = { 0 };
 	Vector3 ModelPosition = { 0 };
 	Color ModelColor = WHITE;
@@ -13,25 +12,22 @@ public:
 	Model3D();
 	~Model3D();
 
-	bool Initialize(Utilities* utilities);
+	bool SetCamera(Camera* camera);
 	void LoadModel(Model &model, Texture2D &texture);
-	virtual bool BeginRun();
-	virtual bool SetCamera(Camera* camera);
 	virtual void Input();
-	void Update(float deltaTime);
-	void Draw3D();
+	virtual bool Initialize(Utilities* utilities);
+	virtual bool BeginRun();
+	virtual void Update(float deltaTime);
+	virtual void Draw3D();
 
 	//void AddChild(Model3D* child);
 	void SetModel(Model &model, float scale);
 	void SetModel(Model &model);
 	void SetModelCopy(Model model, float scale);
-	Model& GetModel();
 	Camera* GetCamera();
 	void Spawn(Vector3 pos, Vector3 vel);
 	void Unload();
 
 private:
-	Model TheModel = {};
-	Camera* TheCamera3D = {};
 };
 

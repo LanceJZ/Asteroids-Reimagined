@@ -190,6 +190,15 @@ void TheBoss::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	if (Wave > 5)
+	{
+		if (Managers.EM.TimerElapsed(MissileFireTimerID)) FireMissile();
+	}
+
+	if (Wave > 10)
+	{
+		if (Managers.EM.TimerElapsed(MineDropTimerID)) DropMine();
+	}
 
 	if (Shield->Enabled)
 	{
@@ -406,7 +415,6 @@ void TheBoss::FireShots()
 		Shots.push_back(DBG_NEW Shot());
 		Managers.EM.AddLineModel(Shots.back(), ShotModel);
 		Shots.back()->SetModel(ShotModel);
-		Shots.back()->Initialize(TheUtilities);
 		Shots.back()->BeginRun();
 	}
 
@@ -442,6 +450,14 @@ void TheBoss::FireShots()
 		RightSpineMount->GetWorldPosition());
 	Shots.at(shotNumberR)->Spawn(offset,
 		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
+}
+
+void TheBoss::FireMissile()
+{
+}
+
+void TheBoss::DropMine()
+{
 }
 
 void TheBoss::ShieldHit(int damage)

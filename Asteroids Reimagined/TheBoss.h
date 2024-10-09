@@ -12,6 +12,8 @@ public:
 	TheBoss();
 	virtual ~TheBoss();
 
+	int Wave = 0;
+
 	Entity* FireShotAtPlayerArea = nullptr;
 
 	TheBossTurret* Turrets[5] = { nullptr };
@@ -90,6 +92,8 @@ private:
 	void ReachedWaypoint();
 	void CheckCollisions();
 	void FireShots();
+	void FireMissile();
+	void DropMine();
 	void ShieldHit(int damage);
 	void ShieldDown(Entity* entity, int damage);
 };

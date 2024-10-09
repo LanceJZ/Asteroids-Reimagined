@@ -1,5 +1,6 @@
 #pragma once
 #include "Globals.h"
+#include "LineModel.h"
 #include "Shot.h"
 #include "TheHomingMine.h"
 #include "ThePlasmaShot.h"

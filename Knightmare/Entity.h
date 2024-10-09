@@ -1,5 +1,7 @@
 #pragma once
 #include "Common.h"
+#include "ContentManager.h"
+//#include <Managers.cpp>
 
 class Entity : public Common
 {
@@ -15,6 +17,7 @@ public:
 	bool WasCulled = false;
 	int ChildNumber = 0;
 	float Scale = 1;
+	float ModelScale = 1;
 	float MaxSpeed = 0;
 	float Radius = 0;
 	float VerticesSize = 0;
@@ -97,6 +100,17 @@ public:
 	void SetHeading(Vector3& waypoint, float rotationSpeed);
 	void SetAimAtTargetZ(Vector3& target, float facingAngle, float magnitute);
 	void SetParent(Entity& parent);
+	virtual bool SetCamera(Camera* camera);
+	virtual void SetModel(Model &model, float scale);
+	virtual void SetModel(Model &model);
+	virtual void SetModelCopy(Model model, float scale);
+	virtual void LoadModel(Model &model, Texture2D &texture);
+	virtual LineModelPoints GetLineModel();
+	virtual std::vector<Vector3> GetModel();
+	virtual void SetModel(std::vector<Vector3> lines);
+	virtual void SetModel(LineModelPoints lines);
+	virtual void SetModel(LineModelPoints lines, float scale);
+	virtual Model& Get3DModel();
 	void RemoveParent(Entity* parent);
 	void ClearParents();
 	void CheckScreenEdge();
@@ -107,9 +121,13 @@ public:
 	void CheckPlayfieldSidesWarp(float left, float right);
 	void CheckPlayfieldHeightWarp(float top, float bottom);
 
-private:
-
 protected:
+	std::vector<Vector3> LinePoints;
+	LineModelPoints Lines;
+
+	Camera* TheCamera3D = {};
+	Model TheModel = {};
+
 	void BeforeCalculate();
 	void CalculateWorldSpace();
 	void CalculateWorldVectors();
@@ -124,5 +142,6 @@ private:
 	float AddRotationVelAcc(float rotation, float rotationVelocity,
 		float rotationAcceleration, float deltaTime);
 
+	void CalculateRadius();
 };
 

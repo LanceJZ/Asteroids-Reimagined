@@ -132,7 +132,6 @@ void TheBossTurret::Fire()
 		Shots.push_back(DBG_NEW Shot());
 		Managers.EM.AddLineModel(Shots.back(), ShotModel);
 		Shots.back()->SetModel(ShotModel);
-		Shots.back()->Initialize(TheUtilities);
 		Shots.back()->BeginRun();
 	}
 

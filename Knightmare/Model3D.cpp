@@ -28,11 +28,7 @@ bool Model3D::Initialize(Utilities* utilities)
 
 void Model3D::LoadModel(Model &model, Texture2D &texture)
 {
-	if (IsTextureReady(texture))
-	{
-		TheModel = model;
-		TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
-	}
+	Entity::LoadModel(model, texture);
 }
 
 bool Model3D::BeginRun()
@@ -132,30 +128,17 @@ void Model3D::Draw3D()
 
 void Model3D::SetModel(Model &model, float scale)
 {
-	if (model.meshes == nullptr)
-	{
-		return;
-	}
-
-	TheModel = model;
-	ModelScale = scale;
-	VerticesSize = (*model.meshes->vertices * -1.0f) * scale;
+	Entity::SetModel(model, scale);
 }
 
 void Model3D::SetModel(Model& model)
 {
-	SetModel(model, 1.0f);
+	Entity::SetModel(model);
 }
 
 void Model3D::SetModelCopy(Model model, float scale)
 {
-	TheModel = model;
-	ModelScale = scale;
-}
-
-Model& Model3D::GetModel()
-{
-	return TheModel;
+	Entity::SetModelCopy(model, scale);
 }
 
 Camera* Model3D::GetCamera()

@@ -181,7 +181,6 @@ void Enemy1::FireMissile() //TODO: Move common parts to Enemy class.
 		Missiles.back()->SetParticleManager(Particles);
 		Missiles.back()->SetOnSound(MissileOnSound);
 		Missiles.back()->SetExplodeSound(MissileExplodeSound);
-		Missiles.back()->Initialize(TheUtilities);
 		Missiles.back()->BeginRun();
 	}
 

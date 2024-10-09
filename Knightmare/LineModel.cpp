@@ -35,14 +35,6 @@ void LineModel::Draw3D()
 
 	if (IsChild)
 	{
-		//for (int i = 0; i < Parents->size(); i++)
-		//{
-		//	rlTranslatef(Parents->at(i)->Position.x, Parents->at(i)->Position.y, Position.z);
-		//	rlRotatef(Parents->at(i)->RotationX, 1, 0, 0);
-		//	rlRotatef(Parents->at(i)->RotationY, 0, 1, 0);
-		//	rlRotatef(Parents->at(i)->RotationZ, 0, 0, 1);
-		//}
-
 		for (auto &parent : *Parents)
 		{
 			rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
@@ -79,10 +71,6 @@ void LineModel::Draw3D()
 		);
 	}
 
-	//WorldMatrix = rlGetMatrixTransform();
-	//WorldPosition = { WorldMatrix.m12, WorldMatrix.m13, WorldMatrix.m14 };
-	//WorldRotation = QuaternionToEuler(QuaternionFromMatrix(WorldMatrix));
-
 	rlPopMatrix();
 	rlEnd();
 }
@@ -99,22 +87,17 @@ std::vector<Vector3> LineModel::GetModel()
 
 void LineModel::SetModel(std::vector<Vector3> lines)
 {
-	LinePoints = lines;
-	Lines.linePoints = lines;
-	CalculateRadius();
+	Entity::SetModel(lines);
 }
 
 void LineModel::SetModel(LineModelPoints lines)
 {
-	Lines = lines;
-	LinePoints = lines.linePoints;
-	CalculateRadius();
+	Entity::SetModel(lines);
 }
 
 void LineModel::SetModel(LineModelPoints lines, float scale)
 {
-	Scale = scale;
-	SetModel(lines);
+	Entity::SetModel(lines, scale);
 }
 
 void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color)
@@ -143,26 +126,4 @@ void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Co
 		rlEnd();
 		rlPopMatrix();
 	}
-}
-
-void LineModel::CalculateRadius()
-{
-	float farDistance = 0.0f;
-
-	if (LinePoints.size() < 2)
-	{
-		return;
-	}
-
-	for (int i = 0; i < LinePoints.size(); i++)
-	{
-		float distance = Vector3Distance(LinePoints[i], { 0 });
-
-		if (distance > farDistance)
-		{
-			farDistance = distance;
-		}
-	}
-
-	Radius = farDistance * 0.9f * Scale;
 }

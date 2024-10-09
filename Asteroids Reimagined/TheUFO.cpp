@@ -61,6 +61,8 @@ void TheUFO::Update(float deltaTime)
 	CheckCollisions();
 
 	if (!Player->GameOver) PlayOnSound();
+
+	if (!Player->Enabled && !Player->GameOver) Managers.EM.ResetTimer(FireTimerID);
 }
 
 void TheUFO::Draw3D()

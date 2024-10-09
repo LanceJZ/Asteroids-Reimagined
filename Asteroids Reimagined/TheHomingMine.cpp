@@ -70,7 +70,7 @@ void TheHomingMine::Destroy()
 void TheHomingMine::ChaseEnemy(Vector3 enemyPosition)
 {
 	RotationZ = GetAngleFromVectors(enemyPosition);
-	Velocity = GetVelocityFromAngleZ(100.666f);
+	Velocity = GetVelocityFromAngleZ(166.666f);
 }
 
 void TheHomingMine::LostEnemy()

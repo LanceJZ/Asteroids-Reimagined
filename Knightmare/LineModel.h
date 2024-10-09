@@ -21,9 +21,6 @@ public:
 	void SetModel(LineModelPoints lines, float scale);
 
 private:
-	std::vector<Vector3> LinePoints;
-	LineModelPoints Lines;
 
 	void DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color);
-	void CalculateRadius();
 };

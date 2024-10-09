@@ -484,6 +484,80 @@ void Entity::SetParent(Entity& parent)
 	IsChild = true;
 }
 
+bool Entity::SetCamera(Camera* camera)
+{
+	TheCamera3D = camera;
+
+	return true;
+}
+
+void Entity::SetModel(Model& model, float scale)
+{
+	if (model.meshes == nullptr)
+	{
+		return;
+	}
+
+	TheModel = model;
+	ModelScale = scale;
+	VerticesSize = (*model.meshes->vertices * -1.0f) * scale;
+}
+
+void Entity::SetModel(Model& model)
+{
+	SetModel(model, 1.0f);
+}
+
+void Entity::SetModelCopy(Model model, float scale)
+{
+	TheModel = model;
+	ModelScale = scale;
+}
+
+void Entity::LoadModel(Model& model, Texture2D& texture)
+{
+	if (IsTextureReady(texture))
+	{
+		TheModel = model;
+		TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+	}
+}
+
+LineModelPoints Entity::GetLineModel()
+{
+	return LineModelPoints();
+}
+
+std::vector<Vector3> Entity::GetModel()
+{
+	return std::vector<Vector3>();
+}
+
+void Entity::SetModel(std::vector<Vector3> lines)
+{
+	LinePoints = lines;
+	Lines.linePoints = lines;
+	CalculateRadius();
+}
+
+void Entity::SetModel(LineModelPoints lines)
+{
+	Lines = lines;
+	LinePoints = lines.linePoints;
+	CalculateRadius();
+}
+
+void Entity::SetModel(LineModelPoints lines, float scale)
+{
+	Scale = scale;
+	SetModel(lines);
+}
+
+Model& Entity::Get3DModel()
+{
+	return TheModel;
+}
+
 void Entity::RemoveParent(Entity* parent)
 {
 	auto parentID = std::find(Parents->begin(), Parents->end(), parent);
@@ -656,4 +730,26 @@ float Entity::AddRotationVelAcc(float rotation, float rotationVelocity,
 	rotation += rotationVelocity * deltaTime;
 
 	return rotation;
+}
+
+void Entity::CalculateRadius()
+{
+	float farDistance = 0.0f;
+
+	if (LinePoints.size() < 2)
+	{
+		return;
+	}
+
+	for (int i = 0; i < LinePoints.size(); i++)
+	{
+		float distance = Vector3Distance(LinePoints[i], { 0 });
+
+		if (distance > farDistance)
+		{
+			farDistance = distance;
+		}
+	}
+
+	Radius = farDistance * 0.9f * Scale;
 }

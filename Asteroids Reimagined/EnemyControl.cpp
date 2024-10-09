@@ -389,7 +389,6 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			Rocks.back()->SetModel((RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
-			Rocks.back()->Initialize(TheUtilities);
 			Rocks.back()->BeginRun();
 
 			for (const auto& ufo : UFOs)
@@ -677,6 +676,8 @@ void EnemyControl::SpawnBoss()
 
 		rotation = PI;
 	}
+
+	Boss->Wave = Wave;
 
 	Boss->Spawn(position, rotation);
 }

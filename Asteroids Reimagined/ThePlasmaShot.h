@@ -1,5 +1,6 @@
 #pragma once
 #include "Globals.h"
+#include "LineModel.h"
 
 class ThePlasmaShot : public LineModel
 {

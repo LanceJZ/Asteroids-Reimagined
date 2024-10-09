@@ -43,6 +43,7 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 	for (auto& shot : Shots)
 	{
 		shot->SetModel(model);
+		shot->BeginRun();
 	}
 
 	ShotModel = model;
@@ -637,7 +638,6 @@ void ThePlayer::FireBigShot()
 		BigShots.push_back(DBG_NEW Shot());
 		Managers.EM.AddLineModel(BigShots.back());
 		BigShots.back()->SetModel(BigShotModel);
-		BigShots.back()->Initialize(TheUtilities);
 		BigShots.back()->RotationVelocityZ = 20.0f;
 		BigShots.back()->SetScale(3.0f);
 		BigShots.back()->BeginRun();
@@ -673,7 +673,6 @@ void ThePlayer::FireDoubleShot()
 		DoubleShots.push_back(DBG_NEW Shot());
 		Managers.EM.AddLineModel(DoubleShots.back());
 		DoubleShots.back()->SetModel(ShotModel);
-		DoubleShots.back()->Initialize(TheUtilities);
 		DoubleShots.back()->SetScale(3.0f);
 		DoubleShots.back()->BeginRun();
 	}
@@ -705,7 +704,6 @@ void ThePlayer::FireDoubleShot()
 		DoubleShots.push_back(DBG_NEW Shot());
 		Managers.EM.AddLineModel(DoubleShots.back());
 		DoubleShots.back()->SetModel(ShotModel);
-		DoubleShots.back()->Initialize(TheUtilities);
 		DoubleShots.back()->BeginRun();
 		DoubleShots.back()->SetScale(3.0f);
 	}
@@ -738,7 +736,6 @@ void ThePlayer::DropHomingMine()
 		Managers.EM.AddLineModel(Mines.back());
 		Mines.back()->SetModel(MineModel);
 		Mines.back()->SetExplodeSound(MineExplodeSound);
-		Mines.back()->Initialize(TheUtilities);
 		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();
 	}
@@ -768,7 +765,6 @@ void ThePlayer::FirePlasmaShot()
 		PlasmaShots.push_back(DBG_NEW ThePlasmaShot());
 		Managers.EM.AddLineModel(PlasmaShots.back());
 		PlasmaShots.back()->SetModel(BigShotModel);
-		PlasmaShots.back()->Initialize(TheUtilities);
 		PlasmaShots.back()->RotationVelocityZ = 20.0f;
 		PlasmaShots.back()->BeginRun();
 	}

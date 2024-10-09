@@ -7,7 +7,7 @@
 #define MAX(a, b) ((a)>(b)? (a) : (b))
 #define MIN(a, b) ((a)<(b)? (a) : (b))
 
-class Common
+class Common //Version 2.0.0 of Knightmare Arcade Engine.
 {
 public:
 	const float TwoPi = 6.283185307179586476925286766559f;
@@ -21,6 +21,8 @@ public:
 	virtual bool BeginRun();
 	virtual void Input();
 	virtual void Update();
+	virtual void Draw2D();
+
 	float GetRandomScreenY();
 	float GetRandomScreenX();
 	float GetRandomFloat(float min, float max);

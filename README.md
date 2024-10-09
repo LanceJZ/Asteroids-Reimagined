@@ -1,6 +1,6 @@
-Asteroids Reimagined RC 4.27.87 Released.
+Asteroids Reimagined RC 4.27.97 Released.
 
-![Asteroids Reimagined RC 3](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
+![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
 Instructions:
 AWD to rotate and move. Use mouse to aim turret. Right mouse for shield. Left mouse to fire. Gun heats up as you fire, and slowly cools when you're not. Using shield drains its power, and slowly regains when not in use. E or Middle Mouse button for secondary weapon (Red, Yellow, Orange and Violet.) Mouse Wheel or F to switch type if you have more than one.
@@ -67,3 +67,8 @@ Enemy Two that lays mines, now can spawn more than one at a time in later waves.
 Changed Fighter/Fighter Pairs behavior.
 Total rework of Drop chance of Power Ups. Now way more drops on first wave. Fewer drops over all past that, and fewer Purple/Full Power Ups.
 New life score amount now 2 * Wave * 10000 after the first new life.
+UFO no longer shoots if player hit, and game is not over. It wont shoot again after player spawns until shot timer expires.
+Player Mines are much more effective now as they move faster than before. They can catch up to any enemy now.
+
+Internal Changes:
+Knightmare Engine Update, Made every entity an Entity in Entity Manager.

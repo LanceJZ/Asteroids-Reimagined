@@ -1,4 +1,5 @@
 #pragma once
+#include "LineModel.h"
 #include "Globals.h"
 
 class Shot : public LineModel
