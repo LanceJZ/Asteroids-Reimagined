@@ -38,6 +38,13 @@ void TheHomingMine::Update(float deltaTime)
 	LineModel::Update(deltaTime);
 
 	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
+
+	if (Target != nullptr)
+	{
+		if (!Target->Enabled) LostEnemy();
+		else ChaseEnemy(Target->GetWorldPosition());
+	}
+	else LostEnemy();
 }
 
 void TheHomingMine::Draw3D()
@@ -73,8 +80,15 @@ void TheHomingMine::ChaseEnemy(Vector3 enemyPosition)
 	Velocity = GetVelocityFromAngleZ(166.666f);
 }
 
+void TheHomingMine::ChaseEnemy(Entity* enemy)
+{
+	Target = enemy;
+}
+
 void TheHomingMine::LostEnemy()
 {
 	Velocity = { 0.0f, 0.0f, 0.0f };
 	RotationZ = 0.0f;
+
+	Target = nullptr;
 }

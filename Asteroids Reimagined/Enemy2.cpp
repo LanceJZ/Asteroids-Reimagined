@@ -2,7 +2,7 @@
 
 Enemy2::Enemy2()
 {
-	LayMineTimerID = Managers.EM.AddTimer(4.75f);
+	MineDropTimerID = Managers.EM.AddTimer(4.75f);
 }
 
 Enemy2::~Enemy2()
@@ -59,7 +59,7 @@ void Enemy2::Update(float deltaTime)
 
 	SetRotateVelocity(Destination, TurnSpeed, Speed);
 
-	if (Managers.EM.TimerElapsed(LayMineTimerID))
+	if (Managers.EM.TimerElapsed(MineDropTimerID))
 	{
 		DropMine();
 	}
@@ -76,7 +76,7 @@ void Enemy2::Draw3D()
 
 void Enemy2::Spawn()
 {
-	Managers.EM.ResetTimer(LayMineTimerID, MineDropTimeAmount = 4.75f);
+	Managers.EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);
 
 	Enemy::Spawn();
 }
@@ -102,7 +102,7 @@ void Enemy2::Reset()
 {
 	Destroy();
 
-	Managers.EM.ResetTimer(LayMineTimerID, MineDropTimeAmount = 4.75f);
+	Managers.EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);
 
 	for (const auto& mine : Mines)
 	{
@@ -140,7 +140,7 @@ void Enemy2::DropMine()
 
 	float dropTime = GetRandomFloat(min, max);
 
-	Managers.EM.ResetTimer(LayMineTimerID, dropTime);
+	Managers.EM.ResetTimer(MineDropTimerID, dropTime);
 
 	for (size_t i = 0; i < mineNumber; i++)
 	{
@@ -155,10 +155,9 @@ void Enemy2::DropMine()
 	if (spawnNewMine)
 	{
 		Mines.push_back(DBG_NEW TheMine());
-		Managers.EM.AddLineModel(Mines.back());
+		Managers.EM.AddLineModel(Mines.back(), MineModel);
 		Mines.back()->SetPlayer(Player);
-		Mines.back()->SetModel(MineModel);
-		Mines.back()->SetExplodeSound(ExplodeSound);
+		Mines.back()->SetExplodeSound(MineExplodeSound);
 		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();
 	}

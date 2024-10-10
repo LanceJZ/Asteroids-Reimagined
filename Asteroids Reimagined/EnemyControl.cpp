@@ -139,11 +139,13 @@ void EnemyControl::SetEnemyOneSpawnSound(Sound sound)
 void EnemyControl::SetEnemyOneFireSound(Sound sound)
 {
 	EnemyOneFireSound = sound;
+	Boss->SetMissileFireSound(sound);
 }
 
 void EnemyControl::SetEnemyOneMissileOnSound(Sound sound)
 {
 	EnemyOneMissileOnSound = sound;
+	Boss->SetMissileOnSound(sound);
 }
 
 void EnemyControl::SetEnemyOneExplodeSound(Sound sound)
@@ -159,6 +161,7 @@ void EnemyControl::SetEnemyOneOnSound(Sound sound)
 void EnemyControl::SetEnemyOneMissileExplodeSound(Sound sound)
 {
 	EnemyOneMissileExplodeSound = sound;
+	Boss->SetMissileExplodeSound(sound);
 }
 
 void EnemyControl::SetEnemyTwoSpawnSound(Sound sound)
@@ -169,6 +172,7 @@ void EnemyControl::SetEnemyTwoSpawnSound(Sound sound)
 void EnemyControl::SetEnemyTwoFireSound(Sound sound)
 {
 	EnemyTwoFireSound = sound;
+	Boss->SetMineDropSound(sound);
 }
 
 void EnemyControl::SetEnemyTwoExplodeSound(Sound sound)
@@ -184,6 +188,7 @@ void EnemyControl::SetEnemyTwoOnSound(Sound sound)
 void EnemyControl::SetEnemyTwoMineExplodeSound(Sound sound)
 {
 	EnemyTwoMineExplodeSound = sound;
+	Boss->SetMineExplodeSound(sound);
 }
 
 void EnemyControl::SetBossExplodeSound(Sound sound)
@@ -385,8 +390,8 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		{
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
-			Managers.EM.AddLineModel(Rocks.back());
-			Rocks.back()->SetModel((RockModels[rockType]));
+			Managers.EM.AddLineModel(Rocks.back(), (RockModels[rockType]));
+			//Rocks.back()->SetModel((RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->BeginRun();
@@ -436,8 +441,7 @@ void EnemyControl::SpawnUFO()
 	if (spawnUFO)
 	{
 		UFOs.push_back(DBG_NEW TheUFO());
-		Managers.EM.AddLineModel(UFOs.back());
-		UFOs.back()->SetModel(UFOModel);
+		Managers.EM.AddLineModel(UFOs.back(), UFOModel);
 		UFOs.back()->SetShotModel(ShotModel);
 		UFOs.back()->SetExplodeSound(UFOExplodeSound);
 		UFOs.back()->SetFireSound(UFOFireSound);
@@ -445,7 +449,6 @@ void EnemyControl::SpawnUFO()
 		UFOs.back()->SetSmallSound(UFOSmallSound);
 		UFOs.back()->SetPlayer(Player);
 		UFOs.back()->SetParticleManager(Particles);
-		UFOs.back()->Initialize(TheUtilities);
 		UFOs.back()->BeginRun();
 
 		for (const auto& enemy : EnemyOnes)
@@ -496,8 +499,7 @@ void EnemyControl::SpawnEnemyOne()
 	if (spawnOne)
 	{
 		EnemyOnes.push_back(DBG_NEW Enemy1());
-		Managers.EM.AddLineModel(EnemyOnes.back());
-		EnemyOnes.back()->SetModel(EnemyOneModel);
+		Managers.EM.AddLineModel(EnemyOnes.back(), EnemyOneModel);
 		EnemyOnes.back()->SetShotModel(ShotModel);
 		EnemyOnes.back()->SetMissileModel(MissileModel);
 		EnemyOnes.back()->SetSpawnSound(EnemyOneSpawnSound);
@@ -508,7 +510,6 @@ void EnemyControl::SpawnEnemyOne()
 		EnemyOnes.back()->SetMissileOnSound(EnemyOneMissileOnSound);
 		EnemyOnes.back()->SetPlayer(Player);
 		EnemyOnes.back()->SetParticleManager(Particles);
-		EnemyOnes.back()->Initialize(TheUtilities);
 		EnemyOnes.back()->BeginRun();
 	}
 
@@ -559,8 +560,7 @@ void EnemyControl::SpawnEnemyTwo()
 	if (spawnOne)
 	{
 		EnemyTwos.push_back(DBG_NEW Enemy2());
-		Managers.EM.AddLineModel(EnemyTwos.back());
-		EnemyTwos.back()->SetModel(EnemyTwoModel);
+		Managers.EM.AddLineModel(EnemyTwos.back(), EnemyTwoModel);
 		EnemyTwos.back()->SetShotModel(ShotModel);
 		EnemyTwos.back()->SetMineModel(MineModel);
 		EnemyTwos.back()->SetSpawnSound(EnemyTwoSpawnSound);
@@ -569,7 +569,6 @@ void EnemyControl::SpawnEnemyTwo()
 		EnemyTwos.back()->SetOnSound(EnemyTwoOnSound);
 		EnemyTwos.back()->SetPlayer(Player);
 		EnemyTwos.back()->SetParticleManager(Particles);
-		EnemyTwos.back()->Initialize(TheUtilities);
 		EnemyTwos.back()->BeginRun();
 	}
 
@@ -643,8 +642,8 @@ void EnemyControl::SpawnBoss()
 {
 	Vector3 position = {0.0f, 0.0f, 0.0f };
 	float rotation = 0;
-	float width = Boss->WindowWidth * 0.75f;
-	float height = Boss->WindowHeight * 0.75f;
+	float width = Boss->WindowWidth * 0.95f;
+	float height = Boss->WindowHeight * 0.95f;
 
 	int option = GetRandomValue(0, 3);
 
@@ -926,9 +925,8 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 	{
 		if (!mine->Enabled) continue;
 
-		bool enemyToChase = false;
 		float distance = 450.0f;
-		Vector3 enemyPosition = { 0.0f, 0.0f, 0.0f };
+		Entity *closestEnemy = nullptr;
 
 		for (const auto& ufo : UFOs)
 		{
@@ -939,23 +937,21 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 			if (ufoDistance < distance)
 			{
 				distance = ufoDistance;
-				enemyToChase = true;
-				enemyPosition = ufo->Position;
+				closestEnemy = ufo;
 				break;
 			}
 		}
 
 		for (const auto& enemy : EnemyOnes)
 		{
-			if (enemy->Enabled && !enemyToChase)
+			if (enemy->Enabled)
 			{
 				float enemyOneDistance = Vector3Distance(enemy->Position, mine->Position);
 
 				if (enemyOneDistance < distance)
 				{
 					distance = enemyOneDistance;
-					enemyToChase = true;
-					enemyPosition = enemy->Position;
+					closestEnemy = enemy;
 					break;
 				}
 			}
@@ -963,15 +959,14 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 
 		for (const auto& enemy : EnemyTwos)
 		{
-			if (enemy->Enabled && !enemyToChase)
+			if (enemy->Enabled)
 			{
 				float enemyTwoDistance = Vector3Distance(enemy->Position, mine->Position);
 
 				if (enemyTwoDistance < distance)
 				{
 					distance = enemyTwoDistance;
-					enemyToChase = true;
-					enemyPosition = enemy->Position;
+					closestEnemy = enemy;
 					break;
 				}
 			}
@@ -984,20 +979,12 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 
 			if (deathStarDistance < distance)
 			{
-				enemyPosition = DeathStar->GetWorldPosition();
-				enemyToChase = true;
+				closestEnemy = DeathStar;
 			}
 
 		}
 
-		if (enemyToChase)
-		{
-			mine->ChaseEnemy(enemyPosition);
-		}
-		else
-		{
-			mine->LostEnemy();
-		}
+		mine->ChaseEnemy(closestEnemy);
 	}
 }
 

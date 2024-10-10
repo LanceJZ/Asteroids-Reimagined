@@ -132,6 +132,31 @@ void TheBoss::SetSpineFireSound(Sound sound)
 	SpineFireSound = sound;
 }
 
+void TheBoss::SetMissileFireSound(Sound sound)
+{
+	MissileFireSound = sound;
+}
+
+void TheBoss::SetMissileOnSound(Sound sound)
+{
+	MissileOnSound = sound;
+}
+
+void TheBoss::SetMissileExplodeSound(Sound sound)
+{
+	MissileExplodeSound = sound;
+}
+
+void TheBoss::SetMineDropSound(Sound sound)
+{
+	MineDropSound = sound;
+}
+
+void TheBoss::SetMineExplodeSound(Sound sound)
+{
+	MineExplodeSound = sound;
+}
+
 bool TheBoss::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -263,6 +288,9 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 	{
 		turret->Spawn();
 	}
+
+	Managers.EM.SetTimer(MissileFireTimerID, 2.5f);
+	Managers.EM.SetTimer(MineDropTimerID, 2.0f);
 }
 
 void TheBoss::Hit()
@@ -454,10 +482,75 @@ void TheBoss::FireShots()
 
 void TheBoss::FireMissile()
 {
+	float missileFireTime = 1.25f;
+
+	Managers.EM.ResetTimer(MissileFireTimerID, missileFireTime);
+
+	if (!Player->Enabled) return;
+
+	if (!Player->GameOver) PlaySound(MissileFireSound);
+
+	bool spawnMissile = true;
+	size_t missileNumber = Missiles.size();
+
+	for (size_t check = 0; check < missileNumber; check++)
+	{
+		if (!Missiles.at(check)->Enabled)
+		{
+			spawnMissile = false;
+			missileNumber = check;
+		}
+	}
+
+	if (spawnMissile)
+	{
+		Missiles.push_back(DBG_NEW TheMissile());
+		Managers.EM.AddLineModel(Missiles.back(), MissileModel);
+		Missiles.back()->SetExplodeSound(MissileExplodeSound);
+		Missiles.back()->SetOnSound(MissileOnSound);
+		Missiles.back()->SetPlayer(Player);
+		Missiles.back()->SetParticleManager(Particles);
+		Missiles.back()->BeginRun();
+	}
+
+	Missiles.at(missileNumber)->Spawn(Position);
+	Missiles.at(missileNumber)->RotationZ = RotationZ;
 }
 
 void TheBoss::DropMine()
 {
+	float dropTime = 1.15f;
+
+	Managers.EM.ResetTimer(MineDropTimerID, dropTime);
+
+	if (!Player->Enabled) return;
+
+	if (!Player->GameOver) PlaySound(MineDropSound);
+
+	size_t mineNumber = Mines.size();
+	bool spawnNewMine = true;
+
+	for (size_t i = 0; i < mineNumber; i++)
+	{
+		if (Mines.at(i)->Enabled == false)
+		{
+			spawnNewMine = false;
+			mineNumber = i;
+			break;
+		}
+	}
+
+	if (spawnNewMine)
+	{
+		Mines.push_back(DBG_NEW TheMine());
+		Managers.EM.AddLineModel(Mines.back(), MineModel);
+		Mines.back()->SetPlayer(Player);
+		Mines.back()->SetExplodeSound(MineExplodeSound);
+		Mines.back()->SetParticleManager(Particles);
+		Mines.back()->BeginRun();
+	}
+
+	Mines.at(mineNumber)->Spawn(Position);
 }
 
 void TheBoss::ShieldHit(int damage)

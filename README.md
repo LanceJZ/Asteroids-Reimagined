@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.27.97 Released.
+Asteroids Reimagined RC 4.37.97 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -69,6 +69,8 @@ Total rework of Drop chance of Power Ups. Now way more drops on first wave. Fewe
 New life score amount now 2 * Wave * 10000 after the first new life.
 UFO no longer shoots if player hit, and game is not over. It wont shoot again after player spawns until shot timer expires.
 Player Mines are much more effective now as they move faster than before. They can catch up to any enemy now.
+Made another change on how player homing mines work on deciding what enemy to go after if there is more than one, goes after closest.
+Boss on wave 10+ now has guided missiles, on 15+ drops mines.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

@@ -18,6 +18,7 @@ public:
 	void Draw3D();
 
 	void ChaseEnemy(Vector3 enemyPosition);
+	void ChaseEnemy(Entity* enemy);
 	void LostEnemy();
 
 	void Spawn(Vector3 position);
@@ -30,4 +31,6 @@ private:
 	Sound ExplodeSound = {};
 
 	ParticleManager* Particles = nullptr;
+
+	Entity* Target = nullptr;
 };

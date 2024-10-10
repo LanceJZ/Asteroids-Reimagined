@@ -39,7 +39,7 @@ public:
 	void Reset();
 
 private:
-	size_t LayMineTimerID = 0;
+	size_t MineDropTimerID = 0;
 
 	float Speed = 75.0f;
 	float TurnSpeed = 0.4666f;

@@ -39,6 +39,11 @@ public:
 	void SetTurretFireSound(Sound sound);
 	void SetTurretExplodeSound(Sound sound);
 	void SetSpineFireSound(Sound sound);
+	void SetMissileFireSound(Sound sound);
+	void SetMissileOnSound(Sound sound);
+	void SetMissileExplodeSound(Sound sound);
+	void SetMineDropSound(Sound sound);
+	void SetMineExplodeSound(Sound sound);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -73,6 +78,11 @@ private:
 	Sound TurretFireSound = {};
 	Sound TurretExplodeSound = {};
 	Sound SpineFireSound = {};
+	Sound MissileFireSound = {};
+	Sound MissileOnSound = {};
+	Sound MissileExplodeSound = {};
+	Sound MineDropSound = {};
+	Sound MineExplodeSound = {};
 
 	LineModelPoints MissileModel;
 	LineModelPoints ShotModel;
