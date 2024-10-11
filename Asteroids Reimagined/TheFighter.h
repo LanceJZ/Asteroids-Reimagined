@@ -9,6 +9,7 @@ public:
 	virtual ~TheFighter();
 
 	bool NewWave = false;
+	int Wave = 0;
 
 	void SetExplodeSound(Sound sound);
 	void SetParticleManager(ParticleManager* particleManager);

@@ -169,6 +169,7 @@ void TheFighterPair::Spawn(Vector3 position)
 	{
 		fighter->Reset();
 		fighter->SetParent(*this);
+		fighter->Wave = Wave;
 		fighter->Spawn(position);
 	}
 

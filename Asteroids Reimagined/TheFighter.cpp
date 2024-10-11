@@ -104,6 +104,8 @@ void TheFighter::Spawn(Vector3 position)
 	Enabled = true;
 	Separated = false;
 	NewWave = false;
+
+	Speed = 150.0f + ((float)Wave - 1) * 5.5f;
 }
 
 void TheFighter::Hit()

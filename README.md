@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.37.97 Released.
+Asteroids Reimagined RC 4.37.107 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -71,6 +71,8 @@ UFO no longer shoots if player hit, and game is not over. It wont shoot again af
 Player Mines are much more effective now as they move faster than before. They can catch up to any enemy now.
 Made another change on how player homing mines work on deciding what enemy to go after if there is more than one, goes after closest.
 Boss on wave 10+ now has guided missiles, on 15+ drops mines.
+Player homing mines no longer go after Death Star.
+Fighter gets faster on each later wave.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

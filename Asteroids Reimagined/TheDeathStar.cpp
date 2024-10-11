@@ -150,6 +150,7 @@ void TheDeathStar::Spawn(Vector3 position)
 	{
 		fighterPair->Reset();
 		fighterPair->SetParent(*this);
+		fighterPair->Wave = Wave;
 		fighterPair->Spawn(position);
 	}
 

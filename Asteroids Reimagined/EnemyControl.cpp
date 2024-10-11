@@ -634,6 +634,7 @@ void EnemyControl::SpawnDeathStar()
 		}
 	}
 
+	DeathStar->Wave = Wave;
 	DeathStar->Spawn(position);
 	SpawnedDeathStar = true;
 }
@@ -972,17 +973,17 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 			}
 		}
 
-		if (DeathStar->Enabled)
-		{
-			float deathStarDistance =
-				Vector3Distance(DeathStar->GetWorldPosition(), mine->Position);
+		//if (DeathStar->Enabled)
+		//{
+		//	float deathStarDistance =
+		//		Vector3Distance(DeathStar->GetWorldPosition(), mine->Position);
 
-			if (deathStarDistance < distance)
-			{
-				closestEnemy = DeathStar;
-			}
+		//	if (deathStarDistance < distance)
+		//	{
+		//		closestEnemy = DeathStar;
+		//	}
 
-		}
+		//}
 
 		mine->ChaseEnemy(closestEnemy);
 	}

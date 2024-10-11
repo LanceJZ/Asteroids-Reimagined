@@ -9,6 +9,7 @@ public:
 	virtual ~TheFighterPair();
 
 	bool NewWave = false;
+	int Wave = 0;
 
 	TheFighter* Fighters[2] = { nullptr };
 
