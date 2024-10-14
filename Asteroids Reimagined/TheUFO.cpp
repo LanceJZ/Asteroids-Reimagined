@@ -70,25 +70,6 @@ void TheUFO::Draw3D()
 	LineModel::Draw3D();
 }
 
-bool TheUFO::CheckShotCollisions(Entity* rock)
-{
-	bool shotHit = false;
-
-	for (const auto& shot : Shots)
-	{
-		if (!shot->Enabled) continue;
-
-		if (shot->CirclesIntersect(*rock))
-		{
-			shot->Destroy();
-			rock->Hit();
-			shotHit = true;
-		}
-	}
-
-	return shotHit;
-}
-
 void TheUFO::Spawn(int spawnCount)
 {
 	Vector3 position = { 0, 0, 0 };
@@ -165,22 +146,7 @@ void TheUFO::Reset()
 	}
 }
 
-void TheUFO::CheckShotsHitPlayer()
-{
-	for (const auto shot : Shots)
-	{
-		if (!shot->Enabled) continue;
-
-		if (shot->CirclesIntersect(*Player))
-		{
-			Player->Hit(shot->Position, shot->Velocity);
-			shot->Destroy();
-			break;
-		}
-	}
-}
-
-void TheUFO::FireShot() //Move or integrate to/with Enemy class.
+void TheUFO::FireShot()
 {
 	float angle = 0;
 	float shotSpeed = 325;

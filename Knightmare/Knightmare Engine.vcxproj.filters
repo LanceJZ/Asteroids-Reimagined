@@ -116,6 +116,9 @@
     <ClInclude Include="LineParticle.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="raymath_operators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Knightmare Engine.rc">

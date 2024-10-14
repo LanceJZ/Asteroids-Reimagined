@@ -70,10 +70,9 @@ void Enemy1::Update(float deltaTime)
 
 	SetRotateVelocity(Destination, TurnSpeed, Speed);
 
-	if (Managers.EM.TimerElapsed(FireMissileTimerID))
-	{
-		FireMissile();
-	}
+	if (Managers.EM.TimerElapsed(FireMissileTimerID)) FireMissile();
+
+	if (Managers.EM.TimerElapsed(ShotTimerID)) FireShot();
 
 	DestinationTarget();
 	CheckCollisions();
@@ -198,6 +197,11 @@ void Enemy1::FireMissile() //TODO: Move common parts to Enemy class.
 			missiles->UFORefs.push_back(ufo);
 		}
 	}
+}
+
+void Enemy1::FireShot()
+{
+	Shoot(GetRandomVelocity(300.666f));
 }
 
 bool Enemy1::CheckCollisions()

@@ -140,7 +140,7 @@ private:
 	void CheckDeathStarStatus();
 	void CheckRockCollisions();
 	bool CheckUFOCollisions(TheRock* rock);
-	void CheckEnemyCollisions(TheRock* rock);
+	bool CheckEnemyCollisions(TheRock* rock);
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void HaveHomingMineChaseEnemy();

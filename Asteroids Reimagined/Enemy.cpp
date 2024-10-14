@@ -61,6 +61,40 @@ void Enemy::Draw3D()
 	LineModel::Draw3D();
 }
 
+bool Enemy::CheckRockCollisions(Entity* rock)
+{
+	bool shotHit = false;
+
+	for (const auto& shot : Shots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (shot->CirclesIntersect(*rock))
+		{
+			shot->Destroy();
+			rock->Hit();
+			shotHit = true;
+		}
+	}
+
+	return shotHit;
+}
+
+void Enemy::CheckShotsHitPlayer()
+{
+	for (const auto shot : Shots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (shot->CirclesIntersect(*Player))
+		{
+			Player->Hit(shot->Position, shot->Velocity);
+			shot->Destroy();
+			break;
+		}
+	}
+}
+
 void Enemy::Spawn()
 {
 	if (!Player->GameOver) PlaySound(SpawnSound);
@@ -211,7 +245,7 @@ void Enemy::Shoot(Vector3 velocity)
 		Shots[spawnNumber]->BeginRun();
 	}
 
-	Shots[spawnNumber]->Spawn(Position, velocity);
+	Shots[spawnNumber]->Spawn(Position, velocity, 3.0f);
 }
 
 void Enemy::ChasePlayer()
@@ -476,19 +510,21 @@ bool Enemy::CheckCollisions()
 		}
 	}
 
-	if (CirclesIntersect(*Player))
+	if (!Player->GetBeenHit())
 	{
-		if (Player->GetBeenHit()) return false;
-
-		if (!Player->Shield->Enabled)
+		if (CirclesIntersect(*Player))
 		{
-			Hit();
-			Player->ScoreUpdate(Points);
+
+			if (!Player->Shield->Enabled)
+			{
+				Hit();
+				Player->ScoreUpdate(Points);
+			}
+
+			Player->Hit(Position, Velocity);
+
+			return true;
 		}
-
-		Player->Hit(Position, Velocity);
-
-		return true;
 	}
 
 	if (!UFORefs.size()) return false;

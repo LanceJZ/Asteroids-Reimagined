@@ -33,6 +33,9 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
+	bool CheckRockCollisions(Entity* rock);
+	void CheckShotsHitPlayer();
+
 	virtual void Spawn();
 	virtual void Spawn(Vector3 position);
 	virtual void Destroy();

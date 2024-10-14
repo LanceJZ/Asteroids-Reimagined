@@ -59,10 +59,9 @@ void Enemy2::Update(float deltaTime)
 
 	SetRotateVelocity(Destination, TurnSpeed, Speed);
 
-	if (Managers.EM.TimerElapsed(MineDropTimerID))
-	{
-		DropMine();
-	}
+	if (Managers.EM.TimerElapsed(MineDropTimerID)) DropMine();
+
+	if (Managers.EM.TimerElapsed(ShotTimerID)) FireShot();
 
 	CheckCollisions();
 
@@ -83,7 +82,7 @@ void Enemy2::Spawn()
 
 void Enemy2::Spawn(Vector3 position)
 {
-	Entity::Spawn(position);
+	Enemy::Spawn(position);
 }
 
 void Enemy2::Hit()
@@ -163,6 +162,11 @@ void Enemy2::DropMine()
 	}
 
 	Mines.at(mineNumber)->Spawn(Position);
+}
+
+void Enemy2::FireShot()
+{
+	Shoot(GetRandomVelocity(360.666f));
 }
 
 bool Enemy2::CheckCollisions()

@@ -34,9 +34,7 @@ void Entity::Update(float deltaTime)
 		LastFrameWorldPosition = Position;
 	}
 
-	Velocity = Vector3Add(Velocity, Acceleration);
-	Position = Vector3Add(Vector3Multiply({ deltaTime, deltaTime, deltaTime },
-		Velocity), Position);
+	Position = Position + ((Velocity = Velocity + Acceleration) * deltaTime);
 
 	if (!IsChild)
 	{
@@ -411,8 +409,7 @@ void Entity::SetAccelerationToZero(float decelerationAmount)
 	if (Velocity.x > 0.01 || Velocity.y > 0.01 ||
 		Velocity.x < -0.01 || Velocity.y < -0.01)
 	{
-		Acceleration = { (-Velocity.x * decelerationAmount) * DeltaTime,
-		(-Velocity.y * decelerationAmount) * DeltaTime, 0 };
+		Acceleration = (Velocity * -decelerationAmount) * DeltaTime;
 	}
 	else
 	{

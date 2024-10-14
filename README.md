@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.37.107 Released.
+Asteroids Reimagined RC 4.38.118 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -14,7 +14,6 @@ Game also has controller support.
 Made with raylib and my Knightmare arcade engine in C++.
 
 To try it out, unzip this to your desktop or documents, or somewhere without write protection for saving the high score. Download the file Asteroids Reimagined.zip or the Update zip file if you already did the previous one.
-Purple PowerUp is limited after wave Five. All Power Drops are limited after wave five as well.
 
 Bug Fixes:
 Player homing mine went to center of screen when Death Star or fighters active. Fixed.
@@ -66,6 +65,7 @@ Death Star now spawns at random location, direction.
 Enemy Two that lays mines, now can spawn more than one at a time in later waves.
 Changed Fighter/Fighter Pairs behavior.
 Total rework of Drop chance of Power Ups. Now way more drops on first wave. Fewer drops over all past that, and fewer Purple/Full Power Ups.
+Purple PowerUp is limited after wave Five. All Power Drops are limited after wave five as well.]
 New life score amount now 2 * Wave * 10000 after the first new life.
 UFO no longer shoots if player hit, and game is not over. It wont shoot again after player spawns until shot timer expires.
 Player Mines are much more effective now as they move faster than before. They can catch up to any enemy now.
@@ -73,6 +73,12 @@ Made another change on how player homing mines work on deciding what enemy to go
 Boss on wave 10+ now has guided missiles, on 15+ drops mines.
 Player homing mines no longer go after Death Star.
 Fighter gets faster on each later wave.
+Enemies now fire shots as well. If they hit a rock, it spawns more than usual, but not as many as the UFO.
+Ammo bar for secondary weapon is now gray instead of white.
+Boss chases player after all turrets are destroyed.
+Only the UFO does not hit small rocks.
+Player can no longer force spawn into something.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
+Added math_operators.h to Knightmare Engine.

@@ -358,9 +358,9 @@ void ThePlayer::Spawn()
 	MineCount = 0;
 	PlasmaShotCount = 0;
 #if DEBUG
-	BigShotCount = 10; //Turn into keys.
-	DoubleShotCount = 10;
-	MineCount = 10;
+	BigShotCount = 20; //Turn into keys.
+	DoubleShotCount = 30;
+	MineCount = 40;
 	PlasmaShotCount = 10;
 #endif
 	MissileCount = 0;
@@ -678,10 +678,9 @@ void ThePlayer::FireDoubleShot()
 	}
 
 	Vector3 offset = GetVelocityFromAngleZ(RotationZ + PI / 2.0f, spread);
-	Vector3 position = Vector3Add(Position,	offset);
+	Vector3 position = Position + offset;
 	Vector3 velocity = GetVelocityFromAngleZ(RotationZ, 400.0f);
-	velocity = Vector3Add(Vector3Multiply(Velocity,
-		{ 0.5f, 0.5f, 0.0f }), velocity);
+	velocity = Vector3Multiply(Velocity, { 0.5f, 0.5f, 0.0f }) + velocity;
 	DoubleShots.at(shotNumber)->Spawn(position, velocity, 2.15f);
 
 	spawnNewDoubleShot = true;
@@ -709,7 +708,7 @@ void ThePlayer::FireDoubleShot()
 	}
 
 	offset = GetVelocityFromAngleZ(RotationZ + -PI / 2.0f, spread);
-	position = Vector3Add(Position,	offset);
+	position = Position + offset;
 	DoubleShots.at(shotNumber)->Spawn(position, velocity, 2.15f);
 }
 
@@ -992,6 +991,7 @@ void ThePlayer::AmmoMeterUpdate(int ammoCount)
 	for (const auto& model : AmmoMeterModels)
 	{
 		model->Enabled = false;
+		model->ModelColor = GRAY;
 		model->Position = { position.x, position.y, 0.0f };
 		position.x += 1.0f;
 	}
@@ -1013,7 +1013,6 @@ void ThePlayer::AddAmmoMeterModels(int count)
 		AmmoMeterModels.back()->RotationLocked = true;
 		AmmoMeterModels.back()->Scale = 0.5f;
 		AmmoMeterModels.back()->Radius = 0.0f;
-		AmmoMeterModels.back()->Initialize(TheUtilities);
 		AmmoMeterModels.back()->BeginRun();
 	}
 }

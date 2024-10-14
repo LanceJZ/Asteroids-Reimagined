@@ -235,7 +235,9 @@ void TheBoss::Update(float deltaTime)
 
 	FireShotAtPlayerArea->Enabled = Enabled;
 
-	HeadToNextWaypoint();
+	if (AllTurretsDead) ChasePlayer();
+	else HeadToNextWaypoint();
+
 	ReachedWaypoint();
 	CheckCollisions();
 }
@@ -273,6 +275,7 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 {
 	Entity::Spawn(position);
 
+	AllTurretsDead = false;
 	RotationZ = rotation;
 	HideCollision = true;
 	Shield->Enabled = true;
@@ -337,6 +340,11 @@ void TheBoss::Hit(Entity* entity, int damage)
 void TheBoss::HeadToNextWaypoint()
 {
 	SetRotateVelocity(Path[NextWaypoint], 0.20f, 20.0f);
+}
+
+void TheBoss::ChasePlayer()
+{
+	SetRotateVelocity(Player->Position, 0.30f, 30.0f);
 }
 
 void TheBoss::ReachedWaypoint()
@@ -607,4 +615,6 @@ void TheBoss::ShieldDown(Entity* shot, int damage)
 			}
 		}
 	}
+
+	AllTurretsDead = turretsAllDead;
 }

@@ -58,5 +58,6 @@ private:
 	bool CheckWentOffScreen();
 	void DestinationTarget();
 	void FireMissile();
+	void FireShot();
 	bool CheckCollisions();
 };

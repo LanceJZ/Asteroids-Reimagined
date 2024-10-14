@@ -262,6 +262,21 @@ void EnemyControl::Update()
 {
 	Common::Update();
 
+	for (const auto& ufo : UFOs)
+	{
+		ufo->CheckShotsHitPlayer();
+	}
+
+	for (const auto& enemy : EnemyOnes)
+	{
+		enemy->CheckShotsHitPlayer();
+	}
+
+	for (const auto& enemy : EnemyTwos)
+	{
+		enemy->CheckShotsHitPlayer();
+	}
+
 	if (ClearForBossWave && !Player->GameOver)
 	{
 		MakeReadyForBossWave();
@@ -297,6 +312,7 @@ void EnemyControl::Update()
 		if (Wave > 15) RockSpawnCount += 4;
 		if (Wave > 20) RockSpawnCount += 5;
 		if (Wave > 25) RockSpawnCount += 6;
+		if (Wave > 30) RockSpawnCount += 7;
 
 		SpawnRocks({ 0, 0, 0 }, RockSpawnCount, TheRock::Large);
 	}
@@ -346,11 +362,6 @@ void EnemyControl::Update()
 	}
 
 	if (Managers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
-
-	for (const auto& ufo : UFOs)
-	{
-		ufo->CheckShotsHitPlayer();
-	}
 }
 
 void EnemyControl::NewGame()
@@ -391,7 +402,6 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
 			Managers.EM.AddLineModel(Rocks.back(), (RockModels[rockType]));
-			//Rocks.back()->SetModel((RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->BeginRun();
@@ -720,6 +730,7 @@ void EnemyControl::CheckDeathStarStatus()
 void EnemyControl::CheckRockCollisions()
 {
 	bool ufoHitRock = false;
+	bool enemyHitRock = false;
 	NoMoreRocks = true;
 	RockCount = 0;
 
@@ -732,7 +743,7 @@ void EnemyControl::CheckRockCollisions()
 
 			if (CheckUFOCollisions(Rocks.at(i))) ufoHitRock = true;
 
-			CheckEnemyCollisions(Rocks.at(i));
+			if (CheckEnemyCollisions(Rocks.at(i))) enemyHitRock = true;
 
 			if (Rocks.at(i)->GetBeenHit())
 			{
@@ -762,6 +773,7 @@ void EnemyControl::CheckRockCollisions()
 				int max = (int)(Wave * 0.5f) + 5;
 
 				if (ufoHitRock) count = GetRandomValue(4, max);
+				else if (enemyHitRock) count = GetRandomValue(3, max);
 				else count = GetRandomValue(1, 4);
 
 				if (Rocks.at(i)->Size == TheRock::Large)
@@ -794,7 +806,7 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 
 		if (rock->Size == TheRock::Small) continue;
 
-		if (ufo->CheckShotCollisions(rock)) ufoHitRock = true;
+		if (ufo->CheckRockCollisions(rock)) ufoHitRock = true;
 
 		if (ufo->CirclesIntersect(*rock))
 		{
@@ -806,9 +818,9 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 	return ufoHitRock;
 }
 
-void EnemyControl::CheckEnemyCollisions(TheRock* rock)
+bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 {
-	if (rock->Size == TheRock::Small) return;
+	bool enemyHitRock = false;
 
 	for (const auto& enemy : EnemyOnes)
 	{
@@ -816,8 +828,9 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		{
 			enemy->Hit();
 			rock->Hit();
-			return;
 		}
+
+		if (enemy->CheckRockCollisions(rock)) enemyHitRock = true;
 	}
 
 	for (const auto& enemy : EnemyTwos)
@@ -826,9 +839,12 @@ void EnemyControl::CheckEnemyCollisions(TheRock* rock)
 		{
 			enemy->Hit();
 			rock->Hit();
-			return;
 		}
+
+		if (enemy->CheckRockCollisions(rock)) enemyHitRock = true;
 	}
+
+	return enemyHitRock;
 }
 
 void EnemyControl::MakeReadyForBossWave()
@@ -972,18 +988,6 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 				}
 			}
 		}
-
-		//if (DeathStar->Enabled)
-		//{
-		//	float deathStarDistance =
-		//		Vector3Distance(DeathStar->GetWorldPosition(), mine->Position);
-
-		//	if (deathStarDistance < distance)
-		//	{
-		//		closestEnemy = DeathStar;
-		//	}
-
-		//}
 
 		mine->ChaseEnemy(closestEnemy);
 	}

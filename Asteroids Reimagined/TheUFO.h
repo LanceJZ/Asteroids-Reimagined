@@ -35,14 +35,10 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	bool CheckShotCollisions(Entity* rock);
-
 	void Spawn(int SpawnCount);
 	void Destroy();
 	void Hit();
 	void Reset();
-
-	void CheckShotsHitPlayer();
 
 private:
 	size_t FireTimerID = 0;

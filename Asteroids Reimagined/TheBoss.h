@@ -59,6 +59,8 @@ public:
 	void Hit(Entity* entity, int damage);
 
 private:
+	bool AllTurretsDead;
+
 	size_t MissileFireTimerID = 0;
 	size_t MineDropTimerID = 0;
 	size_t FireTimerID;
@@ -99,6 +101,7 @@ private:
 	std::vector<Vector3> Path;
 
 	void HeadToNextWaypoint();
+	void ChasePlayer();
 	void ReachedWaypoint();
 	void CheckCollisions();
 	void FireShots();

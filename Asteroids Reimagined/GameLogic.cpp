@@ -43,8 +43,6 @@ bool GameLogic::Initialize(Utilities* utilities)
 
 	AdjustedFieldSize = Vector2Multiply(FieldSize, { 0.5f, 0.5f });
 
-	PlayerClear->Radius = 140.0f;
-
 	State = MainMenu;
 
 	return false;
@@ -97,14 +95,21 @@ void GameLogic::Update()
 			Managers.EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
+			PlayerClear->Radius = 140.0f;
 
-			if (CheckPlayerClear() || IsKeyPressed(KEY_ENTER) ||
+			if (IsKeyPressed(KEY_ENTER) ||
 				(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
+			{
+				PlayerClear->Radius = Player->Radius * 1.5f;
+			}
+
+			if (CheckPlayerClear())
 			{
 				Player->Spawn();
 				PlayerClear->Enabled = false;
 				PlayerShipDisplay();
 			}
+
 		}
 
 		if (Player->NewLife)
@@ -223,7 +228,6 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 		PowerUps.back()->SetEnemy(Enemies);
 		PowerUps.back()->SetModel(PowerUpModel);
 		PowerUps.back()->SetPickUpSound(PickUpSound);
-		PowerUps.back()->Initialize(TheUtilities);
 		PowerUps.back()->BeginRun();
 	}
 
@@ -266,7 +270,6 @@ void GameLogic::AddPlayerShipModels(int number)
 		PlayerShipModels.push_back(DBG_NEW LineModel());
 		Managers.EM.AddLineModel(PlayerShipModels.back());
 		PlayerShipModels.back()->SetModel(PlayerModel);
-		PlayerShipModels.back()->Initialize(TheUtilities);
 		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
 		PlayerShipModels.back()->Scale = 0.8f;
 		PlayerShipModels.back()->Radius = 0.0f;
