@@ -327,7 +327,21 @@ void EnemyControl::Update()
 			ufo->DeathStarPosition = DeathStar->Position;
 		}
 	}
+	else if (Wave > 5 && RockCount < 10)
+	{
+		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		{
+			SpawnDeathStar();
+		}
+	}
 	else if (Wave > 1 && RockCount < 6)
+	{
+		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		{
+			SpawnDeathStar();
+		}
+	}
+	else if (RockCount < 3)
 	{
 		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
@@ -804,9 +818,9 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 	{
 		if (!ufo->Enabled) continue;
 
-		if (rock->Size == TheRock::Small) continue;
-
 		if (ufo->CheckRockCollisions(rock)) ufoHitRock = true;
+
+		if (rock->Size == TheRock::Small) continue;
 
 		if (ufo->CirclesIntersect(*rock))
 		{

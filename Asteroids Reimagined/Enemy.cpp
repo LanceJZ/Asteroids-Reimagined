@@ -449,10 +449,13 @@ bool Enemy::CheckCollisions()
 {
 	for (const auto& shot : Player->Shots)
 	{
-		if (shot->Enabled && shot->CirclesIntersect(*this))
+		if (shot->CirclesIntersect(*this))
 		{
 			shot->Destroy();
 			Hit();
+
+			if (Player->GameOver) return true;
+
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -461,10 +464,13 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& shot : Player->DoubleShots)
 	{
-		if (shot->Enabled && CirclesIntersect(*shot))
+		if (CirclesIntersect(*shot))
 		{
 			shot->Destroy();
 			Hit();
+
+			if (Player->GameOver) return true;
+
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -473,14 +479,16 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& bigShot : Player->BigShots)
 	{
-		if (bigShot->Enabled && CirclesIntersect(*bigShot))
+		if (CirclesIntersect(*bigShot))
 		{
-
 			bigShot->HitPoints -= 50;
 
 			if (bigShot->HitPoints <= 0) bigShot->Destroy();
 
 			Hit();
+
+			if (Player->GameOver) return true;
+
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -489,10 +497,15 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& mine : Player->Mines)
 	{
-		if (mine->Enabled && CirclesIntersect(*mine))
+		if (!mine->Enabled) continue;
+
+		if (CirclesIntersect(*mine))
 		{
 			mine->Hit();
 			Hit();
+
+			if (Player->GameOver) return true;
+
 			Player->ScoreUpdate(Points);
 
 			return true;
@@ -501,12 +514,64 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& plasma : Player->PlasmaShots)
 	{
-		if (plasma->Enabled && CirclesIntersect(*plasma))
+		if (!plasma->Enabled) continue;
+
+		if (CirclesIntersect(*plasma))
 		{
 			Hit();
+
+			if (Player->GameOver) return true;
+
 			Player->ScoreUpdate(Points);
 
 			return true;
+		}
+
+		for (const auto& Enemy : Enemy1Refs)
+		{
+			if (!Enemy->Enabled) continue;
+
+			for (const auto& shot : Enemy->Shots)
+			{
+				if (!shot->Enabled) continue;
+
+				if (plasma->CirclesIntersect(*shot))
+				{
+					shot->Destroy();
+				}
+			}
+		}
+
+		for (const auto& Enemy : Enemy2Refs)
+		{
+			if (!Enemy->Enabled) continue;
+
+			for (const auto& shot : Enemy->Shots)
+			{
+				if (!shot->Enabled) continue;
+
+				if (plasma->CirclesIntersect(*shot))
+				{
+					shot->Destroy();
+				}
+			}
+		}
+
+		if (!UFORefs.size()) return false;
+
+		for (const auto& ufo : UFORefs)
+		{
+			if (!ufo->Enabled) continue;
+
+			for (const auto& shot : ufo->Shots)
+			{
+				if (!shot->Enabled) continue;
+
+				if (plasma->CirclesIntersect(*shot))
+				{
+					shot->Destroy();
+				}
+			}
 		}
 	}
 

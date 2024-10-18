@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.38.118 Released.
+Asteroids Reimagined RC 4.39.119 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -34,6 +34,7 @@ Fixed Death Star flicker on spawn. Was starting on opposite side of screen.
 Fixed High Score instruction text.
 Fixed if Player hit by Fighter Pair, Player lost two lives.
 Fixed Double Shot and Plasma shot not hitting Boss after shield down.
+Fixed all weapons giving the player points after the game is over.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -78,6 +79,9 @@ Ammo bar for secondary weapon is now gray instead of white.
 Boss chases player after all turrets are destroyed.
 Only the UFO does not hit small rocks.
 Player can no longer force spawn into something.
+UFO now can shot small rock, but still wont run into them.
+Plasma Shot now also destroys all enemy shots.
+Deathstar now appears at the first wave, if there are less than three rocks. After wave 10, if there are less than ten rocks it will spawn.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
