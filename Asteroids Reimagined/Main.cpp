@@ -115,17 +115,18 @@ int WinMain()
 		if (game.Logic->State != GameState::Pause)
 		{
 
+			Managers.EM.Update((float)deltaTime);
+			game.Update((float)deltaTime);
+
 			if (update)
 			{
-				Managers.EM.Update((float)deltaTime);
-				game.Update((float)deltaTime);
 
 #ifdef _DEBUG
-			Color color = LIME;                            // Good FPS
-			updateFrameRate += (float)deltaTime;
-			int fps = (int)(++updateFrames / updateFrameRate);
+				Color color = LIME;                            // Good FPS
+				updateFrameRate += (float)deltaTime;
+				int fps = (int)(++updateFrames / updateFrameRate);
 
-			DrawText(TextFormat("%2i Update FPS", fps), 5, 22, 20, color);
+				//DrawText(TextFormat("%2i Update FPS", fps), 5, 22, 20, color);
 #endif
 			}
 
@@ -159,13 +160,13 @@ int WinMain()
 
 #ifdef _DEBUG
 			Color color = LIME;                            // Good FPS
-			frameRate += (float)(deltaTime * 0.5f);
+			frameRate += (float)(deltaTime);
 			int fps = (int)(++frames / frameRate);
 
 			if ((fps < 30) && (fps >= 15)) color = ORANGE; // Warning FPS
 			else if (fps < 15) color = RED;                // Low FPS
 
-			DrawText(TextFormat("%2i FPS", fps), 5, 5, 20, color);
+			//DrawText(TextFormat("%2i FPS", fps), 5, 5, 20, color);
 #endif
 
 			EndDrawing();
