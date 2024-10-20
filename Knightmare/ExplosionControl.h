@@ -19,7 +19,7 @@ public:
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
-	void Update();
+	void FixedUpdate();
 
 	void Spawn(Vector3 position, float radius,
 		float speed,  int count, float time, Color color);

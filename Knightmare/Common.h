@@ -22,6 +22,7 @@ public:
 	virtual bool BeginRun();
 	virtual void Input();
 	virtual void Update();
+	virtual void FixedUpdate();
 	virtual void Draw2D();
 
 	float GetRandomScreenY();

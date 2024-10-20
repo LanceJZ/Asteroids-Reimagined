@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.39.119 Released.
+Asteroids Reimagined RC 4.40.119 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -82,7 +82,9 @@ Player can no longer force spawn into something.
 UFO now can shot small rock, but still wont run into them.
 Plasma Shot now also destroys all enemy shots.
 Deathstar now appears at the first wave, if there are less than three rocks. After wave 10, if there are less than ten rocks it will spawn.
+Player homing mines are now gray, so they are less distracting.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
 Added math_operators.h to Knightmare Engine.
+Reworked Knightmare Engine so that it has three separate frame time hits, Update, FixedUpdate and Render.

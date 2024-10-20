@@ -23,6 +23,10 @@ void Common::Update()
 {
 }
 
+void Common::FixedUpdate()
+{
+}
+
 void Common::Draw2D()
 {
 }

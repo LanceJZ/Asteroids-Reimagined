@@ -27,9 +27,14 @@ void TheMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
-
 	CheckCollisions();
+}
+
+void TheMine::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
+	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
 }
 
 void TheMine::Draw3D()

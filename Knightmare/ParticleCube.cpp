@@ -27,7 +27,7 @@ void ParticleCube::Update(float deltaTime)
 	{
 		Model3D::Update(deltaTime);
 
-		LifeTimer.Update(deltaTime);
+		LifeTimer.FixedUpdate(deltaTime);
 
 		if (LifeTimer.Elapsed())
 		{

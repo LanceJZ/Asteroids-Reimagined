@@ -20,7 +20,6 @@ bool TheHighScore::BeginRun()
 	TheFontSmall = LoadFontEx("font/asteroids-display.otf", 30, 0, 250);
 	TheFontLarge = LoadFontEx("font/asteroids-display.otf", 60, 0, 250);
 
-	Load();
 	GameOver = true;
 
 	return false;
@@ -32,9 +31,9 @@ void TheHighScore::Input()
 
 }
 
-void TheHighScore::Update()
+void TheHighScore::FixedUpdate()
 {
-	OnScreenText::Update();
+	OnScreenText::FixedUpdate();
 
 	if (NewHighScore && GameOver)
 	{
@@ -217,7 +216,7 @@ void TheHighScore::ConvertRawScoreListToArray()
 	bool isLetter = true;
 	std::string number = "";
 
-	for (auto character : HighScoreListRaw)
+	for (const auto& character : HighScoreListRaw)
 	{
 		if (isLetter)
 		{

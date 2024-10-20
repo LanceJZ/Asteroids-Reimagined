@@ -25,6 +25,7 @@ public:
 	bool BeginRun();
 
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	void NewWaveStart();

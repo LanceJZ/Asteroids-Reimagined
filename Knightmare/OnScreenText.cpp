@@ -16,9 +16,9 @@ bool OnScreenText::Initialize(Utilities* utilities)
 	return false;
 }
 
-void OnScreenText::Update()
+void OnScreenText::FixedUpdate()
 {
-	Common::Update();
+	Common::FixedUpdate();
 
 }
 

@@ -5,7 +5,7 @@ Game::Game()
 	//When adding classes to EM, must be pointer to heap,IE: Name = new Class().
 
 	LogicID = Managers.EM.AddCommon(Logic = DBG_NEW GameLogic());
-	BackGroundID = Managers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
+	//BackGroundID = Managers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = Managers.EM.AddCommon(Enemies = DBG_NEW EnemyControl());
 	PlayerID = Managers.EM.AddLineModel(Player = DBG_NEW ThePlayer());
 	ParticlesID = Managers.EM.AddCommon(Particles = DBG_NEW ParticleManager());
@@ -19,7 +19,7 @@ bool Game::Initialize(Utilities* utilities) //Initialize
 {
 	Common::Initialize(utilities);
 
-	BackGround->Initialize(utilities);
+	//BackGround->Initialize(utilities);
 	Enemies->Initialize(utilities);
 	Logic->Initialize(utilities);
 	Player->Initialize(utilities);
@@ -36,13 +36,14 @@ bool Game::Initialize(Utilities* utilities) //Initialize
 	Enemies->SetPlayer(Player);
 
 	//Any Entities added after this point need this method fired manually.
-	Managers.Initialize();
 
 	return true;
 }
 
 bool Game::Load()
 {
+	Logic->Load();
+
 	//Models
 	size_t shotModelID = Managers.CM.LoadTheLineModel("Dot");
 	Player->SetModel(Managers.CM.LoadAndGetLineModel("PlayerShip"));
@@ -122,7 +123,6 @@ bool Game::Load()
 
 	Enemies->SetRockModels(rockModels);
 
-
 	return true;
 }
 
@@ -133,7 +133,6 @@ bool Game::BeginRun()
 	Enemies->SetParticleManager(Particles);
 
 	//Any Entities added after this point need this method fired manually if needed.
-	Managers.BeginRun();
 
 	return true;
 }
@@ -153,7 +152,6 @@ void Game::ProcessInput()
 	}
 
 	GameInput();
-	Managers.EM.Input();
 }
 
 
@@ -161,16 +159,16 @@ void Game::Update(float deltaTime)
 {
 	if (Logic->State == Pause)	return;
 
-	Managers.EM.Update(deltaTime);
+}
+
+void Game::FixedUpdate(float deltaTime)
+{
+	if (Logic->State == Pause)	return;
+
 }
 
 void Game::Draw3D()
 {
-	BeginMode3D(TheCamera);
-	//3D Drawing here.
-
-	Managers.EM.Draw3D();
-
 #ifdef _DEBUG
 	int fsx = int(FieldSize.x * 0.5f);
 	int fsy = int(FieldSize.y * 0.5f);
@@ -180,14 +178,11 @@ void Game::Draw3D()
 	DrawLine(fsx, fsy - 1, -fsx, fsy - 1, { DARKBLUE }); //Bottom.
 	DrawLine(-fsx + 1, fsy - 1, -fsx + 1, -fsy - 1, { DARKBLUE }); //Left side.
 #endif
-
-	EndMode3D();
 }
 
 void Game::Draw2D()
 {
-	//2D drawing, fonts go here.
-	Managers.EM.Draw2D();
+
 }
 
 void Game::GameInput()

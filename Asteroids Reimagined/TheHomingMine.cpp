@@ -37,6 +37,12 @@ void TheHomingMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+}
+
+void TheHomingMine::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
 	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	if (Target != nullptr)

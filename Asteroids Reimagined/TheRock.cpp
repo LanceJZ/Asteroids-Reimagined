@@ -37,8 +37,14 @@ void TheRock::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	CheckScreenEdge();
 	CheckCollisions();
+}
+
+void TheRock::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
+	CheckScreenEdge();
 }
 
 void TheRock::Draw3D()
@@ -128,7 +134,7 @@ void TheRock::Hit()
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 }
 
-bool TheRock::CheckCollisions() // Move to Enemy class.
+bool TheRock::CheckCollisions()
 {
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{

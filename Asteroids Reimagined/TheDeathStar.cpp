@@ -89,6 +89,12 @@ void TheDeathStar::Update(float deltaTime)
 
 	CheckCollisions();
 
+}
+
+void TheDeathStar::FixedUpdate(float deltaTime)
+{
+	Enemy::FixedUpdate(deltaTime);
+
 	if (NewWave)
 	{
 		if (IsOffScreen())

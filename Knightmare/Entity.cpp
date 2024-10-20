@@ -25,8 +25,6 @@ void Entity::Update(float deltaTime)
 {
 	if (!Enabled) return;
 
-	Common::Update();
-
 	LastFramePosition = Position;
 
 	if (!IsChild)
@@ -53,6 +51,11 @@ void Entity::Update(float deltaTime)
 	RotationZ = RadianSpin(RotationZ);
 
 	DeltaTime = deltaTime;
+}
+
+void Entity::FixedUpdate(float deltaTime)
+{
+	Common::FixedUpdate();
 }
 
 void Entity::Draw3D()

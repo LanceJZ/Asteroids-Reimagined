@@ -16,9 +16,10 @@ public:
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
+	void Load();
 
 	void Input();
-	void Update();
+	void FixedUpdate();
 	void Draw2D();
 
 	void TheGameIsOver(int playerScore);
@@ -55,7 +56,6 @@ private:
 	void ConvertScoreListToString();
 	void ConvertRawScoreListToArray();
 	void CheckForNewHighScore(int score);
-	void Load();
 	void Save();
 };
 

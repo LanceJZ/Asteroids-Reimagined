@@ -35,8 +35,9 @@ public:
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
+	bool Load();
 
-	void Update();
+	void FixedUpdate();
 	void GameInput();
 
 	void SpawnPowerUp(Vector3 position);

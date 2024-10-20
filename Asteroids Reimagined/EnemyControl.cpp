@@ -277,6 +277,13 @@ void EnemyControl::Update()
 		enemy->CheckShotsHitPlayer();
 	}
 
+	CheckRockCollisions();
+}
+
+void EnemyControl::FixedUpdate()
+{
+	Common::FixedUpdate();
+
 	if (ClearForBossWave && !Player->GameOver)
 	{
 		MakeReadyForBossWave();
@@ -290,8 +297,6 @@ void EnemyControl::Update()
 
 		return;
 	}
-
-	CheckRockCollisions();
 
 	if (NoMoreRocks)
 	{

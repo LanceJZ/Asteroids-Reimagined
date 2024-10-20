@@ -60,9 +60,16 @@ bool GameLogic::BeginRun()
 	return true;
 }
 
-void GameLogic::Update()
+bool GameLogic::Load()
 {
-	Common::Update();
+	HighScores->Load();
+
+	return true;
+}
+
+void GameLogic::FixedUpdate()
+{
+	Common::FixedUpdate();
 
 	if (State == MainMenu)
 	{

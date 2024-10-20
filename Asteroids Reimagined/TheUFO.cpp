@@ -42,6 +42,15 @@ void TheUFO::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	CheckCollisions();
+}
+
+void TheUFO::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
+	CheckScreenEdgeY();
+
 	if (CheckReachedSide())
 	{
 		Enabled = false;
@@ -56,9 +65,6 @@ void TheUFO::Update(float deltaTime)
 	{
 		ChangeVector();
 	}
-
-	CheckScreenEdgeY();
-	CheckCollisions();
 
 	if (!Player->GameOver) PlayOnSound();
 

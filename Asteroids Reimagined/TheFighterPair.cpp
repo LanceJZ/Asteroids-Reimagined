@@ -101,7 +101,15 @@ void TheFighterPair::Update(float deltaTime)
 	if (Separated)
 	{
 		CheckCollisions();
+	}
+}
 
+void TheFighterPair::FixedUpdate(float deltaTime)
+{
+	Enemy::FixedUpdate(deltaTime);
+
+	if (Separated)
+	{
 		if (!Player->Enabled)
 		{
 			if (CheckUFOActive())

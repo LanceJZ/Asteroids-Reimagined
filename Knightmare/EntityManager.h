@@ -27,6 +27,7 @@ public:
 
 	void Input();
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 	void Draw2D();
 

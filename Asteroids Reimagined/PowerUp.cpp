@@ -42,13 +42,19 @@ void PowerUp::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	CheckCollisions();
+}
+
+void PowerUp::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
 	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
 
 	DriftToPlayer();
-	CheckCollisions();
 }
 
 void PowerUp::Draw3D()

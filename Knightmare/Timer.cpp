@@ -5,6 +5,10 @@ void Timer::Update(float deltaTime)
     SecondsElapsed += deltaTime;
 }
 
+void Timer::FixedUpdate(float deltaTime)
+{
+}
+
 void Timer::Set(float amountInSeconds)
 {
     TimerAmount = amountInSeconds;

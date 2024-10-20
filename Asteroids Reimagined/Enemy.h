@@ -31,6 +31,7 @@ public:
 	bool BeginRun();
 
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	bool CheckRockCollisions(Entity* rock);

@@ -3,6 +3,7 @@ class Timer
 {
 public:
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 
 	void Set(float amountInSeconds);
 	void Reset();

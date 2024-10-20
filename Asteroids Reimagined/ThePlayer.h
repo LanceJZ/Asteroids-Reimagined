@@ -69,6 +69,7 @@ public:
 
 	void Input();
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	void Hit(Vector3 location, Vector3 velocity);

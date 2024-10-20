@@ -13,11 +13,14 @@ public:
 	Game();
 	virtual ~Game();
 
+	GameLogic* Logic = {};
+
 	bool Initialize(Utilities* utilities);
 	bool Load();
 	bool BeginRun();
 	void ProcessInput();
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 	void Draw2D();
 
@@ -32,8 +35,7 @@ private:
 	size_t ParticlesID = 0;
 
 	//When adding classes to EM, must be heap pointer.
-	GameLogic* Logic = {};
-	TheBackground* BackGround = {};
+	//TheBackground* BackGround = {};
 	ThePlayer* Player = {};
 	EnemyControl* Enemies = {};
 	ParticleManager* Particles = {};

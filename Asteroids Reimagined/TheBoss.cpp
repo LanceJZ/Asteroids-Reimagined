@@ -235,11 +235,17 @@ void TheBoss::Update(float deltaTime)
 
 	FireShotAtPlayerArea->Enabled = Enabled;
 
+	CheckCollisions();
+}
+
+void TheBoss::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
 	if (AllTurretsDead) ChasePlayer();
 	else HeadToNextWaypoint();
 
 	ReachedWaypoint();
-	CheckCollisions();
 }
 
 void TheBoss::Draw3D()

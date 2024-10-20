@@ -27,6 +27,12 @@ void Shot::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+}
+
+void Shot::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
 	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	CheckScreenEdge();

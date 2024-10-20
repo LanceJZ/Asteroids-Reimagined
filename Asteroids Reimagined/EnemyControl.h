@@ -76,6 +76,7 @@ public:
 	bool BeginRun();
 
 	void Update();
+	void FixedUpdate();
 
 	void NewGame();
 	void NextWave();

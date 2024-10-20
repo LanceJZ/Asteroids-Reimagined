@@ -24,7 +24,7 @@ public:
 	virtual bool Initialize(Utilities* utilities);
 	virtual bool BeginRun();
 
-	virtual void Update();
+	virtual void FixedUpdate();
 
 	virtual void SpawnCubes(Vector3 position, Vector3 velocity, float radius,
 		float speed,  int count, float time, Color color);

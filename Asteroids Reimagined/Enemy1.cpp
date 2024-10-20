@@ -68,16 +68,22 @@ void Enemy1::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
+	CheckCollisions();
+}
+
+void Enemy1::FixedUpdate(float deltaTime)
+{
+	Enemy::FixedUpdate(deltaTime);
+
 	SetRotateVelocity(Destination, TurnSpeed, Speed);
+
+	if (CheckWentOffScreen()) Enabled = false;
 
 	if (Managers.EM.TimerElapsed(FireMissileTimerID)) FireMissile();
 
 	if (Managers.EM.TimerElapsed(ShotTimerID)) FireShot();
 
 	DestinationTarget();
-	CheckCollisions();
-
-	if (CheckWentOffScreen()) Enabled = false;
 }
 
 void Enemy1::Draw3D()

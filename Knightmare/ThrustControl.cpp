@@ -23,9 +23,9 @@ bool ThrustControl::BeginRun()
 	return false;
 }
 
-void ThrustControl::Update()
+void ThrustControl::FixedUpdate()
 {
-	ParticleManager::Update();
+	ParticleManager::FixedUpdate();
 
 }
 

@@ -27,6 +27,12 @@ void ThePlasmaShot::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+}
+
+void ThePlasmaShot::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
 	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Enabled = false;

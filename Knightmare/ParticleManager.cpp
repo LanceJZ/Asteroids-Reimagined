@@ -35,9 +35,9 @@ bool ParticleManager::BeginRun()
 	return false;
 }
 
-void ParticleManager::Update()
+void ParticleManager::FixedUpdate()
 {
-	Common::Update();
+	Common::FixedUpdate();
 }
 
 void ParticleManager::SpawnCubes(Vector3 position, Vector3 velocity, float radius,

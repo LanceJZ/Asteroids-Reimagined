@@ -9,7 +9,7 @@ public:
 
 	virtual bool Initialize(Utilities* utilities);
 
-	virtual void Update();
+	virtual void FixedUpdate();
 	virtual void Draw2D();
 
 private:

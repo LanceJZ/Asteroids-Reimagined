@@ -18,6 +18,7 @@ public:
 	virtual bool Initialize(Utilities* utilities);
 	virtual bool BeginRun();
 	virtual void Update(float deltaTime);
+	virtual void FixedUpdate(float deltaTime);
 	virtual void Draw3D();
 
 	//void AddChild(Model3D* child);

@@ -255,11 +255,17 @@ void ThePlayer::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	CheckScreenEdge();
-	TurretTimers();
-	CrosshairUpdate();
-	ShieldPowerDrain(deltaTime);
 	WeaponPlasmaIconUpdate(deltaTime);
+	CrosshairUpdate();
+	TurretTimers();
+}
+
+void ThePlayer::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
+	CheckScreenEdge();
+	ShieldPowerDrain(deltaTime);
 
 	if (PoweredUp) WeHaveThePower();
 }
@@ -734,6 +740,7 @@ void ThePlayer::DropHomingMine()
 		Mines.push_back(DBG_NEW TheHomingMine());
 		Managers.EM.AddLineModel(Mines.back());
 		Mines.back()->SetModel(MineModel);
+		Mines.back()->ModelColor = GRAY;
 		Mines.back()->SetExplodeSound(MineExplodeSound);
 		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();

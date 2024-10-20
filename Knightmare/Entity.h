@@ -1,7 +1,6 @@
 #pragma once
 #include "Common.h"
 #include "ContentManager.h"
-//#include <Managers.cpp>
 
 class Entity : public Common
 {
@@ -56,6 +55,7 @@ public:
 
 	virtual bool Initialize(Utilities* utilities);
 	virtual void Update(float deltaTime);
+	virtual void FixedUpdate(float deltaTime);
 	virtual void Draw3D();
 
 	void X(float x);

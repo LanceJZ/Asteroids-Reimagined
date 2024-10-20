@@ -22,9 +22,9 @@ bool ExplosionControl::BeginRun()
 	return false;
 }
 
-void ExplosionControl::Update()
+void ExplosionControl::FixedUpdate()
 {
-	ParticleManager::Update();
+	ParticleManager::FixedUpdate();
 
 }
 

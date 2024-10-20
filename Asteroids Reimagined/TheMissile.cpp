@@ -37,6 +37,13 @@ void TheMissile::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
+	CheckCollisions();
+}
+
+void TheMissile::FixedUpdate(float deltaTime)
+{
+	Enemy::FixedUpdate(deltaTime);
+
 	if (Managers.EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
@@ -44,7 +51,6 @@ void TheMissile::Update(float deltaTime)
 
 	ChasePlayer();
 	CheckScreenEdge();
-	CheckCollisions();
 }
 
 void TheMissile::Draw3D()

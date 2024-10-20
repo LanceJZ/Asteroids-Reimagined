@@ -55,6 +55,12 @@ void TheBossTurret::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+}
+
+void TheBossTurret::FixedUpdate(float deltaTime)
+{
+	LineModel::FixedUpdate(deltaTime);
+
 	if (Managers.EM.TimerElapsed(FireTimerID))
 	{
 		Fire();
