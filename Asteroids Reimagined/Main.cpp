@@ -33,7 +33,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.40.119");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.40.120");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -42,7 +42,7 @@ int WinMain()
 
 	if (IsWindowState(FLAG_VSYNC_HINT)) ClearWindowState(FLAG_VSYNC_HINT);
 	glfwSwapInterval(0);
-	SetTargetFPS(120);
+	SetTargetFPS(200);
 
 	static Utilities TheUtilities = {};
 
@@ -79,20 +79,20 @@ int WinMain()
 	bool update = true;
 	bool render = true;
 	float fixedDeltaTime = 1.0f / 30.0f;
-	float fixedAccumulator = 0.0f;
-	float updateDeltaTime = 1.0f / 200.0f;
-	float updateAccumulator = 0.0f;
+	double fixedAccumulator = 0.0f;
+	float updateDeltaTime = 1.0f / 120.0f;
+	double updateAccumulator = 0.0f;
 	float renderDeltaTime = 1.0f / 60.0f; //Change to get the vsync rate.
-	float renderAccumulator = 0.0f;
+	double renderAccumulator = 0.0f;
 	double deltaTime = 0.0f;
 
 	while (!WindowShouldClose())
 	{
 		auto start = std::chrono::steady_clock::now();
 
-		fixedAccumulator += (float)deltaTime;
-		updateAccumulator += (float)deltaTime;
-		renderAccumulator += (float)deltaTime;
+		fixedAccumulator += deltaTime;
+		updateAccumulator += deltaTime;
+		renderAccumulator += deltaTime;
 
 		if (fixedAccumulator >= fixedDeltaTime)
 		{
@@ -114,12 +114,14 @@ int WinMain()
 
 		if (game.Logic->State != GameState::Pause)
 		{
-
-			Managers.EM.Update((float)deltaTime);
-			game.Update((float)deltaTime);
-
-			if (update)
+			if (true)
 			{
+				update = false;
+
+				double updateDelta = GetFrameTime();
+
+				Managers.EM.Update(updateDelta);
+				game.Update(updateDelta);
 
 #ifdef _DEBUG
 				Color color = LIME;                            // Good FPS
@@ -128,25 +130,18 @@ int WinMain()
 
 				//DrawText(TextFormat("%2i Update FPS", fps), 5, 22, 20, color);
 #endif
+
 			}
 
 			if (fixedUpdate)
 			{
 				fixedUpdate = false;
-				Managers.EM.FixedUpdate((float)deltaTime);
-				game.FixedUpdate((float)deltaTime);
+				Managers.EM.FixedUpdate(deltaTime);
+				game.FixedUpdate(deltaTime);
 			}
 		}
 
-		if (update)
-		{
-			update = false;
-			Managers.EM.Input();
-			game.ProcessInput();
-			PollInputEvents();
-		}
-
-		if (render)
+		if (true)
 		{
 			render = false;
 			BeginDrawing();
@@ -161,23 +156,27 @@ int WinMain()
 #ifdef _DEBUG
 			Color color = LIME;                            // Good FPS
 			frameRate += (float)(deltaTime);
-			int fps = (int)(++frames / frameRate);
+			//int fps = (int)(++frames / frameRate);
+			int fps = GetFPS();
 
 			if ((fps < 30) && (fps >= 15)) color = ORANGE; // Warning FPS
 			else if (fps < 15) color = RED;                // Low FPS
 
-			//DrawText(TextFormat("%2i FPS", fps), 5, 5, 20, color);
+			DrawText(TextFormat("%2i FPS", fps), 5, 5, 20, color);
 #endif
 
+			game.ProcessInput();
+			Managers.EM.Input();
 			EndDrawing();
-			SwapScreenBuffer();
+			//PollInputEvents();
+			//SwapScreenBuffer();
 		}
 
 		auto end = std::chrono::steady_clock::now();
 
 		std::chrono::duration<double> frameTime = end - start;
 
-		deltaTime = (frameTime.count());
+		deltaTime = GetFrameTime();
 	}
 
 	UnloadImage(icon);

@@ -32,8 +32,8 @@ public:
 	void SetBigSound(Sound sound);
 	void SetSmallSound(Sound sound);
 
-	void Update(float deltaTime);
-	void FixedUpdate(float deltaTime);
+	void Update(double deltaTime);
+	void FixedUpdate(double deltaTime);
 	void Draw3D();
 
 	void Spawn(int SpawnCount);

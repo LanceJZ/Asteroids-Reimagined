@@ -83,7 +83,7 @@ bool TheDeathStar::BeginRun()
 	return false;
 }
 
-void TheDeathStar::Update(float deltaTime)
+void TheDeathStar::Update(double deltaTime)
 {
 	Enemy::Update(deltaTime);
 
@@ -91,7 +91,7 @@ void TheDeathStar::Update(float deltaTime)
 
 }
 
-void TheDeathStar::FixedUpdate(float deltaTime)
+void TheDeathStar::FixedUpdate(double deltaTime)
 {
 	Enemy::FixedUpdate(deltaTime);
 

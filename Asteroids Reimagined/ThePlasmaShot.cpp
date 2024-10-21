@@ -23,13 +23,13 @@ bool ThePlasmaShot::BeginRun()
 	return false;
 }
 
-void ThePlasmaShot::Update(float deltaTime)
+void ThePlasmaShot::Update(double deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 }
 
-void ThePlasmaShot::FixedUpdate(float deltaTime)
+void ThePlasmaShot::FixedUpdate(double deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

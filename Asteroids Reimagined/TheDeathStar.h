@@ -24,8 +24,8 @@ public:
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
-	void Update(float deltaTime);
-	void FixedUpdate(float deltaTime);
+	void Update(double deltaTime);
+	void FixedUpdate(double deltaTime);
 	void Draw3D();
 
 	void NewWaveStart();

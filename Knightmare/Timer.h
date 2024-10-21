@@ -2,8 +2,8 @@
 class Timer
 {
 public:
-	void Update(float deltaTime);
-	void FixedUpdate(float deltaTime);
+	void Update(double deltaTime);
+	void FixedUpdate(double deltaTime);
 
 	void Set(float amountInSeconds);
 	void Reset();
@@ -14,6 +14,6 @@ public:
 	float GetAmountElapsed();
 
 private:
-	float SecondsElapsed = 0.0f;
+	double SecondsElapsed = 0.0f;
 	float TimerAmount = 0.0f;
 };

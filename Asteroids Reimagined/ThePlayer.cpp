@@ -251,23 +251,23 @@ void ThePlayer::Input()
 	}
 }
 
-void ThePlayer::Update(float deltaTime)
+void ThePlayer::Update(double deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 	WeaponPlasmaIconUpdate(deltaTime);
 	CrosshairUpdate();
 	TurretTimers();
+
+	if (PoweredUp) WeHaveThePower();
 }
 
-void ThePlayer::FixedUpdate(float deltaTime)
+void ThePlayer::FixedUpdate(double deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
 	CheckScreenEdge();
 	ShieldPowerDrain(deltaTime);
-
-	if (PoweredUp) WeHaveThePower();
 }
 
 void ThePlayer::Draw3D()

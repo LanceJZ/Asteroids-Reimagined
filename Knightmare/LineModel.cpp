@@ -10,7 +10,7 @@ void LineModel::Input()
 {
 }
 
-void LineModel::Update(float deltaTime)
+void LineModel::Update(double deltaTime)
 {
 	if (Enabled) Entity::Update(deltaTime);
 

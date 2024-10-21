@@ -29,7 +29,7 @@ bool LineParticle::BeginRun()
 	return false;
 }
 
-void LineParticle::Update(float deltaTime)
+void LineParticle::Update(double deltaTime)
 {
 	LineModel::Update(deltaTime);
 

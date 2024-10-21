@@ -13,7 +13,7 @@ public:
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
-	void Update(float deltaTime);
+	void Update(double deltaTime);
 	void Draw3D();
 
 	void Spawn(Vector3 position, Vector3 velocity, float radius, float speed, float time);

@@ -33,14 +33,14 @@ bool TheMissile::BeginRun()
 	return false;
 }
 
-void TheMissile::Update(float deltaTime)
+void TheMissile::Update(double deltaTime)
 {
 	Enemy::Update(deltaTime);
 
 	CheckCollisions();
 }
 
-void TheMissile::FixedUpdate(float deltaTime)
+void TheMissile::FixedUpdate(double deltaTime)
 {
 	Enemy::FixedUpdate(deltaTime);
 

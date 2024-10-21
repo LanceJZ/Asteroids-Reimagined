@@ -21,7 +21,7 @@ bool Entity::Initialize(Utilities* utilities)
 	return true;
 }
 
-void Entity::Update(float deltaTime)
+void Entity::Update(double deltaTime)
 {
 	if (!Enabled) return;
 
@@ -32,7 +32,7 @@ void Entity::Update(float deltaTime)
 		LastFrameWorldPosition = Position;
 	}
 
-	Position = Position + ((Velocity = Velocity + Acceleration) * deltaTime);
+	Position = Position + ((Velocity = Velocity + Acceleration) * (float)deltaTime);
 
 	if (!IsChild)
 	{
@@ -53,7 +53,7 @@ void Entity::Update(float deltaTime)
 	DeltaTime = deltaTime;
 }
 
-void Entity::FixedUpdate(float deltaTime)
+void Entity::FixedUpdate(double deltaTime)
 {
 	Common::FixedUpdate();
 }

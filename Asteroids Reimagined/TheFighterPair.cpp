@@ -94,7 +94,7 @@ bool TheFighterPair::BeginRun()
 	return false;
 }
 
-void TheFighterPair::Update(float deltaTime)
+void TheFighterPair::Update(double deltaTime)
 {
 	Enemy::Update(deltaTime);
 
@@ -104,7 +104,7 @@ void TheFighterPair::Update(float deltaTime)
 	}
 }
 
-void TheFighterPair::FixedUpdate(float deltaTime)
+void TheFighterPair::FixedUpdate(double deltaTime)
 {
 	Enemy::FixedUpdate(deltaTime);
 

@@ -84,7 +84,7 @@ void EntityManager::Input()
 	}
 }
 
-void EntityManager::Update(float deltaTime)
+void EntityManager::Update(double deltaTime)
 {
 	for (int i = 0; i < Entities.size(); i++)
 	{
@@ -102,7 +102,7 @@ void EntityManager::Update(float deltaTime)
 	}
 }
 
-void EntityManager::FixedUpdate(float deltaTime)
+void EntityManager::FixedUpdate(double deltaTime)
 {
 	for (const auto& timer : Timers)
 	{

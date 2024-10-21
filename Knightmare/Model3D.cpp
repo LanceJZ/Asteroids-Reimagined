@@ -49,12 +49,12 @@ void Model3D::Input()
 {
 }
 
-void Model3D::Update(float deltaTime)
+void Model3D::Update(double deltaTime)
 {
 	Entity::Update(deltaTime);
 }
 
-void Model3D::FixedUpdate(float deltaTime)
+void Model3D::FixedUpdate(double deltaTime)
 {
 	Entity::FixedUpdate(deltaTime);
 }

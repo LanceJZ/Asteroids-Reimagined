@@ -155,13 +155,13 @@ void Game::ProcessInput()
 }
 
 
-void Game::Update(float deltaTime)
+void Game::Update(double deltaTime)
 {
 	if (Logic->State == Pause)	return;
 
 }
 
-void Game::FixedUpdate(float deltaTime)
+void Game::FixedUpdate(double deltaTime)
 {
 	if (Logic->State == Pause)	return;
 

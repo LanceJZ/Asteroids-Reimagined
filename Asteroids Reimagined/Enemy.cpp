@@ -49,13 +49,13 @@ bool Enemy::BeginRun()
 	return false;
 }
 
-void Enemy::Update(float deltaTime)
+void Enemy::Update(double deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 }
 
-void Enemy::FixedUpdate(float deltaTime)
+void Enemy::FixedUpdate(double deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

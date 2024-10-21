@@ -17,8 +17,8 @@ public:
 	virtual void Input();
 	virtual bool Initialize(Utilities* utilities);
 	virtual bool BeginRun();
-	virtual void Update(float deltaTime);
-	virtual void FixedUpdate(float deltaTime);
+	virtual void Update(double deltaTime);
+	virtual void FixedUpdate(double deltaTime);
 	virtual void Draw3D();
 
 	//void AddChild(Model3D* child);

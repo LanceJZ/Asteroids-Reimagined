@@ -95,6 +95,7 @@ size_t ParticleManager::SpawnCubePool(Color color)
 		{
 			CubeParticles.push_back(DBG_NEW ParticleCube());
 			Managers->EM.AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
+			CubeParticles[cubeSpawnNumber]->SetManagers(Managers);
 		}
 
 		CubeParticles[cubeSpawnNumber]->ModelColor = color;
@@ -123,10 +124,10 @@ size_t ParticleManager::SpawnLinePool(Color color)
 	if (spawnNew)
 	{
 		LineParticles.push_back(DBG_NEW LineParticle());
+		Managers->EM.AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
 		LineParticles.back()->SetManagers(Managers);
 		LineParticles.back()->Initialize(TheUtilities);
 		LineParticles.back()->BeginRun();
-		Managers->EM.AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
 	}
 
 	LineParticles[lineSpawnNumber]->ModelColor = color;
