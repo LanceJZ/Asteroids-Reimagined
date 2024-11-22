@@ -26,9 +26,9 @@ bool Model3D::Initialize(Utilities* utilities)
 	return false;
 }
 
-void Model3D::LoadModel(Model &model, Texture2D &texture)
+void Model3D::SetModelWithTexture(Model &model, Texture2D &texture)
 {
-	Entity::LoadModel(model, texture);
+	Entity::SetModelWithTexture(model, texture);
 }
 
 bool Model3D::BeginRun()
@@ -49,12 +49,12 @@ void Model3D::Input()
 {
 }
 
-void Model3D::Update(double deltaTime)
+void Model3D::Update(float deltaTime)
 {
 	Entity::Update(deltaTime);
 }
 
-void Model3D::FixedUpdate(double deltaTime)
+void Model3D::FixedUpdate(float deltaTime)
 {
 	Entity::FixedUpdate(deltaTime);
 }
@@ -78,25 +78,18 @@ void Model3D::Draw3D()
 	{
 		if (IsChild)
 		{
-			Vector3 parentTest = Position;
-			float radius = 0;
+			Vector3 parentTest = GetWorldPosition();
 
-			for (auto parent : *Parents)
-			{
-				parentTest = Vector3Add(parent->Position, parentTest);
-				radius += parent->VerticesSize;
-			}
-
-			if (TheCamera3D->position.x > parentTest.x + radius + VerticesSize +
-				ViewableArea.x || TheCamera3D->position.x < parentTest.x + -radius +
+			if (TheCamera3D->position.x > parentTest.x + VerticesSize +
+				ViewableArea.x || TheCamera3D->position.x < parentTest.x +
 				-VerticesSize + -ViewableArea.x)
 			{
 				WasCulled = true;
 				return;
 			}
 
-			if (TheCamera3D->position.y > parentTest.y + radius + VerticesSize +
-				ViewableArea.y || TheCamera3D->position.y < parentTest.y + -radius +
+			if (TheCamera3D->position.y > parentTest.y + VerticesSize +
+				ViewableArea.y || TheCamera3D->position.y < parentTest.y +
 				-VerticesSize + -ViewableArea.y)
 			{
 				WasCulled = true;
@@ -105,15 +98,19 @@ void Model3D::Draw3D()
 		}
 		else
 		{
-			if (TheCamera3D->position.x > Position.x + VerticesSize + ViewableArea.x
-				|| TheCamera3D->position.x < Position.x + -VerticesSize + -ViewableArea.x)
+			if (TheCamera3D->position.x > GetWorldPosition().x + VerticesSize +
+				ViewableArea.x
+				|| TheCamera3D->position.x < GetWorldPosition().x + -VerticesSize +
+				-ViewableArea.x)
 			{
 				WasCulled = true;
 				return;
 			}
 
-			if (TheCamera3D->position.y > Position.y + VerticesSize + ViewableArea.y ||
-				TheCamera3D->position.y < Position.y + -VerticesSize + -ViewableArea.y)
+			if (TheCamera3D->position.y > GetWorldPosition().y + VerticesSize +
+				ViewableArea.y ||
+				TheCamera3D->position.y < GetWorldPosition().y + -VerticesSize +
+				-ViewableArea.y)
 			{
 				WasCulled = true;
 				return;
@@ -127,7 +124,6 @@ void Model3D::Draw3D()
 
 	DrawModel(TheModel, ModelPosition, ModelScale, ModelColor);	// Draw 3D model
 
-	CalculateWorldSpace();
 	AfterCalculate();
 }
 

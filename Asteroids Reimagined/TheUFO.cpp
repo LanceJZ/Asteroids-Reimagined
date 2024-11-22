@@ -38,14 +38,14 @@ void TheUFO::SetSmallSound(Sound sound)
 	SetSoundVolume(SmallSound, 0.5f);
 }
 
-void TheUFO::Update(double deltaTime)
+void TheUFO::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 	CheckCollisions();
 }
 
-void TheUFO::FixedUpdate(double deltaTime)
+void TheUFO::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

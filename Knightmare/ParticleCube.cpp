@@ -1,16 +1,17 @@
 #include "ParticleCube.h"
 ParticleCube::ParticleCube()
 {
-	LifeTimerID = Managers->EM.AddTimer();
 }
 
 ParticleCube::~ParticleCube()
 {
 }
 
-void ParticleCube::SetManagers(TheManagers* Managers)
+void ParticleCube::SetManagers(TheManagers* managers)
 {
-	Managers = Managers;
+	Managers = managers;
+
+	LifeTimerID = Managers->EM.AddTimer();
 }
 
 bool ParticleCube::Initialize(Utilities* utilities)
@@ -27,7 +28,7 @@ bool ParticleCube::BeginRun()
 	return false;
 }
 
-void ParticleCube::Update(double deltaTime)
+void ParticleCube::Update(float deltaTime)
 {
 	Model3D::Update(deltaTime);
 
@@ -37,7 +38,7 @@ void ParticleCube::Update(double deltaTime)
 	}
 }
 
-void ParticleCube::FixedUpdate(double deltaTime)
+void ParticleCube::FixedUpdate(float deltaTime)
 {
 	Model3D::FixedUpdate(deltaTime);
 

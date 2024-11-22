@@ -68,8 +68,8 @@ public:
 	bool BeginRun();
 
 	void Input();
-	void Update(double deltaTime);
-	void FixedUpdate(double deltaTime);
+	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	void Hit(Vector3 location, Vector3 velocity);

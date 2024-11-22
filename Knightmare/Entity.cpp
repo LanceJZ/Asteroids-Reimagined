@@ -21,7 +21,7 @@ bool Entity::Initialize(Utilities* utilities)
 	return true;
 }
 
-void Entity::Update(double deltaTime)
+void Entity::Update(float deltaTime)
 {
 	if (!Enabled) return;
 
@@ -32,7 +32,7 @@ void Entity::Update(double deltaTime)
 		LastFrameWorldPosition = Position;
 	}
 
-	Position = Position + ((Velocity = Velocity + Acceleration) * (float)deltaTime);
+	Position = Position + ((Velocity = Velocity + Acceleration) * deltaTime);
 
 	if (!IsChild)
 	{
@@ -53,7 +53,7 @@ void Entity::Update(double deltaTime)
 	DeltaTime = deltaTime;
 }
 
-void Entity::FixedUpdate(double deltaTime)
+void Entity::FixedUpdate(float deltaTime)
 {
 	Common::FixedUpdate();
 }
@@ -121,8 +121,7 @@ bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 {
 	if (!Enabled) return false;
 
-	Vector2 distance = { targetPosition.x - Position.x,
-		targetPosition.y - Position.y };
+	Vector3 distance = Vector3Subtract(targetPosition, Position);
 
 	float radius = (Radius * Scale) + targetRadius;
 
@@ -141,7 +140,7 @@ bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 /// <returns>bool</returns>
 bool Entity::CirclesIntersect(Entity& target)
 {
-	if (!target.Enabled) return false;
+	if (!target.Enabled || !Enabled) return false;
 
 	return CirclesIntersect(target.Position, (target.Radius * target.Scale));
 }
@@ -155,41 +154,55 @@ bool Entity::CirclesIntersectBullet(Entity& target)
 
 	if (Velocity.x > 0)
 	{
-		TheRay.direction.x = 1;
+		TheRay.direction.x = 1.0f;
 	}
 	else if (Velocity.x < 0)
 	{
-		TheRay.direction.x = -1;
+		TheRay.direction.x = -1.0f;
 	}
 
 	if (Velocity.y > 0)
 	{
-		TheRay.direction.y = 1;
+		TheRay.direction.y = 1.0f;
 	}
 	else if (Velocity.y < 0)
 	{
-		TheRay.direction.y = -1;
+		TheRay.direction.y = -1.0f;
 	}
 
-	TheRayCollision = GetRayCollisionSphere(TheRay,	target.Position, target.Radius);
+	RayCollision rayCollision = GetRayCollisionSphere(TheRay,
+		target.Position, (target.Radius * target.Scale));
 
-	if (TheRayCollision.hit)
+	if (rayCollision.hit)
 	{
-		float distance = (Position.x - LastFramePosition.x) +
-			(Position.y - LastFramePosition.y);
+		float distance = Vector3Distance(Position, LastFramePosition);
 
 		if (distance < 0) distance *= -1;
 
-		if (TheRayCollision.distance > 0)
+		if (rayCollision.distance > 0)
 		{
-			if (TheRayCollision.distance > distance + Radius) return false;
+			if (rayCollision.distance > Radius)
+			{
+				return false;
+			}
 		}
 		else
 		{
-			if (TheRayCollision.distance * -1 > distance + Radius) return false;
+			if (rayCollision.distance * -1 > Radius)
+			{
+				return false;
+			}
 		}
 
-		return true;
+		//TODO: Check each point from the Last frame to This frame.
+
+		for (int i = 0; i < distance; i++)
+		{
+			Vector3 point = { Position.x - LastFramePosition.x + i,
+				Position.y - LastFramePosition.y + i, 0 };
+
+			if (target.CirclesIntersect(point, Radius)) return true;
+		}
 	}
 
 	return false;
@@ -225,14 +238,17 @@ bool Entity::ScreenEdgeBoundY(float topOffset, float bottomOffset)
 {
 	bool hitBound = false;
 
-	if (Y() > WindowHeight - bottomOffset - VerticesSize)
+	float top = topOffset + Radius;
+	float bottom = bottomOffset + Radius;
+
+	if (Y() > WindowHeight - bottom)
 	{
-		Y(WindowHeight - bottomOffset - VerticesSize);
+		Y(WindowHeight - bottom);
 		hitBound = true;
 	}
-	else if (Y() < -WindowHeight + topOffset + VerticesSize)
+	else if (Y() < -WindowHeight + top)
 	{
-		Y(-WindowHeight + topOffset + VerticesSize);
+		Y(-WindowHeight + top);
 		hitBound = true;
 	}
 
@@ -501,6 +517,7 @@ void Entity::SetModel(Model& model, float scale)
 	TheModel = model;
 	ModelScale = scale;
 	VerticesSize = (*model.meshes->vertices * -1.0f) * scale;
+	Radius = VerticesSize;
 }
 
 void Entity::SetModel(Model& model)
@@ -514,13 +531,22 @@ void Entity::SetModelCopy(Model model, float scale)
 	ModelScale = scale;
 }
 
-void Entity::LoadModel(Model& model, Texture2D& texture)
+void Entity::SetModelWithTexture(Model& model, Texture2D& texture)
 {
-	if (IsTextureReady(texture))
-	{
-		TheModel = model;
-		TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
-	}
+	//if (IsTextureReady(texture)) //From raylib 5.0, no longer supported in 5.5.
+	//{
+	//	TheModel = model;
+	//	TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+	//}
+
+	//if (IsTextureValid(texture)) //For raylib 5.5, wont compile.
+	//{
+	//	TheModel = model;
+	//	TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+	//}
+
+	TheModel = model;
+	TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 }
 
 LineModelPoints Entity::GetLineModel()

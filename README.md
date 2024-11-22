@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.40.120 Released.
+Asteroids Reimagined RC 4.50.120 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -88,3 +88,4 @@ Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
 Added math_operators.h to Knightmare Engine.
 Reworked Knightmare Engine so that it has three separate frame time hits, Update, FixedUpdate and Render. Disabled until fixed.
+Knightmare Engine Update, optimizations were made.

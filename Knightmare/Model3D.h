@@ -13,19 +13,20 @@ public:
 	~Model3D();
 
 	bool SetCamera(Camera* camera);
-	void LoadModel(Model &model, Texture2D &texture);
-	virtual void Input();
-	virtual bool Initialize(Utilities* utilities);
-	virtual bool BeginRun();
-	virtual void Update(double deltaTime);
-	virtual void FixedUpdate(double deltaTime);
-	virtual void Draw3D();
+	void SetModelWithTexture(Model &model, Texture2D &texture);
+	void Input();
+	bool Initialize(Utilities* utilities);
+	bool BeginRun();
+	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
+	void Draw3D();
 
-	//void AddChild(Model3D* child);
 	void SetModel(Model &model, float scale);
 	void SetModel(Model &model);
 	void SetModelCopy(Model model, float scale);
+
 	Camera* GetCamera();
+
 	void Spawn(Vector3 pos, Vector3 vel);
 	void Unload();
 

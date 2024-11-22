@@ -23,13 +23,13 @@ bool Shot::BeginRun()
 	return false;
 }
 
-void Shot::Update(double deltaTime)
+void Shot::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 }
 
-void Shot::FixedUpdate(double deltaTime)
+void Shot::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

@@ -26,8 +26,8 @@ public:
 	void SetUtilities(Utilities* utilities);
 
 	void Input();
-	void Update(double deltaTime);
-	void FixedUpdate(double deltaTime);
+	void Update(float deltaTime);
+	void FixedUpdate(float fixedDeltaTime);
 	void Draw3D();
 	void Draw2D();
 

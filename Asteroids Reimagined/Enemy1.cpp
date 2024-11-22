@@ -64,14 +64,14 @@ bool Enemy1::BeginRun()
 	return false;
 }
 
-void Enemy1::Update(double deltaTime)
+void Enemy1::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
 	CheckCollisions();
 }
 
-void Enemy1::FixedUpdate(double deltaTime)
+void Enemy1::FixedUpdate(float deltaTime)
 {
 	Enemy::FixedUpdate(deltaTime);
 

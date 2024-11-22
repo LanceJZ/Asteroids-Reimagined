@@ -251,7 +251,7 @@ void ThePlayer::Input()
 	}
 }
 
-void ThePlayer::Update(double deltaTime)
+void ThePlayer::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
@@ -262,7 +262,7 @@ void ThePlayer::Update(double deltaTime)
 	if (PoweredUp) WeHaveThePower();
 }
 
-void ThePlayer::FixedUpdate(double deltaTime)
+void ThePlayer::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

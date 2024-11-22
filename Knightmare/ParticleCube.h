@@ -12,14 +12,15 @@ public:
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
-	void Update(double deltaTime);
-	void FixedUpdate(double deltaTime);
+	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position, Vector3 velocity, float radius, float speed, float time);
+	void Spawn(Vector3 position, Vector3 velocity, float radius,
+		float speed, float time);
 
 private:
-	size_t LifeTimerID;
+	size_t LifeTimerID = 0;
 
-	TheManagers* Managers;
+	TheManagers* Managers= nullptr;
 };

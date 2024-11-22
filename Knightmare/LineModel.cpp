@@ -10,7 +10,7 @@ void LineModel::Input()
 {
 }
 
-void LineModel::Update(double deltaTime)
+void LineModel::Update(float deltaTime)
 {
 	if (Enabled) Entity::Update(deltaTime);
 
@@ -31,29 +31,8 @@ void LineModel::Draw3D()
 		return;
 	}
 
-	rlPushMatrix();
-
-	if (IsChild)
-	{
-		for (auto &parent : *Parents)
-		{
-			rlTranslatef(parent->Position.x, parent->Position.y, Position.z);
-
-			if (!RotationLocked)
-			{
-				rlRotatef(parent->RotationX, 1, 0, 0);
-				rlRotatef(parent->RotationY, 0, 1, 0);
-				rlRotatef(parent->RotationZ, 0, 0, 1);
-			}
-		}
-
-	}
-
-	rlTranslatef(Position.x, Position.y, Position.z);
-	rlRotatef(RotationX, 1, 0, 0);
-	rlRotatef(RotationY, 0, 1, 0);
-	rlRotatef(RotationZ, 0, 0, 1);
-	rlScalef(Scale, Scale, Scale);
+	BeforeCalculate();
+	CalculateWorldVectors();
 
 	rlBegin(RL_LINES);
 	rlColor4ub(ModelColor.r, ModelColor.g, ModelColor.b, ModelColor.a);
@@ -61,7 +40,8 @@ void LineModel::Draw3D()
 	for (int i = 0; i < LinePoints.size() - 1; i++)
 	{
 		rlVertex3f(LinePoints[i].x, LinePoints[i].y, LinePoints[i].z);
-		rlVertex3f(
+		rlVertex3f
+		(
 			LinePoints[static_cast<std::vector<Vector3,
 			std::allocator<Vector3>>::size_type>(i) + 1].x,
 			LinePoints[static_cast<std::vector<Vector3,
@@ -71,8 +51,7 @@ void LineModel::Draw3D()
 		);
 	}
 
-	rlPopMatrix();
-	rlEnd();
+	AfterCalculate();
 }
 
 LineModelPoints LineModel::GetLineModel()

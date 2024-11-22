@@ -33,13 +33,13 @@ bool TheHomingMine::BeginRun()
 	return false;
 }
 
-void TheHomingMine::Update(double deltaTime)
+void TheHomingMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 }
 
-void TheHomingMine::FixedUpdate(double deltaTime)
+void TheHomingMine::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

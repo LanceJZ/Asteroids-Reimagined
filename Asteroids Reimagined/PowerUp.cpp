@@ -38,14 +38,14 @@ bool PowerUp::BeginRun()
 	return false;
 }
 
-void PowerUp::Update(double deltaTime)
+void PowerUp::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 	CheckCollisions();
 }
 
-void PowerUp::FixedUpdate(double deltaTime)
+void PowerUp::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

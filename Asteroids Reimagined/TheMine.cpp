@@ -23,14 +23,14 @@ bool TheMine::BeginRun()
 	return false;
 }
 
-void TheMine::Update(double deltaTime)
+void TheMine::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 	CheckCollisions();
 }
 
-void TheMine::FixedUpdate(double deltaTime)
+void TheMine::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

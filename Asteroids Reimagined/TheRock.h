@@ -25,8 +25,8 @@ public:
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
-	void Update(double deltaTime);
-	void FixedUpdate(double deltaTime);
+	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	void Spawn(Vector3 position, RockSize size = Large);

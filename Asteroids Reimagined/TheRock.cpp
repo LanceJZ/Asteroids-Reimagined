@@ -33,14 +33,14 @@ bool TheRock::BeginRun()
 	return false;
 }
 
-void TheRock::Update(double deltaTime)
+void TheRock::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
 	CheckCollisions();
 }
 
-void TheRock::FixedUpdate(double deltaTime)
+void TheRock::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 

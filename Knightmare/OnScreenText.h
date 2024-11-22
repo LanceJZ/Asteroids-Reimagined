@@ -7,10 +7,10 @@ public:
 	OnScreenText();
 	virtual ~OnScreenText();
 
-	virtual bool Initialize(Utilities* utilities);
+	bool Initialize(Utilities* utilities);
 
-	virtual void FixedUpdate();
-	virtual void Draw2D();
+	void FixedUpdate();
+	void Draw2D();
 
 private:
 

@@ -14,6 +14,7 @@ public:
 	bool Enabled = true;
 	bool IgnoreParentRotation = false;
 	bool WasCulled = false;
+	bool BeenHit = false;
 	int ChildNumber = 0;
 	float Scale = 1;
 	float ModelScale = 1;
@@ -54,8 +55,8 @@ public:
 	virtual ~Entity();
 
 	virtual bool Initialize(Utilities* utilities);
-	virtual void Update(double deltaTime);
-	virtual void FixedUpdate(double deltaTime);
+	virtual void Update(float deltaTime);
+	virtual void FixedUpdate(float deltaTime);
 	virtual void Draw3D();
 
 	void X(float x);
@@ -104,7 +105,7 @@ public:
 	virtual void SetModel(Model &model, float scale);
 	virtual void SetModel(Model &model);
 	virtual void SetModelCopy(Model model, float scale);
-	virtual void LoadModel(Model &model, Texture2D &texture);
+	virtual void SetModelWithTexture(Model &model, Texture2D &texture);
 	virtual LineModelPoints GetLineModel();
 	virtual std::vector<Vector3> GetModel();
 	virtual void SetModel(std::vector<Vector3> lines);
@@ -134,9 +135,8 @@ protected:
 	void AfterCalculate();
 
 private:
-	bool BeenHit = false;
 	Ray TheRay = { 0 };
-	RayCollision TheRayCollision = { 0 };
+	//RayCollision TheRayCollision = { 0 };
 
 	float RadianSpin(float radian);
 	float AddRotationVelAcc(float rotation, float rotationVelocity,

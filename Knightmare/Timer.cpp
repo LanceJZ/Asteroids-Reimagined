@@ -1,11 +1,11 @@
 #include "Timer.h"
 
-void Timer::Update(double deltaTime)
+void Timer::Update(float deltaTime)
 {
     SecondsElapsed += deltaTime;
 }
 
-void Timer::FixedUpdate(double deltaTime)
+void Timer::FixedUpdate(float deltaTime)
 {
 }
 

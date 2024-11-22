@@ -220,7 +220,6 @@
     </ClInclude>
     <ClInclude Include="ExplosionControl.h" />
     <ClInclude Include="LineModel.h" />
-    <ClInclude Include="raymath_operators.h" />
     <ClInclude Include="TheManagers.h">
       <SubType>
       </SubType>

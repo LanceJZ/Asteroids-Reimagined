@@ -19,8 +19,8 @@ public:
 	bool Load();
 	bool BeginRun();
 	void ProcessInput();
-	void Update(double deltaTime);
-	void FixedUpdate(double deltaTime);
+	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 	void Draw2D();
 

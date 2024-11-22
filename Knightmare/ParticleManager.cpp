@@ -21,6 +21,11 @@ void ParticleManager::SetCubeModel(Model model)
 	CubeModel = model;
 }
 
+void ParticleManager::SetLineModel(LineModelPoints model)
+{
+	ParticleModel = model; //Replace with vertices in code.
+}
+
 void ParticleManager::SetManagers(TheManagers& managers)
 {
 	Managers = &managers;
@@ -30,7 +35,7 @@ bool ParticleManager::BeginRun()
 {
 	Common::BeginRun();
 
-	ParticleModel = Managers->CM.LoadAndGetLineModel("Dot"); //Replace with vertices in code.
+	//ParticleModel = Managers->CM.LoadAndGetLineModel("Dot"); //Replace with vertices in code.
 
 	return false;
 }
@@ -45,17 +50,20 @@ void ParticleManager::SpawnCubes(Vector3 position, Vector3 velocity, float radiu
 {
 	for (int i = 0; i < count; i++)
 	{
-		CubeParticles[SpawnCubePool(color)]->Spawn(position, velocity, radius, speed,  time);
+		CubeParticles[SpawnCubePool(color)]->Spawn(position, velocity,
+			radius, speed,  time);
 	}
 
 }
 
-void ParticleManager::SpawnLineParticles(Vector3 position, Vector3 velocity, float radius,
+void ParticleManager::SpawnLineParticles(Vector3 position, Vector3 velocity,
+	float radius,
 	float speed, int count, float time, Color color)
 {
 	for (int i = 0; i < count; i++)
 	{
-		LineParticles[SpawnLinePool(color)]->Spawn(position, velocity, radius, speed, time);
+		LineParticles[SpawnLinePool(color)]->Spawn(position, velocity,
+			radius, speed, time);
 	}
 }
 
@@ -72,6 +80,26 @@ void ParticleManager::ResetLines()
 	{
 		line->Enabled = false;
 	}
+}
+bool ParticleManager::GetParticlesActive()
+{
+	for (const auto& cube : CubeParticles)
+	{
+		if (cube->Enabled)
+		{
+			return true;
+		}
+	}
+
+	for (const auto& line : LineParticles)
+	{
+		if (line->Enabled)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 size_t ParticleManager::SpawnCubePool(Color color)
 {
@@ -96,6 +124,8 @@ size_t ParticleManager::SpawnCubePool(Color color)
 			CubeParticles.push_back(DBG_NEW ParticleCube());
 			Managers->EM.AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
 			CubeParticles[cubeSpawnNumber]->SetManagers(Managers);
+			CubeParticles[cubeSpawnNumber]->Initialize(TheUtilities);
+			CubeParticles[cubeSpawnNumber]->BeginRun();
 		}
 
 		CubeParticles[cubeSpawnNumber]->ModelColor = color;

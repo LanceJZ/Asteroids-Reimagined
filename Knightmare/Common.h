@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include "raylib.h"
-//#include "raymath.h"
-#include "raymath_operators.h"
+#include "raymath.h"
+//#include "raymath_operators.h" //Integrated into raylib 5.5 raymath.h
 #include "Utilities.h"
 
 #define MAX(a, b) ((a)>(b)? (a) : (b))

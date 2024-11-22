@@ -8,12 +8,19 @@ TheManagers::~TheManagers()
 {
 }
 
+bool TheManagers::SetCamera(Camera& camera)
+{
+	EM.SetCamera(camera);
+
+	return true;
+}
+
 bool TheManagers::Initialize()
 {
 	CM.Initialize();
 	EM.Initialize();
 
-	return false;
+	return true;
 }
 
 bool TheManagers::BeginRun()
@@ -21,14 +28,7 @@ bool TheManagers::BeginRun()
 	CM.BeginRun();
 	EM.BeginRun();
 
-	return false;
-}
-
-bool TheManagers::SetCamera(Camera& camera)
-{
-	EM.SetCamera(camera);
-
-	return false;
+	return true;
 }
 
 void TheManagers::Update(float deltaTime)
