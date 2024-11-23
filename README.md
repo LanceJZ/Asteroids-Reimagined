@@ -83,9 +83,11 @@ UFO now can shot small rock, but still wont run into them.
 Plasma Shot now also destroys all enemy shots.
 Deathstar now appears at the first wave, if there are less than three rocks. After wave 10, if there are less than ten rocks it will spawn.
 Player homing mines are now gray, so they are less distracting.
+When player hit, game speeds up until it is clear to spawn.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
 Added math_operators.h to Knightmare Engine.
 Reworked Knightmare Engine so that it has three separate frame time hits, Update, FixedUpdate and Render. Disabled until fixed.
-Knightmare Engine Update, optimizations were made.
+Knightmare Engine Update, optimizations were made. Using raylib 5.5 release now.
+Collusions are much more accurate now. Update is divided into half and run twice for each render. So that collusions are checked twice every frame, with half the movement.

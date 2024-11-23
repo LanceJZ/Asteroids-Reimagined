@@ -104,6 +104,9 @@ void GameLogic::FixedUpdate()
 			PlayerClear->Enabled = true;
 			PlayerClear->Radius = 140.0f;
 
+			Managers.EM.Update(GetFrameTime());
+			Managers.EM.Update(GetFrameTime());
+
 			if (IsKeyPressed(KEY_ENTER) ||
 				(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
 			{

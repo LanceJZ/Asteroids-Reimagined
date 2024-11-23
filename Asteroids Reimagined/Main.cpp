@@ -71,16 +71,19 @@ int WinMain()
 	{
 		if (game.Logic->State != GameState::Pause)
 		{
-			float deltaTime = GetFrameTime();
+			float deltaTime = GetFrameTime() * 0.5f;
 
 			Managers.EM.Update(deltaTime);
-			game.ProcessInput();
-			Managers.EM.Input();
 			game.Update(deltaTime);
-
+			Managers.EM.FixedUpdate(deltaTime);
+			game.FixedUpdate(deltaTime);
+			Managers.EM.Update(deltaTime);
+			game.Update(deltaTime);
 			Managers.EM.FixedUpdate(deltaTime);
 			game.FixedUpdate(deltaTime);
 
+			game.ProcessInput();
+			Managers.EM.Input();
 		}
 
 		BeginDrawing();
