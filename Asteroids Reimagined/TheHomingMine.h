@@ -8,6 +8,8 @@ public:
 	TheHomingMine();
 	virtual ~TheHomingMine();
 
+	bool GameOver = false;
+
 	void SetExplodeSound(Sound sound);
 	void SetParticleManager(ParticleManager* particles);
 

@@ -32,7 +32,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.50.120");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.50.123");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -75,16 +75,15 @@ int WinMain()
 
 			Managers.EM.Update(deltaTime);
 			game.Update(deltaTime);
-			Managers.EM.FixedUpdate(deltaTime);
-			game.FixedUpdate(deltaTime);
 			Managers.EM.Update(deltaTime);
 			game.Update(deltaTime);
-			Managers.EM.FixedUpdate(deltaTime);
-			game.FixedUpdate(deltaTime);
+			Managers.EM.FixedUpdate(deltaTime * 2.0f);
+			game.FixedUpdate(deltaTime * 2.0f);
 
-			game.ProcessInput();
 			Managers.EM.Input();
 		}
+
+		game.ProcessInput();
 
 		BeginDrawing();
 		ClearBackground({ 8, 2, 16, 100 });

@@ -312,6 +312,11 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		if (Lives < 0)
 		{
 			GameOver = true;
+
+			for (const auto& mine : Mines)
+			{
+				mine->GameOver = true;
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.50.121 Released.
+Asteroids Reimagined RC 4.50.123 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -85,6 +85,8 @@ Plasma Shot now also destroys all enemy shots.
 Deathstar now appears at the first wave, if there are less than three rocks. After wave 10, if there are less than ten rocks it will spawn.
 Player homing mines are now gray, so they are less distracting.
 When player hit, game speeds up until it is clear to spawn.
+Fixed bug where pause can not be undone.
+Fixed Player Mine having sound after game is over.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

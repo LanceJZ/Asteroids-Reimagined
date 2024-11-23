@@ -87,6 +87,7 @@ void GameLogic::FixedUpdate()
 		State = MainMenu;
 		PlayerClear->Enabled = false;
 		Player->Destroy();
+
 		return;
 	}
 

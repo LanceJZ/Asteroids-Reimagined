@@ -62,12 +62,14 @@ void TheHomingMine::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
+	GameOver = false;
+
 	Managers.EM.ResetTimer(LifeTimerID, 30.0f);
 }
 
 void TheHomingMine::Hit()
 {
-	PlaySound(ExplodeSound);
+	if (!GameOver) PlaySound(ExplodeSound);
 
 	Particles->SpawnLineParticles(Position, { 0.0f }, Radius * 0.25f, 50, 25, 1.0f, WHITE);
 
