@@ -90,4 +90,4 @@ Knightmare Engine Update, Made every entity an Entity in Entity Manager.
 Added math_operators.h to Knightmare Engine.
 Reworked Knightmare Engine so that it has three separate frame time hits, Update, FixedUpdate and Render. Disabled until fixed.
 Knightmare Engine Update, optimizations were made. Using raylib 5.5 release now.
-Collusions are much more accurate now. Update is divided into half and run twice for each render. So that collusions are checked twice every frame, with half the movement.
+Collisions are much more accurate now. Update is divided into half and run twice for each render. So that collisions are checked twice every frame, with half the movement.
