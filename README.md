@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.50.120 Released.
+Asteroids Reimagined RC 4.50.121 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -35,6 +35,7 @@ Fixed High Score instruction text.
 Fixed if Player hit by Fighter Pair, Player lost two lives.
 Fixed Double Shot and Plasma shot not hitting Boss after shield down.
 Fixed all weapons giving the player points after the game is over.
+Fixed absence of particles, forgot I changed that in my engine.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.

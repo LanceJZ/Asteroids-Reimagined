@@ -12,6 +12,10 @@ ParticleManager::~ParticleManager()
 
 bool ParticleManager::Initialize(Utilities* utilities)
 {
+	ParticleModel.linePoints.push_back({ -0.250f, 0.250f, 0 });
+	ParticleModel.linePoints.push_back({ 0.250f, 0.250f, 0 });
+	ParticleModel.linePoints.push_back({ 0.250f, -0.250f, 0 });
+	ParticleModel.linePoints.push_back({ -0.250f, -0.250f, 0 });
 
 	return false;
 }
@@ -34,8 +38,6 @@ void ParticleManager::SetManagers(TheManagers& managers)
 bool ParticleManager::BeginRun()
 {
 	Common::BeginRun();
-
-	//ParticleModel = Managers->CM.LoadAndGetLineModel("Dot"); //Replace with vertices in code.
 
 	return false;
 }
