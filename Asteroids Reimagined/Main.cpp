@@ -32,7 +32,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.50.123");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.52.123");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -41,7 +41,7 @@ int WinMain()
 
 	if (IsWindowState(FLAG_VSYNC_HINT)) ClearWindowState(FLAG_VSYNC_HINT);
 	glfwSwapInterval(0);
-	SetTargetFPS(200);
+	SetTargetFPS(120);
 
 	static Utilities TheUtilities = {};
 
@@ -69,21 +69,22 @@ int WinMain()
 
 	while (!WindowShouldClose())
 	{
+		game.ProcessInput();
+
 		if (game.Logic->State != GameState::Pause)
 		{
-			float deltaTime = GetFrameTime() * 0.5f;
-
-			Managers.EM.Update(deltaTime);
-			game.Update(deltaTime);
-			Managers.EM.Update(deltaTime);
-			game.Update(deltaTime);
-			Managers.EM.FixedUpdate(deltaTime * 2.0f);
-			game.FixedUpdate(deltaTime * 2.0f);
-
 			Managers.EM.Input();
-		}
 
-		game.ProcessInput();
+			float deltaTime = GetFrameTime() * 0.5f;
+			float fixedDeltaTime = deltaTime * 2.0f;
+
+			Managers.EM.Update(deltaTime);
+			game.Update(deltaTime);
+			Managers.EM.Update(deltaTime);
+			game.Update(deltaTime);
+			Managers.EM.FixedUpdate(fixedDeltaTime);
+			game.FixedUpdate(fixedDeltaTime);
+		}
 
 		BeginDrawing();
 		ClearBackground({ 8, 2, 16, 100 });

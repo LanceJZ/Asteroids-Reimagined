@@ -25,6 +25,7 @@ public:
 	bool NewLife = false;
 	bool GameOver = false;
 	bool Paused = false;
+	bool AltMouseMode = false;
 
 	int Lives = 0;
 
@@ -102,6 +103,7 @@ private:
 	size_t PowerupTimerID = 0;
 	size_t PowerupRundownTimerID = 0;
 	size_t PowerUpBlinkTimerID = 0;
+	size_t FlameColorTimerID = 0;
 
 	int NextNewLifeScore = 10000;
 	int TurretHeat = 0;
@@ -187,4 +189,7 @@ private:
 
 	void Gamepad();
 	void Keyboard();
+	void Mouse();
+	void MouseWheel();
+	void AltMouse();
 };

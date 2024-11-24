@@ -184,7 +184,7 @@ void Game::Draw2D()
 {
 
 }
-
+// For Game Input when game is paused or not.
 void Game::GameInput()
 {
 	Logic->GameInput();

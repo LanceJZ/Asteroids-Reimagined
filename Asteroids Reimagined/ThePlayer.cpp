@@ -21,6 +21,7 @@ ThePlayer::ThePlayer()
 	PowerupTimerID = Managers.EM.AddTimer();
 	PowerupRundownTimerID = Managers.EM.AddTimer(2.0f);
 	PowerUpBlinkTimerID = Managers.EM.AddTimer(0.25f);
+	FlameColorTimerID = Managers.EM.AddTimer(0.15f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
@@ -173,6 +174,8 @@ bool ThePlayer::Initialize(Utilities* utilities)
 
 	PowerUpTimerAmount = 8.0f;
 
+	Flame->ModelColor = { 255, 140, 0, 255 };
+
 	GameOver = true;
 	Enabled = false;
 
@@ -242,12 +245,10 @@ void ThePlayer::Input()
 	}
 	else if (Enabled)
 	{
-		Crosshair->Enabled = true;
 		Keyboard();
-	}
-	else
-	{
-		Crosshair->Enabled = false;
+
+		if (AltMouseMode) AltMouse();
+		else Mouse();
 	}
 }
 
@@ -370,8 +371,8 @@ void ThePlayer::Spawn()
 	PlasmaShotCount = 0;
 #if DEBUG
 	BigShotCount = 20; //Turn into keys.
-	DoubleShotCount = 30;
-	MineCount = 40;
+	DoubleShotCount = 40;
+	MineCount = 210;
 	PlasmaShotCount = 10;
 #endif
 	MissileCount = 0;
@@ -403,6 +404,7 @@ void ThePlayer::ShieldPowerUp()
 	ShieldPower += 200;
 	Shield->ModelColor = BLUE;
 	Shield->Alpha = 255.0f;
+	if (!PoweredUp) ModelColor = BLUE;
 }
 
 void ThePlayer::GunPowerUp()
@@ -833,6 +835,17 @@ void ThePlayer::ThrustOn(float amount)
 	SetAccelerationToMaxAtRotation((amount * 50.25f), 350.0f);
 	Flame->Enabled = true;
 
+	if (Managers.EM.TimerElapsed(FlameColorTimerID))
+	{
+		Managers.EM.ResetTimer(FlameColorTimerID, GetRandomFloat(0.025f, 0.25f));
+
+		Color color = {(unsigned char)GetRandomValue(100, 255),
+			(unsigned char)GetRandomValue(60, 105),
+			(unsigned char)GetRandomValue(0, 255), 255};
+
+		Flame->ModelColor = color;
+	}
+
 	if (!IsSoundPlaying(ThrustSound)) PlaySound(ThrustSound);
 }
 
@@ -856,6 +869,7 @@ void ThePlayer::ShieldOn()
 			if (ShieldPower < 100.0f)
 			{
 				Shield->ModelColor = WHITE;
+				ModelColor = WHITE;
 				ShieldOverCharge = false;
 			}
 		}
@@ -928,7 +942,10 @@ void ThePlayer::WeHaveThePower()
 	{
 		PoweredUp = false;
 		PoweredUpRundown = false;
-		ModelColor = WHITE;
+
+		if (ShieldOverCharge) ModelColor = BLUE;
+		else ModelColor = WHITE;
+
 		Managers.EM.SetTimer(PowerupTimerID, 0.0f);
 	}
 }
@@ -995,6 +1012,24 @@ void ThePlayer::AmmoMeterUpdate(int ammoCount)
 {
 	if (ammoCount <= 0)	SwitchSecondaryWeapon(None);
 
+	float ammoX = 3.25f;
+	float scale = 1.0f;
+	Color color = LIGHTGRAY;
+
+	if (ammoCount > 100)
+	{
+		ammoCount /= 100;
+		ammoX = 8.5f;
+		scale = 3.0f;
+		color = DARKGRAY;
+	} else if (ammoCount > 10)
+	{
+		ammoCount /= 10;
+		ammoX = 5.5f;
+		scale = 2.0f;
+		color = GRAY;
+	}
+
 	if (AmmoMeterModels.size() < ammoCount)
 		AddAmmoMeterModels(ammoCount - (int)AmmoMeterModels.size());
 
@@ -1003,7 +1038,6 @@ void ThePlayer::AmmoMeterUpdate(int ammoCount)
 	for (const auto& model : AmmoMeterModels)
 	{
 		model->Enabled = false;
-		model->ModelColor = GRAY;
 		model->Position = { position.x, position.y, 0.0f };
 		position.x += 1.0f;
 	}
@@ -1011,6 +1045,9 @@ void ThePlayer::AmmoMeterUpdate(int ammoCount)
 	for (int i = 0; i < ammoCount; i++)
 	{
 		AmmoMeterModels[i]->Enabled = true;
+		AmmoMeterModels[i]->Scale = scale;
+		AmmoMeterModels[i]->ModelColor = color;
+		AmmoMeterModels[i]->X(i * ammoX);
 	}
 }
 
@@ -1122,22 +1159,24 @@ void ThePlayer::Gamepad()
 	PointTurret(GetGamepadAxisMovement(0, 2), GetGamepadAxisMovement(0, 3));
 
 	//Right Stick
-	if (GetGamepadAxisMovement(0, 2) > 0.1f) //Right
+	if (GetGamepadAxisMovement(0, 2) > 0.1f ||
+		GetGamepadAxisMovement(0, 2) > 0.1f) //Left/Right
 	{
 		FireTurret();
 	}
-	else if (GetGamepadAxisMovement(0, 2) < -0.1f) //Left
+	//else if (GetGamepadAxisMovement(0, 2) < -0.1f) //Left
+	//{
+	//	FireTurret();
+	//}
+	else if (GetGamepadAxisMovement(0, 3) > 0.1f ||
+		GetGamepadAxisMovement(0, 3) > 0.1f) //Up/Down
 	{
 		FireTurret();
 	}
-	else if (GetGamepadAxisMovement(0, 3) > 0.1f) //Down
-	{
-		FireTurret();
-	}
-	else if (GetGamepadAxisMovement(0, 3) < -0.1f) //Up
-	{
-		FireTurret();
-	}
+	//else if (GetGamepadAxisMovement(0, 3) < -0.1f) //Up
+	//{
+	//	FireTurret();
+	//}
 
 	//Left Trigger
 	if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_TRIGGER_2))
@@ -1220,13 +1259,7 @@ void ThePlayer::Keyboard()
 		ShieldOff();
 	}
 
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-	{
-		PointTurret(Crosshair->Position);
-		FireTurret();
-	}
-
-	if (IsKeyPressed(KEY_E) || IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
+	if (IsKeyPressed(KEY_E))
 	{
 		FireSecondary();
 	}
@@ -1236,22 +1269,76 @@ void ThePlayer::Keyboard()
 		MouseWheelScroll = SecondaryWeapon;
 
 		MouseWheelScroll += 1;
-
+		//Repeated code.
 		if (MouseWheelScroll < 1) MouseWheelScroll = 4;
 		if (MouseWheelScroll > 4) MouseWheelScroll = 1;
 
 		SwitchSecondaryWeapon((SecondaryWeaponType)MouseWheelScroll);
 	}
+}
 
+void ThePlayer::Mouse()
+{
+	Crosshair->Enabled = true;
+
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+	{
+		PointTurret(Crosshair->Position);
+		FireTurret();
+	}
+
+	if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
+	{
+		FireSecondary();
+	}
+
+	MouseWheel();
+}
+
+void ThePlayer::MouseWheel()
+{
 	if ((int)GetMouseWheelMove() != 0)
 	{
 		MouseWheelScroll = SecondaryWeapon;
 
 		MouseWheelScroll -= (int)GetMouseWheelMove();
-
+		//Repeated code.
 		if (MouseWheelScroll < 1) MouseWheelScroll = 4;
 		if (MouseWheelScroll > 4) MouseWheelScroll = 1;
 
 		SwitchSecondaryWeapon((SecondaryWeaponType)MouseWheelScroll);
 	}
+}
+
+void ThePlayer::AltMouse()
+{
+	Crosshair->Enabled = false;
+
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+	{
+		FireSecondary();
+	}
+
+	float sensitivity = 0.0025f;
+
+	float mouseX = GetMouseDelta().x * sensitivity;
+	float mouseY = GetMouseDelta().y * sensitivity;
+
+	mouseX = Clamp(mouseX, -1.0f, 1.0f);
+	mouseY = Clamp(mouseY, -1.0f, 1.0f);
+
+	float over = 0.015f;
+
+	if (mouseX > over || mouseX < -over) //Right
+	{
+		PointTurret(mouseX, mouseY);
+		FireTurret();
+	}
+	else if (mouseY > over || mouseY < -over) //Down
+	{
+		PointTurret(mouseX, mouseY);
+		FireTurret();
+	}
+
+	MouseWheel();
 }

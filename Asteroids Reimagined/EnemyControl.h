@@ -78,8 +78,9 @@ public:
 	void Update();
 	void FixedUpdate();
 
-	void NewGame();
 	void NextWave();
+	void NewGame();
+	void Reset();
 
 private:
 	bool NoMoreRocks = false;
@@ -145,6 +146,4 @@ private:
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void HaveHomingMineChaseEnemy();
-
-	void Reset();
 };

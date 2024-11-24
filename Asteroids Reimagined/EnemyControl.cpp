@@ -383,10 +383,14 @@ void EnemyControl::FixedUpdate()
 	if (Managers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
 }
 
+void EnemyControl::NextWave()
+{
+	Wave++;
+}
+
 void EnemyControl::NewGame()
 {
 	DeathStar->NewGame();
-	Reset();
 
 	for (const auto& rock : Rocks)
 	{
@@ -394,9 +398,35 @@ void EnemyControl::NewGame()
 	}
 }
 
-void EnemyControl::NextWave()
+void EnemyControl::Reset()
 {
-	Wave++;
+	BossWave = false;
+	ClearForBossWave = false;
+	Wave = 0;
+	UFOSpawnCount = 0;
+	RockSpawnCount = StartRockCount;
+
+	Managers.EM.ResetTimer(UFOSpawnTimerID, 35.0f);
+	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+
+	UFOSpawnTimeAmount = 30.0f;
+	EnemyOneSpawnTimeAmount = 15.0f;
+	EnemyTwoSpawnTimeAmount = 20.0f;
+
+	for (const auto& enemy : EnemyOnes)
+	{
+		enemy->Reset();
+	}
+
+	for (const auto& enemy : EnemyTwos)
+	{
+		enemy->Reset();
+	}
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->Reset();
+	}
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
@@ -1009,36 +1039,5 @@ void EnemyControl::HaveHomingMineChaseEnemy()
 		}
 
 		mine->ChaseEnemy(closestEnemy);
-	}
-}
-
-void EnemyControl::Reset()
-{
-	BossWave = false;
-	ClearForBossWave = false;
-	Wave = 0;
-	UFOSpawnCount = 0;
-	RockSpawnCount = StartRockCount;
-
-	Managers.EM.ResetTimer(UFOSpawnTimerID, 35.0f);
-	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
-
-	UFOSpawnTimeAmount = 30.0f;
-	EnemyOneSpawnTimeAmount = 15.0f;
-	EnemyTwoSpawnTimeAmount = 20.0f;
-
-	for (const auto& enemy : EnemyOnes)
-	{
-		enemy->Reset();
-	}
-
-	for (const auto& enemy : EnemyTwos)
-	{
-		enemy->Reset();
-	}
-
-	for (const auto& ufo : UFOs)
-	{
-		ufo->Reset();
 	}
 }

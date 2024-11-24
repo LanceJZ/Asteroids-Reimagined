@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.50.123 Released.
+Asteroids Reimagined RC 4.52.123 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -36,6 +36,8 @@ Fixed if Player hit by Fighter Pair, Player lost two lives.
 Fixed Double Shot and Plasma shot not hitting Boss after shield down.
 Fixed all weapons giving the player points after the game is over.
 Fixed absence of particles, forgot I changed that in my engine.
+Fixed bug where pause can not be undone.
+Fixed Player Mine having sound after game is over.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -85,8 +87,10 @@ Plasma Shot now also destroys all enemy shots.
 Deathstar now appears at the first wave, if there are less than three rocks. After wave 10, if there are less than ten rocks it will spawn.
 Player homing mines are now gray, so they are less distracting.
 When player hit, game speeds up until it is clear to spawn.
-Fixed bug where pause can not be undone.
-Fixed Player Mine having sound after game is over.
+Special Weapon Ammo display is easier to see. When more than ten ammo is scaled larger, and shows one per every ten. When larger than a hundred, scaled larger, and shows one per every hundred. Color also goes from light gray to gray to dark gray.
+Player Flame is now an ever changing random color.
+When Player gets shield Power Up ship turns blue.
+Experimental alternate mouse input, use I to switch modes.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
@@ -94,3 +98,4 @@ Added math_operators.h to Knightmare Engine.
 Reworked Knightmare Engine so that it has three separate frame time hits, Update, FixedUpdate and Render. Disabled until fixed.
 Knightmare Engine Update, optimizations were made. Using raylib 5.5 release now.
 Collisions are much more accurate now. Update is divided into half and run twice for each render. So that collisions are checked twice every frame, with half the movement.
+Optimizations on keyboard/mouse/controller input. Added new mouse controls, can switch using the I button at any time.

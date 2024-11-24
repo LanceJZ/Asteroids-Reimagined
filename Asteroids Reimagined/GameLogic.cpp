@@ -143,7 +143,7 @@ void GameLogic::FixedUpdate()
 		}
 	}
 }
-
+//For Game Input when game is paused or not.
 void GameLogic::GameInput()
 {
 	if (State == Pause)
@@ -208,6 +208,18 @@ void GameLogic::GameInput()
 			Player->ExtraLife();
 		}
 #endif
+	}
+
+	if (IsKeyPressed(KEY_I))
+	{
+		if (Player->AltMouseMode)
+		{
+			Player->AltMouseMode = false;
+		}
+		else
+		{
+			Player->AltMouseMode = true;
+		}
 	}
 }
 
@@ -290,6 +302,7 @@ void GameLogic::AddPlayerShipModels(int number)
 void GameLogic::NewGame()
 {
 	Player->NewGame();
+	Enemies->Reset();
 	Enemies->NewGame();
 	HighScores->Reset();
 
