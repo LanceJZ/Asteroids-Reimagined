@@ -1314,7 +1314,7 @@ void ThePlayer::AltMouse()
 {
 	Crosshair->Enabled = false;
 
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{
 		FireSecondary();
 	}
