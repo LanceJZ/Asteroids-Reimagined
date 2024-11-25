@@ -130,7 +130,7 @@ void TheUFO::Spawn(int spawnCount)
 
 void TheUFO::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 
 	Managers.EM.ResetTimer(FireTimerID, 1.75f);
 	Managers.EM.ResetTimer(ChangeVectorTimerID, 5.50f);
@@ -144,12 +144,9 @@ void TheUFO::Hit()
 
 void TheUFO::Reset()
 {
-	Destroy();
+	Enemy::Reset();
 
-	for (const auto& shot : Shots)
-	{
-		shot->Destroy();
-	}
+	Destroy();
 }
 
 void TheUFO::FireShot()

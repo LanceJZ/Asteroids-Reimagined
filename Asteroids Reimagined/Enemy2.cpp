@@ -104,6 +104,8 @@ void Enemy2::Destroy()
 
 void Enemy2::Reset()
 {
+	Enemy::Reset();
+
 	Destroy();
 
 	Managers.EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);

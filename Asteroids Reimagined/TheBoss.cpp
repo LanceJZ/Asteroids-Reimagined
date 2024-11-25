@@ -87,6 +87,12 @@ void TheBoss::SetMineModel(LineModelPoints model)
 	MineModel = model;
 }
 
+void TheBoss::SetOnSound(Sound sound)
+{
+	OnSound = sound;
+	SetSoundVolume(OnSound, 0.25f);
+}
+
 void TheBoss::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;
@@ -246,6 +252,8 @@ void TheBoss::FixedUpdate(float deltaTime)
 	else HeadToNextWaypoint();
 
 	ReachedWaypoint();
+
+	if (!Player->GameOver) PlaySound(OnSound);
 }
 
 void TheBoss::Draw3D()
@@ -274,6 +282,11 @@ void TheBoss::Reset()
 	for (const auto& mine : Mines)
 	{
 		mine->Destroy();
+	}
+
+	for (const auto& turret : Turrets)
+	{
+		turret->Reset();
 	}
 }
 

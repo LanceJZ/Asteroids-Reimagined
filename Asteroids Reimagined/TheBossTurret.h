@@ -31,6 +31,7 @@ public:
 	void Spawn();
 	void Hit();
 	void Destroy();
+	void Reset();
 
 private:
 	size_t FireTimerID;

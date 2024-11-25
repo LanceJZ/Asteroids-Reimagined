@@ -1160,23 +1160,15 @@ void ThePlayer::Gamepad()
 
 	//Right Stick
 	if (GetGamepadAxisMovement(0, 2) > 0.1f ||
-		GetGamepadAxisMovement(0, 2) > 0.1f) //Left/Right
+		GetGamepadAxisMovement(0, 2) < -0.1f) //Left/Right
 	{
 		FireTurret();
 	}
-	//else if (GetGamepadAxisMovement(0, 2) < -0.1f) //Left
-	//{
-	//	FireTurret();
-	//}
 	else if (GetGamepadAxisMovement(0, 3) > 0.1f ||
-		GetGamepadAxisMovement(0, 3) > 0.1f) //Up/Down
+		GetGamepadAxisMovement(0, 3) < -0.1f) //Up/Down
 	{
 		FireTurret();
 	}
-	//else if (GetGamepadAxisMovement(0, 3) < -0.1f) //Up
-	//{
-	//	FireTurret();
-	//}
 
 	//Left Trigger
 	if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_TRIGGER_2))

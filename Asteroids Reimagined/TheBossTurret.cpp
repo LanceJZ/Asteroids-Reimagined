@@ -98,6 +98,16 @@ void TheBossTurret::Destroy()
 	RotationZ = 0.0f;
 }
 
+void TheBossTurret::Reset()
+{
+	Destroy();
+
+	for (const auto& shot : Shots)
+	{
+		shot->Destroy();
+	}
+}
+
 void TheBossTurret::CheckCollisions()
 {
 	for (const auto& shot : Shots)

@@ -62,6 +62,7 @@ public:
 	void SetEnemyTwoExplodeSound(Sound sound);
 	void SetEnemyTwoOnSound(Sound sound);
 	void SetEnemyTwoMineExplodeSound(Sound sound);
+	void SetBossOnSound(Sound sound);
 	void SetBossExplodeSound(Sound sound);
 	void SetBossShieldHitSound(Sound sound);
 	void SetBossShieldDownSound(Sound sound);

@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.52.123 Released.
+Asteroids Reimagined RC 4.52.223 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -38,6 +38,7 @@ Fixed all weapons giving the player points after the game is over.
 Fixed absence of particles, forgot I changed that in my engine.
 Fixed bug where pause can not be undone.
 Fixed Player Mine having sound after game is over.
+Fixed issue in controller firing main weapon not working when pointed at upper left. Issue was created when optimizing code.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -91,6 +92,7 @@ Special Weapon Ammo display is easier to see. When more than ten ammo is scaled 
 Player Flame is now an ever changing random color.
 When Player gets shield Power Up ship turns blue.
 Experimental alternate mouse input, use I to switch modes.
+Boss Ship has sound now.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

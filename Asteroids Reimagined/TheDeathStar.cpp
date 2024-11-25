@@ -93,7 +93,7 @@ void TheDeathStar::Update(float deltaTime)
 
 void TheDeathStar::FixedUpdate(float deltaTime)
 {
-	Enemy::FixedUpdate(deltaTime);
+	Entity::FixedUpdate(deltaTime);
 
 	if (NewWave)
 	{

@@ -124,7 +124,7 @@ void TheFighter::Hit()
 
 void TheFighter::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 
 	ClearParents();
 }

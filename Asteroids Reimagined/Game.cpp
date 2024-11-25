@@ -103,10 +103,11 @@ bool Game::Load()
 	Enemies->SetEnemyTwoSpawnSound(Managers.CM.LoadAndGetSound("EnemyTwoSpawn"));
 	Enemies->SetEnemyTwoFireSound(Managers.CM.LoadAndGetSound("MineDrop"));
 	Enemies->SetEnemyTwoOnSound(Managers.CM.LoadAndGetSound("EnemyTwo"));
+	Enemies->SetBossOnSound(Managers.CM.LoadAndGetSound("BossShip"));
 	Enemies->SetBossExplodeSound(Managers.CM.LoadAndGetSound("BossExplode"));
 	Enemies->SetBossShieldHitSound(Managers.CM.LoadAndGetSound("BossShieldHit"));
 	Enemies->SetBossShieldDownSound(Managers.CM.LoadAndGetSound("BossShieldDown"));
-	Enemies->SetBossHitSound(Managers.CM.LoadAndGetSound("BossHitSound"));
+	Enemies->SetBossHitSound(Managers.CM.LoadAndGetSound("BossHit"));
 	Enemies->SetBossTurretFireSound(Managers.CM.LoadAndGetSound("BossTurretFire"));
 	Enemies->SetBossTurretExplodeSound(Managers.CM.LoadAndGetSound("BossTurretExplode"));
 	Enemies->SetBossSpineFireSound(Managers.CM.LoadAndGetSound("BossSpineFire"));

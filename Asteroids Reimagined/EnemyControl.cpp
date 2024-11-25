@@ -191,6 +191,11 @@ void EnemyControl::SetEnemyTwoMineExplodeSound(Sound sound)
 	Boss->SetMineExplodeSound(sound);
 }
 
+void EnemyControl::SetBossOnSound(Sound sound)
+{
+	Boss->SetOnSound(sound);
+}
+
 void EnemyControl::SetBossExplodeSound(Sound sound)
 {
 	Boss->SetExplodeSound(sound);
@@ -385,17 +390,14 @@ void EnemyControl::FixedUpdate()
 
 void EnemyControl::NextWave()
 {
-	Wave++;
+	float wave = Wave++;
+	Reset();
+	Wave = wave;
 }
 
 void EnemyControl::NewGame()
 {
 	DeathStar->NewGame();
-
-	for (const auto& rock : Rocks)
-	{
-		rock->Destroy();
-	}
 }
 
 void EnemyControl::Reset()
@@ -427,6 +429,15 @@ void EnemyControl::Reset()
 	{
 		ufo->Reset();
 	}
+
+	for (const auto& rock : Rocks)
+	{
+		rock->Destroy();
+	}
+
+	DeathStar->Reset();
+
+	Boss->Reset();
 }
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)

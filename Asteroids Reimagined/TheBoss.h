@@ -32,6 +32,7 @@ public:
 	void SetShotModel(LineModelPoints model);
 	void SetMineModel(LineModelPoints model);
 
+	void SetOnSound(Sound sound);
 	void SetExplodeSound(Sound sound);
 	void SetShieldHitSound(Sound sound);
 	void SetShieldDownSound(Sound sound);
@@ -74,6 +75,7 @@ private:
 	float FireTimerSetting = 0;
 	float HitPoints = 100.0f;
 
+	Sound OnSound = {};
 	Sound ShieldHitSound = {};
 	Sound ShieldDownSound = {};
 	Sound HitSound = {};

@@ -120,6 +120,8 @@ void Enemy1::Destroy()
 
 void Enemy1::Reset()
 {
+	Enemy::Reset();
+
 	Destroy();
 
 	Managers.EM.SetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);

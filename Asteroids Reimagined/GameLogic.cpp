@@ -197,18 +197,19 @@ void GameLogic::GameInput()
 			Player->Paused = true;
 		}
 
-#if DEBUG
-		if (IsKeyPressed(KEY_F5))
-		{
-			Enemies->NextWave();
-		}
-
-		if (IsKeyPressed(KEY_F6))
-		{
-			Player->ExtraLife();
-		}
-#endif
 	}
+
+#if DEBUG
+	if (IsKeyPressed(KEY_F5))
+	{
+		Enemies->NextWave();
+	}
+
+	if (IsKeyPressed(KEY_F6))
+	{
+		Player->ExtraLife();
+	}
+#endif
 
 	if (IsKeyPressed(KEY_I))
 	{
