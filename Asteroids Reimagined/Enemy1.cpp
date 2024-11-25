@@ -184,7 +184,6 @@ void Enemy1::FireMissile() //TODO: Move common parts to Enemy class.
 		Missiles.push_back(DBG_NEW TheMissile());
 		Managers.EM.AddLineModel(Missiles.back(), MissileModel);
 		Missiles.back()->SetPlayer(Player);
-		Missiles.back()->SetParticleManager(Particles);
 		Missiles.back()->SetOnSound(MissileOnSound);
 		Missiles.back()->SetExplodeSound(MissileExplodeSound);
 		Missiles.back()->BeginRun();

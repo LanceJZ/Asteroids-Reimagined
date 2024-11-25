@@ -231,14 +231,6 @@ void EnemyControl::SetBossSpineFireSound(Sound sound)
 	Boss->SetSpineFireSound(sound);
 }
 
-void EnemyControl::SetParticleManager(ParticleManager* particles)
-{
-	Particles = particles;
-
-	DeathStar->SetParticleManager(particles);
-	Boss->SetParticleManager(particles);
-}
-
 bool EnemyControl::Initialize(Utilities* utilities)
 {
 	Common::Initialize(TheUtilities);
@@ -518,7 +510,6 @@ void EnemyControl::SpawnUFO()
 		UFOs.back()->SetBigSound(UFOBigSound);
 		UFOs.back()->SetSmallSound(UFOSmallSound);
 		UFOs.back()->SetPlayer(Player);
-		UFOs.back()->SetParticleManager(Particles);
 		UFOs.back()->BeginRun();
 
 		for (const auto& enemy : EnemyOnes)
@@ -579,7 +570,6 @@ void EnemyControl::SpawnEnemyOne()
 		EnemyOnes.back()->SetOnSound(EnemyOneOnSound);
 		EnemyOnes.back()->SetMissileOnSound(EnemyOneMissileOnSound);
 		EnemyOnes.back()->SetPlayer(Player);
-		EnemyOnes.back()->SetParticleManager(Particles);
 		EnemyOnes.back()->BeginRun();
 	}
 
@@ -638,7 +628,6 @@ void EnemyControl::SpawnEnemyTwo()
 		EnemyTwos.back()->SetExplodeSound(EnemyTwoExplodeSound);
 		EnemyTwos.back()->SetOnSound(EnemyTwoOnSound);
 		EnemyTwos.back()->SetPlayer(Player);
-		EnemyTwos.back()->SetParticleManager(Particles);
 		EnemyTwos.back()->BeginRun();
 	}
 
@@ -824,7 +813,7 @@ void EnemyControl::CheckRockCollisions()
 
 				Rocks.at(i)->Destroy();
 				Managers.EM.ResetTimer(DeathStarSpawnTimerID);
-				Particles->SpawnLineParticles(Rocks.at(i)->Position,
+				Particles.SpawnLineParticles(Rocks.at(i)->Position,
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f, 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 

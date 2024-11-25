@@ -146,11 +146,6 @@ void ThePlayer::SetMineExplodeSound(Sound sound)
 	MineExplodeSound = sound;
 }
 
-void ThePlayer::SetParticleManager(ParticleManager* particleManager)
-{
-	Particles = particleManager;
-}
-
 void ThePlayer::SetCrosshairModel(LineModelPoints model)
 {
 	Crosshair->SetModel(model);
@@ -288,7 +283,7 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Entity::Hit();
 
 		PlaySound(ExplodeSound);
-		Particles->SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
+		Particles.SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
 			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
 		Acceleration = { 0 };
 		Velocity = { 0 };
@@ -749,7 +744,6 @@ void ThePlayer::DropHomingMine()
 		Mines.back()->SetModel(MineModel);
 		Mines.back()->ModelColor = GRAY;
 		Mines.back()->SetExplodeSound(MineExplodeSound);
-		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();
 	}
 

@@ -7,7 +7,6 @@
 #include "Enemy1.h"
 #include "Enemy2.h"
 #include "TheBoss.h"
-#include "ParticleManager.h"
 
 class EnemyControl : public Common
 {
@@ -71,8 +70,6 @@ public:
 	void SetBossTurretExplodeSound(Sound sound);
 	void SetBossSpineFireSound(Sound sound);
 
-	void SetParticleManager(ParticleManager* particles);
-
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
 
@@ -132,7 +129,6 @@ private:
 	LineModelPoints MineModel;
 
 	ThePlayer *Player = nullptr;
-	ParticleManager *Particles = nullptr;
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

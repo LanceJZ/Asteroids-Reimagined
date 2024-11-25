@@ -5,7 +5,6 @@
 #include "TheHomingMine.h"
 #include "ThePlasmaShot.h"
 #include "TheScore.h"
-#include "ParticleManager.h"
 
 enum SecondaryWeaponType
 {
@@ -150,7 +149,6 @@ private:
 	LineModelPoints BigShotModel;
 
 	TheScore* Score = {};
-	ParticleManager* Particles = {};
 
 	std::vector<LineModel*> AmmoMeterModels = {};
 

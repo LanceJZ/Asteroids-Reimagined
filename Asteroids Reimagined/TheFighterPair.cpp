@@ -60,14 +60,6 @@ void TheFighterPair::SetExplodeSound(Sound sound)
 	ExplodeSound = sound;
 }
 
-void TheFighterPair::SetParticleManager(ParticleManager* particleManager)
-{
-	for (const auto& fighter : Fighters)
-	{
-		fighter->SetParticleManager(particleManager);
-	}
-}
-
 bool TheFighterPair::Initialize(Utilities* utilities)
 {
 	Entity::Initialize(TheUtilities);

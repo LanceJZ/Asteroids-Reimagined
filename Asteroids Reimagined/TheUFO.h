@@ -3,7 +3,6 @@
 #include "Enemy.h"
 #include "ThePlayer.h"
 #include "Shot.h"
-#include "ParticleManager.h"
 
 class TheUFO : public Enemy
 {

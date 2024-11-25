@@ -8,7 +8,6 @@ Game::Game()
 	//BackGroundID = Managers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = Managers.EM.AddCommon(Enemies = DBG_NEW EnemyControl());
 	PlayerID = Managers.EM.AddLineModel(Player = DBG_NEW ThePlayer());
-	ParticlesID = Managers.EM.AddCommon(Particles = DBG_NEW ParticleManager());
 }
 
 Game::~Game()
@@ -23,7 +22,6 @@ bool Game::Initialize(Utilities* utilities) //Initialize
 	Enemies->Initialize(utilities);
 	Logic->Initialize(utilities);
 	Player->Initialize(utilities);
-	Particles->Initialize(utilities);
 
 	DisableCursor();
 
@@ -129,9 +127,6 @@ bool Game::Load()
 
 bool Game::BeginRun()
 {
-	Particles->SetManagers(Managers);
-	Player->SetParticleManager(Particles);
-	Enemies->SetParticleManager(Particles);
 
 	//Any Entities added after this point need this method fired manually if needed.
 

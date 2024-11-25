@@ -31,16 +31,6 @@ void TheBoss::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheBoss::SetParticleManager(ParticleManager* particleManager)
-{
-	Particles = particleManager;
-
-	for (const auto& turret : Turrets)
-	{
-		turret->SetParticleManager(particleManager);
-	}
-}
-
 void TheBoss::SetShieldModel(LineModelPoints model)
 {
 	Shield->SetModel(model);
@@ -321,7 +311,7 @@ void TheBoss::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	Particles->SpawnLineParticles(Position,
+	Particles.SpawnLineParticles(Position,
 		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
 
@@ -536,7 +526,6 @@ void TheBoss::FireMissile()
 		Missiles.back()->SetExplodeSound(MissileExplodeSound);
 		Missiles.back()->SetOnSound(MissileOnSound);
 		Missiles.back()->SetPlayer(Player);
-		Missiles.back()->SetParticleManager(Particles);
 		Missiles.back()->BeginRun();
 	}
 
@@ -573,7 +562,6 @@ void TheBoss::DropMine()
 		Managers.EM.AddLineModel(Mines.back(), MineModel);
 		Mines.back()->SetPlayer(Player);
 		Mines.back()->SetExplodeSound(MineExplodeSound);
-		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();
 	}
 

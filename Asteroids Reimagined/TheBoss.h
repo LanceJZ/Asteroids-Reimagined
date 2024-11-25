@@ -22,7 +22,6 @@ public:
 	std::vector<Shot*> Shots;
 
 	void SetPlayer(ThePlayer* player);
-	void SetParticleManager(ParticleManager* particleManager);
 
 	void SetShieldModel(LineModelPoints model);
 	void SetTurretModel(LineModelPoints model);
@@ -98,7 +97,6 @@ private:
 	LineModel* RightSpineMount = nullptr;
 	LineModel* LeftSpineMount = nullptr;
 
-	ParticleManager* Particles = nullptr;
 	ThePlayer* Player = nullptr;
 
 	std::vector<Vector3> Path;

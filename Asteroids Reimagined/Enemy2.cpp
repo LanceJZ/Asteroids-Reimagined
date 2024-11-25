@@ -164,7 +164,6 @@ void Enemy2::DropMine()
 		Managers.EM.AddLineModel(Mines.back(), MineModel);
 		Mines.back()->SetPlayer(Player);
 		Mines.back()->SetExplodeSound(MineExplodeSound);
-		Mines.back()->SetParticleManager(Particles);
 		Mines.back()->BeginRun();
 	}
 

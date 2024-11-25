@@ -18,7 +18,6 @@ public:
 	void SetWedgeModel(LineModelPoints model);
 
 	void SetExplodeSound(Sound sound);
-	void SetParticleManager(ParticleManager* particleManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();

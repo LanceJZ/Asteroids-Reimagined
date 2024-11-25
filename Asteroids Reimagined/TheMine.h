@@ -1,7 +1,6 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
-#include "ParticleManager.h"
 #include "Enemy.h"
 
 class TheMine : public Enemy

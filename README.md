@@ -101,3 +101,4 @@ Reworked Knightmare Engine so that it has three separate frame time hits, Update
 Knightmare Engine Update, optimizations were made. Using raylib 5.5 release now.
 Collisions are much more accurate now. Update is divided into half and run twice for each render. So that collisions are checked twice every frame, with half the movement.
 Optimizations on keyboard/mouse/controller input. Added new mouse controls, can switch using the I button at any time.
+Changed Particles, made it Global.

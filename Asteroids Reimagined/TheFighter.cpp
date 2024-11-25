@@ -13,11 +13,6 @@ void TheFighter::SetExplodeSound(Sound sound)
 	Enemy::SetExplodeSound(sound);
 }
 
-void TheFighter::SetParticleManager(ParticleManager* particleManager)
-{
-	Enemy::SetParticleManager(particleManager);
-}
-
 bool TheFighter::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(TheUtilities);

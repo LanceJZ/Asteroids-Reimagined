@@ -12,7 +12,6 @@ public:
 	std::vector<Shot*> Shots;
 
 	void SetPlayer(ThePlayer* player);
-	void SetParticleManager(ParticleManager* particleManager);
 
 	void SetShotModel(LineModelPoints model);
 
@@ -43,7 +42,6 @@ private:
 
 	LineModelPoints ShotModel = {};
 
-	ParticleManager* Particles = nullptr;
 	ThePlayer* Player = nullptr;
 
 	void Fire();

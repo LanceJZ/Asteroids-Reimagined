@@ -35,14 +35,6 @@ void TheDeathStar::SetSpawnSound(Sound sound)
 	SpawnSound = sound;
 }
 
-void TheDeathStar::SetParticleManager(ParticleManager* particleManager)
-{
-	for (const auto& fighterPair : FighterPairs)
-	{
-		fighterPair->SetParticleManager(particleManager);
-	}
-}
-
 void TheDeathStar::SetPlayer(ThePlayer* player)
 {
 	Player = player;

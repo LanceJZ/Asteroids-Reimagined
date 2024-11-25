@@ -2,7 +2,6 @@
 #include "Globals.h"
 #include "ThePlayer.h"
 #include "Shot.h"
-#include "ParticleManager.h"
 
 class Enemy : public LineModel
 {
@@ -20,7 +19,6 @@ public:
 	std::vector<Enemy*> Enemy2Refs;
 
 	void SetPlayer(ThePlayer* player);
-	void SetParticleManager(ParticleManager* particleManager);
 
 	void SetShotModel(LineModelPoints model);
 
@@ -64,7 +62,6 @@ protected:
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
 	ThePlayer* Player = nullptr;
-	ParticleManager* Particles = nullptr;
 	Sound FireSound = {};
 	Sound ExplodeSound = {};
 	Sound OnSound = {};

@@ -1,6 +1,5 @@
 #pragma once
 #include "Globals.h"
-#include "ParticleManager.h"
 
 class TheHomingMine : public LineModel
 {
@@ -11,7 +10,6 @@ public:
 	bool GameOver = false;
 
 	void SetExplodeSound(Sound sound);
-	void SetParticleManager(ParticleManager* particles);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -32,8 +30,6 @@ private:
 	size_t LifeTimerID = 0;
 
 	Sound ExplodeSound = {};
-
-	ParticleManager* Particles = nullptr;
 
 	Entity* Target = nullptr;
 };

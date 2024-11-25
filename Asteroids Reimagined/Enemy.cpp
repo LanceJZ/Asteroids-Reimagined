@@ -29,11 +29,6 @@ void Enemy::SetExplodeSound(Sound explodeSound)
 	ExplodeSound = explodeSound;
 }
 
-void Enemy::SetParticleManager(ParticleManager* particleManager)
-{
-	Particles = particleManager;
-}
-
 bool Enemy::Initialize(Utilities* utilities)
 {
 	LineModel::Initialize(utilities);
@@ -172,7 +167,7 @@ void Enemy::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	if (Particles != nullptr) Particles->SpawnLineParticles(Position,
+	Particles.SpawnLineParticles(Position,
 		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
 
