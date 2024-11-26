@@ -80,7 +80,7 @@ void TheBossTurret::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	Particles.SpawnLineParticles(GetWorldPosition(),
+	Particles.SpawnLineDots(GetWorldPosition(),
 		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
 

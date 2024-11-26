@@ -63,6 +63,9 @@
     <ClCompile Include="LineParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LineModelParticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -114,9 +117,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LineParticle.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="raymath_operators.h">
+    <ClInclude Include="LineModelParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

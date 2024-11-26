@@ -382,7 +382,7 @@ void EnemyControl::FixedUpdate()
 
 void EnemyControl::NextWave()
 {
-	float wave = Wave++;
+	int wave = Wave++;
 	Reset();
 	Wave = wave;
 }
@@ -813,7 +813,7 @@ void EnemyControl::CheckRockCollisions()
 
 				Rocks.at(i)->Destroy();
 				Managers.EM.ResetTimer(DeathStarSpawnTimerID);
-				Particles.SpawnLineParticles(Rocks.at(i)->Position,
+				Particles.SpawnLineDots(Rocks.at(i)->Position,
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f, 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 

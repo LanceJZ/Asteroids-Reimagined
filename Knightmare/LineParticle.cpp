@@ -8,9 +8,9 @@ LineParticle::~LineParticle()
 {
 }
 
-void LineParticle::SetManagers(TheManagers* managers)
+void LineParticle::SetEntityManager(EntityManager* entityManager)
 {
-	Managers = managers;
+	EM = entityManager;
 }
 
 bool LineParticle::Initialize(Utilities* utilities)
@@ -24,7 +24,7 @@ bool LineParticle::BeginRun()
 {
 	LineModel::BeginRun();
 
-	LifeTimerID = Managers->EM.AddTimer();
+	LifeTimerID = EM->AddTimer();
 
 	return false;
 }
@@ -33,7 +33,7 @@ void LineParticle::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (Managers->EM.TimerElapsed(LifeTimerID))
+	if (EM->TimerElapsed(LifeTimerID))
 	{
 		Enabled = false;
 	}
@@ -44,18 +44,21 @@ void LineParticle::Draw3D()
 	LineModel::Draw3D();
 }
 
-void LineParticle::Spawn(Vector3 position, Vector3 velocity, float radius, float speed, float time)
+void LineParticle::Spawn(Vector3 position, Vector3 velocity, float radius,
+	float maxSpeed, float maxTime)
 {
-	Enabled = true;
 	Vector3 spawnPosition = position;
+
 	spawnPosition.x += GetRandomFloat(-radius, radius);
 	spawnPosition.y += GetRandomFloat(-radius, radius);
-	Position = spawnPosition;
 
-	Vector3 addedVelocity = GetRandomVelocity(GetRandomFloat(speed * 0.25f, speed));
+	LineModel::Spawn(spawnPosition);
+
+	Vector3 addedVelocity = GetRandomVelocity(GetRandomFloat(maxSpeed * 0.25f,
+		maxSpeed));
 	Velocity = Vector3Add(velocity, addedVelocity);
 
-	Managers->EM.ResetTimer(LifeTimerID, time);
+	EM->ResetTimer(LifeTimerID, GetRandomFloat(maxTime * 0.25f, maxTime));
 }
 
 void LineParticle::Destroy()

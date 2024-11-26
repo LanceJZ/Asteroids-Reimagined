@@ -1,13 +1,13 @@
 #pragma once
 #include "Model3D.h"
-#include "TheManagers.h"
+#include "EntityManager.h"
 
 class ParticleCube : public Model3D
 {
 public:
 	ParticleCube();
 	virtual ~ParticleCube();
-	void SetManagers(TheManagers* Managers);
+	void SetManagers(EntityManager* Managers);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -22,5 +22,5 @@ public:
 private:
 	size_t LifeTimerID = 0;
 
-	TheManagers* Managers= nullptr;
+	EntityManager* EM= nullptr;
 };

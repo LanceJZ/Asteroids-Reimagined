@@ -2,13 +2,13 @@
 #include "LineModel.h"
 #include "EntityManager.h"
 
-class LineParticle : public LineModel
+class LineModelParticle : public LineModel
 {
 public:
-	LineParticle();
-	virtual ~LineParticle();
+	LineModelParticle();
+	virtual ~LineModelParticle();
 
-	void SetEntityManager(EntityManager* entityManager);
+	void SetEntityManager(EntityManager *entityManager);
 
 	bool Initialize(Utilities* utilities);
 	bool BeginRun();
@@ -16,8 +16,8 @@ public:
 	void Update(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position, Vector3 velocity, float radius,
-		float maxSpeed, float maxTime);
+	void Spawn(Vector3 position, Vector3 velocity,
+		float rotationZ, float maxSpeed,float maxTime);
 	void Destroy();
 
 private:

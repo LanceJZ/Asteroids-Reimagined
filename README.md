@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.52.223 Released.
+Asteroids Reimagined RC 4.54.223 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -39,6 +39,7 @@ Fixed absence of particles, forgot I changed that in my engine.
 Fixed bug where pause can not be undone.
 Fixed Player Mine having sound after game is over.
 Fixed issue in controller firing main weapon not working when pointed at upper left. Issue was created when optimizing code.
+Fixed Turret Heat Bar and Secondary Weapon ammo bar does not rotate with ship.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -93,6 +94,7 @@ Player Flame is now an ever changing random color.
 When Player gets shield Power Up ship turns blue.
 Experimental alternate mouse input, use I to switch modes.
 Boss Ship has sound now.
+Player ship blows up into lines.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
@@ -102,3 +104,4 @@ Knightmare Engine Update, optimizations were made. Using raylib 5.5 release now.
 Collisions are much more accurate now. Update is divided into half and run twice for each render. So that collisions are checked twice every frame, with half the movement.
 Optimizations on keyboard/mouse/controller input. Added new mouse controls, can switch using the I button at any time.
 Changed Particles, made it Global.
+Added Exploding Line Model to Particle Manager.

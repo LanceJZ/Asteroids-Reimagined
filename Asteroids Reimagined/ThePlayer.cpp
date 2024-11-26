@@ -185,11 +185,11 @@ bool ThePlayer::BeginRun()
 	Turret->X(-9.0f);
 	Turret->SetParent(*this);
 
-	TurretHeatMeter->Y(-25.0f);
+	TurretHeatMeter->Y(-32.0f);
 	TurretHeatMeter->SetParent(*this);
 	TurretHeatMeter->Enabled = false;
 	TurretHeatMeter->Radius = 0.0f;
-	TurretHeatMeter->RotationLocked = true;
+	TurretHeatMeter->IgnoreParentRotation = true;
 
 	WeaponTypeIconBig->SetParent(*this);
 	WeaponTypeIconDoubleLeft->SetParent(*this);
@@ -197,11 +197,11 @@ bool ThePlayer::BeginRun()
 	WeaponTypeIconPlasma->SetParent(*this);
 	WeaponTypeIconMine->SetParent(*this);
 
-	WeaponTypeIconBig->RotationLocked = true;
-	WeaponTypeIconDoubleLeft->RotationLocked = true;
-	WeaponTypeIconDoubleRight->RotationLocked = true;
-	WeaponTypeIconPlasma->RotationLocked = true;
-	WeaponTypeIconMine->RotationLocked = true;
+	WeaponTypeIconBig->IgnoreParentRotation = true;
+	WeaponTypeIconDoubleLeft->IgnoreParentRotation = true;
+	WeaponTypeIconDoubleRight->IgnoreParentRotation = true;
+	WeaponTypeIconPlasma->IgnoreParentRotation = true;
+	WeaponTypeIconMine->IgnoreParentRotation = true;
 
 	float iconX = - 15.0f;
 
@@ -283,8 +283,12 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Entity::Hit();
 
 		PlaySound(ExplodeSound);
-		Particles.SpawnLineParticles(Position, Vector3Multiply(Velocity, { 0.25f }),
-			Radius * 0.25f, 30.0f, 40, 3.0f, WHITE);
+		Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
+			Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
+		Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
+			RotationZ, 20.0f, 4.0f, WHITE);
+		Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
+			Turret->RotationZ, 15.0f, 3.0f, WHITE);
 		Acceleration = { 0 };
 		Velocity = { 0 };
 		Lives--;
@@ -1027,7 +1031,7 @@ void ThePlayer::AmmoMeterUpdate(int ammoCount)
 	if (AmmoMeterModels.size() < ammoCount)
 		AddAmmoMeterModels(ammoCount - (int)AmmoMeterModels.size());
 
-	Vector2 position = { 0.0f, 30.0f };
+	Vector2 position = { 0.0f, 32.0f };
 
 	for (const auto& model : AmmoMeterModels)
 	{
@@ -1053,7 +1057,7 @@ void ThePlayer::AddAmmoMeterModels(int count)
 		Managers.EM.AddLineModel(AmmoMeterModels.back());
 		AmmoMeterModels.back()->SetModel(ShotModel);
 		AmmoMeterModels.back()->SetParent(*this);
-		AmmoMeterModels.back()->RotationLocked = true;
+		AmmoMeterModels.back()->IgnoreParentRotation = true;
 		AmmoMeterModels.back()->Scale = 0.5f;
 		AmmoMeterModels.back()->Radius = 0.0f;
 		AmmoMeterModels.back()->BeginRun();

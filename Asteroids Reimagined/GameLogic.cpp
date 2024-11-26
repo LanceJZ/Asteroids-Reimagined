@@ -5,7 +5,7 @@ GameLogic::GameLogic()
 	Managers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
 	Managers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
 
-	ExplodeTimerID = Managers.EM.AddTimer(3.1f);
+	ExplodeTimerID = Managers.EM.AddTimer(4.25f);
 }
 
 GameLogic::~GameLogic()

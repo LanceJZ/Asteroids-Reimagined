@@ -33,7 +33,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.52.123");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.54.223");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -48,7 +48,7 @@ int WinMain()
 
 	Managers.EM.SetUtilities(&TheUtilities);
 	Particles.Initialize(&TheUtilities);
-	Particles.SetManagers(Managers);
+	Particles.SetManagers(Managers.EM);
 
 	// Define the camera to look into our 3D world.
 	// Camera position

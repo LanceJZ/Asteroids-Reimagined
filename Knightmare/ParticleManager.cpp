@@ -27,12 +27,12 @@ void ParticleManager::SetCubeModel(Model model)
 
 void ParticleManager::SetLineModel(LineModelPoints model)
 {
-	ParticleModel = model; //Replace with vertices in code.
+	ParticleModel = model;
 }
 
-void ParticleManager::SetManagers(TheManagers& managers)
+void ParticleManager::SetManagers(EntityManager& managers)
 {
-	Managers = &managers;
+	EM = &managers;
 }
 
 bool ParticleManager::BeginRun()
@@ -48,24 +48,46 @@ void ParticleManager::FixedUpdate()
 }
 
 void ParticleManager::SpawnCubes(Vector3 position, Vector3 velocity, float radius,
-	float speed, int count, float time, Color color)
+	float maxSpeed, int count, float maxTime, Color color)
 {
 	for (int i = 0; i < count; i++)
 	{
 		CubeParticles[SpawnCubePool(color)]->Spawn(position, velocity,
-			radius, speed,  time);
+			radius, maxSpeed,  maxTime);
 	}
 
 }
 
-void ParticleManager::SpawnLineParticles(Vector3 position, Vector3 velocity,
-	float radius,
-	float speed, int count, float time, Color color)
+void ParticleManager::SpawnLineDots(Vector3 position, Vector3 velocity,
+	float radius, float maxSpeed, int count, float maxTime, Color color)
 {
 	for (int i = 0; i < count; i++)
 	{
 		LineParticles[SpawnLinePool(color)]->Spawn(position, velocity,
-			radius, speed, time);
+			radius, maxSpeed, maxTime);
+	}
+}
+
+void ParticleManager::SpawnLineModelExplosion(LineModelPoints model,
+	Vector3 position, Vector3 velocity, float rotationZ,
+	float maxSpeed, float maxTime, Color color)
+{
+	std::vector<LineModelPoints> lineModelParts = {};
+
+	for (int i = 0; i < model.linePoints.size() - 1; i++)
+	{
+		LineModelPoints lineModelPart = {};
+
+		lineModelPart.linePoints.push_back(model.linePoints[i]);
+		lineModelPart.linePoints.push_back(model.linePoints[i + 1]);
+
+		lineModelParts.push_back(lineModelPart);
+	}
+
+	for (const auto& partModel : lineModelParts)
+	{
+		ExplosionLineModels[SpawnLineModelPool(partModel, color)]->Spawn(position,
+			velocity, rotationZ, maxSpeed, maxTime);
 	}
 }
 
@@ -101,31 +123,36 @@ bool ParticleManager::GetParticlesActive()
 		}
 	}
 
+	for (const auto& lineModel : ExplosionLineModels)
+	{
+		if (lineModel->Enabled)
+		{
+			return true;
+		}
+	}
+
 	return false;
 }
 size_t ParticleManager::SpawnCubePool(Color color)
 {
 		bool spawnNew = true;
 		size_t cubeSpawnNumber = CubeParticles.size();
-		int cubeNumber = 0;
 
-		for (const auto& cube : CubeParticles)
+		for (size_t check = 0; check < cubeSpawnNumber; check++)
 		{
-			if (!cube->Enabled)
+			if (!CubeParticles[check]->Enabled)
 			{
 				spawnNew = false;
-				cubeSpawnNumber = cubeNumber;
+				cubeSpawnNumber = check;
 				break;
 			}
-
-			cubeNumber++;
 		}
 
 		if (spawnNew)
 		{
 			CubeParticles.push_back(DBG_NEW ParticleCube());
-			Managers->EM.AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
-			CubeParticles[cubeSpawnNumber]->SetManagers(Managers);
+			EM->AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
+			CubeParticles[cubeSpawnNumber]->SetManagers(EM);
 			CubeParticles[cubeSpawnNumber]->Initialize(TheUtilities);
 			CubeParticles[cubeSpawnNumber]->BeginRun();
 		}
@@ -139,25 +166,22 @@ size_t ParticleManager::SpawnLinePool(Color color)
 {
 	bool spawnNew = true;
 	size_t lineSpawnNumber = LineParticles.size();
-	int lineNumber = 0;
 
-	for (const auto& line : LineParticles)
+	for (size_t check = 0; check < lineSpawnNumber; check++)
 	{
-		if (!line->Enabled)
+		if (!LineParticles[check]->Enabled)
 		{
 			spawnNew = false;
-			lineSpawnNumber = lineNumber;
+			lineSpawnNumber = check;
 			break;
 		}
-
-		lineNumber++;
 	}
 
 	if (spawnNew)
 	{
 		LineParticles.push_back(DBG_NEW LineParticle());
-		Managers->EM.AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
-		LineParticles.back()->SetManagers(Managers);
+		EM->AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
+		LineParticles.back()->SetEntityManager(EM);
 		LineParticles.back()->Initialize(TheUtilities);
 		LineParticles.back()->BeginRun();
 	}
@@ -165,4 +189,34 @@ size_t ParticleManager::SpawnLinePool(Color color)
 	LineParticles[lineSpawnNumber]->ModelColor = color;
 
 	return lineSpawnNumber;
+}
+
+size_t ParticleManager::SpawnLineModelPool(LineModelPoints modelPart,
+	Color color)
+{
+	bool spawnNew = true;
+	size_t lineModelSpawnNumber = ExplosionLineModels.size();
+
+	for (size_t check = 0; check < lineModelSpawnNumber; check++)
+	{
+		if (!ExplosionLineModels[check]->Enabled)
+		{
+			spawnNew = false;
+			lineModelSpawnNumber = check;
+			break;
+		}
+	}
+
+	if (spawnNew)
+	{
+		ExplosionLineModels.push_back(DBG_NEW LineModelParticle());
+		EM->AddLineModel(ExplosionLineModels[lineModelSpawnNumber], modelPart);
+		ExplosionLineModels[lineModelSpawnNumber]->SetEntityManager(EM);
+		ExplosionLineModels[lineModelSpawnNumber]->Initialize(TheUtilities);
+		ExplosionLineModels[lineModelSpawnNumber]->BeginRun();
+	}
+
+	ExplosionLineModels[lineModelSpawnNumber]->ModelColor = color;
+
+	return lineModelSpawnNumber;
 }

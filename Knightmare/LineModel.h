@@ -5,7 +5,6 @@
 class LineModel : public Entity
 {
 public:
-	bool RotationLocked = false;
 	float Alpha = 255;
 	Color ModelColor = WHITE;
 

@@ -1,8 +1,9 @@
 #pragma once
 #include "Common.h"
-#include "TheManagers.h"
+#include "EntityManager.h"
 #include "ParticleCube.h"
 #include "LineParticle.h"
+#include "LineModelParticle.h"
 
 #ifdef _DEBUG
 	#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -18,7 +19,7 @@ public:
 	ParticleManager();
 	virtual ~ParticleManager();
 
-	void SetManagers(TheManagers& managers);
+	void SetManagers(EntityManager& entityManager);
 	void SetCubeModel(Model model);
 	void SetLineModel(LineModelPoints model);
 
@@ -27,23 +28,30 @@ public:
 
 	virtual void FixedUpdate();
 
-	virtual void SpawnCubes(Vector3 position, Vector3 velocity, float radius,
-		float speed,  int count, float time, Color color);
-	virtual void SpawnLineParticles(Vector3 position, Vector3 velocity, float radius,
-		float speed, int count, float time, Color color);
-	virtual void ResetCubes();
-	virtual void ResetLines();
+	void SpawnCubes(Vector3 position, Vector3 velocity, float radius,
+		float maxSpeed,  int count, float maxTime, Color color);
+	void SpawnLineDots(Vector3 position, Vector3 velocity, float radius,
+		float maxSpeed, int count, float maxTime, Color color);
+	void SpawnLineModelExplosion(LineModelPoints model, Vector3 position,
+		Vector3 velocity, float rotationZ, float maxSpeed,
+		float maxTime, Color color);
+
+	void ResetCubes();
+	void ResetLines();
 
 	bool GetParticlesActive();
 protected:
 	Model CubeModel = {};
 	LineModelPoints ParticleModel = {};
-	TheManagers* Managers = {};
+	EntityManager* EM = nullptr;
 
 private:
 	std::vector<ParticleCube*> CubeParticles;
 	std::vector<LineParticle*> LineParticles;
+	std::vector<LineModelParticle*> ExplosionLineModels;
+
 	size_t SpawnCubePool(Color color);
 	size_t SpawnLinePool(Color color);
+	size_t SpawnLineModelPool(LineModelPoints modelPart, Color color);
 };
 
