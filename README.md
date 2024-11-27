@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.54.223 Released.
+Asteroids Reimagined RC 4.54.323 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -95,6 +95,8 @@ When Player gets shield Power Up ship turns blue.
 Experimental alternate mouse input, use I to switch modes.
 Boss Ship has sound now.
 Player ship blows up into lines.
+Changed Boss ship behavior. Boss turns to edge if player hit. Changed Spawn position.
+Improved Player Explosion VFX.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

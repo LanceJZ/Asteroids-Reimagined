@@ -68,6 +68,8 @@ protected:
 	Sound SpawnSound = {};
 	LineModelPoints ShotModel = {};
 
+	std::vector<Vector3> Path = {};
+
 	void Shoot();
 	void Shoot(Vector3 velocity);
 	void ChasePlayer();

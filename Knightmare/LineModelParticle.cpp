@@ -54,12 +54,19 @@ void LineModelParticle::Spawn(Vector3 position, Vector3 velocity,
 
 	//Change so that the velocity goes out from position.
 	//The position is the center of the line model that is exploding.
+	//Add the two points and divide by two to get the middle of the line model.
 	Vector3 velocityX = GetRandomVelocity(GetRandomFloat(maxSpeed * 0.15f,
 		maxSpeed * 0.5f));
 
-	Vector3 velocityOut = GetVelocityFromAngleZ(rotationZ, maxSpeed * 0.5f);
+	Vector3 velocityOut = Vector3((GetLineModel().linePoints.at(0).x +
+		GetLineModel().linePoints.at(1).x) / 2.0f,
+		(GetLineModel().linePoints.at(0).y +
+			GetLineModel().linePoints.at(1).y) / 2.0f, 0);
 
-	Velocity = (velocity * Vector3(0.1f, 0.1f, 0)) + velocityX + velocityOut;
+	velocityOut = Vector3Multiply(velocityOut, Vector3(maxSpeed * 0.15f,
+		maxSpeed * 0.15f, 0));
+
+	Velocity = (velocity * Vector3(0.05f, 0.05f, 0)) + velocityX + velocityOut;
 	RotationZ = rotationZ;
 }
 

@@ -96,7 +96,12 @@ void GameLogic::FixedUpdate()
 		if (Player->GetBeenHit())
 		{
 			Managers.EM.ResetTimer(ExplodeTimerID);
+
+			if (Enemies->Boss->Enabled) Managers.EM.ResetTimer(ExplodeTimerID, 3.0f);
+
 			Player->Destroy();
+
+			if (Enemies->Boss->Enabled) Enemies->Boss->PlayerHit = true;
 		}
 
 		if (!Player->Enabled && !Player->GetBeenHit() &&

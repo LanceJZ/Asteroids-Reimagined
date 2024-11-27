@@ -286,9 +286,9 @@ void ThePlayer::Hit(Vector3 location, Vector3 velocity)
 		Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
 			Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
 		Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
-			RotationZ, 20.0f, 4.0f, WHITE);
+			RotationZ, 10.0f, 4.0f, ModelColor);
 		Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
-			Turret->RotationZ, 15.0f, 3.0f, WHITE);
+			Turret->RotationZ, 15.0f, 3.0f, Turret->ModelColor);
 		Acceleration = { 0 };
 		Velocity = { 0 };
 		Lives--;

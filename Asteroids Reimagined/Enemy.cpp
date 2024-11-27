@@ -391,7 +391,7 @@ void Enemy::DestinationTarget()
 		break;
 	}
 }
-
+//TODO: Make it so enemy turns to avoid rocks. Use the path vector if needed.
 void Enemy::DestinationTopBottom()
 {
 	if (Player->X() > X())

@@ -189,7 +189,7 @@ bool TheBoss::BeginRun()
 	LeftSpineMount->Position = { 19.0f * 2.0f, 30.0f * 2.0f, 0.0f };
 	RightSpineMount->Position = { 19.0f * 2.0f, -30.0f * 2.0f, 0.0f };
 
-	float edge = 0.666f;
+	float edge = 0.7666f;
 	float upper = WindowHeight * edge;
 	float lower = -WindowHeight * edge;
 	float left = -WindowWidth * edge;
@@ -231,6 +231,8 @@ void TheBoss::Update(float deltaTime)
 
 	FireShotAtPlayerArea->Enabled = Enabled;
 
+	Vector3 p = Position;
+
 	CheckCollisions();
 }
 
@@ -238,12 +240,18 @@ void TheBoss::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
+	if (!Player->GameOver) PlaySound(OnSound);
+
+	if (PlayerHit)
+	{
+		HeadToEdge();
+		return;
+	}
+
 	if (AllTurretsDead) ChasePlayer();
 	else HeadToNextWaypoint();
 
 	ReachedWaypoint();
-
-	if (!Player->GameOver) PlaySound(OnSound);
 }
 
 void TheBoss::Draw3D()
@@ -301,8 +309,8 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 		turret->Spawn();
 	}
 
-	Managers.EM.SetTimer(MissileFireTimerID, 2.5f);
-	Managers.EM.SetTimer(MineDropTimerID, 2.0f);
+	Managers.EM.SetTimer(MissileFireTimerID, 5.5f);
+	Managers.EM.SetTimer(MineDropTimerID, 4.0f);
 }
 
 void TheBoss::Hit()
@@ -354,6 +362,41 @@ void TheBoss::HeadToNextWaypoint()
 void TheBoss::ChasePlayer()
 {
 	SetRotateVelocity(Player->Position, 0.30f, 30.0f);
+}
+
+void TheBoss::HeadToEdge()
+{
+	Vector3 edge = { 0.0f, 0.0f, 0.0f };
+
+	if (X() > 0.0f)
+	{
+		edge.x = WindowWidth * 0.75f;
+	}
+	else
+	{
+		edge.x = -WindowWidth * 0.75f;
+	}
+
+	if (Y() > 0.0f)
+	{
+		edge.y = WindowHeight * 0.75f;
+	}
+	else
+	{
+		edge.y = -WindowHeight * 0.75f;
+	}
+
+	SetRotateVelocity(edge, 0.60f, 90.0f);
+
+	if (Player->Enabled) PlayerHit = false;
+
+	Managers.EM.SetTimer(MissileFireTimerID, 5.5f);
+	Managers.EM.SetTimer(MineDropTimerID, 4.0f);
+
+	for (const auto& turret : Turrets)
+	{
+		turret->Spawn();
+	}
 }
 
 void TheBoss::ReachedWaypoint()

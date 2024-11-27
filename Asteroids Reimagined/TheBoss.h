@@ -12,6 +12,7 @@ public:
 	TheBoss();
 	virtual ~TheBoss();
 
+	bool PlayerHit = false;
 	int Wave = 0;
 
 	Entity* FireShotAtPlayerArea = nullptr;
@@ -103,6 +104,7 @@ private:
 
 	void HeadToNextWaypoint();
 	void ChasePlayer();
+	void HeadToEdge();
 	void ReachedWaypoint();
 	void CheckCollisions();
 	void FireShots();

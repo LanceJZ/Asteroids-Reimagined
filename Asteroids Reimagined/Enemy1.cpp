@@ -144,7 +144,7 @@ void Enemy1::DestinationTarget()
 
 }
 
-void Enemy1::FireMissile() //TODO: Move common parts to Enemy class.
+void Enemy1::FireMissile()
 {
 	float missileTimeAmountAdjust = ((float)(Wave - 3) * 0.5f) +
 		((((float)MissilesFired++)) * 0.05f);

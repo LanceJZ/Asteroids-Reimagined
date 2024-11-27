@@ -71,7 +71,7 @@ void TheBossTurret::Spawn()
 {
 	Enabled = true;
 
-	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting);
+	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting * 3.5f);
 }
 
 void TheBossTurret::Hit()
