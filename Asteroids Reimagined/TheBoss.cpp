@@ -80,7 +80,7 @@ void TheBoss::SetMineModel(LineModelPoints model)
 void TheBoss::SetOnSound(Sound sound)
 {
 	OnSound = sound;
-	SetSoundVolume(OnSound, 0.25f);
+	SetSoundVolume(OnSound, 0.15f);
 }
 
 void TheBoss::SetExplodeSound(Sound sound)
@@ -231,7 +231,7 @@ void TheBoss::Update(float deltaTime)
 
 	FireShotAtPlayerArea->Enabled = Enabled;
 
-	Vector3 p = Position;
+	//Vector3 p = Position;
 
 	CheckCollisions();
 }
@@ -240,7 +240,7 @@ void TheBoss::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (!Player->GameOver) PlaySound(OnSound);
+	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
 
 	if (PlayerHit)
 	{
@@ -366,29 +366,69 @@ void TheBoss::ChasePlayer()
 
 void TheBoss::HeadToEdge()
 {
-	Vector3 edge = { 0.0f, 0.0f, 0.0f };
+	Vector3 edge = { WindowWidth * 0.666f, WindowHeight * 0.666f, 0.0f };
 
-	if (X() > 0.0f)
+	float speed = 10.0f;
+	float rotationSpeed = 0.60f;
+
+	float topDistance = Vector3Distance(Position, { Position.x, -edge.y, 0 });
+	float bottomDistance = Vector3Distance(Position, { Position.x, edge.y, 0 });
+	float leftDistance = Vector3Distance(Position, { -edge.x, Position.y, 0 });
+	float rightDistance = Vector3Distance(Position, { edge.x, Position.y, 0 });
+
+	if (topDistance < bottomDistance &&
+		topDistance < leftDistance && topDistance < rightDistance)
 	{
-		edge.x = WindowWidth * 0.75f;
+		edge.y = -edge.y;
+		edge.x = Position.x;
+
+		if (Y() > -edge.y)
+		{
+			speed = 1.0f;
+
+			edge.y = -WindowWidth;
+		}
+	}
+	else if (bottomDistance < topDistance &&
+		bottomDistance < leftDistance && bottomDistance < rightDistance)
+	{
+		edge.y = edge.y;
+		edge.x = Position.x;
+
+		if (Y() > edge.y)
+		{
+			speed = 1.0f;
+
+			edge.y = WindowWidth;
+		}
+	}
+	else if (leftDistance < rightDistance &&
+		leftDistance < topDistance && leftDistance < bottomDistance)
+	{
+		edge.x = -edge.x;
+		edge.y = Position.y;
+
+		if (X() > -edge.x)
+		{
+			speed = 1.0f;
+
+			edge.x = -WindowWidth;
+		}
 	}
 	else
 	{
-		edge.x = -WindowWidth * 0.75f;
+		edge.x = edge.x;
+		edge.y = Position.y;
+
+		if (X() > edge.x)
+		{
+			speed = 1.0f;
+
+			edge.x = WindowWidth;
+		}
 	}
 
-	if (Y() > 0.0f)
-	{
-		edge.y = WindowHeight * 0.75f;
-	}
-	else
-	{
-		edge.y = -WindowHeight * 0.75f;
-	}
-
-	SetRotateVelocity(edge, 0.60f, 90.0f);
-
-	if (Player->Enabled) PlayerHit = false;
+	SetRotateVelocity(edge, rotationSpeed, speed);
 
 	Managers.EM.SetTimer(MissileFireTimerID, 5.5f);
 	Managers.EM.SetTimer(MineDropTimerID, 4.0f);

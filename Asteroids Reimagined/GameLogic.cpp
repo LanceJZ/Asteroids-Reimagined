@@ -123,9 +123,9 @@ void GameLogic::FixedUpdate()
 			{
 				Player->Spawn();
 				PlayerClear->Enabled = false;
+				Enemies->Boss->PlayerHit = false;
 				PlayerShipDisplay();
 			}
-
 		}
 
 		if (Player->NewLife)

@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.54.323 Released.
+Asteroids Reimagined RC 4.54.423 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -40,6 +40,7 @@ Fixed bug where pause can not be undone.
 Fixed Player Mine having sound after game is over.
 Fixed issue in controller firing main weapon not working when pointed at upper left. Issue was created when optimizing code.
 Fixed Turret Heat Bar and Secondary Weapon ammo bar does not rotate with ship.
+Fixed sound issue with Boss.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -97,6 +98,7 @@ Boss Ship has sound now.
 Player ship blows up into lines.
 Changed Boss ship behavior. Boss turns to edge if player hit. Changed Spawn position.
 Improved Player Explosion VFX.
+Improved how Boss handles player hit.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

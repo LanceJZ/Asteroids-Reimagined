@@ -702,8 +702,8 @@ void EnemyControl::SpawnBoss()
 {
 	Vector3 position = {0.0f, 0.0f, 0.0f };
 	float rotation = 0;
-	float width = Boss->WindowWidth * 0.75f;
-	float height = Boss->WindowHeight * 0.75f;
+	float width = Boss->WindowWidth * 0.666f;
+	float height = Boss->WindowHeight * 0.666f;
 
 	int option = GetRandomValue(0, 3);
 
@@ -712,28 +712,28 @@ void EnemyControl::SpawnBoss()
 		position.x = width;
 		position.y = -height;
 
-		rotation = -HalfPi;
+		rotation = -PI;
 	}
 	else if (option == 1)
 	{
 		position.x = -width;
 		position.y = height;
 
-		rotation = PI;
+		rotation = 0.0f;
 	}
 	else if (option == 2)
 	{
 		position.x = -width;
 		position.y = -height;
 
-		rotation = PI + HalfPi;
+		rotation = 0.0f;
 	}
 	else if (option == 3)
 	{
 		position.x = width;
 		position.y = height;
 
-		rotation = HalfPi;
+		rotation = PI;
 	}
 
 	Boss->Wave = Wave;
