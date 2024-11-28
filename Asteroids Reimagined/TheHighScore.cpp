@@ -256,7 +256,7 @@ void TheHighScore::ConvertRawScoreListToArray()
 
 void TheHighScore::CheckForNewHighScore(int score)
 {
-	for (int rank = 0; rank < 10; rank++)
+	for (int rank = 0; rank < MaxScoreListLength; rank++)
 	{
 		if (score > HighScoreList[rank].Score)
 		{

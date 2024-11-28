@@ -41,6 +41,7 @@ Fixed Player Mine having sound after game is over.
 Fixed issue in controller firing main weapon not working when pointed at upper left. Issue was created when optimizing code.
 Fixed Turret Heat Bar and Secondary Weapon ammo bar does not rotate with ship.
 Fixed sound issue with Boss.
+Fixed bug in High Score, only the first ten were being checked.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
