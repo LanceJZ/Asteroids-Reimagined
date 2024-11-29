@@ -37,8 +37,8 @@ private:
 	int HighScoreSelectedLetter = 0;
 	int HighestScore = 0;
 
-	const int MaxScoreListLength = 50;
-	const int MaxHighScoreListNameLength = 5;
+	static const size_t MaxScoreListLength = 50;
+	static const size_t MaxHighScoreListNameLength = 5;
 
 	Color color = WHITE;
 
@@ -48,7 +48,7 @@ private:
 	Font TheFontLarge = {};
 	Font TheFontSmall = {};
 
-	ScoreList HighScoreList[50];
+	ScoreList HighScoreList[MaxScoreListLength];
 
 	void DisplayHighScoreList();
 	void NewHighScoreEntry();

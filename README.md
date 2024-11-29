@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.54.423 Released.
+Asteroids Reimagined RC 4.54.424 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -100,6 +100,7 @@ Player ship blows up into lines.
 Changed Boss ship behavior. Boss turns to edge if player hit. Changed Spawn position.
 Improved Player Explosion VFX.
 Improved how Boss handles player hit.
+Fixed bug in Engine for collisions for children.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.

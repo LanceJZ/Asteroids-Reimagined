@@ -383,7 +383,6 @@ bool GameLogic::CheckPlayerClear()
 	if (Enemies->DeathStar->CirclesIntersect(*PlayerClear))
 	{
 		return false;
-
 	}
 
 	for (const auto& fighterPair : Enemies->DeathStar->FighterPairs)

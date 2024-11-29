@@ -121,7 +121,10 @@ bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 {
 	if (!Enabled) return false;
 
-	Vector3 distance = Vector3Subtract(targetPosition, Position);
+	Vector3 distance = {};
+
+	if (!IsChild) distance = Vector3Subtract(targetPosition, Position);
+	else distance = Vector3Subtract(targetPosition, GetWorldPosition());
 
 	float radius = (Radius * Scale) + targetRadius;
 

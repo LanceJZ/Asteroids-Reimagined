@@ -260,16 +260,16 @@ void TheHighScore::CheckForNewHighScore(int score)
 	{
 		if (score > HighScoreList[rank].Score)
 		{
-			if (rank < 49)
+			if (rank < MaxScoreListLength - 1)
 			{
-				ScoreList oldScores[50];
+				ScoreList oldScores[MaxScoreListLength];
 
-				for (int oldRank = rank; oldRank < 50; oldRank++)
+				for (int oldRank = rank; oldRank < MaxScoreListLength; oldRank++)
 				{
 					oldScores[oldRank] = HighScoreList[oldRank];
 				}
 
-				for (int newRank = rank; newRank < 49; newRank++)
+				for (int newRank = rank; newRank < MaxScoreListLength - 1; newRank++)
 				{
 					HighScoreList[newRank + 1] = oldScores[newRank];
 				}
