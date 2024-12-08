@@ -75,8 +75,38 @@ void GameLogic::FixedUpdate()
 	{
 		if (!GameEnded)
 		{
-			HighScores->TheGameIsOver(Player->GetScore());
-			GameEnded = true;
+			bool done = true;
+
+			for (const auto& shot : Player->Shots)
+			{
+				if (shot->Enabled) done = false;
+			}
+
+			for (const auto& shot : Player->DoubleShots)
+			{
+				if (shot->Enabled) done = false;
+			}
+
+			for (const auto& shot : Player->BigShots)
+			{
+				if (shot->Enabled) done = false;
+			}
+
+			for (const auto& shot : Player->PlasmaShots)
+			{
+				if (shot->Enabled) done = false;
+			}
+
+			if (done)
+			{
+				GameEnded = true;
+				HighScores->TheGameIsOver(Player->GetScore());
+
+				for (const auto& mine : Player->Mines)
+				{
+					mine->Destroy();
+				}
+			}
 		}
 
 		return;
@@ -84,9 +114,9 @@ void GameLogic::FixedUpdate()
 
 	if (Player->GameOver)
 	{
-		State = MainMenu;
 		PlayerClear->Enabled = false;
 		Player->Destroy();
+		State = MainMenu;
 
 		return;
 	}

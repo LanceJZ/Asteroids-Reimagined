@@ -167,10 +167,9 @@ void Enemy::Hit()
 
 	if (!Player->GameOver) PlaySound(ExplodeSound);
 
-	Particles.SpawnLineDots(Position,
-		Vector3Multiply(Velocity, {0.25f}),
-		20, 100, 20, 2.0f, WHITE);
+	Player->ScoreUpdate(Points);
 
+	Explode();
 	Destroy();
 }
 
@@ -325,6 +324,15 @@ void Enemy::ChaseEnemy()
 	SetRotateVelocity(closestEnemyPosition, TurnSpeed, Speed);
 }
 
+void Enemy::Explode()
+{
+	Particles.SpawnLineDots(Position,
+		Vector3Multiply(Velocity, {0.25f}),
+		20, 100, 20, 2.0f, WHITE);
+
+	Destroy();
+}
+
 bool Enemy::CheckUFOActive()
 {
 	bool ufoActive = false;
@@ -455,10 +463,6 @@ bool Enemy::CheckCollisions()
 			shot->Destroy();
 			Hit();
 
-			if (Player->GameOver) return true;
-
-			Player->ScoreUpdate(Points);
-
 			return true;
 		}
 	}
@@ -469,10 +473,6 @@ bool Enemy::CheckCollisions()
 		{
 			shot->Destroy();
 			Hit();
-
-			if (Player->GameOver) return true;
-
-			Player->ScoreUpdate(Points);
 
 			return true;
 		}
@@ -488,10 +488,6 @@ bool Enemy::CheckCollisions()
 
 			Hit();
 
-			if (Player->GameOver) return true;
-
-			Player->ScoreUpdate(Points);
-
 			return true;
 		}
 	}
@@ -505,10 +501,6 @@ bool Enemy::CheckCollisions()
 			mine->Hit();
 			Hit();
 
-			if (Player->GameOver) return true;
-
-			Player->ScoreUpdate(Points);
-
 			return true;
 		}
 	}
@@ -520,10 +512,6 @@ bool Enemy::CheckCollisions()
 		if (CirclesIntersect(*plasma))
 		{
 			Hit();
-
-			if (Player->GameOver) return true;
-
-			Player->ScoreUpdate(Points);
 
 			return true;
 		}
@@ -580,7 +568,6 @@ bool Enemy::CheckCollisions()
 	{
 		if (CirclesIntersect(*Player))
 		{
-
 			if (!Player->Shield->Enabled)
 			{
 				Hit();
@@ -604,7 +591,7 @@ bool Enemy::CheckCollisions()
 			if (CirclesIntersect(*shot))
 			{
 				shot->Destroy();
-				Hit();
+				Explode();
 				return true;
 			}
 		}
@@ -613,8 +600,8 @@ bool Enemy::CheckCollisions()
 
 		if (ufo->CirclesIntersect(*this))
 		{
-			ufo->Hit();
-			Hit();
+			ufo->Destroy();
+			Explode();
 
 			return true;
 		}

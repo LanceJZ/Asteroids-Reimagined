@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.54.424 Released.
+Asteroids Reimagined RC 4.54.434 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
@@ -42,6 +42,8 @@ Fixed issue in controller firing main weapon not working when pointed at upper l
 Fixed Turret Heat Bar and Secondary Weapon ammo bar does not rotate with ship.
 Fixed sound issue with Boss.
 Fixed bug in High Score, only the first ten were being checked.
+Fixed bug in Engine for collisions for children.
+Fixed bug with high score, not counting shots fired that hit something after last player ship hit.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
@@ -100,7 +102,6 @@ Player ship blows up into lines.
 Changed Boss ship behavior. Boss turns to edge if player hit. Changed Spawn position.
 Improved Player Explosion VFX.
 Improved how Boss handles player hit.
-Fixed bug in Engine for collisions for children.
 
 Internal Changes:
 Knightmare Engine Update, Made every entity an Entity in Entity Manager.
@@ -111,3 +112,4 @@ Collisions are much more accurate now. Update is divided into half and run twice
 Optimizations on keyboard/mouse/controller input. Added new mouse controls, can switch using the I button at any time.
 Changed Particles, made it Global.
 Added Exploding Line Model to Particle Manager.
+Internal game engine tweaks for better performance.

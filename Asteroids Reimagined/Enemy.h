@@ -75,6 +75,7 @@ protected:
 	void ChasePlayer();
 	void ChaseUFO();
 	void ChaseEnemy();
+	void Explode();
 	bool CheckUFOActive();
 	bool CheckEnemyActive();
 	bool LeaveScreen();

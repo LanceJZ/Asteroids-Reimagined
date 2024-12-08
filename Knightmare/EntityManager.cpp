@@ -86,9 +86,16 @@ void EntityManager::Input()
 
 void EntityManager::Update(float deltaTime)
 {
+	float halfDeltaTime = deltaTime * 0.5f;
+
 	for (int i = 0; i < Entities.size(); i++)
 	{
-		if (Entities.at(i)->Enabled) Entities.at(i)->Update(deltaTime);
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
+	}
+
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
 	}
 
 	for (const auto& timer : Timers)
