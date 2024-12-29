@@ -1217,11 +1217,11 @@ void ThePlayer::Gamepad()
 
 void ThePlayer::Keyboard()
 {
-	if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
+	if (IsKeyDown(KEY_D))
 	{
 		RotateShip(1.0f);
 	}
-	else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
+	else if (IsKeyDown(KEY_A))
 	{
 		RotateShip(-1.0f);
 	}
@@ -1230,7 +1230,37 @@ void ThePlayer::Keyboard()
 		RotateStop();
 	}
 
-	if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W))
+	if (IsKeyPressed(KEY_M))
+	{
+		Crosshair->Enabled = !Crosshair->Enabled;
+		MouseTurnedOff = !MouseTurnedOff;
+	}
+
+	if (IsKeyDown(KEY_RIGHT))
+	{
+		Turret->RotationAccelerationZ += 20.25f;
+	}
+	else if (IsKeyDown(KEY_LEFT))
+	{
+		Turret->RotationAccelerationZ -= 20.25f;
+	}
+	else
+	{
+		Turret->RotationAccelerationZ = 0.0f;
+		Turret->RotationVelocityZ = 0.0f;
+	}
+
+	if (IsKeyDown(KEY_DOWN))
+	{
+		FireSecondary();
+	}
+
+	if (IsKeyDown(KEY_UP))
+	{
+		FireTurret();
+	}
+
+	if (IsKeyDown(KEY_W))
 	{
 		ThrustOn(1.0f);
 	}
@@ -1239,7 +1269,7 @@ void ThePlayer::Keyboard()
 		ThrustOff();
 	}
 
-	if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_SPACE)
+	if (IsKeyDown(KEY_SPACE)
 		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
 		ShieldOn();
@@ -1269,7 +1299,7 @@ void ThePlayer::Keyboard()
 
 void ThePlayer::Mouse()
 {
-	Crosshair->Enabled = true;
+	if (!MouseTurnedOff) Crosshair->Enabled = true;
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{

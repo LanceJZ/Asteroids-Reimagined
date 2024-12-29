@@ -53,6 +53,10 @@ void Entity::Update(float deltaTime)
 	DeltaTime = deltaTime;
 }
 
+void Entity::AlwaysUpdate(float deltaTime)
+{
+}
+
 void Entity::FixedUpdate(float deltaTime)
 {
 	Common::FixedUpdate();

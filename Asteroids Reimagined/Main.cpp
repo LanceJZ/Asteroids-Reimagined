@@ -74,11 +74,19 @@ int WinMain()
 	{
 		game.ProcessInput();
 
-		if (game.Logic->State != GameState::Pause)
+		float deltaTime = GetFrameTime();
+
+#if _DEBUG
+		if (deltaTime > 0.05f) deltaTime = 0.05f;
+#endif
+
+		Managers.EM.AlwaysUpdate(deltaTime);
+
+		if (game.Logic->State != GameState::Pause &&
+			game.Logic->State != GameState::Ended)
 		{
 			Managers.EM.Input();
 
-			float deltaTime = GetFrameTime();
 
 			Managers.EM.Update(deltaTime);
 			game.Update(deltaTime);

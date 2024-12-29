@@ -56,6 +56,7 @@ public:
 
 	virtual bool Initialize(Utilities* utilities);
 	virtual void Update(float deltaTime);
+	virtual void AlwaysUpdate(float deltaTime);
 	virtual void FixedUpdate(float deltaTime);
 	virtual void Draw3D();
 

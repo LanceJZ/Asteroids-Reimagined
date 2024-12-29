@@ -94,6 +94,7 @@ private:
 	bool PoweredUpRundown = false;
 	bool ShieldOverCharge = false;
 	bool GunOverCharge = false;
+	bool MouseTurnedOff = false;
 
 	size_t MagazineSize = 16;
 	size_t FireRateTimerID = 0;

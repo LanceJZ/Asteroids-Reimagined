@@ -17,6 +17,11 @@ void LineModel::Update(float deltaTime)
 	ModelColor.a = (char)Alpha;
 }
 
+void LineModel::AlwaysUpdate(float deltaTime)
+{
+	Entity::AlwaysUpdate(deltaTime);
+}
+
 void LineModel::Draw3D()
 {
 	Entity::Draw3D();
