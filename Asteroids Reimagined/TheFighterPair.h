@@ -19,7 +19,7 @@ public:
 
 	void SetExplodeSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

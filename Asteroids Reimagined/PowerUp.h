@@ -22,7 +22,7 @@ public:
 
 	PowerUpType Type = PowerUpType::Skyblue;
 
-	int Wave = 0;
+	int WaveNumber = 0;
 
 	PowerUp();
 	virtual ~PowerUp();
@@ -32,7 +32,7 @@ public:
 
 	void SetPickUpSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

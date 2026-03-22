@@ -2,14 +2,14 @@
 
 EnemyControl::EnemyControl()
 {
-	UFOSpawnTimerID = Managers.EM.AddTimer(20.0f);
-	DeathStarSpawnTimerID = Managers.EM.AddTimer(5.0f);
-	EnemyOneSpawnTimerID = Managers.EM.AddTimer(15.0f);
-	EnemyTwoSpawnTimerID = Managers.EM.AddTimer(12.0f);
-	BossExplodingTimerID = Managers.EM.AddTimer(5.0f);
+	UFOSpawnTimerID = EM.AddTimer(20.0f);
+	DeathStarSpawnTimerID = EM.AddTimer(5.0f);
+	EnemyOneSpawnTimerID = EM.AddTimer(15.0f);
+	EnemyTwoSpawnTimerID = EM.AddTimer(12.0f);
+	BossExplodingTimerID = EM.AddTimer(5.0f);
 
-	Managers.EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
-	Managers.EM.AddLineModel(Boss = DBG_NEW TheBoss());
+	EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
+	EM.AddLineModel(Boss = DBG_NEW TheBoss());
 }
 
 EnemyControl::~EnemyControl()
@@ -231,12 +231,12 @@ void EnemyControl::SetBossSpineFireSound(Sound sound)
 	Boss->SetSpineFireSound(sound);
 }
 
-bool EnemyControl::Initialize(Utilities* utilities)
+bool EnemyControl::Initialize()
 {
-	Common::Initialize(TheUtilities);
+	Common::Initialize();
 
-	DeathStar->Initialize(TheUtilities);
-	Boss->Initialize(TheUtilities);
+	DeathStar->Initialize();
+	Boss->Initialize();
 
 	return false;
 }
@@ -258,21 +258,6 @@ bool EnemyControl::BeginRun()
 void EnemyControl::Update()
 {
 	Common::Update();
-
-	for (const auto& ufo : UFOs)
-	{
-		ufo->CheckShotsHitPlayer();
-	}
-
-	for (const auto& enemy : EnemyOnes)
-	{
-		enemy->CheckShotsHitPlayer();
-	}
-
-	for (const auto& enemy : EnemyTwos)
-	{
-		enemy->CheckShotsHitPlayer();
-	}
 
 	CheckRockCollisions();
 }
@@ -297,24 +282,24 @@ void EnemyControl::FixedUpdate()
 
 	if (NoMoreRocks)
 	{
-		Wave++;
+		WaveNumber++;
 
 		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 
-		if (Wave % 5 == 0 && !Player->GameOver)
+		if (WaveNumber % 5 == 0 && !Player->GameOver)
 		{
 			ClearForBossWave = true;
 			return;
 		}
 
-		if (Wave > 5) RockSpawnCount += 2;
+		if (WaveNumber > 5) RockSpawnCount += 2;
 		else RockSpawnCount++;
 
-		if (Wave > 10) RockSpawnCount += 3;
-		if (Wave > 15) RockSpawnCount += 4;
-		if (Wave > 20) RockSpawnCount += 5;
-		if (Wave > 25) RockSpawnCount += 6;
-		if (Wave > 30) RockSpawnCount += 7;
+		if (WaveNumber > 10) RockSpawnCount += 3;
+		if (WaveNumber > 15) RockSpawnCount += 4;
+		if (WaveNumber > 20) RockSpawnCount += 5;
+		if (WaveNumber > 25) RockSpawnCount += 6;
+		if (WaveNumber > 30) RockSpawnCount += 7;
 
 		SpawnRocks({ 0, 0, 0 }, RockSpawnCount, TheRock::Large);
 	}
@@ -329,23 +314,23 @@ void EnemyControl::FixedUpdate()
 			ufo->DeathStarPosition = DeathStar->Position;
 		}
 	}
-	else if (Wave > 5 && RockCount < 10)
+	else if (WaveNumber > 5 && RockCount < 10)
 	{
-		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		if (EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
 			SpawnDeathStar();
 		}
 	}
-	else if (Wave > 1 && RockCount < 6)
+	else if (WaveNumber > 1 && RockCount < 6)
 	{
-		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		if (EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
 			SpawnDeathStar();
 		}
 	}
 	else if (RockCount < 3)
 	{
-		if (Managers.EM.TimerElapsed(DeathStarSpawnTimerID))
+		if (EM.TimerElapsed(DeathStarSpawnTimerID))
 		{
 			SpawnDeathStar();
 		}
@@ -353,55 +338,57 @@ void EnemyControl::FixedUpdate()
 
 	HaveHomingMineChaseEnemy();
 
-	if (Managers.EM.TimerElapsed(EnemyOneSpawnTimerID))
+	if (EM.TimerElapsed(EnemyOneSpawnTimerID))
 	{
-		Managers.EM.ResetTimer(EnemyOneSpawnTimerID, EnemyOneSpawnTimeAmount);
+		EM.ResetTimer(EnemyOneSpawnTimerID, EnemyOneSpawnTimeAmount);
 
 		if (!Player->GameOver && !Player->Enabled) return;
 
-		if (Wave > 2)
+		if (WaveNumber > 2)
 		{
 			SpawnEnemyOne();
 		}
 	}
 
-	if (Managers.EM.TimerElapsed(EnemyTwoSpawnTimerID))
+	if (EM.TimerElapsed(EnemyTwoSpawnTimerID))
 	{
-		Managers.EM.ResetTimer(EnemyTwoSpawnTimerID, EnemyTwoSpawnTimeAmount);
+		EM.ResetTimer(EnemyTwoSpawnTimerID, EnemyTwoSpawnTimeAmount);
 
 		if (!Player->GameOver && !Player->Enabled) return;
 
-		if (Wave > 3)
+		if (WaveNumber > 3)
 		{
 			SpawnEnemyTwo();
 		}
 	}
 
-	if (Managers.EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
+	if (EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
 }
 
 void EnemyControl::NextWave()
 {
-	int wave = Wave++;
+	int wave = WaveNumber++;
 	Reset();
-	Wave = wave;
+	WaveNumber = wave;
 }
 
 void EnemyControl::NewGame()
 {
+	Reset();
 	DeathStar->NewGame();
 }
 
 void EnemyControl::Reset()
 {
 	BossWave = false;
+	NoMoreRocks = true;
 	ClearForBossWave = false;
-	Wave = 0;
+	WaveNumber = 0;
 	UFOSpawnCount = 0;
 	RockSpawnCount = StartRockCount;
 
-	Managers.EM.ResetTimer(UFOSpawnTimerID, 35.0f);
-	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+	EM.ResetTimer(UFOSpawnTimerID, 35.0f);
+	EM.ResetTimer(DeathStarSpawnTimerID);
 
 	UFOSpawnTimeAmount = 30.0f;
 	EnemyOneSpawnTimeAmount = 15.0f;
@@ -453,7 +440,7 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 		{
 			size_t rockType = GetRandomValue(0, 3);
 			Rocks.push_back(DBG_NEW TheRock());
-			Managers.EM.AddLineModel(Rocks.back(), (RockModels[rockType]));
+			EM.AddLineModel(Rocks.back(), (RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->BeginRun();
@@ -470,20 +457,20 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 void EnemyControl::SpawnUFO()
 {
-	float ufoTimeAmountAdjust = ((float)Wave * 0.3f) + ((float)UFOSpawnCount * 0.03f);
+	float ufoTimeAmountAdjust = ((float)WaveNumber * 0.3f) + ((float)UFOSpawnCount * 0.03f);
 
 	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
 		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
 
 	float min = (UFOSpawnTimeAmount - ufoTimeAmountAdjust) /
-		(((float)Wave * 0.1f) + 1.0f);
+		(((float)WaveNumber * 0.1f) + 1.0f);
 	float max = UFOSpawnTimeAmount - ufoTimeAmountAdjust;
 
 	if (max < min) min = max;
 
-	float ufoSpawnTime = GetRandomFloat(min, max);
+	float ufoSpawnTime = M.GetRandomFloat(min, max);
 
-	Managers.EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
+	EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
 
 	if (!Player->GameOver && !Player->Enabled) return;
 
@@ -503,7 +490,7 @@ void EnemyControl::SpawnUFO()
 	if (spawnUFO)
 	{
 		UFOs.push_back(DBG_NEW TheUFO());
-		Managers.EM.AddLineModel(UFOs.back(), UFOModel);
+		EM.AddLineModel(UFOs.back(), UFOModel);
 		UFOs.back()->SetShotModel(ShotModel);
 		UFOs.back()->SetExplodeSound(UFOExplodeSound);
 		UFOs.back()->SetFireSound(UFOFireSound);
@@ -526,23 +513,23 @@ void EnemyControl::SpawnUFO()
 
 void EnemyControl::SpawnEnemyOne()
 {
-	float enemyTimeAmountAdjust = ((float)(Wave - 3) * 0.5f) +
+	float enemyTimeAmountAdjust = ((float)(WaveNumber - 3) * 0.5f) +
 		(((float)(EnemyOneSpawnCount++)) * 0.05f);
 
 	if (EnemyOneSpawnTimeAmount < enemyTimeAmountAdjust - 0.5f)
 		enemyTimeAmountAdjust = EnemyOneSpawnTimeAmount - 0.5f;
 
 	float min = (EnemyOneSpawnTimeAmount - enemyTimeAmountAdjust) /
-		(((float)(Wave - 3) * 0.1f) + 1.0f);
+		(((float)(WaveNumber - 3) * 0.1f) + 1.0f);
 	float max = EnemyOneSpawnTimeAmount - enemyTimeAmountAdjust;
 
 	if (min < 0.15f) min = 0.15f;
 
 	if (min > max) max = min * 2.0f;
 
-	float enemyTime = GetRandomFloat(min, max);
+	float enemyTime = M.GetRandomFloat(min, max);
 
-	Managers.EM.ResetTimer(EnemyOneSpawnTimerID, enemyTime);
+	EM.ResetTimer(EnemyOneSpawnTimerID, enemyTime);
 
 	bool spawnOne = true;
 	size_t enemyNumber = EnemyOnes.size();
@@ -560,7 +547,7 @@ void EnemyControl::SpawnEnemyOne()
 	if (spawnOne)
 	{
 		EnemyOnes.push_back(DBG_NEW Enemy1());
-		Managers.EM.AddLineModel(EnemyOnes.back(), EnemyOneModel);
+		EM.AddLineModel(EnemyOnes.back(), EnemyOneModel);
 		EnemyOnes.back()->SetShotModel(ShotModel);
 		EnemyOnes.back()->SetMissileModel(MissileModel);
 		EnemyOnes.back()->SetSpawnSound(EnemyOneSpawnSound);
@@ -573,7 +560,7 @@ void EnemyControl::SpawnEnemyOne()
 		EnemyOnes.back()->BeginRun();
 	}
 
-	EnemyOnes.at(enemyNumber)->Wave = Wave;
+	EnemyOnes.at(enemyNumber)->WaveNumber = WaveNumber;
 	EnemyOnes.at(enemyNumber)->UFORefs.clear();
 
 	for (const auto& ufo : UFOs)
@@ -586,23 +573,23 @@ void EnemyControl::SpawnEnemyOne()
 
 void EnemyControl::SpawnEnemyTwo()
 {
-	float enemyTimeAmountAdjust = ((float)(Wave - 4) * 0.5f) +
+	float enemyTimeAmountAdjust = ((float)(WaveNumber - 4) * 0.5f) +
 		(((float)(EnemyTwoSpawnCount++)) * 0.05f);
 
 	if (EnemyTwoSpawnTimeAmount < enemyTimeAmountAdjust - 0.5f)
 		enemyTimeAmountAdjust = EnemyTwoSpawnTimeAmount - 0.5f;
 
 	float min = (EnemyTwoSpawnTimeAmount - enemyTimeAmountAdjust) /
-		(((float)(Wave - 4) * 0.1f) + 1.0f);
+		(((float)(WaveNumber - 4) * 0.1f) + 1.0f);
 	float max = EnemyTwoSpawnTimeAmount - enemyTimeAmountAdjust;
 
 	if (min < 0.15f) min = 0.15f;
 
 	if (min > max) max = min * 2.0f;
 
-	float enemyTime = GetRandomFloat(min, max);
+	float enemyTime = M.GetRandomFloat(min, max);
 
-	Managers.EM.ResetTimer(EnemyTwoSpawnTimerID, enemyTime);
+	EM.ResetTimer(EnemyTwoSpawnTimerID, enemyTime);
 
 	bool spawnOne = true;
 	size_t enemyNumber = EnemyTwos.size();
@@ -620,7 +607,7 @@ void EnemyControl::SpawnEnemyTwo()
 	if (spawnOne)
 	{
 		EnemyTwos.push_back(DBG_NEW Enemy2());
-		Managers.EM.AddLineModel(EnemyTwos.back(), EnemyTwoModel);
+		EM.AddLineModel(EnemyTwos.back(), EnemyTwoModel);
 		EnemyTwos.back()->SetShotModel(ShotModel);
 		EnemyTwos.back()->SetMineModel(MineModel);
 		EnemyTwos.back()->SetSpawnSound(EnemyTwoSpawnSound);
@@ -631,7 +618,7 @@ void EnemyControl::SpawnEnemyTwo()
 		EnemyTwos.back()->BeginRun();
 	}
 
-	EnemyTwos.at(enemyNumber)->Wave = Wave;
+	EnemyTwos.at(enemyNumber)->WaveNumber = WaveNumber;
 	EnemyTwos.at(enemyNumber)->UFORefs.clear();
 
 	for (const auto& ufo : UFOs)
@@ -693,7 +680,7 @@ void EnemyControl::SpawnDeathStar()
 		}
 	}
 
-	DeathStar->Wave = Wave;
+	DeathStar->WaveNumber = WaveNumber;
 	DeathStar->Spawn(position);
 	SpawnedDeathStar = true;
 }
@@ -702,8 +689,8 @@ void EnemyControl::SpawnBoss()
 {
 	Vector3 position = {0.0f, 0.0f, 0.0f };
 	float rotation = 0;
-	float width = Boss->WindowWidth * 0.666f;
-	float height = Boss->WindowHeight * 0.666f;
+	float width = Boss->WindowHalfWidth * 0.666f;
+	float height = Boss->WindowHalfHeight * 0.666f;
 
 	int option = GetRandomValue(0, 3);
 
@@ -736,7 +723,7 @@ void EnemyControl::SpawnBoss()
 		rotation = PI;
 	}
 
-	Boss->Wave = Wave;
+	Boss->WaveNumber = WaveNumber;
 
 	Boss->Spawn(position, rotation);
 }
@@ -771,7 +758,7 @@ void EnemyControl::CheckDeathStarStatus()
 	if (deadJim)
 	{
 		SpawnedDeathStar = false;
-		Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+		EM.ResetTimer(DeathStarSpawnTimerID);
 		return;
 	}
 }
@@ -800,7 +787,7 @@ void EnemyControl::CheckRockCollisions()
 				{
 					int chance = 30;
 
-					chance -= (int)((Wave + 1) * 3.5f);
+					chance -= (int)((WaveNumber + 1) * 3.5f);
 
 					if (chance < 1) chance = 1;
 
@@ -812,14 +799,14 @@ void EnemyControl::CheckRockCollisions()
 				}
 
 				Rocks.at(i)->Destroy();
-				Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+				EM.ResetTimer(DeathStarSpawnTimerID);
 				Particles.SpawnLineDots(Rocks.at(i)->Position,
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f, 0.25f }),
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
 
 				int count = 0;
 
-				int max = (int)(Wave * 0.5f) + 5;
+				int max = (int)(WaveNumber * 0.5f) + 5;
 
 				if (ufoHitRock) count = GetRandomValue(4, max);
 				else if (enemyHitRock) count = GetRandomValue(3, max);
@@ -962,18 +949,18 @@ void EnemyControl::MakeReadyForBossWave()
 
 void EnemyControl::DoBossStuff()
 {
-	if (!Boss->Enabled && Managers.EM.TimerElapsed(BossExplodingTimerID))
+	if (!Boss->Enabled && EM.TimerElapsed(BossExplodingTimerID))
 	{
 		BossWave = false;
-		Managers.EM.ResetTimer(UFOSpawnTimerID);
-		Managers.EM.ResetTimer(EnemyOneSpawnTimerID);
-		Managers.EM.ResetTimer(EnemyTwoSpawnTimerID);
+		EM.ResetTimer(UFOSpawnTimerID);
+		EM.ResetTimer(EnemyOneSpawnTimerID);
+		EM.ResetTimer(EnemyTwoSpawnTimerID);
 	}
 
 	if (Boss->GetBeenHit())
 	{
 		Boss->Destroy();
-		Managers.EM.ResetTimer(BossExplodingTimerID);
+		EM.ResetTimer(BossExplodingTimerID);
 	}
 
 	if (Player->GameOver)
@@ -982,7 +969,7 @@ void EnemyControl::DoBossStuff()
 		BossWave = false;
 	}
 
-	Managers.EM.ResetTimer(DeathStarSpawnTimerID);
+	EM.ResetTimer(DeathStarSpawnTimerID);
 }
 
 void EnemyControl::HaveHomingMineChaseEnemy()

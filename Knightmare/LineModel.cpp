@@ -17,11 +17,6 @@ void LineModel::Update(float deltaTime)
 	ModelColor.a = (char)Alpha;
 }
 
-void LineModel::AlwaysUpdate(float deltaTime)
-{
-	Entity::AlwaysUpdate(deltaTime);
-}
-
 void LineModel::Draw3D()
 {
 	Entity::Draw3D();
@@ -84,13 +79,15 @@ void LineModel::SetModel(LineModelPoints lines, float scale)
 	Entity::SetModel(lines, scale);
 }
 
-void LineModel::DrawLines(std::vector <Vector3> points, Vector3 rotationAxis, Color color)
+void LineModel::DrawLines(std::vector <Vector3> points,
+	Vector3 rotationAxis, Color color)
 {
 	if (points.size() >= 2)
 	{
 		rlPushMatrix();
 		rlTranslatef(Position.x, Position.y, 0);
-		rlRotatef(RotationZ * (float)(180.0f / PI), rotationAxis.x, rotationAxis.y, rotationAxis.z);
+		rlRotatef(RotationZ * (float)(180.0f / PI), rotationAxis.x,
+			rotationAxis.y, rotationAxis.z);
 		rlBegin(RL_LINES);
 		rlColor4ub(color.r, color.g, color.b, color.a);
 

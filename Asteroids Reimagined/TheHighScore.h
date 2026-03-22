@@ -14,7 +14,7 @@ public:
 	TheHighScore();
 	virtual ~TheHighScore();
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 	void Load();
 

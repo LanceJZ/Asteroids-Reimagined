@@ -17,11 +17,11 @@ Model3D::~Model3D()
 	}
 }
 
-bool Model3D::Initialize(Utilities* utilities)
+bool Model3D::Initialize()
 {
-	Entity::Initialize(utilities);
+	Entity::Initialize();
 
-	ViewableArea = { WindowWidth, WindowHeight };
+	HalfViewableArea = { (float)WindowHalfWidth, (float)WindowHalfHeight };
 
 	return false;
 }
@@ -54,6 +54,11 @@ void Model3D::Update(float deltaTime)
 	Entity::Update(deltaTime);
 }
 
+void Model3D::AlwaysUpdate(float deltaTime)
+{
+	Entity::AlwaysUpdate(deltaTime);
+}
+
 void Model3D::FixedUpdate(float deltaTime)
 {
 	Entity::FixedUpdate(deltaTime);
@@ -81,16 +86,16 @@ void Model3D::Draw3D()
 			Vector3 parentTest = GetWorldPosition();
 
 			if (TheCamera3D->position.x > parentTest.x + VerticesSize +
-				ViewableArea.x || TheCamera3D->position.x < parentTest.x +
-				-VerticesSize + -ViewableArea.x)
+				HalfViewableArea.x || TheCamera3D->position.x < parentTest.x +
+				-VerticesSize + -HalfViewableArea.x)
 			{
 				WasCulled = true;
 				return;
 			}
 
 			if (TheCamera3D->position.y > parentTest.y + VerticesSize +
-				ViewableArea.y || TheCamera3D->position.y < parentTest.y +
-				-VerticesSize + -ViewableArea.y)
+				HalfViewableArea.y || TheCamera3D->position.y < parentTest.y +
+				-VerticesSize + -HalfViewableArea.y)
 			{
 				WasCulled = true;
 				return;
@@ -99,18 +104,18 @@ void Model3D::Draw3D()
 		else
 		{
 			if (TheCamera3D->position.x > GetWorldPosition().x + VerticesSize +
-				ViewableArea.x
+				HalfViewableArea.x
 				|| TheCamera3D->position.x < GetWorldPosition().x + -VerticesSize +
-				-ViewableArea.x)
+				-HalfViewableArea.x)
 			{
 				WasCulled = true;
 				return;
 			}
 
 			if (TheCamera3D->position.y > GetWorldPosition().y + VerticesSize +
-				ViewableArea.y ||
+				HalfViewableArea.y ||
 				TheCamera3D->position.y < GetWorldPosition().y + -VerticesSize +
-				-ViewableArea.y)
+				-HalfViewableArea.y)
 			{
 				WasCulled = true;
 				return;
@@ -119,16 +124,30 @@ void Model3D::Draw3D()
 	}
 
 	WasCulled = false;
-	BeforeCalculate();
-	CalculateWorldVectors();
 
-	DrawModel(TheModel, ModelPosition, ModelScale, ModelColor);	// Draw 3D model
+	if (!Stationary)
+	{
+		BeforeCalculate();
+		CalculateWorldVectors();
 
-	AfterCalculate();
+		DrawModel(TheModel, ModelPosition, ModelScale, ModelColor);	// Draw 3D model
+		AfterCalculate();
+	}
+	else
+	{
+		DrawModel(TheModel, Position, Scale, ModelColor);// Draw stationary 3D model
+	}
+}
+
+void Model3D::Draw2D()
+{
+	Entity::Draw2D();
 }
 
 void Model3D::SetModel(Model &model, float scale)
 {
+	if (model.meshes == nullptr) return;
+
 	Entity::SetModel(model, scale);
 }
 
@@ -147,8 +166,15 @@ Camera* Model3D::GetCamera()
 	return TheCamera3D;
 }
 
+void Model3D::Spawn(Vector3 pos)
+{
+	Entity::Spawn(pos);
+}
+
 void Model3D::Spawn(Vector3 pos, Vector3 vel)
 {
+	Spawn(pos);
+	Velocity = vel;
 }
 
 void Model3D::Unload()

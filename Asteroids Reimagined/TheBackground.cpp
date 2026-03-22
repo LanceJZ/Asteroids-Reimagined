@@ -9,9 +9,9 @@ TheBackground::~TheBackground()
 {
 }
 
-bool TheBackground::Initialize(Utilities* utilities)
+bool TheBackground::Initialize()
 {
-	Common::Initialize(utilities);
+	Common::Initialize();
 
 	return false;
 }

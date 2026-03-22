@@ -2,31 +2,31 @@
 
 ThePlayer::ThePlayer()
 {
-	Managers.EM.AddLineModel(Flame = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(Shield = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(Turret = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(Crosshair = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(WeaponTypeIconDoubleLeft = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(WeaponTypeIconDoubleRight = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(WeaponTypeIconBig = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(WeaponTypeIconMine = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(WeaponTypeIconPlasma = DBG_NEW LineModel());
+	EM.AddLineModel(Flame = DBG_NEW LineModel());
+	EM.AddLineModel(Shield = DBG_NEW LineModel());
+	EM.AddLineModel(Turret = DBG_NEW LineModel());
+	EM.AddLineModel(Crosshair = DBG_NEW LineModel());
+	EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
+	EM.AddLineModel(WeaponTypeIconDoubleLeft = DBG_NEW LineModel());
+	EM.AddLineModel(WeaponTypeIconDoubleRight = DBG_NEW LineModel());
+	EM.AddLineModel(WeaponTypeIconBig = DBG_NEW LineModel());
+	EM.AddLineModel(WeaponTypeIconMine = DBG_NEW LineModel());
+	EM.AddLineModel(WeaponTypeIconPlasma = DBG_NEW LineModel());
 
-	Managers.EM.AddOnScreenText(Score = DBG_NEW TheScore());
+	EM.AddOnScreenText(Score = DBG_NEW TheScoreOld());
 
-	FireRateTimerID = Managers.EM.AddTimer(0.125f);
-	TurretCooldownTimerID = Managers.EM.AddTimer(2.0f);
-	TurretHeatTimerID = Managers.EM.AddTimer(0.15f);
-	PowerupTimerID = Managers.EM.AddTimer();
-	PowerupRundownTimerID = Managers.EM.AddTimer(2.0f);
-	PowerUpBlinkTimerID = Managers.EM.AddTimer(0.25f);
-	FlameColorTimerID = Managers.EM.AddTimer(0.15f);
+	FireRateTimerID = EM.AddTimer(0.125f);
+	TurretCooldownTimerID = EM.AddTimer(2.0f);
+	TurretHeatTimerID = EM.AddTimer(0.15f);
+	PowerupTimerID = EM.AddTimer();
+	PowerupRundownTimerID = EM.AddTimer(2.0f);
+	PowerUpBlinkTimerID = EM.AddTimer(0.25f);
+	FlameColorTimerID = EM.AddTimer(0.15f);
 
 	for (int i = 0; i < MagazineSize; i++)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots.back());
+		EM.AddLineModel(Shots.back());
 	}
 }
 
@@ -152,9 +152,9 @@ void ThePlayer::SetCrosshairModel(LineModelPoints model)
 	Crosshair->Radius = 0.0f;
 }
 
-bool ThePlayer::Initialize(Utilities* utilities)
+bool ThePlayer::Initialize()
 {
-	LineModel::Initialize(TheUtilities);
+	LineModel::Initialize();
 	//Scale = 35.0f;
 
 	Flame->Enabled = false;
@@ -181,6 +181,7 @@ bool ThePlayer::BeginRun()
 {
 	Flame->SetParent(*this);
 	Shield->SetParent(*this);
+	Shield->ShowCollision = true;
 
 	Turret->X(-9.0f);
 	Turret->SetParent(*this);
@@ -272,62 +273,57 @@ void ThePlayer::Draw3D()
 
 }
 
-void ThePlayer::Hit(Vector3 location, Vector3 velocity)
+void ThePlayer::Hit()
 {
-	if (Shield->Enabled)
+	//TODO:: If shield on, use shield hit function.
+	Entity::Hit();
+
+	PlaySound(ExplodeSound);
+	Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
+		Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
+	Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
+		RotationZ, 10.0f, 4.0f, ModelColor);
+	Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
+		Turret->RotationZ, 15.0f, 3.0f, Turret->ModelColor);
+	Acceleration = { 0 };
+	Velocity = { 0 };
+	Lives--;
+	Turret->Enabled = false;
+	Flame->Enabled = false;
+	Shield->Enabled = false;
+	Crosshair->Enabled = false;
+	TurretHeatMeter->Enabled = false;
+	WeaponTypeIconBig->Enabled = false;
+	WeaponTypeIconDoubleLeft->Enabled = false;
+	WeaponTypeIconDoubleRight->Enabled = false;
+	WeaponTypeIconPlasma->Enabled = false;
+	WeaponTypeIconMine->Enabled = false;
+	RotateStop();
+
+	for (const auto& model : AmmoMeterModels)
 	{
-		ShieldHit(location, velocity);
+		model->Enabled = false;
 	}
-	else
+
+	if (Lives < 0)
 	{
-		Entity::Hit();
+		GameOver = true;
 
-		PlaySound(ExplodeSound);
-		Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
-			Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
-		Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
-			RotationZ, 10.0f, 4.0f, ModelColor);
-		Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
-			Turret->RotationZ, 15.0f, 3.0f, Turret->ModelColor);
-		Acceleration = { 0 };
-		Velocity = { 0 };
-		Lives--;
-		Turret->Enabled = false;
-		Flame->Enabled = false;
-		Shield->Enabled = false;
-		Crosshair->Enabled = false;
-		TurretHeatMeter->Enabled = false;
-		WeaponTypeIconBig->Enabled = false;
-		WeaponTypeIconDoubleLeft->Enabled = false;
-		WeaponTypeIconDoubleRight->Enabled = false;
-		WeaponTypeIconPlasma->Enabled = false;
-		WeaponTypeIconMine->Enabled = false;
-		RotateStop();
-
-		for (const auto& model : AmmoMeterModels)
+		for (const auto& mine : Mines)
 		{
-			model->Enabled = false;
-		}
-
-		if (Lives < 0)
-		{
-			GameOver = true;
-
-			for (const auto& mine : Mines)
-			{
-				mine->GameOver = true;
-			}
+			mine->GameOver = true;
 		}
 	}
 }
 
 void ThePlayer::ScoreUpdate(int addToScore)
 {
+	//TODO: Convert this to use engine score class.
 	Score->UpdateScore(addToScore);
 
 	if (Score->GetScore() > NextNewLifeScore)
 	{
-		NextNewLifeScore += ((10000 * (Wave + 1)) * 4);
+		NextNewLifeScore += ((10000 * (WaveNumber + 1)) * 4);
 		Lives++;
 		NewLife = true;
 		PlaySound(BonusSound);
@@ -350,7 +346,6 @@ void ThePlayer::Spawn()
 
 	Velocity = { 0, 0, 0 };
 
-	Enabled = true;
 	Turret->Enabled = true;
 	TurretHeatMeter->Enabled = true;
 	ShieldPower = 100.0f;
@@ -416,8 +411,8 @@ void ThePlayer::GunPowerUp()
 
 void ThePlayer::FullPowerUp()
 {
-	Managers.EM.ResetTimer(PowerupTimerID,
-		Managers.EM.GetTimerAmount(PowerupTimerID) + PowerUpTimerAmount);
+	EM.ResetTimer(PowerupTimerID,
+		EM.GetTimerAmount(PowerupTimerID) + PowerUpTimerAmount);
 	ModelColor = PURPLE;
 	PoweredUp = true;
 	PoweredUpRundown = false;
@@ -482,7 +477,7 @@ void ThePlayer::FireTurret()
 {
 	if (TurretOverHeat)	return;
 
-	if (Managers.EM.TimerElapsed(FireRateTimerID))
+	if (EM.TimerElapsed(FireRateTimerID))
 	{
 		for (auto& shot : Shots)
 		{
@@ -490,7 +485,7 @@ void ThePlayer::FireTurret()
 			{
 				PlaySound(FireSound);
 
-				Managers.EM.ResetTimer(FireRateTimerID);
+				EM.ResetTimer(FireRateTimerID);
 
 				if (GunOverCharge)
 				{
@@ -508,7 +503,7 @@ void ThePlayer::FireTurret()
 
 					if (TurretHeat > TurretHeatMax)
 					{
-						Managers.EM.ResetTimer(TurretCooldownTimerID);
+						EM.ResetTimer(TurretCooldownTimerID);
 						TurretOverHeat = true;
 					}
 				}
@@ -529,7 +524,7 @@ void ThePlayer::TurretTimers()
 {
 	if (TurretOverHeat)
 	{
-		if (Managers.EM.TimerElapsed(TurretCooldownTimerID))
+		if (EM.TimerElapsed(TurretCooldownTimerID))
 		{
 			TurretOverHeat = false;
 			TurretHeat = 0;
@@ -538,9 +533,9 @@ void ThePlayer::TurretTimers()
 	}
 	else
 	{
-		if (Managers.EM.TimerElapsed(TurretHeatTimerID))
+		if (EM.TimerElapsed(TurretHeatTimerID))
 		{
-			Managers.EM.ResetTimer(TurretHeatTimerID);
+			EM.ResetTimer(TurretHeatTimerID);
 
 			if (TurretHeat > 2)	TurretHeat -= 2;
 			if (TurretHeat >= 1) TurretHeat -= 1;
@@ -648,7 +643,7 @@ void ThePlayer::FireBigShot()
 	if (spawnNewBigShot)
 	{
 		BigShots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(BigShots.back());
+		EM.AddLineModel(BigShots.back());
 		BigShots.back()->SetModel(BigShotModel);
 		BigShots.back()->RotationVelocityZ = 20.0f;
 		BigShots.back()->SetScale(3.0f);
@@ -683,7 +678,7 @@ void ThePlayer::FireDoubleShot()
 	if (spawnNewDoubleShot)
 	{
 		DoubleShots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(DoubleShots.back());
+		EM.AddLineModel(DoubleShots.back());
 		DoubleShots.back()->SetModel(ShotModel);
 		DoubleShots.back()->SetScale(3.0f);
 		DoubleShots.back()->BeginRun();
@@ -713,7 +708,7 @@ void ThePlayer::FireDoubleShot()
 	if (spawnNewDoubleShot)
 	{
 		DoubleShots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(DoubleShots.back());
+		EM.AddLineModel(DoubleShots.back());
 		DoubleShots.back()->SetModel(ShotModel);
 		DoubleShots.back()->BeginRun();
 		DoubleShots.back()->SetScale(3.0f);
@@ -744,7 +739,7 @@ void ThePlayer::DropHomingMine()
 	if (spawnNewMine)
 	{
 		Mines.push_back(DBG_NEW TheHomingMine());
-		Managers.EM.AddLineModel(Mines.back());
+		EM.AddLineModel(Mines.back());
 		Mines.back()->SetModel(MineModel);
 		Mines.back()->ModelColor = GRAY;
 		Mines.back()->SetExplodeSound(MineExplodeSound);
@@ -774,7 +769,7 @@ void ThePlayer::FirePlasmaShot()
 	if (spawnNewBigShot)
 	{
 		PlasmaShots.push_back(DBG_NEW ThePlasmaShot());
-		Managers.EM.AddLineModel(PlasmaShots.back());
+		EM.AddLineModel(PlasmaShots.back());
 		PlasmaShots.back()->SetModel(BigShotModel);
 		PlasmaShots.back()->RotationVelocityZ = 20.0f;
 		PlasmaShots.back()->BeginRun();
@@ -788,31 +783,31 @@ void ThePlayer::FirePlasmaShot()
 
 void ThePlayer::CrosshairUpdate()
 {
-	Crosshair->X(GetMousePosition().x - WindowWidth);
-	Crosshair->Y(GetMousePosition().y - WindowHeight);
+	Crosshair->X(GetMousePosition().x - WindowHalfWidth);
+	Crosshair->Y(GetMousePosition().y - WindowHalfHeight);
 
-	if (Crosshair->X() < -WindowWidth)
+	if (Crosshair->X() < -WindowHalfWidth)
 	{
-		Crosshair->X(-WindowWidth);
+		Crosshair->X((float)-WindowHalfWidth);
 		SetMousePosition(0, (int)GetMousePosition().y);
 	}
 
-	if (Crosshair->X() > WindowWidth)
+	if (Crosshair->X() > WindowHalfWidth)
 	{
-		Crosshair->X(WindowWidth);
-		SetMousePosition((int)WindowWidth * 2, (int)GetMousePosition().y);
+		Crosshair->X((float)WindowHalfWidth);
+		SetMousePosition((int)WindowHalfWidth * 2, (int)GetMousePosition().y);
 	}
 
-	if (Crosshair->Y() < -WindowHeight)
+	if (Crosshair->Y() < -WindowHalfHeight)
 	{
-		Crosshair->Y(-WindowHeight);
+		Crosshair->Y((float)-WindowHalfHeight);
 		SetMousePosition((int)GetMousePosition().x, 0);
 	}
 
-	if (Crosshair->Y() > WindowHeight)
+	if (Crosshair->Y() > WindowHalfHeight)
 	{
-		Crosshair->Y((float)WindowHeight);
-		SetMousePosition((int)GetMousePosition().x, (int)WindowHeight * 2);
+		Crosshair->Y((float)WindowHalfHeight);
+		SetMousePosition((int)GetMousePosition().x, (int)WindowHalfHeight * 2);
 	}
 }
 
@@ -833,9 +828,9 @@ void ThePlayer::ThrustOn(float amount)
 	SetAccelerationToMaxAtRotation((amount * 50.25f), 350.0f);
 	Flame->Enabled = true;
 
-	if (Managers.EM.TimerElapsed(FlameColorTimerID))
+	if (EM.TimerElapsed(FlameColorTimerID))
 	{
-		Managers.EM.ResetTimer(FlameColorTimerID, GetRandomFloat(0.025f, 0.25f));
+		EM.ResetTimer(FlameColorTimerID, M.GetRandomFloat(0.025f, 0.25f));
 
 		Color color = {(unsigned char)GetRandomValue(100, 255),
 			(unsigned char)GetRandomValue(60, 105),
@@ -912,18 +907,18 @@ void ThePlayer::WeHaveThePower()
 
 	ShieldOn();
 
-	if (Managers.EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
+	if (EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
 	{
 		PoweredUpRundown = true;
-		Managers.EM.ResetTimer(PowerupRundownTimerID);
-		Managers.EM.ResetTimer(PowerUpBlinkTimerID);
+		EM.ResetTimer(PowerupRundownTimerID);
+		EM.ResetTimer(PowerUpBlinkTimerID);
 	}
 
 	if (PoweredUpRundown)
 	{
-		if (Managers.EM.TimerElapsed(PowerUpBlinkTimerID))
+		if (EM.TimerElapsed(PowerUpBlinkTimerID))
 		{
-			Managers.EM.ResetTimer(PowerUpBlinkTimerID);
+			EM.ResetTimer(PowerUpBlinkTimerID);
 
 			if (ModelColor.g == 255.0f)
 			{
@@ -936,7 +931,7 @@ void ThePlayer::WeHaveThePower()
 		}
 	}
 
-	if (Managers.EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
+	if (EM.TimerElapsed(PowerupRundownTimerID) && PoweredUpRundown)
 	{
 		PoweredUp = false;
 		PoweredUpRundown = false;
@@ -944,18 +939,22 @@ void ThePlayer::WeHaveThePower()
 		if (ShieldOverCharge) ModelColor = BLUE;
 		else ModelColor = WHITE;
 
-		Managers.EM.SetTimer(PowerupTimerID, 0.0f);
+		EM.SetTimer(PowerupTimerID, 0.0f);
 	}
 }
 
 void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 {
+	//TODO:: Have rocks and enemy check for shield radius if on.
+
 	PlaySound(ShieldHitSound);
 	Acceleration = {0};
 
-	Velocity = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity, {0.25f}), {-1}),
-		Vector3Add(Vector3Multiply(velocity, {0.90f}),
-			GetVelocityFromAngleZ(GetAngleFromVectorsZ(location, Position),	196.666f)));
+	//Velocity = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity, {0.25f}), {-1}),
+	//	Vector3Add(Vector3Multiply(velocity, {0.90f}),
+	//	GetVelocityFromAngleZ(GetAngleFromVectorsZ(location, Position),	196.666f)));
+
+	Velocity = GetReflectionVelocity(location, velocity, 106.666f, 0.90f, 0.25f);
 
 	if (PoweredUp) return;
 
@@ -1054,7 +1053,7 @@ void ThePlayer::AddAmmoMeterModels(int count)
 	for (int i = 0; i < count; i++)
 	{
 		AmmoMeterModels.push_back(DBG_NEW LineModel());
-		Managers.EM.AddLineModel(AmmoMeterModels.back());
+		EM.AddLineModel(AmmoMeterModels.back());
 		AmmoMeterModels.back()->SetModel(ShotModel);
 		AmmoMeterModels.back()->SetParent(*this);
 		AmmoMeterModels.back()->IgnoreParentRotation = true;

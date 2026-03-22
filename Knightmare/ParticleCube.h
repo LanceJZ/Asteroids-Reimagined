@@ -1,15 +1,16 @@
 #pragma once
 #include "Model3D.h"
 #include "EntityManager.h"
+#include "Globals.h"
 
 class ParticleCube : public Model3D
 {
 public:
 	ParticleCube();
 	virtual ~ParticleCube();
-	void SetManagers(EntityManager* Managers);
+	void SetManagers(EntityManager* entityManager);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

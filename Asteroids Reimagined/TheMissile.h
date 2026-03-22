@@ -10,7 +10,7 @@ public:
 
 	void SetOnSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

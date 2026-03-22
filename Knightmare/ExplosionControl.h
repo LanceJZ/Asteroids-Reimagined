@@ -1,6 +1,5 @@
 #pragma once
 #include "ParticleManager.h"
-#include "TheManagers.h"
 
 #ifdef _DEBUG
 	#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -16,7 +15,7 @@ public:
 	ExplosionControl();
 	virtual ~ExplosionControl();
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void FixedUpdate();

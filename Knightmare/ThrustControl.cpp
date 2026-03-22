@@ -9,9 +9,9 @@ ThrustControl::~ThrustControl()
 {
 }
 
-bool ThrustControl::Initialize(Utilities* utilities)
+bool ThrustControl::Initialize()
 {
-	ParticleManager::Initialize(utilities);
+	ParticleManager::Initialize();
 
 	return false;
 }
@@ -35,9 +35,9 @@ void ThrustControl::SpawnCubes(Vector3 position, Vector3 velocity, float endWidt
 	float size = 3.1f;
 	float speed = 5.1f;
 
-	float width = GetRandomFloat(-endWidth, endWidth);
+	float width = M.GetRandomFloat(-endWidth, endWidth);
 
-	velocity = Vector3Add(GetVelocityFromAngleZ(width, length), velocity);
+	velocity = Vector3Add(M.GetVelocityFromAngleZ(width, length), velocity);
 
 	ParticleManager::SpawnCubes(position, velocity, size, speed, count, time, color);
 }

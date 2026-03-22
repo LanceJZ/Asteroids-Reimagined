@@ -9,9 +9,9 @@ OnScreenText::~OnScreenText()
 {
 }
 
-bool OnScreenText::Initialize(Utilities* utilities)
+bool OnScreenText::Initialize()
 {
-	Common::Initialize(TheUtilities);
+	Common::Initialize();
 
 	return false;
 }
@@ -24,5 +24,8 @@ void OnScreenText::FixedUpdate()
 
 void OnScreenText::Draw2D()
 {
+	if (!Enabled) return;
+
+	Common::Draw2D();
 
 }

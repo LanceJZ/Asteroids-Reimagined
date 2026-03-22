@@ -2,16 +2,16 @@
 
 ThePlasmaShot::ThePlasmaShot()
 {
-	LifeTimerID = Managers.EM.AddTimer(5.0f);
+	LifeTimerID = EM.AddTimer(5.0f);
 }
 
 ThePlasmaShot::~ThePlasmaShot()
 {
 }
 
-bool ThePlasmaShot::Initialize(Utilities* utilities)
+bool ThePlasmaShot::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -33,7 +33,7 @@ void ThePlasmaShot::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID))
+	if (EM.TimerElapsed(LifeTimerID))
 	{
 		Enabled = false;
 	}
@@ -57,7 +57,7 @@ void ThePlasmaShot::Spawn(Vector3 position, Vector3 velocity)
 
 	Velocity = velocity;
 
-	Managers.EM.ResetTimer(LifeTimerID);
+	EM.ResetTimer(LifeTimerID);
 
 	SetScale(1.0f);
 }

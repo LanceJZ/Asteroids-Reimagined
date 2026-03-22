@@ -2,16 +2,16 @@
 
 Shot::Shot()
 {
-	LifeTimerID = Managers.EM.AddTimer();
+	LifeTimerID = EM.AddTimer();
 }
 
 Shot::~Shot()
 {
 }
 
-bool Shot::Initialize(Utilities* utilities)
+bool Shot::Initialize()
 {
-	LineModel::Initialize(TheUtilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -33,7 +33,7 @@ void Shot::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
+	if (EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	CheckScreenEdge();
 }
@@ -56,7 +56,7 @@ void Shot::Spawn(Vector3 position, Vector3 velocity)
 
 void Shot::Spawn(Vector3 position, Vector3 velocity, float lifetime)
 {
-	Managers.EM.ResetTimer(LifeTimerID, lifetime);
+	EM.ResetTimer(LifeTimerID, lifetime);
 	Spawn(position, velocity);
 }
 

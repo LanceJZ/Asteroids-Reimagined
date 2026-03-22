@@ -29,7 +29,7 @@ public:
 	void SetMissileOnSound(Sound sound);
 	void SetMissileExplodeSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

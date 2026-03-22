@@ -19,9 +19,9 @@ void TheRock::SetExplodeSound(Sound sound)
 	SetSoundVolume(ExplodeSound, 0.333f);
 }
 
-bool TheRock::Initialize(Utilities* utilities)
+bool TheRock::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -57,7 +57,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	Entity::Spawn(position);
 
 	float magnitude = 0;
-	float angle = GetRandomRadian();
+	float angle = M.GetRandomRadian();
 	float maxVS = 0;
 
 	TheRock::Size = size;
@@ -70,44 +70,44 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 		change = 4.5f;
 		Scale = scale / change;
 		maxVS = 3;
-		magnitude = GetRandomFloat(52.3f, 74.1f);
+		magnitude = M.GetRandomFloat(52.3f, 74.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Medium:
 		change = 2.75f;
 		Scale =  scale / change;
 		maxVS = 2;
-		magnitude = GetRandomFloat(43.2f, 63.1f);
+		magnitude = M.GetRandomFloat(43.2f, 63.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case MediumLarge:
 		change = 1.85f;
 		Scale =  scale / change;
 		maxVS = 2;
-		magnitude = GetRandomFloat(36.1f, 56.1f);
+		magnitude = M.GetRandomFloat(36.1f, 56.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Large:
-		Y(GetRandomFloat(-WindowHeight, WindowHeight));
+		Y(M.GetRandomFloat((float)-WindowHalfHeight, (float)WindowHalfHeight));
 		Scale = scale;
 		maxVS = 1;
 
-		magnitude = GetRandomFloat(20.35f, 40.1f);
+		magnitude = M.GetRandomFloat(20.35f, 40.1f);
 		Velocity = GetVelocityFromAngleZ(angle, magnitude);
 
 		if (Velocity.x > 0)
 		{
-			X(-WindowWidth);
+			X((float)-WindowHalfWidth);
 		}
 		else
 		{
-			X(WindowWidth);
+			X((float)WindowHalfWidth);
 		}
 
 		break;
 	}
 
-	float rVel = GetRandomFloat(-maxVS, maxVS);
+	float rVel = M.GetRandomFloat(-maxVS, maxVS);
 
 	if (rVel < 0.1)
 	{
@@ -136,11 +136,17 @@ void TheRock::Hit()
 
 bool TheRock::CheckCollisions()
 {
-	if (Player->Enabled && CirclesIntersect(*Player))
+	if (Player->Shield->Enabled &&
+		CirclesIntersect(Player->Position, Player->Shield->Radius))
 	{
-		if (!Player->Shield->Enabled) Hit();
+		Player->ShieldHit(Position, Velocity);
+		return false;
+	}
 
-		Player->Hit(Position, Velocity);
+	if (Player->Enabled && !Player->Shield->Enabled && CirclesIntersect(*Player))
+	{
+
+		Player->Hit();
 		SendScoreToPlayer();
 
 		return true;

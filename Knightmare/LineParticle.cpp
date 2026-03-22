@@ -13,9 +13,9 @@ void LineParticle::SetEntityManager(EntityManager* entityManager)
 	EM = entityManager;
 }
 
-bool LineParticle::Initialize(Utilities* utilities)
+bool LineParticle::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -49,16 +49,16 @@ void LineParticle::Spawn(Vector3 position, Vector3 velocity, float radius,
 {
 	Vector3 spawnPosition = position;
 
-	spawnPosition.x += GetRandomFloat(-radius, radius);
-	spawnPosition.y += GetRandomFloat(-radius, radius);
+	spawnPosition.x += M.GetRandomFloat(-radius, radius);
+	spawnPosition.y += M.GetRandomFloat(-radius, radius);
 
 	LineModel::Spawn(spawnPosition);
 
-	Vector3 addedVelocity = GetRandomVelocity(GetRandomFloat(maxSpeed * 0.25f,
+	Vector3 addedVelocity = M.GetRandomVelocity(M.GetRandomFloat(maxSpeed * 0.25f,
 		maxSpeed));
 	Velocity = Vector3Add(velocity, addedVelocity);
 
-	EM->ResetTimer(LifeTimerID, GetRandomFloat(maxTime * 0.25f, maxTime));
+	EM->ResetTimer(LifeTimerID, M.GetRandomFloat(maxTime * 0.25f, maxTime));
 }
 
 void LineParticle::Destroy()

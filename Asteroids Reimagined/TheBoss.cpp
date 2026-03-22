@@ -2,18 +2,18 @@
 
 TheBoss::TheBoss()
 {
-	MissileFireTimerID = Managers.EM.AddTimer(1.25f);
-	MineDropTimerID = Managers.EM.AddTimer(1.5f);
-	FireTimerID = Managers.EM.AddTimer();
+	MissileFireTimerID = EM.AddTimer(1.25f);
+	MineDropTimerID = EM.AddTimer(1.5f);
+	FireTimerID = EM.AddTimer();
 
-	Managers.EM.AddLineModel(LeftSpineMount = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(RightSpineMount = DBG_NEW LineModel());
-	Managers.EM.AddLineModel(Shield = DBG_NEW LineModel());
-	Managers.EM.AddEntity(FireShotAtPlayerArea = DBG_NEW Entity());
+	EM.AddLineModel(LeftSpineMount = DBG_NEW LineModel());
+	EM.AddLineModel(RightSpineMount = DBG_NEW LineModel());
+	EM.AddLineModel(Shield = DBG_NEW LineModel());
+	EM.AddEntity(FireShotAtPlayerArea = DBG_NEW Entity());
 
 	for (int i = 0; i < 5; i++)
 	{
-		Managers.EM.AddLineModel(Turrets[i] = DBG_NEW TheBossTurret());
+		EM.AddLineModel(Turrets[i] = DBG_NEW TheBossTurret());
 	}
 }
 
@@ -153,9 +153,9 @@ void TheBoss::SetMineExplodeSound(Sound sound)
 	MineExplodeSound = sound;
 }
 
-bool TheBoss::Initialize(Utilities* utilities)
+bool TheBoss::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	FireShotAtPlayerArea->Enabled = false;
 
@@ -190,17 +190,17 @@ bool TheBoss::BeginRun()
 	RightSpineMount->Position = { 19.0f * 2.0f, -30.0f * 2.0f, 0.0f };
 
 	float edge = 0.7666f;
-	float upper = WindowHeight * edge;
-	float lower = -WindowHeight * edge;
-	float left = -WindowWidth * edge;
-	float right = WindowWidth * edge;
+	float upper = WindowHalfHeight * edge;
+	float lower = -WindowHalfHeight * edge;
+	float left = -WindowHalfWidth * edge;
+	float right = WindowHalfWidth * edge;
 
 	Path.push_back({ left, upper, 0.0f });
 	Path.push_back({ right, upper, 0.0f });
 	Path.push_back({ right, lower, 0.0f });
 	Path.push_back({ left, lower, 0.0f });
 
-	FireTimerSetting = GetRandomFloat(0.75f, 1.5f);
+	FireTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
 
 	Reset();
 
@@ -211,14 +211,14 @@ void TheBoss::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
-	if (Wave > 5)
+	if (WaveNumber > 5)
 	{
-		if (Managers.EM.TimerElapsed(MissileFireTimerID)) FireMissile();
+		if (EM.TimerElapsed(MissileFireTimerID)) FireMissile();
 	}
 
-	if (Wave > 10)
+	if (WaveNumber > 10)
 	{
-		if (Managers.EM.TimerElapsed(MineDropTimerID)) DropMine();
+		if (EM.TimerElapsed(MineDropTimerID)) DropMine();
 	}
 
 	if (Shield->Enabled)
@@ -298,7 +298,7 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 	Shield->Enabled = true;
 	LeftSpineMount->Enabled = true;
 	RightSpineMount->Enabled = true;
-	Shield->ShowCollision = true;
+	//Shield->ShowCollision = true;
 	ShieldPower = 100;
 	HitPoints = 100;
 	ModelColor = { 255, 255, 255, 255 };
@@ -309,8 +309,8 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 		turret->Spawn();
 	}
 
-	Managers.EM.SetTimer(MissileFireTimerID, 5.5f);
-	Managers.EM.SetTimer(MineDropTimerID, 4.0f);
+	EM.SetTimer(MissileFireTimerID, 5.5f);
+	EM.SetTimer(MineDropTimerID, 4.0f);
 }
 
 void TheBoss::Hit()
@@ -366,7 +366,7 @@ void TheBoss::ChasePlayer()
 
 void TheBoss::HeadToEdge()
 {
-	Vector3 edge = { WindowWidth * 0.666f, WindowHeight * 0.666f, 0.0f };
+	Vector3 edge = { WindowHalfWidth * 0.666f, WindowHalfHeight * 0.666f, 0.0f };
 
 	float speed = 10.0f;
 	float rotationSpeed = 0.60f;
@@ -386,7 +386,7 @@ void TheBoss::HeadToEdge()
 		{
 			speed = 1.0f;
 
-			edge.y = -WindowWidth;
+			edge.y = (float)-WindowHalfWidth;
 		}
 	}
 	else if (bottomDistance < topDistance &&
@@ -399,7 +399,7 @@ void TheBoss::HeadToEdge()
 		{
 			speed = 1.0f;
 
-			edge.y = WindowWidth;
+			edge.y = (float)WindowHalfWidth;
 		}
 	}
 	else if (leftDistance < rightDistance &&
@@ -412,7 +412,7 @@ void TheBoss::HeadToEdge()
 		{
 			speed = 1.0f;
 
-			edge.x = -WindowWidth;
+			edge.x = (float)-WindowHalfWidth;
 		}
 	}
 	else
@@ -424,14 +424,14 @@ void TheBoss::HeadToEdge()
 		{
 			speed = 1.0f;
 
-			edge.x = WindowWidth;
+			edge.x = (float)WindowHalfWidth;
 		}
 	}
 
 	SetRotateVelocity(edge, rotationSpeed, speed);
 
-	Managers.EM.SetTimer(MissileFireTimerID, 5.5f);
-	Managers.EM.SetTimer(MineDropTimerID, 4.0f);
+	EM.SetTimer(MissileFireTimerID, 5.5f);
+	EM.SetTimer(MineDropTimerID, 4.0f);
 
 	for (const auto& turret : Turrets)
 	{
@@ -451,10 +451,11 @@ void TheBoss::CheckCollisions()
 {
 	if (Player->Enabled)
 	{
-		if (Player->CirclesIntersect(FireShotAtPlayerArea->GetWorldPosition(),
-			FireShotAtPlayerArea->Radius))
+		Vector3 fireShot = FireShotAtPlayerArea->GetWorldPosition();
+
+		if (Player->CirclesIntersect(fireShot, FireShotAtPlayerArea->Radius))
 		{
-			if (Managers.EM.TimerElapsed(FireTimerID))
+			if (EM.TimerElapsed(FireTimerID))
 			{
 				FireShots();
 			}
@@ -467,19 +468,29 @@ void TheBoss::CheckCollisions()
 
 		for (const auto& shot : Shots)
 		{
-			if (shot->CirclesIntersect(*Player))
+			if (Player->Shield->Enabled &&
+				CirclesIntersect(Player->Position, Player->Shield->Radius))
 			{
-				Player->Hit(shot->Position, shot->Velocity);
+				Player->ShieldHit(shot->Position, shot->Velocity);
+				break;
+			}
+
+			if (shot->CirclesIntersect(*Player) && !Player->Shield->Enabled)
+			{
+				Player->Hit();
 				break;
 			}
 		}
 	}
 
+	Vector3 shieldPos = Shield->GetWorldPosition();
+
 	for (const auto& shot : Player->Shots)
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+
+		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
 		{
 			Hit(shot, 2);
 		}
@@ -489,7 +500,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
 		{
 			Hit(shot, 10);
 		}
@@ -499,7 +510,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
 		{
 			Hit(shot, 5);
 		}
@@ -509,7 +520,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(Shield->GetWorldPosition(), Shield->Radius))
+		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
 		{
 			Hit(shot, 50);
 		}
@@ -518,8 +529,8 @@ void TheBoss::CheckCollisions()
 
 void TheBoss::FireShots()
 {
-	FireTimerSetting = GetRandomFloat(0.25f, 0.75f);
-	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting);
+	FireTimerSetting = M.GetRandomFloat(0.25f, 0.75f);
+	EM.ResetTimer(FireTimerID, FireTimerSetting);
 
 	if (!Player->Enabled) return;
 
@@ -541,7 +552,7 @@ void TheBoss::FireShots()
 	if (spawnNewShotL)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots.back(), ShotModel);
+		EM.AddLineModel(Shots.back(), ShotModel);
 		Shots.back()->SetModel(ShotModel);
 		Shots.back()->BeginRun();
 	}
@@ -568,9 +579,9 @@ void TheBoss::FireShots()
 	if (spawnNewShotR)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots.back(), ShotModel);
+		EM.AddLineModel(Shots.back(), ShotModel);
 		Shots.back()->SetModel(ShotModel);
-		Shots.back()->Initialize(TheUtilities);
+		Shots.back()->Initialize();
 		Shots.back()->BeginRun();
 	}
 
@@ -584,7 +595,7 @@ void TheBoss::FireMissile()
 {
 	float missileFireTime = 1.25f;
 
-	Managers.EM.ResetTimer(MissileFireTimerID, missileFireTime);
+	EM.ResetTimer(MissileFireTimerID, missileFireTime);
 
 	if (!Player->Enabled) return;
 
@@ -605,7 +616,7 @@ void TheBoss::FireMissile()
 	if (spawnMissile)
 	{
 		Missiles.push_back(DBG_NEW TheMissile());
-		Managers.EM.AddLineModel(Missiles.back(), MissileModel);
+		EM.AddLineModel(Missiles.back(), MissileModel);
 		Missiles.back()->SetExplodeSound(MissileExplodeSound);
 		Missiles.back()->SetOnSound(MissileOnSound);
 		Missiles.back()->SetPlayer(Player);
@@ -620,7 +631,7 @@ void TheBoss::DropMine()
 {
 	float dropTime = 1.15f;
 
-	Managers.EM.ResetTimer(MineDropTimerID, dropTime);
+	EM.ResetTimer(MineDropTimerID, dropTime);
 
 	if (!Player->Enabled) return;
 
@@ -642,7 +653,7 @@ void TheBoss::DropMine()
 	if (spawnNewMine)
 	{
 		Mines.push_back(DBG_NEW TheMine());
-		Managers.EM.AddLineModel(Mines.back(), MineModel);
+		EM.AddLineModel(Mines.back(), MineModel);
 		Mines.back()->SetPlayer(Player);
 		Mines.back()->SetExplodeSound(MineExplodeSound);
 		Mines.back()->BeginRun();
@@ -673,7 +684,9 @@ void TheBoss::ShieldDown(Entity* shot, int damage)
 	{
 		if (!turret->Enabled) continue;
 
-		if (shot->CirclesIntersect(turret->GetWorldPosition(), turret->Radius))
+		Vector3 turretPos = turret->GetWorldPosition();
+
+		if (shot->CirclesIntersect(turretPos, turret->Radius))
 		{
 			shot->Destroy();
 			turret->Hit();

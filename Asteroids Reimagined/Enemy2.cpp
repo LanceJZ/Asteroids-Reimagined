@@ -2,7 +2,7 @@
 
 Enemy2::Enemy2()
 {
-	MineDropTimerID = Managers.EM.AddTimer(4.75f);
+	MineDropTimerID = EM.AddTimer(4.75f);
 }
 
 Enemy2::~Enemy2()
@@ -33,9 +33,9 @@ void Enemy2::SetMineExplodeSound(Sound sound)
 	MineExplodeSound = sound;
 }
 
-bool Enemy2::Initialize(Utilities* utilities)
+bool Enemy2::Initialize()
 {
-	Enemy::Initialize(utilities);
+	Enemy::Initialize();
 
 	Enabled = false;
 	Points = 1300;
@@ -68,9 +68,9 @@ void Enemy2::FixedUpdate(float deltaTime)
 
 	if (CheckWentOffScreen()) Enabled = false;
 
-	if (Managers.EM.TimerElapsed(MineDropTimerID)) DropMine();
+	if (EM.TimerElapsed(MineDropTimerID)) DropMine();
 
-	if (Managers.EM.TimerElapsed(ShotTimerID)) FireShot();
+	if (EM.TimerElapsed(ShotTimerID)) FireShot();
 }
 
 void Enemy2::Draw3D()
@@ -80,7 +80,7 @@ void Enemy2::Draw3D()
 
 void Enemy2::Spawn()
 {
-	Managers.EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);
+	EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);
 
 	Enemy::Spawn();
 }
@@ -94,6 +94,7 @@ void Enemy2::Hit()
 {
 	Enemy::Hit();
 
+	Destroy();
 }
 
 void Enemy2::Destroy()
@@ -108,7 +109,7 @@ void Enemy2::Reset()
 
 	Destroy();
 
-	Managers.EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);
+	EM.ResetTimer(MineDropTimerID, MineDropTimeAmount = 4.75f);
 
 	for (const auto& mine : Mines)
 	{
@@ -135,18 +136,18 @@ void Enemy2::DropMine()
 
 	if (!Player->GameOver) PlaySound(FireSound);
 
-	float dropTimeAdjust = ((float)Wave - 4) * 0.25f;
+	float dropTimeAdjust = ((float)WaveNumber - 4) * 0.25f;
 
-	float min = (MineDropTimeAmount - dropTimeAdjust) / (((float)Wave - 4) * 0.5f);
+	float min = (MineDropTimeAmount - dropTimeAdjust) / (((float)WaveNumber - 4) * 0.5f);
 	float max = MineDropTimeAmount - dropTimeAdjust;
 
 	if (min < 0.15f) min = 0.15f;
 
 	if (min > max) max = min * 2.0f;
 
-	float dropTime = GetRandomFloat(min, max);
+	float dropTime = M.GetRandomFloat(min, max);
 
-	Managers.EM.ResetTimer(MineDropTimerID, dropTime);
+	EM.ResetTimer(MineDropTimerID, dropTime);
 
 	for (size_t i = 0; i < mineNumber; i++)
 	{
@@ -161,7 +162,7 @@ void Enemy2::DropMine()
 	if (spawnNewMine)
 	{
 		Mines.push_back(DBG_NEW TheMine());
-		Managers.EM.AddLineModel(Mines.back(), MineModel);
+		EM.AddLineModel(Mines.back(), MineModel);
 		Mines.back()->SetPlayer(Player);
 		Mines.back()->SetExplodeSound(MineExplodeSound);
 		Mines.back()->BeginRun();
@@ -172,7 +173,7 @@ void Enemy2::DropMine()
 
 void Enemy2::FireShot()
 {
-	Shoot(GetRandomVelocity(360.666f));
+	Shoot(M.GetRandomVelocity(360.666f));
 }
 
 bool Enemy2::CheckCollisions()

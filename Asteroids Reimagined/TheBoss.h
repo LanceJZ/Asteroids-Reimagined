@@ -13,7 +13,7 @@ public:
 	virtual ~TheBoss();
 
 	bool PlayerHit = false;
-	int Wave = 0;
+	int WaveNumber = 0;
 
 	Entity* FireShotAtPlayerArea = nullptr;
 
@@ -46,7 +46,7 @@ public:
 	void SetMineDropSound(Sound sound);
 	void SetMineExplodeSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

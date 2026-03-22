@@ -2,15 +2,15 @@
 
 TheHighScore::TheHighScore()
 {
-	HighScoreListTimerID = Managers.EM.AddTimer(7.5f);
+	HighScoreListTimerID = EM.AddTimer(7.5f);
 }
 
 TheHighScore::~TheHighScore()
 {
 }
-bool TheHighScore::Initialize(Utilities* utilities)
+bool TheHighScore::Initialize()
 {
-	OnScreenText::Initialize(TheUtilities);
+	OnScreenText::Initialize();
 
 	return false;
 }
@@ -42,10 +42,10 @@ void TheHighScore::FixedUpdate()
 
 	if (GameOver && !NewHighScore)
 	{
-		if (Managers.EM.TimerElapsed(HighScoreListTimerID))
+		if (EM.TimerElapsed(HighScoreListTimerID))
 		{
 			ShowHighScores = !ShowHighScores;
-			Managers.EM.ResetTimer(HighScoreListTimerID);
+			EM.ResetTimer(HighScoreListTimerID);
 		}
 	}
 }

@@ -2,17 +2,17 @@
 
 TheUFO::TheUFO()
 {
-	FireTimerID = Managers.EM.AddTimer(1.75f);
-	ChangeVectorTimerID = Managers.EM.AddTimer(5.50f);
+	FireTimerID = EM.AddTimer(1.75f);
+	ChangeVectorTimerID = EM.AddTimer(5.50f);
 }
 
 TheUFO::~TheUFO()
 {
 }
 
-bool TheUFO::Initialize(Utilities* utilities)
+bool TheUFO::Initialize()
 {
-	LineModel::Initialize(TheUtilities);
+	Enemy::Initialize();
 
 	ShotTimerAmount = 1.75f;
 
@@ -21,7 +21,7 @@ bool TheUFO::Initialize(Utilities* utilities)
 
 bool TheUFO::BeginRun()
 {
-	LineModel::BeginRun();
+	Enemy::BeginRun();
 
 	return false;
 }
@@ -40,14 +40,14 @@ void TheUFO::SetSmallSound(Sound sound)
 
 void TheUFO::Update(float deltaTime)
 {
-	LineModel::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
 	CheckCollisions();
 }
 
 void TheUFO::FixedUpdate(float deltaTime)
 {
-	LineModel::FixedUpdate(deltaTime);
+	Enemy::FixedUpdate(deltaTime);
 
 	CheckScreenEdgeY();
 
@@ -56,35 +56,42 @@ void TheUFO::FixedUpdate(float deltaTime)
 		Enabled = false;
 	}
 
-	if (Managers.EM.TimerElapsed(FireTimerID))
+	if (EM.TimerElapsed(FireTimerID))
 	{
 		FireShot();
 	}
 
-	if (Managers.EM.TimerElapsed(ChangeVectorTimerID))
+	if (EM.TimerElapsed(ChangeVectorTimerID))
 	{
 		ChangeVector();
 	}
 
-	if (!Player->GameOver) PlayOnSound();
+	//if (!Player->GameOver) PlayOnSound();
 
-	if (!Player->Enabled && !Player->GameOver) Managers.EM.ResetTimer(FireTimerID);
+	if (!Player->Enabled && !Player->GameOver) EM.ResetTimer(FireTimerID);
+}
+
+void TheUFO::AlwaysUpdate(float deltaTime)
+{
+	Enemy::AlwaysUpdate(deltaTime);
+
+	//CheckShotsHitPlayer();
 }
 
 void TheUFO::Draw3D()
 {
-	LineModel::Draw3D();
+	Enemy::Draw3D();
 }
 
 void TheUFO::Spawn(int spawnCount)
 {
 	Vector3 position = { 0, 0, 0 };
-	int height = (int)(WindowHeight / 1.25f);
+	int height = (int)(WindowHalfHeight / 1.25f);
 
 	position.y = (float)GetRandomValue(-height, height);
 
-	Managers.EM.ResetTimer(FireTimerID);
-	Managers.EM.ResetTimer(ChangeVectorTimerID);
+	EM.ResetTimer(FireTimerID);
+	EM.ResetTimer(ChangeVectorTimerID);
 
 	float fullScale = 1.0f;
 	float fullRadius = 18.5f;
@@ -93,7 +100,7 @@ void TheUFO::Spawn(int spawnCount)
 	spawnPercent += (Player->GetScore() * 0.0001f);
 	spawnPercent += (Wave);
 
-	if (GetRandomFloat(0, 300) > spawnPercent)
+	if (M.GetRandomFloat(0, 300) > spawnPercent)
 	{
 		TheSize = Large;
 		Scale = fullScale;
@@ -112,13 +119,23 @@ void TheUFO::Spawn(int spawnCount)
 
 	if (GetRandomValue(1, 10) < 5)
 	{
-		position.x = WindowWidth;
+		position.x = (float)WindowHalfWidth;
 		Velocity.x = -MaxSpeed;
 	}
 	else
 	{
-		position.x = -WindowWidth;
+		position.x = (float)-WindowHalfWidth;
 		Velocity.x = MaxSpeed;
+	}
+
+	switch(TheSize)
+	{
+	case Large:
+		if (!IsSoundPlaying(BigSound)) OnSound = BigSound;
+		break;
+	case Small:
+		if (!IsSoundPlaying(SmallSound)) SmallSound;
+		break;
 	}
 
 	ShotTimerAmount = 1.75f - (spawnCount * 0.01f) - (Wave * 0.1f);
@@ -132,14 +149,15 @@ void TheUFO::Destroy()
 {
 	Enemy::Destroy();
 
-	Managers.EM.ResetTimer(FireTimerID, 1.75f);
-	Managers.EM.ResetTimer(ChangeVectorTimerID, 5.50f);
+	EM.ResetTimer(FireTimerID, 1.75f);
+	EM.ResetTimer(ChangeVectorTimerID, 5.50f);
 }
 
 void TheUFO::Hit()
 {
 	Enemy::Hit();
 
+	Destroy();
 }
 
 void TheUFO::Reset()
@@ -154,7 +172,7 @@ void TheUFO::FireShot()
 	float angle = 0;
 	float shotSpeed = 325;
 	bool shootRocks = false;
-	Managers.EM.ResetTimer(FireTimerID, ShotTimerAmount);
+	EM.ResetTimer(FireTimerID, ShotTimerAmount);
 
 	if (DeathStarActive)
 	{
@@ -179,11 +197,11 @@ void TheUFO::FireShot()
 	{
 		if (GetRandomValue(1, 10) < 3)
 		{
-			angle = GetRandomRadian();
+			angle = M.GetRandomRadian();
 		}
 	}
 
-	Managers.EM.ResetTimer(ShotTimerID);
+	EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -201,7 +219,7 @@ void TheUFO::FireShot()
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 
@@ -215,7 +233,7 @@ float TheUFO::AimedShot()
 {
 	if (!Player->Enabled)
 	{
-		return GetRandomRadian();
+		return M.GetRandomRadian();
 	}
 
 	float percentChance = 0.2f - (Player->GetScore() * 0.00001f);
@@ -232,10 +250,10 @@ float TheUFO::AimedShot()
 
 	float maxP = 0.02f + minP;
 
-	percentChance += GetRandomFloat(minP, maxP);
+	percentChance += M.GetRandomFloat(minP, maxP);
 
 	return GetAngleFromVectorZ(Player->Position) +
-		GetRandomFloat(-percentChance, percentChance);
+		M.GetRandomFloat(-percentChance, percentChance);
 }
 
 float TheUFO::AimedShotAtDeathStar()
@@ -269,23 +287,25 @@ float TheUFO::AimedShotAtRock()
 
 	if (noRocks)
 	{
-		return GetRandomRadian();
+		return M.GetRandomRadian();
 	}
 
 	Vector3 compensation = GetVelocityFromAngleZ(GetAngleFromVectorZ(closestRockVelocity),
 		shortestDistance);
 
-	return GetAngleFromVectorZ(Vector3Add(closestRockPosition,
-		Vector3Add(closestRockVelocity, compensation)));
+	Vector3 closestRock = Vector3Add(closestRockPosition,
+		Vector3Add(closestRockVelocity, compensation));
+
+	return GetAngleFromVectorZ(closestRock);
 }
 
 void TheUFO::ChangeVector()
 {
-	float vectorTimer = GetRandomFloat(3.1f - (Wave * 0.1f), 7.5f);
+	float vectorTimer = M.GetRandomFloat(3.1f - (Wave * 0.1f), 7.5f);
 
 	if (vectorTimer < 0.25f) vectorTimer = 0.25f;
 
-	Managers.EM.ResetTimer(ChangeVectorTimerID,	vectorTimer);
+	EM.ResetTimer(ChangeVectorTimerID,	vectorTimer);
 
 	if (GetRandomValue(1, 10) > 2)
 	{
@@ -302,8 +322,8 @@ void TheUFO::ChangeVector()
 		}
 		else
 		{
-			if (Position.y < WindowHeight - (Radius * 3) &&
-				Position.y > -WindowHeight - (Radius * 3))
+			if (Position.y < WindowHalfHeight - (Radius * 3) &&
+				Position.y > -WindowHalfHeight - (Radius * 3))
 			{
 				Velocity.y = 0;
 			}
@@ -313,11 +333,11 @@ void TheUFO::ChangeVector()
 
 bool TheUFO::CheckReachedSide()
 {
-	if (X() < -WindowWidth)
+	if (X() < -WindowHalfWidth)
 	{
 		return true;
 	}
-	if (X() > WindowWidth)
+	if (X() > WindowHalfWidth)
 	{
 		return true;
 	}

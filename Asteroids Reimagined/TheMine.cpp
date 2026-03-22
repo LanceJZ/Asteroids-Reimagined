@@ -2,16 +2,16 @@
 
 TheMine::TheMine()
 {
-	LifeTimerID = Managers.EM.AddTimer(10.0f);
+	LifeTimerID = EM.AddTimer(10.0f);
 }
 
 TheMine::~TheMine()
 {
 }
 
-bool TheMine::Initialize(Utilities* utilities)
+bool TheMine::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -34,7 +34,7 @@ void TheMine::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
+	if (EM.TimerElapsed(LifeTimerID)) Destroy();
 }
 
 void TheMine::Draw3D()
@@ -46,7 +46,7 @@ void TheMine::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	Managers.EM.ResetTimer(LifeTimerID);
+	EM.ResetTimer(LifeTimerID);
 }
 
 void TheMine::Hit()

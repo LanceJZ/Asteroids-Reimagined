@@ -10,7 +10,7 @@ ParticleManager::~ParticleManager()
 	CubeParticles.clear();
 }
 
-bool ParticleManager::Initialize(Utilities* utilities)
+bool ParticleManager::Initialize()
 {
 	ParticleModel.linePoints.push_back({ -0.250f, 0.250f, 0 });
 	ParticleModel.linePoints.push_back({ 0.250f, 0.250f, 0 });
@@ -30,7 +30,7 @@ void ParticleManager::SetLineModel(LineModelPoints model)
 	ParticleModel = model;
 }
 
-void ParticleManager::SetManagers(EntityManager& managers)
+void ParticleManager::SetEntityManager(EntityManager& managers)
 {
 	EM = &managers;
 }
@@ -153,7 +153,7 @@ size_t ParticleManager::SpawnCubePool(Color color)
 			CubeParticles.push_back(DBG_NEW ParticleCube());
 			EM->AddModel3D(CubeParticles[cubeSpawnNumber], CubeModel);
 			CubeParticles[cubeSpawnNumber]->SetManagers(EM);
-			CubeParticles[cubeSpawnNumber]->Initialize(TheUtilities);
+			CubeParticles[cubeSpawnNumber]->Initialize();
 			CubeParticles[cubeSpawnNumber]->BeginRun();
 		}
 
@@ -182,7 +182,7 @@ size_t ParticleManager::SpawnLinePool(Color color)
 		LineParticles.push_back(DBG_NEW LineParticle());
 		EM->AddLineModel(LineParticles[lineSpawnNumber], ParticleModel);
 		LineParticles.back()->SetEntityManager(EM);
-		LineParticles.back()->Initialize(TheUtilities);
+		LineParticles.back()->Initialize();
 		LineParticles.back()->BeginRun();
 	}
 
@@ -212,7 +212,7 @@ size_t ParticleManager::SpawnLineModelPool(LineModelPoints modelPart,
 		ExplosionLineModels.push_back(DBG_NEW LineModelParticle());
 		EM->AddLineModel(ExplosionLineModels[lineModelSpawnNumber], modelPart);
 		ExplosionLineModels[lineModelSpawnNumber]->SetEntityManager(EM);
-		ExplosionLineModels[lineModelSpawnNumber]->Initialize(TheUtilities);
+		ExplosionLineModels[lineModelSpawnNumber]->Initialize();
 		ExplosionLineModels[lineModelSpawnNumber]->BeginRun();
 	}
 

@@ -13,9 +13,9 @@ void TheFighter::SetExplodeSound(Sound sound)
 	Enemy::SetExplodeSound(sound);
 }
 
-bool TheFighter::Initialize(Utilities* utilities)
+bool TheFighter::Initialize()
 {
-	LineModel::Initialize(TheUtilities);
+	LineModel::Initialize();
 
 	Enabled = false;
 
@@ -104,7 +104,8 @@ void TheFighter::Reset()
 
 void TheFighter::Spawn(Vector3 position)
 {
-	Enabled = true;
+	Enemy::Spawn(position);
+
 	Separated = false;
 	NewWave = false;
 
@@ -115,6 +116,7 @@ void TheFighter::Hit()
 {
 	Enemy::Hit();
 
+	Destroy();
 }
 
 void TheFighter::Destroy()

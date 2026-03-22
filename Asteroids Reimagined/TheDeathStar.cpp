@@ -4,7 +4,7 @@ TheDeathStar::TheDeathStar()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		Managers.EM.AddEntity(FighterPairs[i] = DBG_NEW TheFighterPair());
+		EM.AddEntity(FighterPairs[i] = DBG_NEW TheFighterPair());
 	}
 }
 
@@ -53,13 +53,13 @@ void TheDeathStar::SetUFO()
 	}
 }
 
-bool TheDeathStar::Initialize(Utilities* utilities)
+bool TheDeathStar::Initialize()
 {
-	Entity::Initialize(TheUtilities);
+	Enemy::Initialize();
 
 	for (const auto &fighterPair : FighterPairs)
 	{
-		fighterPair->Initialize(TheUtilities);
+		fighterPair->Initialize();
 	}
 
 	Radius = 30.0f;
@@ -70,7 +70,7 @@ bool TheDeathStar::Initialize(Utilities* utilities)
 
 bool TheDeathStar::BeginRun()
 {
-	Entity::BeginRun();
+	Enemy::BeginRun();
 
 	return false;
 }
@@ -85,7 +85,7 @@ void TheDeathStar::Update(float deltaTime)
 
 void TheDeathStar::FixedUpdate(float deltaTime)
 {
-	Entity::FixedUpdate(deltaTime);
+	Enemy::FixedUpdate(deltaTime);
 
 	if (NewWave)
 	{
@@ -102,7 +102,7 @@ void TheDeathStar::FixedUpdate(float deltaTime)
 
 void TheDeathStar::Draw3D()
 {
-	Entity::Draw3D();
+	Enemy::Draw3D();
 
 }
 
@@ -196,6 +196,7 @@ void TheDeathStar::Hit()
 		}
 	}
 
+	Destroy();
 }
 
 void TheDeathStar::Destroy()

@@ -7,7 +7,7 @@ public:
 	TheBackground();
 	virtual ~TheBackground();
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update();

@@ -2,7 +2,7 @@
 
 TheHomingMine::TheHomingMine()
 {
-	LifeTimerID = Managers.EM.AddTimer(90.0f);
+	LifeTimerID = EM.AddTimer(90.0f);
 }
 
 TheHomingMine::~TheHomingMine()
@@ -14,9 +14,9 @@ void TheHomingMine::SetExplodeSound(Sound sound)
 	ExplodeSound = sound;
 }
 
-bool TheHomingMine::Initialize(Utilities* utilities)
+bool TheHomingMine::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -38,7 +38,7 @@ void TheHomingMine::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID)) Destroy();
+	if (EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	if (Target != nullptr)
 	{
@@ -59,7 +59,7 @@ void TheHomingMine::Spawn(Vector3 position)
 
 	GameOver = false;
 
-	Managers.EM.ResetTimer(LifeTimerID, 30.0f);
+	EM.ResetTimer(LifeTimerID, 30.0f);
 }
 
 void TheHomingMine::Hit()

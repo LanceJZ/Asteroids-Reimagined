@@ -20,10 +20,11 @@ public:
 	EntityManager();
 	virtual ~EntityManager();
 
+	bool AllInView = false;
+
 	bool Initialize();
 	bool BeginRun();
 	void SetCamera(Camera& camera);
-	void SetUtilities(Utilities* utilities);
 
 	void Input();
 	void Update(float deltaTime);
@@ -61,7 +62,6 @@ public:
 	std::vector<Common*> Commons = {};
 
 private:
-	Utilities* TheUtilities = {};
 	Camera* TheCamera = {};
 
 	std::vector<Timer*> Timers = {};

@@ -2,7 +2,7 @@
 
 Enemy1::Enemy1()
 {
-	FireMissileTimerID = Managers.EM.AddTimer(4.0f);
+	FireMissileTimerID = EM.AddTimer(4.0f);
 }
 
 Enemy1::~Enemy1()
@@ -44,9 +44,9 @@ void Enemy1::SetMissileExplodeSound(Sound sound)
 	MissileExplodeSound = sound;
 }
 
-bool Enemy1::Initialize(Utilities* utilities)
+bool Enemy1::Initialize()
 {
-	Enemy::Initialize(utilities);
+	Enemy::Initialize();
 
 	Enabled = false;
 	Points = 1250;
@@ -79,9 +79,9 @@ void Enemy1::FixedUpdate(float deltaTime)
 
 	if (CheckWentOffScreen()) Enabled = false;
 
-	if (Managers.EM.TimerElapsed(FireMissileTimerID)) FireMissile();
+	if (EM.TimerElapsed(FireMissileTimerID)) FireMissile();
 
-	if (Managers.EM.TimerElapsed(ShotTimerID)) FireShot();
+	if (EM.TimerElapsed(ShotTimerID)) FireShot();
 
 	DestinationTarget();
 }
@@ -93,7 +93,7 @@ void Enemy1::Draw3D()
 
 void Enemy1::Spawn()
 {
-	Managers.EM.ResetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
+	EM.ResetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
 
 	MaxSpeed = 133.666f;
 	MissilesFired = 0;
@@ -110,6 +110,7 @@ void Enemy1::Hit()
 {
 	Enemy::Hit();
 
+	Destroy();
 }
 
 void Enemy1::Destroy()
@@ -124,7 +125,7 @@ void Enemy1::Reset()
 
 	Destroy();
 
-	Managers.EM.SetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
+	EM.SetTimer(FireMissileTimerID, MissileFireTimerAmount = 6.5f);
 
 	for (const auto& missile : Missiles)
 	{
@@ -146,23 +147,23 @@ void Enemy1::DestinationTarget()
 
 void Enemy1::FireMissile()
 {
-	float missileTimeAmountAdjust = ((float)(Wave - 3) * 0.5f) +
+	float missileTimeAmountAdjust = ((float)(WaveNumber - 3) * 0.5f) +
 		((((float)MissilesFired++)) * 0.05f);
 
 	if (MissileFireTimerAmount < missileTimeAmountAdjust - 0.2f)
 		missileTimeAmountAdjust = MissileFireTimerAmount - 0.2f;
 
 	float min = (MissileFireTimerAmount - missileTimeAmountAdjust) /
-		((((float)Wave - 3) * 0.5f) + 1.0f);
+		((((float)WaveNumber - 3) * 0.5f) + 1.0f);
 	float max = MissileFireTimerAmount - missileTimeAmountAdjust;
 
 	if (min < 0.15f) min = 0.15f;
 
 	if (min > max) max = min * 2.0f;
 
-	float missileTime = GetRandomFloat(min,	max);
+	float missileTime = M.GetRandomFloat(min, max);
 
-	Managers.EM.ResetTimer(FireMissileTimerID, missileTime);
+	EM.ResetTimer(FireMissileTimerID, missileTime);
 
 	if (!Player->GameOver) PlaySound(FireSound);
 
@@ -182,7 +183,7 @@ void Enemy1::FireMissile()
 	if (spawnMissile)
 	{
 		Missiles.push_back(DBG_NEW TheMissile());
-		Managers.EM.AddLineModel(Missiles.back(), MissileModel);
+		EM.AddLineModel(Missiles.back(), MissileModel);
 		Missiles.back()->SetPlayer(Player);
 		Missiles.back()->SetOnSound(MissileOnSound);
 		Missiles.back()->SetExplodeSound(MissileExplodeSound);
@@ -208,7 +209,7 @@ void Enemy1::FireMissile()
 
 void Enemy1::FireShot()
 {
-	Shoot(GetRandomVelocity(300.666f));
+	Shoot(M.GetRandomVelocity(300.666f));
 }
 
 bool Enemy1::CheckCollisions()

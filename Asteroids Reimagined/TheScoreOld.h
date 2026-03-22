@@ -2,13 +2,13 @@
 #include "Globals.h"
 #include "OnScreenText.h"
 
-class TheScore : public OnScreenText
+class TheScoreOld : public OnScreenText
 {
 public:
-	TheScore();
-	virtual ~TheScore();
+	TheScoreOld();
+	virtual ~TheScoreOld();
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update();

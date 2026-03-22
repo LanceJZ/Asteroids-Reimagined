@@ -7,16 +7,16 @@ ParticleCube::~ParticleCube()
 {
 }
 
-void ParticleCube::SetManagers(EntityManager* managers)
+void ParticleCube::SetManagers(EntityManager* entityManager)
 {
-	EM = managers;
+	EM = entityManager;
 
 	LifeTimerID = EM->AddTimer();
 }
 
-bool ParticleCube::Initialize(Utilities* utilities)
+bool ParticleCube::Initialize()
 {
-	Model3D::Initialize(utilities);
+	Model3D::Initialize();
 
 	return false;
 }
@@ -25,6 +25,8 @@ bool ParticleCube::BeginRun()
 {
 	Model3D::BeginRun();
 
+	Enabled = false;
+
 	return false;
 }
 
@@ -32,16 +34,16 @@ void ParticleCube::Update(float deltaTime)
 {
 	Model3D::Update(deltaTime);
 
-	if (EM->TimerElapsed(LifeTimerID))
-	{
-		Enabled = false;
-	}
 }
 
 void ParticleCube::FixedUpdate(float deltaTime)
 {
 	Model3D::FixedUpdate(deltaTime);
 
+	if (EM->TimerElapsed(LifeTimerID))
+	{
+		Enabled = false;
+	}
 }
 
 void ParticleCube::Draw3D()
@@ -56,12 +58,12 @@ void ParticleCube::Spawn(Vector3 position, Vector3 velocity, float radius,
 	Enabled = true;
 
 	Vector3 spawnPos = position;
-	spawnPos.x += GetRandomFloat(-radius, radius);
-	spawnPos.y += GetRandomFloat(-radius, radius);
+	spawnPos.x += M.GetRandomFloat(-radius, radius);
+	spawnPos.y += M.GetRandomFloat(-radius, radius);
 	Position = spawnPos;
 
 	EM->ResetTimer(LifeTimerID, time);
 
-	Vector3 AddedVel = GetRandomVelocity(GetRandomFloat(speed * 0.25f, speed));
+	Vector3 AddedVel = M.GetRandomVelocity(M.GetRandomFloat(speed * 0.25f, speed));
 	Velocity = Vector3Add(velocity, AddedVel);
 }

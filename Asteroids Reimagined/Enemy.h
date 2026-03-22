@@ -9,7 +9,7 @@ public:
 	Enemy();
 	virtual ~Enemy();
 
-	int Wave = 0;
+	int WaveNumber = 0;
 	float Distance = 0.0f;
 	float ShotTimerAmount = 0.0f;
 
@@ -25,11 +25,12 @@ public:
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);
 	void FixedUpdate(float deltaTime);
+	void AlwaysUpdate(float deltaTime);
 	void Draw3D();
 
 	bool CheckRockCollisions(Entity* rock);

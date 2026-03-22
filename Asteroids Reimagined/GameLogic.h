@@ -1,6 +1,5 @@
 #pragma once
 #include "Globals.h"
-#include "Utilities.h"
 #include "ThePlayer.h"
 #include "EnemyControl.h"
 #include "PowerUp.h"
@@ -33,7 +32,7 @@ public:
 	void SetPowerUpSound(Sound sound);
 	void SetPickUpSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 	bool Load();
 

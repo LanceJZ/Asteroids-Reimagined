@@ -30,12 +30,12 @@ bool EntityManager::Initialize()
 {
 	for (const auto& common : Commons)
 	{
-		common->Initialize(TheUtilities);
+		common->Initialize();
 	}
 
 	for (const auto& Entity : Entities)
 	{
-		Entity->Initialize(TheUtilities);
+		Entity->Initialize();
 	}
 
 	return true;
@@ -66,11 +66,6 @@ void EntityManager::SetCamera(Camera& camera)
 	}
 }
 
-void EntityManager::SetUtilities(Utilities* utilities)
-{
-	TheUtilities = utilities;
-}
-
 void EntityManager::Input()
 {
 	for (const auto& common : Commons)
@@ -83,10 +78,20 @@ void EntityManager::Input()
 		if (Entities.at(i)->Enabled) Entities.at(i)->Input();
 	}
 }
-
+// For Movement and Collisions.
 void EntityManager::Update(float deltaTime)
 {
-	float halfDeltaTime = deltaTime * 0.5f;
+	float halfDeltaTime = deltaTime * 0.25f;
+
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
+	}
+
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
+	}
 
 	for (int i = 0; i < Entities.size(); i++)
 	{
@@ -108,7 +113,7 @@ void EntityManager::Update(float deltaTime)
 		common->Update();
 	}
 }
-
+// Movement and Collision Updates you need done even when Entity is Disabled.
 void EntityManager::AlwaysUpdate(float deltaTime)
 {
 	float halfDeltaTime = deltaTime * 0.5f;
@@ -123,9 +128,14 @@ void EntityManager::AlwaysUpdate(float deltaTime)
 		Entities.at(i)->AlwaysUpdate(halfDeltaTime);
 	}
 }
-
+// For things that don't involve Movement or Collisions.
 void EntityManager::FixedUpdate(float deltaTime)
 {
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		if (Entities.at(i)->Enabled) Entities.at(i)->FixedUpdate(deltaTime);
+	}
+
 	for (const auto& timer : Timers)
 	{
 		timer->FixedUpdate(deltaTime);
@@ -133,12 +143,7 @@ void EntityManager::FixedUpdate(float deltaTime)
 
 	for (const auto& common : Commons)
 	{
-		common->FixedUpdate();
-	}
-
-	for (int i = 0; i < Entities.size(); i++)
-	{
-		if (Entities.at(i)->Enabled) Entities.at(i)->FixedUpdate(deltaTime);
+		if (common->Enabled) common->FixedUpdate();
 	}
 }
 
@@ -152,6 +157,11 @@ void EntityManager::Draw3D()
 
 void EntityManager::Draw2D()
 {
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		if (Entities.at(i)->Enabled) Entities.at(i)->Draw2D();
+	}
+
 	for (const auto& common : Commons)
 	{
 		common->Draw2D();
@@ -192,7 +202,7 @@ size_t EntityManager::AddEntity(Entity* entity)
 {
 	size_t entityNumber = Entities.size();
 	Entities.push_back(entity);
-	Entities[entityNumber]->Initialize(TheUtilities);
+	Entities[entityNumber]->Initialize();
 	Entities[entityNumber]->EntityOnly = true;
 	Entities[entityNumber]->BeginRun();
 
@@ -201,14 +211,14 @@ size_t EntityManager::AddEntity(Entity* entity)
 //TODO: Change to use CreateEntity(* entity) private function for shared code.
 size_t EntityManager::AddEntity()
 {
-	size_t entityNumber = Entities.size();
+	size_t number = Entities.size();
 	Entity* newEntity = DBG_NEW Entity();
 	Entities.push_back(newEntity);
-	Entities[entityNumber]->Initialize(TheUtilities);
-	Entities[entityNumber]->EntityOnly = true;
-	Entities[entityNumber]->BeginRun();
+	Entities[number]->Initialize();
+	Entities[number]->EntityOnly = true;
+	Entities[number]->BeginRun();
 
-	return entityNumber;
+	return number;
 }
 
 size_t EntityManager::AddLineModel(Entity* model)
@@ -216,7 +226,8 @@ size_t EntityManager::AddLineModel(Entity* model)
 	size_t number = Entities.size();
 
 	Entities.push_back(model);
-	Entities[number]->Initialize(TheUtilities);
+	Entities[number]->Initialize();
+	Entities[number]->Cull = !AllInView;
 
 	return number;
 }
@@ -227,7 +238,8 @@ size_t EntityManager::AddLineModel(LineModelPoints model)
 
 	Entities.push_back(DBG_NEW Entity());
 	Entities[number]->SetModel(model);
-	Entities[number]->Initialize(TheUtilities);
+	Entities[number]->Initialize();
+	Entities[number]->Cull = !AllInView;
 
 	return number;
 }
@@ -251,7 +263,7 @@ size_t EntityManager::AddLineModel()
 	size_t number = Entities.size();
 
 	Entities.push_back(DBG_NEW Entity());
-	Entities[number]->Initialize(TheUtilities);
+	Entities[number]->Initialize();
 
 	return number;
 }
@@ -261,8 +273,9 @@ size_t EntityManager::AddModel3D(Entity* model3D)
 	size_t modelNumber = Entities.size();
 
 	Entities.push_back(model3D);
-	Entities.at(modelNumber)->Initialize(TheUtilities);
+	Entities.at(modelNumber)->Initialize();
 	Entities.at(modelNumber)->SetCamera(TheCamera);
+	Entities.at(modelNumber)->Cull = !AllInView;
 
 	return modelNumber;
 }
@@ -287,7 +300,7 @@ size_t EntityManager::AddModel3D(Entity* model3D, Model &model, float scale)
 	size_t modelNumber = AddModel3D(model3D);
 	Entities[modelNumber]->SetModel(model, scale);
 	Entities[modelNumber]->SetCamera(TheCamera);
-	Entities[modelNumber]->Initialize(TheUtilities);
+	Entities[modelNumber]->Initialize();
 	Entities[modelNumber]->BeginRun();
 
 	return modelNumber;
@@ -298,6 +311,7 @@ size_t EntityManager::AddModel3D(Model &model)
 	size_t modelNumber = Entities.size();
 	Entities.push_back(DBG_NEW Entity());
 	Entities[modelNumber]->SetModel(model, 1.0f);
+	Entities.at(modelNumber)->Cull = !AllInView;
 
 	return modelNumber;
 }
@@ -330,7 +344,7 @@ size_t EntityManager::AddCommon(Common* common)
 {
 	size_t commonNumber = Commons.size();
 	Commons.push_back(common);
-	Commons[commonNumber]->Initialize(TheUtilities);
+	Commons[commonNumber]->Initialize();
 
 	return commonNumber;
 }
@@ -339,7 +353,7 @@ size_t EntityManager::AddOnScreenText(Common* onScreenText)
 {
 	size_t number = Commons.size();
 	Commons.push_back(onScreenText);
-	Commons[number]->Initialize(TheUtilities);
+	Commons[number]->Initialize();
 
 	return number;
 }
@@ -348,7 +362,7 @@ Entity* EntityManager::CreateEntity()
 {
 	Entity* newEntity = DBG_NEW Entity();
 	Entities.push_back(newEntity);
-	newEntity->Initialize(TheUtilities);
+	newEntity->Initialize();
 	newEntity->BeginRun();
 
 	return newEntity;

@@ -20,7 +20,7 @@ public:
 	void SetExplodeSound(Sound sound);
 	void SetSpawnSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);

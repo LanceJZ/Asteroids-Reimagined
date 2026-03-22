@@ -15,7 +15,7 @@ public:
 	virtual ~EnemyControl();
 
 	bool SpawnPowerUp = false;
-	int Wave = 0;
+	int WaveNumber = 0;
 	Vector3 PowerUpSpawnPosition = {};
 
 	std::vector<TheRock*> Rocks;
@@ -70,7 +70,7 @@ public:
 	void SetBossTurretExplodeSound(Sound sound);
 	void SetBossSpineFireSound(Sound sound);
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Update();

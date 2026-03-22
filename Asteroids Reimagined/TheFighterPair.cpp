@@ -4,7 +4,7 @@ TheFighterPair::TheFighterPair()
 {
 	for (int i = 0; i < 2; i++)
 	{
-		Managers.EM.AddLineModel(Fighters[i] = DBG_NEW TheFighter());
+		EM.AddLineModel(Fighters[i] = DBG_NEW TheFighter());
 	}
 }
 
@@ -60,13 +60,13 @@ void TheFighterPair::SetExplodeSound(Sound sound)
 	ExplodeSound = sound;
 }
 
-bool TheFighterPair::Initialize(Utilities* utilities)
+bool TheFighterPair::Initialize()
 {
-	Entity::Initialize(TheUtilities);
+	Enemy::Initialize();
 
-	for (const auto &fighterPair : Fighters)
+	for (const auto &fighter : Fighters)
 	{
-		fighterPair->Initialize(TheUtilities);
+		fighter->Initialize();
 	}
 
 	Enabled = false;
@@ -76,7 +76,7 @@ bool TheFighterPair::Initialize(Utilities* utilities)
 
 bool TheFighterPair::BeginRun()
 {
-	Entity::BeginRun();
+	Enemy::BeginRun();
 
 	Points = 200;
 	Speed = 100.0f;
@@ -88,7 +88,7 @@ bool TheFighterPair::BeginRun()
 
 void TheFighterPair::Update(float deltaTime)
 {
-	Enemy::Update(deltaTime);
+	Entity::Update(deltaTime);
 
 	if (Separated)
 	{
@@ -98,7 +98,7 @@ void TheFighterPair::Update(float deltaTime)
 
 void TheFighterPair::FixedUpdate(float deltaTime)
 {
-	Enemy::FixedUpdate(deltaTime);
+	Entity::FixedUpdate(deltaTime);
 
 	if (Separated)
 	{
@@ -137,7 +137,7 @@ void TheFighterPair::FixedUpdate(float deltaTime)
 
 void TheFighterPair::Draw3D()
 {
-	Entity::Draw3D();
+	Enemy::Draw3D();
 
 }
 
@@ -161,7 +161,8 @@ void TheFighterPair::Reset()
 
 void TheFighterPair::Spawn(Vector3 position)
 {
-	Enabled = true;
+	Enemy::Spawn(position);
+
 	Separated = false;
 	NewWave = false;
 
@@ -192,13 +193,15 @@ void TheFighterPair::Hit()
 		fighter->Separate();
 		fighter->RemoveParent(this);
 	}
+
+	ClearParents();
+	Destroy();
 }
 
 void TheFighterPair::Destroy()
 {
 	Enemy::Destroy();
 
-	ClearParents();
 }
 
 bool TheFighterPair::CheckCollisions()

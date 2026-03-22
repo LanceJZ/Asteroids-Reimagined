@@ -8,9 +8,9 @@ ExplosionControl::~ExplosionControl()
 {
 }
 
-bool ExplosionControl::Initialize(Utilities* utilities)
+bool ExplosionControl::Initialize()
 {
-	ParticleManager::Initialize(utilities);
+	ParticleManager::Initialize();
 
 	return false;
 }

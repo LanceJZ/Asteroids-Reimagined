@@ -2,7 +2,7 @@
 
 Enemy::Enemy()
 {
-	ShotTimerID = Managers.EM.AddTimer();
+	ShotTimerID = EM.AddTimer();
 }
 
 Enemy::~Enemy()
@@ -29,9 +29,9 @@ void Enemy::SetExplodeSound(Sound explodeSound)
 	ExplodeSound = explodeSound;
 }
 
-bool Enemy::Initialize(Utilities* utilities)
+bool Enemy::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -39,7 +39,6 @@ bool Enemy::Initialize(Utilities* utilities)
 bool Enemy::BeginRun()
 {
 	LineModel::BeginRun();
-
 
 	return false;
 }
@@ -55,6 +54,13 @@ void Enemy::FixedUpdate(float deltaTime)
 	LineModel::FixedUpdate(deltaTime);
 
 	if (!Player->GameOver && !IsSoundPlaying(OnSound)) PlaySound(OnSound);
+}
+
+void Enemy::AlwaysUpdate(float deltaTime)
+{
+	LineModel::AlwaysUpdate(deltaTime);
+
+	CheckShotsHitPlayer();
 }
 
 void Enemy::Draw3D()
@@ -83,13 +89,21 @@ bool Enemy::CheckRockCollisions(Entity* rock)
 
 void Enemy::CheckShotsHitPlayer()
 {
-	for (const auto shot : Shots)
+	for (const auto& shot : Shots)
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(*Player))
+		if (Player->Shield->Enabled &&
+			shot->CirclesIntersect(Player->Position, Player->Shield->Radius))
 		{
-			Player->Hit(shot->Position, shot->Velocity);
+			Player->ShieldHit(shot->Position, shot->Velocity);
+			shot->Destroy();
+			break;
+		}
+
+		if (shot->CirclesIntersect(*Player) && !Player->Shield->Enabled)
+		{
+			Player->Hit();
 			shot->Destroy();
 			break;
 		}
@@ -103,8 +117,8 @@ void Enemy::Spawn()
 	MaxSpeed = 133.666f;
 
 	Vector3 position = { 0.0f, 0.0f, 0.0f };
-	int width = (int)(WindowWidth / 1.25f);
-	int height = (int)(WindowHeight / 1.25f);
+	int width = (int)(WindowHalfWidth / 1.25f);
+	int height = (int)(WindowHalfHeight / 1.25f);
 
 	if (GetRandomValue(1, 10) < 5)
 	{
@@ -112,19 +126,19 @@ void Enemy::Spawn()
 		{
 			// Top
 			EdgeSpawnedFrom = Edge::Top;
-			position.y = (float)-WindowHeight;
+			position.y = (float)-WindowHalfHeight;
 			position.x = (float)GetRandomValue(-width, width);
 			Velocity.y = MaxSpeed;
-			Destination = { position.x, (float)WindowHeight, 0 };
+			Destination = { position.x, (float)WindowHalfHeight, 0 };
 		}
 		else
 		{
 			//Bottom
 			EdgeSpawnedFrom = Edge::Bottom;
-			position.y = (float)WindowHeight;
+			position.y = (float)WindowHalfHeight;
 			position.x = (float)GetRandomValue(-width, width);
 			Velocity.y = -MaxSpeed;
-			Destination = { position.x, (float) -WindowHeight, 0};
+			Destination = { position.x, (float) -WindowHalfHeight, 0};
 		}
 
 	}
@@ -134,19 +148,19 @@ void Enemy::Spawn()
 		{
 			//Left
 			EdgeSpawnedFrom = Edge::Left;
-			position.x = (float)-WindowWidth;
+			position.x = (float)-WindowHalfWidth;
 			position.y = (float)GetRandomValue(-height, height);
 			Velocity.x = MaxSpeed;
-			Destination = { (float)WindowWidth, position.y, 0 };
+			Destination = { (float)WindowHalfWidth, position.y, 0 };
 		}
 		else
 		{
 			//Right
 			EdgeSpawnedFrom = Edge::Right;
-			position.x = (float)WindowWidth;
+			position.x = (float)WindowHalfWidth;
 			position.y = (float)GetRandomValue(-height, height);
 			Velocity.x = -MaxSpeed;
-			Destination = { (float) -WindowWidth, position.y, 0};
+			Destination = { (float) -WindowHalfWidth, position.y, 0};
 		}
 	}
 
@@ -158,7 +172,7 @@ void Enemy::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	Managers.EM.ResetTimer(ShotTimerID, GetRandomFloat(0.75f, 1.5f));
+	EM.ResetTimer(ShotTimerID, M.GetRandomFloat(0.75f, 1.5f));
 }
 
 void Enemy::Hit()
@@ -196,7 +210,7 @@ void Enemy::Shoot()
 {
 	PlaySound(FireSound);
 
-	Managers.EM.ResetTimer(ShotTimerID);
+	EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -214,7 +228,7 @@ void Enemy::Shoot()
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 
@@ -223,7 +237,7 @@ void Enemy::Shoot()
 
 void Enemy::Shoot(Vector3 velocity)
 {
-	Managers.EM.ResetTimer(ShotTimerID);
+	EM.ResetTimer(ShotTimerID);
 
 	bool spawnNew = true;
 	size_t spawnNumber = Shots.size();
@@ -241,7 +255,7 @@ void Enemy::Shoot(Vector3 velocity)
 	if (spawnNew)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		EM.AddLineModel(Shots[spawnNumber], ShotModel);
 		Shots[spawnNumber]->BeginRun();
 	}
 
@@ -256,11 +270,11 @@ void Enemy::ChasePlayer()
 
 	if (!Player->Enabled)
 	{
-		if (X() > 0.0f) target.x = (float)WindowWidth;
-		else target.x = (float)-WindowWidth;
+		if (X() > 0.0f) target.x = (float)WindowHalfWidth;
+		else target.x = (float)-WindowHalfWidth;
 
-		if (Y() > 0.0f) target.y = (float)WindowHeight;
-		else target.y = (float)-WindowHeight;
+		if (Y() > 0.0f) target.y = (float)WindowHalfHeight;
+		else target.y = (float)-WindowHalfHeight;
 	}
 
 	SetRotateVelocity(target, TurnSpeed, Speed);
@@ -329,8 +343,6 @@ void Enemy::Explode()
 	Particles.SpawnLineDots(Position,
 		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
-
-	Destroy();
 }
 
 bool Enemy::CheckUFOActive()
@@ -404,11 +416,11 @@ void Enemy::DestinationTopBottom()
 {
 	if (Player->X() > X())
 	{
-		Destination.x = (-WindowWidth * 0.5f) + (Player->X() - (WindowWidth * 0.25f));
+		Destination.x = (-WindowHalfWidth * 0.5f) + (Player->X() - (WindowHalfWidth * 0.25f));
 	}
 	else
 	{
-		Destination.x = (WindowWidth * 0.5f) - (Player->X() - (WindowWidth * 0.25f));
+		Destination.x = (WindowHalfWidth * 0.5f) - (Player->X() - (WindowHalfWidth * 0.25f));
 	}
 }
 
@@ -416,11 +428,11 @@ void Enemy::DestinationLeftRight()
 {
 	if (Player->Y() > Y())
 	{
-		Destination.y = (-WindowHeight * 0.5f) + (Player->Y() - (WindowHeight * 0.25f));
+		Destination.y = (-WindowHalfHeight * 0.5f) + (Player->Y() - (WindowHalfHeight * 0.25f));
 	}
 	else
 	{
-		Destination.y = (WindowHeight * 0.5f) - (Player->Y() - (WindowHeight * 0.25f));
+		Destination.y = (WindowHalfHeight * 0.5f) - (Player->Y() - (WindowHalfHeight * 0.25f));
 	}
 }
 
@@ -428,22 +440,22 @@ bool Enemy::CheckWentOffScreen()
 {
 	if (EdgeSpawnedFrom == Edge::Right || EdgeSpawnedFrom == Edge::Left)
 	{
-		if (X() < -WindowWidth)
+		if (X() < -WindowHalfWidth)
 		{
 			return true;
 		}
-		if (X() > WindowWidth)
+		if (X() > WindowHalfWidth)
 		{
 			return true;
 		}
 	}
 	else if (EdgeSpawnedFrom == Edge::Top || EdgeSpawnedFrom == Edge::Bottom)
 	{
-		if (Y() < -WindowHeight)
+		if (Y() < -WindowHalfHeight)
 		{
 			return true;
 		}
-		if (Y() > WindowHeight)
+		if (Y() > WindowHalfHeight)
 		{
 			return true;
 		}
@@ -458,6 +470,8 @@ bool Enemy::CheckCollisions()
 {
 	for (const auto& shot : Player->Shots)
 	{
+		if (!shot->Enabled) continue;
+
 		if (shot->CirclesIntersect(*this))
 		{
 			shot->Destroy();
@@ -469,6 +483,8 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& shot : Player->DoubleShots)
 	{
+		if (!shot->Enabled) continue;
+
 		if (CirclesIntersect(*shot))
 		{
 			shot->Destroy();
@@ -480,6 +496,8 @@ bool Enemy::CheckCollisions()
 
 	for (const auto& bigShot : Player->BigShots)
 	{
+		if (!bigShot->Enabled) continue;
+
 		if (CirclesIntersect(*bigShot))
 		{
 			bigShot->HitPoints -= 50;
@@ -566,15 +584,18 @@ bool Enemy::CheckCollisions()
 
 	if (!Player->GetBeenHit())
 	{
-		if (CirclesIntersect(*Player))
+		if (Player->Shield->Enabled &&
+			CirclesIntersect(Player->Position, Player->Shield->Radius))
 		{
-			if (!Player->Shield->Enabled)
-			{
-				Hit();
-				Player->ScoreUpdate(Points);
-			}
+			Player->ShieldHit(Position, Velocity);
+			return false;
+		}
 
-			Player->Hit(Position, Velocity);
+		if (CirclesIntersect(*Player) && !Player->Shield->Enabled)
+		{
+			Hit();
+			Player->ScoreUpdate(Points);
+			Player->Hit();
 
 			return true;
 		}
@@ -591,7 +612,9 @@ bool Enemy::CheckCollisions()
 			if (CirclesIntersect(*shot))
 			{
 				shot->Destroy();
+				Hit();
 				Explode();
+
 				return true;
 			}
 		}
@@ -601,6 +624,7 @@ bool Enemy::CheckCollisions()
 		if (ufo->CirclesIntersect(*this))
 		{
 			ufo->Destroy();
+			Hit();
 			Explode();
 
 			return true;

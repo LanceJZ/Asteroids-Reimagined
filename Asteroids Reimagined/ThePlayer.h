@@ -4,7 +4,7 @@
 #include "Shot.h"
 #include "TheHomingMine.h"
 #include "ThePlasmaShot.h"
-#include "TheScore.h"
+#include "TheScoreOld.h"
 
 enum SecondaryWeaponType
 {
@@ -30,7 +30,7 @@ public:
 
 	SecondaryWeaponType SecondaryWeapon = SecondaryWeaponType::None;
 
-	int Wave = 0;
+	int WaveNumber = 0;
 
 	LineModel* Shield = {};
 
@@ -62,9 +62,7 @@ public:
 	void SetMineDropSound(Sound sound);
 	void SetMineExplodeSound(Sound sound);
 
-	void SetParticleManager(ParticleManager* particleManager);
-
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void Input();
@@ -72,7 +70,8 @@ public:
 	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void Hit(Vector3 location, Vector3 velocity);
+	void Hit();
+	void ShieldHit(Vector3 location, Vector3 velocity);
 	void ScoreUpdate(int addToScore);
 	void Spawn();
 	void NewGame();
@@ -149,7 +148,7 @@ private:
 	LineModelPoints MineModel;
 	LineModelPoints BigShotModel;
 
-	TheScore* Score = {};
+	TheScoreOld* Score = {};
 
 	std::vector<LineModel*> AmmoMeterModels = {};
 
@@ -178,7 +177,6 @@ private:
 
 	void WeHaveThePower();
 
-	void ShieldHit(Vector3 location, Vector3 velocity);
 	void TurretHeatMeterUpdate();
 	void AmmoMeterUpdate(int ammoCount);
 	void AddAmmoMeterModels(int count);

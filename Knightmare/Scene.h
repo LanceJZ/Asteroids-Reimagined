@@ -1,9 +1,8 @@
 #pragma once
 #include "Common.h"
 
-class Scene : Common
+struct Scene : Common
 {
-public:
 	Scene();
 	virtual ~Scene();
 
@@ -13,8 +12,5 @@ public:
 	virtual void Input();
 	virtual void Update(float deltaTime);
 	virtual void Draw();
-
-private:
-
 };
 

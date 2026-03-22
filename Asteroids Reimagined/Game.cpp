@@ -4,24 +4,24 @@ Game::Game()
 {
 	//When adding classes to EM, must be pointer to heap,IE: Name = new Class().
 
-	LogicID = Managers.EM.AddCommon(Logic = DBG_NEW GameLogic());
-	//BackGroundID = Managers.EM.AddCommon(BackGround = DBG_NEW TheBackground());
-	EnemiesID = Managers.EM.AddCommon(Enemies = DBG_NEW EnemyControl());
-	PlayerID = Managers.EM.AddLineModel(Player = DBG_NEW ThePlayer());
+	LogicID = EM.AddCommon(Logic = DBG_NEW GameLogic());
+	//BackGroundID = EM.AddCommon(BackGround = DBG_NEW TheBackground());
+	EnemiesID = EM.AddCommon(Enemies = DBG_NEW EnemyControl());
+	PlayerID = EM.AddLineModel(Player = DBG_NEW ThePlayer());
 }
 
 Game::~Game()
 {
 }
 
-bool Game::Initialize(Utilities* utilities) //Initialize
+bool Game::Initialize() //Initialize
 {
-	Common::Initialize(utilities);
+	Common::Initialize();
 
-	//BackGround->Initialize(utilities);
-	Enemies->Initialize(utilities);
-	Logic->Initialize(utilities);
-	Player->Initialize(utilities);
+	//BackGround->Initialize();
+	Enemies->Initialize();
+	Logic->Initialize();
+	Player->Initialize();
 
 	DisableCursor();
 
@@ -43,82 +43,86 @@ bool Game::Load()
 	Logic->Load();
 
 	//Models
-	size_t shotModelID = Managers.CM.LoadTheLineModel("Dot");
-	Player->SetModel(Managers.CM.LoadAndGetLineModel("PlayerShip"));
-	Player->SetFlameModel(Managers.CM.LoadAndGetLineModel("PlayerFlame"));
-	Player->SetShieldModel(Managers.CM.LoadAndGetLineModel("PlayerShield"));
-	Player->SetTurretModel(Managers.CM.LoadAndGetLineModel("PlayerTurret"));
-	Player->SetShotModel(Managers.CM.GetLineModel(shotModelID));
-	Player->SetCrosshairModel(Managers.CM.LoadAndGetLineModel("Cross"));
-	Player->SetTurretHeatModel(Managers.CM.LoadAndGetLineModel("HeatMeter"));
-	Player->SetBigShotModel(Managers.CM.LoadAndGetLineModel("PlayerBigShot"));
-	Player->SetMineModel(Managers.CM.LoadAndGetLineModel("HomingMine"));
+/* This line of code is declaring a variable `shotModelID` of type `size_t` and assigning it the return value of the
+`LoadTheLineModel` function from the `CM` object. The function is loading a line model named "Dot" and
+returning an identifier or ID associated with that model, which is then stored in the `shotModelID` variable for later
+use. */
+	size_t shotModelID = CM.LoadTheLineModel("Dot");
+	Player->SetModel(CM.LoadAndGetLineModel("PlayerShip"));
+	Player->SetFlameModel(CM.LoadAndGetLineModel("PlayerFlame"));
+	Player->SetShieldModel(CM.LoadAndGetLineModel("PlayerShield"));
+	Player->SetTurretModel(CM.LoadAndGetLineModel("PlayerTurret"));
+	Player->SetShotModel(CM.GetLineModel(shotModelID));
+	Player->SetCrosshairModel(CM.LoadAndGetLineModel("Cross"));
+	Player->SetTurretHeatModel(CM.LoadAndGetLineModel("HeatMeter"));
+	Player->SetBigShotModel(CM.LoadAndGetLineModel("PlayerBigShot"));
+	Player->SetMineModel(CM.LoadAndGetLineModel("HomingMine"));
 
-	Enemies->SetUFOModel(Managers.CM.LoadAndGetLineModel("UFO"));
-	Enemies->SetShotModel(Managers.CM.GetLineModel(shotModelID));
-	Enemies->SetWedgeModel(Managers.CM.LoadAndGetLineModel("Wedge"));
-	Enemies->SetEnemy1Model(Managers.CM.LoadAndGetLineModel("Enemy1"));
-	Enemies->SetEnemy2Model(Managers.CM.LoadAndGetLineModel("Enemy2"));
-	Enemies->SetEnemyMissileModel(Managers.CM.LoadAndGetLineModel("Missile"));
-	Enemies->SetEnemyMineModel(Managers.CM.LoadAndGetLineModel("Mine"));
-	Enemies->SetEnemyTwoMineExplodeSound(Managers.CM.LoadAndGetSound("MineExplode"));
-	Enemies->SetBossModel(Managers.CM.LoadAndGetLineModel("BossShip"));
-	Enemies->SetBossShieldModel(Managers.CM.LoadAndGetLineModel("BossShield"));
-	Enemies->SetBossTurretModel(Managers.CM.LoadAndGetLineModel("BossTurret"));
-	Enemies->SetLeftSpineMountModel(Managers.CM.LoadAndGetLineModel("LeftSpineGun"));
-	Enemies->SetRightSpineMountModel(Managers.CM.LoadAndGetLineModel("RightSpineGun"));
+	Enemies->SetUFOModel(CM.LoadAndGetLineModel("UFO"));
+	Enemies->SetShotModel(CM.GetLineModel(shotModelID));
+	Enemies->SetWedgeModel(CM.LoadAndGetLineModel("Wedge"));
+	Enemies->SetEnemy1Model(CM.LoadAndGetLineModel("Enemy1"));
+	Enemies->SetEnemy2Model(CM.LoadAndGetLineModel("Enemy2"));
+	Enemies->SetEnemyMissileModel(CM.LoadAndGetLineModel("Missile"));
+	Enemies->SetEnemyMineModel(CM.LoadAndGetLineModel("Mine"));
+	Enemies->SetEnemyTwoMineExplodeSound(CM.LoadAndGetSound("MineExplode"));
+	Enemies->SetBossModel(CM.LoadAndGetLineModel("BossShip"));
+	Enemies->SetBossShieldModel(CM.LoadAndGetLineModel("BossShield"));
+	Enemies->SetBossTurretModel(CM.LoadAndGetLineModel("BossTurret"));
+	Enemies->SetLeftSpineMountModel(CM.LoadAndGetLineModel("LeftSpineGun"));
+	Enemies->SetRightSpineMountModel(CM.LoadAndGetLineModel("RightSpineGun"));
 
-	Logic->SetPowerUpModel(Managers.CM.LoadAndGetLineModel("PowerUp"));
+	Logic->SetPowerUpModel(CM.LoadAndGetLineModel("PowerUp"));
 
 	//Sounds
-	Player->SetExplodeSound(Managers.CM.LoadAndGetSound("PlayerExplode"));
-	Player->SetBonusSound(Managers.CM.LoadAndGetSound("BonusShip"));
-	Player->SetFireSound(Managers.CM.LoadAndGetSound("PlayerFire"));
-	Player->SetShieldHitSound(Managers.CM.LoadAndGetSound("PlayerShieldHit"));
-	Player->SetShieldOnSound(Managers.CM.LoadAndGetSound("PlayerShieldOn"));
-	Player->SetThrustSound(Managers.CM.LoadAndGetSound("PlayerThrust"));
-	Player->SetSpawnSound(Managers.CM.LoadAndGetSound("PlayerSpawn"));
-	Player->SetMineDropSound(Managers.CM.LoadAndGetSound("HomingMineDrop"));
-	Player->SetMineExplodeSound(Managers.CM.LoadAndGetSound("HomingMineExplode"));
-	Player->SetDoubleShotSound(Managers.CM.LoadAndGetSound("DoubleShotFire"));
-	Player->SetBigShotSound(Managers.CM.LoadAndGetSound("BigShotFire"));
-	Player->SetPlasmaShotSound(Managers.CM.LoadAndGetSound("PlayerPlasmaFire"));
+	Player->SetExplodeSound(CM.LoadAndGetSound("PlayerExplode"));
+	Player->SetBonusSound(CM.LoadAndGetSound("BonusShip"));
+	Player->SetFireSound(CM.LoadAndGetSound("PlayerFire"));
+	Player->SetShieldHitSound(CM.LoadAndGetSound("PlayerShieldHit"));
+	Player->SetShieldOnSound(CM.LoadAndGetSound("PlayerShieldOn"));
+	Player->SetThrustSound(CM.LoadAndGetSound("PlayerThrust"));
+	Player->SetSpawnSound(CM.LoadAndGetSound("PlayerSpawn"));
+	Player->SetMineDropSound(CM.LoadAndGetSound("HomingMineDrop"));
+	Player->SetMineExplodeSound(CM.LoadAndGetSound("HomingMineExplode"));
+	Player->SetDoubleShotSound(CM.LoadAndGetSound("DoubleShotFire"));
+	Player->SetBigShotSound(CM.LoadAndGetSound("BigShotFire"));
+	Player->SetPlasmaShotSound(CM.LoadAndGetSound("PlayerPlasmaFire"));
 
-	Enemies->SetRockExplodeSound(Managers.CM.LoadAndGetSound("RockExplode"));
-	Enemies->SetUFOExplodeSound(Managers.CM.LoadAndGetSound("UFOExplode"));
-	Enemies->SetUFOFireSound(Managers.CM.LoadAndGetSound("UFOFire"));
-	Enemies->SetUFOBigSound(Managers.CM.LoadAndGetSound("UFOBig"));
-	Enemies->SetUFOSmallSound(Managers.CM.LoadAndGetSound("UFOSmall"));
-	Enemies->SetDeathStarSpawnSound(Managers.CM.LoadAndGetSound("DeathStarSpawn"));
-	Enemies->SetDeathStarExplodeSound(Managers.CM.LoadAndGetSound("DeathStarExplode"));
-	Enemies->SetEnemyOneSpawnSound(Managers.CM.LoadAndGetSound("EnemyOneSpawn"));
-	Enemies->SetEnemyOneOnSound(Managers.CM.LoadAndGetSound("EnemyOne"));
-	Enemies->SetEnemyOneExplodeSound(Managers.CM.LoadAndGetSound("EnemyOneExplode"));
-	Enemies->SetEnemyOneFireSound(Managers.CM.LoadAndGetSound("MissileLaunch"));
-	Enemies->SetEnemyOneMissileOnSound(Managers.CM.LoadAndGetSound("MissileOn"));
-	Enemies->SetEnemyOneMissileExplodeSound(Managers.CM.LoadAndGetSound("MissileExplode"));
-	Enemies->SetEnemyTwoExplodeSound(Managers.CM.LoadAndGetSound("EnemyTwoExplode"));
-	Enemies->SetEnemyTwoSpawnSound(Managers.CM.LoadAndGetSound("EnemyTwoSpawn"));
-	Enemies->SetEnemyTwoFireSound(Managers.CM.LoadAndGetSound("MineDrop"));
-	Enemies->SetEnemyTwoOnSound(Managers.CM.LoadAndGetSound("EnemyTwo"));
-	Enemies->SetBossOnSound(Managers.CM.LoadAndGetSound("BossShip"));
-	Enemies->SetBossExplodeSound(Managers.CM.LoadAndGetSound("BossExplode"));
-	Enemies->SetBossShieldHitSound(Managers.CM.LoadAndGetSound("BossShieldHit"));
-	Enemies->SetBossShieldDownSound(Managers.CM.LoadAndGetSound("BossShieldDown"));
-	Enemies->SetBossHitSound(Managers.CM.LoadAndGetSound("BossHit"));
-	Enemies->SetBossTurretFireSound(Managers.CM.LoadAndGetSound("BossTurretFire"));
-	Enemies->SetBossTurretExplodeSound(Managers.CM.LoadAndGetSound("BossTurretExplode"));
-	Enemies->SetBossSpineFireSound(Managers.CM.LoadAndGetSound("BossSpineFire"));
+	Enemies->SetRockExplodeSound(CM.LoadAndGetSound("RockExplode"));
+	Enemies->SetUFOExplodeSound(CM.LoadAndGetSound("UFOExplode"));
+	Enemies->SetUFOFireSound(CM.LoadAndGetSound("UFOFire"));
+	Enemies->SetUFOBigSound(CM.LoadAndGetSound("UFOBig"));
+	Enemies->SetUFOSmallSound(CM.LoadAndGetSound("UFOSmall"));
+	Enemies->SetDeathStarSpawnSound(CM.LoadAndGetSound("DeathStarSpawn"));
+	Enemies->SetDeathStarExplodeSound(CM.LoadAndGetSound("DeathStarExplode"));
+	Enemies->SetEnemyOneSpawnSound(CM.LoadAndGetSound("EnemyOneSpawn"));
+	Enemies->SetEnemyOneOnSound(CM.LoadAndGetSound("EnemyOne"));
+	Enemies->SetEnemyOneExplodeSound(CM.LoadAndGetSound("EnemyOneExplode"));
+	Enemies->SetEnemyOneFireSound(CM.LoadAndGetSound("MissileLaunch"));
+	Enemies->SetEnemyOneMissileOnSound(CM.LoadAndGetSound("MissileOn"));
+	Enemies->SetEnemyOneMissileExplodeSound(CM.LoadAndGetSound("MissileExplode"));
+	Enemies->SetEnemyTwoExplodeSound(CM.LoadAndGetSound("EnemyTwoExplode"));
+	Enemies->SetEnemyTwoSpawnSound(CM.LoadAndGetSound("EnemyTwoSpawn"));
+	Enemies->SetEnemyTwoFireSound(CM.LoadAndGetSound("MineDrop"));
+	Enemies->SetEnemyTwoOnSound(CM.LoadAndGetSound("EnemyTwo"));
+	Enemies->SetBossOnSound(CM.LoadAndGetSound("BossShip"));
+	Enemies->SetBossExplodeSound(CM.LoadAndGetSound("BossExplode"));
+	Enemies->SetBossShieldHitSound(CM.LoadAndGetSound("BossShieldHit"));
+	Enemies->SetBossShieldDownSound(CM.LoadAndGetSound("BossShieldDown"));
+	Enemies->SetBossHitSound(CM.LoadAndGetSound("BossHit"));
+	Enemies->SetBossTurretFireSound(CM.LoadAndGetSound("BossTurretFire"));
+	Enemies->SetBossTurretExplodeSound(CM.LoadAndGetSound("BossTurretExplode"));
+	Enemies->SetBossSpineFireSound(CM.LoadAndGetSound("BossSpineFire"));
 
-	Logic->SetPowerUpSound(Managers.CM.LoadAndGetSound("PowerUp"));
-	Logic->SetPickUpSound(Managers.CM.LoadAndGetSound("PickUp"));
+	Logic->SetPowerUpSound(CM.LoadAndGetSound("PowerUp"));
+	Logic->SetPickUpSound(CM.LoadAndGetSound("PickUp"));
 
 	LineModelPoints rockModels[4];
 
-	rockModels[0] = Managers.CM.LoadAndGetLineModel("Rock1");
-	rockModels[1] = Managers.CM.LoadAndGetLineModel("Rock2");
-	rockModels[2] = Managers.CM.LoadAndGetLineModel("Rock3");
-	rockModels[3] = Managers.CM.LoadAndGetLineModel("Rock4");
+	rockModels[0] = CM.LoadAndGetLineModel("Rock1");
+	rockModels[1] = CM.LoadAndGetLineModel("Rock2");
+	rockModels[2] = CM.LoadAndGetLineModel("Rock3");
+	rockModels[3] = CM.LoadAndGetLineModel("Rock4");
 
 	Enemies->SetRockModels(rockModels);
 

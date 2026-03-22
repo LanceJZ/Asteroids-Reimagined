@@ -19,11 +19,11 @@ public:
 	ParticleManager();
 	virtual ~ParticleManager();
 
-	void SetManagers(EntityManager& entityManager);
+	void SetEntityManager(EntityManager& entityManager);
 	void SetCubeModel(Model model);
 	void SetLineModel(LineModelPoints model);
 
-	virtual bool Initialize(Utilities* utilities);
+	virtual bool Initialize();
 	virtual bool BeginRun();
 
 	virtual void FixedUpdate();

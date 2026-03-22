@@ -14,7 +14,7 @@ public:
 
 	GameLogic* Logic = {};
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool Load();
 	bool BeginRun();
 	void ProcessInput();

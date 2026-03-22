@@ -1,22 +1,22 @@
-#include "TheScore.h"
+#include "TheScoreOld.h"
 
-TheScore::TheScore()
+TheScoreOld::TheScoreOld()
 {
 
 }
 
-TheScore::~TheScore()
+TheScoreOld::~TheScoreOld()
 {
 }
 
-bool TheScore::Initialize(Utilities* utilities)
+bool TheScoreOld::Initialize()
 {
-	OnScreenText::Initialize(TheUtilities);
+	OnScreenText::Initialize();
 
 	return false;
 }
 
-bool TheScore::BeginRun()
+bool TheScoreOld::BeginRun()
 {
 	TheFontTiny = LoadFontEx("font/asteroids-display.otf", 16, 0, 250);
 	TheFontSmall = LoadFontEx("font/asteroids-display.otf", 30, 0, 250);
@@ -25,13 +25,13 @@ bool TheScore::BeginRun()
 	return false;
 }
 
-void TheScore::Update()
+void TheScoreOld::Update()
 {
 	OnScreenText::Update();
 
 }
 
-void TheScore::Draw2D()
+void TheScoreOld::Draw2D()
 {
 	OnScreenText::Draw2D();
 
@@ -46,7 +46,7 @@ void TheScore::Draw2D()
 		(float)(GetScreenHeight() - 20)), 16.0f, 0, WHITE);
 }
 
-void TheScore::UpdateScore(int addToScore)
+void TheScoreOld::UpdateScore(int addToScore)
 {
 	Score += addToScore;
 
@@ -56,17 +56,17 @@ void TheScore::UpdateScore(int addToScore)
 	}
 }
 
-int TheScore::GetScore()
+int TheScoreOld::GetScore()
 {
 	return Score;
 }
 
-void TheScore::Reset()
+void TheScoreOld::Reset()
 {
 	Score = 0;
 }
 
-void TheScore::SetHighScore(int highScore)
+void TheScoreOld::SetHighScore(int highScore)
 {
 	HighScore = highScore;
 }

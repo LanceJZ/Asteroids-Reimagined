@@ -2,7 +2,7 @@
 
 TheMissile::TheMissile()
 {
-	LifeTimerID = Managers.EM.AddTimer(5.0f);
+	LifeTimerID = EM.AddTimer(5.0f);
 }
 
 TheMissile::~TheMissile()
@@ -14,9 +14,9 @@ void TheMissile::SetOnSound(Sound sound)
 	OnSound = sound;
 }
 
-bool TheMissile::Initialize(Utilities* utilities)
+bool TheMissile::Initialize()
 {
-	Enemy::Initialize(utilities);
+	Enemy::Initialize();
 
 	Enabled = false;
 	Points = 500;
@@ -44,7 +44,7 @@ void TheMissile::FixedUpdate(float deltaTime)
 {
 	Enemy::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID))
+	if (EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
@@ -62,12 +62,14 @@ void TheMissile::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	Managers.EM.ResetTimer(LifeTimerID);
+	EM.ResetTimer(LifeTimerID);
 }
 
 void TheMissile::Hit()
 {
 	Enemy::Hit();
+
+	Destroy();
 }
 
 void TheMissile::Destroy()

@@ -2,10 +2,10 @@
 
 GameLogic::GameLogic()
 {
-	Managers.EM.AddEntity(PlayerClear = DBG_NEW Entity());
-	Managers.EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
+	EM.AddEntity(PlayerClear = DBG_NEW Entity());
+	EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
 
-	ExplodeTimerID = Managers.EM.AddTimer(4.25f);
+	ExplodeTimerID = EM.AddTimer(4.25f);
 }
 
 GameLogic::~GameLogic()
@@ -37,9 +37,9 @@ void GameLogic::SetPickUpSound(Sound sound)
 	PickUpSound = sound;
 }
 
-bool GameLogic::Initialize(Utilities* utilities)
+bool GameLogic::Initialize()
 {
-	Common::Initialize(TheUtilities);
+	Common::Initialize();
 
 	AdjustedFieldSize = Vector2Multiply(FieldSize, { 0.5f, 0.5f });
 
@@ -125,9 +125,9 @@ void GameLogic::FixedUpdate()
 	{
 		if (Player->GetBeenHit())
 		{
-			Managers.EM.ResetTimer(ExplodeTimerID);
+			EM.ResetTimer(ExplodeTimerID);
 
-			if (Enemies->Boss->Enabled) Managers.EM.ResetTimer(ExplodeTimerID, 3.0f);
+			if (Enemies->Boss->Enabled) EM.ResetTimer(ExplodeTimerID, 3.0f);
 
 			Player->Destroy();
 
@@ -135,13 +135,13 @@ void GameLogic::FixedUpdate()
 		}
 
 		if (!Player->Enabled && !Player->GetBeenHit() &&
-			Managers.EM.TimerElapsed(ExplodeTimerID))
+			EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
 			PlayerClear->Radius = 140.0f;
 
-			Managers.EM.Update(GetFrameTime());
-			Managers.EM.Update(GetFrameTime());
+			EM.Update(GetFrameTime());
+			EM.Update(GetFrameTime());
 
 			if (IsKeyPressed(KEY_ENTER) ||
 				(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
@@ -282,7 +282,7 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 	if (spawnNewPowerUp)
 	{
 		PowerUps.push_back(DBG_NEW PowerUp());
-		Managers.EM.AddEntity(PowerUps.back());
+		EM.AddEntity(PowerUps.back());
 		PowerUps.back()->SetPlayer(Player);
 		PowerUps.back()->SetEnemy(Enemies);
 		PowerUps.back()->SetModel(PowerUpModel);
@@ -290,7 +290,7 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 		PowerUps.back()->BeginRun();
 	}
 
-	PowerUps.at(powerUpNumber)->Wave = Enemies->Wave;
+	PowerUps.at(powerUpNumber)->WaveNumber = Enemies->WaveNumber;
 	PowerUps.at(powerUpNumber)->Spawn(position);
 }
 
@@ -327,7 +327,7 @@ void GameLogic::AddPlayerShipModels(int number)
 	for (int i = 0; i < number; i++)
 	{
 		PlayerShipModels.push_back(DBG_NEW LineModel());
-		Managers.EM.AddLineModel(PlayerShipModels.back());
+		EM.AddLineModel(PlayerShipModels.back());
 		PlayerShipModels.back()->SetModel(PlayerModel);
 		PlayerShipModels.back()->RotationZ = PI / 2 + PI;
 		PlayerShipModels.back()->Scale = 0.8f;
@@ -338,7 +338,6 @@ void GameLogic::AddPlayerShipModels(int number)
 void GameLogic::NewGame()
 {
 	Player->NewGame();
-	Enemies->Reset();
 	Enemies->NewGame();
 	HighScores->Reset();
 
@@ -381,10 +380,11 @@ bool GameLogic::CheckPlayerClear()
 
 	if (Enemies->Boss->Enabled)
 	{
+		Vector3 bossPlayer = Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition();
+
 		if (Enemies->Boss->CirclesIntersect(*PlayerClear)) return false;
 
-		if (PlayerClear->CirclesIntersect(
-			Enemies->Boss->FireShotAtPlayerArea->GetWorldPosition(),
+		if (PlayerClear->CirclesIntersect(bossPlayer,
 				Enemies->Boss->FireShotAtPlayerArea->Radius))
 		{
 			return false;

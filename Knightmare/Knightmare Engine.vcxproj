@@ -29,27 +29,27 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -137,6 +137,7 @@
     <Lib>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(SolutionDir)$(Configuration)\raylib.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -166,11 +167,16 @@
   <ItemGroup>
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ContentManager.cpp" />
+    <ClCompile Include="FactoryManager.cpp" />
     <ClCompile Include="LineModelParticle.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="LineParticle.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="KnightMath.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -185,10 +191,6 @@
     </ClCompile>
     <ClCompile Include="ExplosionControl.cpp" />
     <ClCompile Include="LineModel.cpp" />
-    <ClCompile Include="TheManagers.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="Model3D.cpp" />
     <ClCompile Include="ParticleCube.cpp" />
     <ClCompile Include="ParticleManager.cpp">
@@ -199,21 +201,27 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheScore.cpp" />
     <ClCompile Include="ThrustControl.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="ContentManager.h" />
+    <ClInclude Include="FactoryManager.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="LineModelParticle.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="LineParticle.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="KnightMath.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -228,10 +236,6 @@
     </ClInclude>
     <ClInclude Include="ExplosionControl.h" />
     <ClInclude Include="LineModel.h" />
-    <ClInclude Include="TheManagers.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Model3D.h" />
     <ClInclude Include="ParticleCube.h" />
     <ClInclude Include="ParticleManager.h">
@@ -243,12 +247,12 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TheScore.h" />
     <ClInclude Include="ThrustControl.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ludum Dare 54\raylib-4.5.0-Release\projects\VS2022\raylib\raylib.vcxproj">

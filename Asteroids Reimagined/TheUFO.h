@@ -25,7 +25,7 @@ public:
 	TheUFO();
 	virtual ~TheUFO();
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void SetBigSound(Sound sound);
@@ -33,6 +33,7 @@ public:
 
 	void Update(float deltaTime);
 	void FixedUpdate(float deltaTime);
+	void AlwaysUpdate(float deltaTime);
 	void Draw3D();
 
 	void Spawn(int SpawnCount);

@@ -17,10 +17,15 @@
 	#define DBG_NEW new
 #endif
 
-TheManagers Managers = {};
+ContentManager CM = {};
+EntityManager EM = {};
+FactoryManager FM = {};
+KnightMath M = {};
 ParticleManager Particles = {};
 Camera TheCamera = {};
 Vector2 FieldSize = {};
+TheScore Score = {};
+TheScore HighScore = {};
 
 #ifdef _DEBUG
 int main()
@@ -33,7 +38,8 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.54.435");
+	InitWindow(windowWidth, windowHeight,
+		"Asteroids Reimagined - RC 4.55.500");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -44,11 +50,10 @@ int WinMain()
 	glfwSwapInterval(0);
 	SetTargetFPS(120);
 
-	static Utilities TheUtilities = {};
 
-	Managers.EM.SetUtilities(&TheUtilities);
-	Particles.Initialize(&TheUtilities);
-	Particles.SetManagers(Managers.EM);
+	Particles.Initialize();
+	Particles.SetEntityManager(EM);
+	FM.SetEntityManager(EM);
 
 	// Define the camera to look into our 3D world.
 	// Camera position
@@ -62,13 +67,15 @@ int WinMain()
 	// Camera mode type
 	TheCamera.projection = CAMERA_ORTHOGRAPHIC;
 	// The Managers needs a reference to The Camera
-	Managers.SetCamera(TheCamera);
+	EM.SetCamera(TheCamera);
 
-	game.Initialize(&TheUtilities);
-	Managers.Initialize();
+	game.Initialize();
+	EM.Initialize();
+	FM.Initialize();
 	game.Load();
 	game.BeginRun();
-	Managers.BeginRun();
+	EM.BeginRun();
+	FM.BeginRun();
 
 	while (!WindowShouldClose())
 	{
@@ -80,27 +87,27 @@ int WinMain()
 		if (deltaTime > 0.05f) deltaTime = 0.05f;
 #endif
 
-		Managers.EM.AlwaysUpdate(deltaTime);
+		EM.AlwaysUpdate(deltaTime);
 
 		if (game.Logic->State != GameState::Pause &&
 			game.Logic->State != GameState::Ended)
 		{
-			Managers.EM.Input();
+			EM.Input();
 
 
-			Managers.EM.Update(deltaTime);
+			EM.Update(deltaTime);
 			game.Update(deltaTime);
-			Managers.EM.FixedUpdate(deltaTime);
+			EM.FixedUpdate(deltaTime);
 			game.FixedUpdate(deltaTime);
 		}
 
 		BeginDrawing();
 		ClearBackground({ 8, 2, 16, 100 });
 		BeginMode3D(TheCamera);
-		Managers.EM.Draw3D();
+		EM.Draw3D();
 		game.Draw3D();
 		EndMode3D();
-		Managers.EM.Draw2D();
+		EM.Draw2D();
 		game.Draw2D();
 
 #ifdef _DEBUG

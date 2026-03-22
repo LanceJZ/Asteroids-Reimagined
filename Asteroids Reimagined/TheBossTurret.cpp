@@ -2,7 +2,7 @@
 
 TheBossTurret::TheBossTurret()
 {
-	FireTimerID = Managers.EM.AddTimer();
+	FireTimerID = EM.AddTimer();
 }
 
 TheBossTurret::~TheBossTurret()
@@ -30,9 +30,9 @@ void TheBossTurret::SetExplodeSound(Sound sound)
 	ExplodeSound = sound;
 }
 
-bool TheBossTurret::Initialize(Utilities* utilities)
+bool TheBossTurret::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -41,7 +41,7 @@ bool TheBossTurret::BeginRun()
 {
 	LineModel::BeginRun();
 
-	FireTimerSetting = GetRandomFloat(0.75f, 1.5f);
+	FireTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
 
 	return false;
 }
@@ -56,7 +56,7 @@ void TheBossTurret::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(FireTimerID))
+	if (EM.TimerElapsed(FireTimerID))
 	{
 		Fire();
 	}
@@ -71,7 +71,7 @@ void TheBossTurret::Spawn()
 {
 	Enabled = true;
 
-	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting * 3.5f);
+	EM.ResetTimer(FireTimerID, FireTimerSetting * 3.5f);
 }
 
 void TheBossTurret::Hit()
@@ -107,10 +107,20 @@ void TheBossTurret::CheckCollisions()
 {
 	for (const auto& shot : Shots)
 	{
-		if (shot->Enabled && shot->CirclesIntersect(*Player))
+		if (!shot->Enabled) continue;
+
+		if (Player->Shield->Enabled &&
+			CirclesIntersect(Player->Position, Player->Shield->Radius))
+		{
+			Player->ShieldHit(shot->Position, shot->Velocity);
+			shot->Destroy();
+			break;
+		}
+
+		if (shot->CirclesIntersect(*Player) && !Player->Shield->Enabled)
 		{
 			shot->Destroy();
-			Player->Hit(shot->Position, shot->Velocity);
+			Player->Hit();
 			break;
 		}
 	}
@@ -118,8 +128,8 @@ void TheBossTurret::CheckCollisions()
 
 void TheBossTurret::Fire()
 {
-	FireTimerSetting = GetRandomFloat(0.75f, 1.5f);
-	Managers.EM.ResetTimer(FireTimerID, FireTimerSetting);
+	FireTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
+	EM.ResetTimer(FireTimerID, FireTimerSetting);
 
 	if (!Player->Enabled) return;
 
@@ -141,7 +151,7 @@ void TheBossTurret::Fire()
 	if (spawnNewShot)
 	{
 		Shots.push_back(DBG_NEW Shot());
-		Managers.EM.AddLineModel(Shots.back(), ShotModel);
+		EM.AddLineModel(Shots.back(), ShotModel);
 		Shots.back()->SetModel(ShotModel);
 		Shots.back()->BeginRun();
 	}
@@ -151,7 +161,7 @@ void TheBossTurret::Fire()
 	if (percentChance < 0) percentChance = 0;
 
 	float angle = GetAngleFromWorldVectorZ(Player->Position) +
-		GetRandomFloat(-percentChance, percentChance);
+		M.GetRandomFloat(-percentChance, percentChance);
 	RotationZ = angle -Parents->at(0)->RotationZ;
 	float shotSpeed = 200;
 

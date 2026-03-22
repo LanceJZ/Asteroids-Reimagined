@@ -2,7 +2,7 @@
 
 PowerUp::PowerUp()
 {
-	LifeTimerID = Managers.EM.AddTimer(15.0f);
+	LifeTimerID = EM.AddTimer(15.0f);
 }
 
 PowerUp::~PowerUp()
@@ -24,9 +24,9 @@ void PowerUp::SetPickUpSound(Sound sound)
 	PickUpSound = sound;
 }
 
-bool PowerUp::Initialize(Utilities* utilities)
+bool PowerUp::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -49,7 +49,7 @@ void PowerUp::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (Managers.EM.TimerElapsed(LifeTimerID))
+	if (EM.TimerElapsed(LifeTimerID))
 	{
 		Destroy();
 	}
@@ -66,7 +66,7 @@ void PowerUp::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
-	Managers.EM.ResetTimer(LifeTimerID);
+	EM.ResetTimer(LifeTimerID);
 
 	int chance = GetRandomValue(1, 10); //Rework this. Later waves limit Purple.
 
@@ -82,16 +82,16 @@ void PowerUp::Spawn(Vector3 position)
 	}
 	else
 	{
-		if (Wave > 1)
+		if (WaveNumber > 1)
 		{
-			if (GetRandomValue(1, 100) < (100 - (int)(Wave * 4.75f))) return;
+			if (GetRandomValue(1, 100) < (100 - (int)(WaveNumber * 4.75f))) return;
 		}
 
 		ModelColor = PURPLE;
 		Type = Purple; //Everything over charged for a time.
 	}
 
-	if (Enemies->Wave > 1)
+	if (Enemies->WaveNumber > 1)
 	{
 		if (chance == 7)
 		{
@@ -106,7 +106,7 @@ void PowerUp::Spawn(Vector3 position)
 		}
 	}
 
-	if (Enemies->Wave > 2)
+	if (Enemies->WaveNumber > 2)
 	{
 		if (chance == 1)
 		{
@@ -125,7 +125,7 @@ void PowerUp::Spawn(Vector3 position)
 
 	return;
 
-	if (Enemies->Wave > 3)
+	if (Enemies->WaveNumber > 3)
 	{
 		if (chance == 3)
 		{

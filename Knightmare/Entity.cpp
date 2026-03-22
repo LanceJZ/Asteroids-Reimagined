@@ -11,12 +11,9 @@ Entity::~Entity()
 	Parents->clear();
 }
 
-bool Entity::Initialize(Utilities* utilities)
+bool Entity::Initialize()
 {
-	Common::Initialize(utilities);
-
-	WindowWidth = (float)(GetScreenWidth() * 0.5f);
-	WindowHeight = (float)(GetScreenHeight() * 0.5f);
+	Common::Initialize();
 
 	return true;
 }
@@ -24,6 +21,7 @@ bool Entity::Initialize(Utilities* utilities)
 void Entity::Update(float deltaTime)
 {
 	if (!Enabled) return;
+	if (Stationary) return;
 
 	LastFramePosition = Position;
 
@@ -65,9 +63,18 @@ void Entity::FixedUpdate(float deltaTime)
 void Entity::Draw3D()
 {
 #ifdef _DEBUG
-	if((Enabled && !IsChild && !HideCollision) || EntityOnly || ShowCollision)
-		DrawCircle3D(GetWorldPosition(), Radius * Scale, {0}, 0, {150, 50, 200, 200});
+	if((Enabled && ShowCollision) || (Enabled && !EntityOnly) && (Enabled && !IsChild && !HideCollision) &&
+		!NoCollision)
+	{
+		DrawCircle3D(GetWorldPosition(), Radius * Scale,
+			{0}, 0, {150, 50, 200, 200});
+	}
 #endif
+}
+
+void Entity::Draw2D()
+{
+	Common::Draw2D();
 }
 
 void Entity::X(float x)
@@ -88,6 +95,12 @@ void Entity::Z(float z)
 void Entity::SetScale(float scale)
 {
 	Scale = scale;
+}
+
+void Entity::Spawn()
+{
+	Enabled = true;
+	BeenHit = false;
 }
 
 void Entity::Spawn(Vector3 position)
@@ -121,7 +134,7 @@ bool Entity::GetBeenHit()
 /// <param name="targetPosition">Target Vector3 position.</param>
 /// <param name="targetRadius">Target float radius.</param>
 /// <returns>bool</returns>
-bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
+bool Entity::CirclesIntersect(Vector3& targetPosition, float targetRadius)
 {
 	if (!Enabled) return false;
 
@@ -148,6 +161,10 @@ bool Entity::CirclesIntersect(Vector3 targetPosition, float targetRadius)
 bool Entity::CirclesIntersect(Entity& target)
 {
 	if (!target.Enabled || !Enabled) return false;
+
+	Vector3 targetPosition = targetPosition = target.Position;
+
+	if (target.IsChild) targetPosition = target.GetWorldPosition();
 
 	return CirclesIntersect(target.Position, (target.Radius * target.Scale));
 }
@@ -219,14 +236,14 @@ bool Entity::ScreenEdgeBoundY()
 {
 	bool hitBound = false;
 
-	if (Y() > WindowHeight - VerticesSize)
+	if (Y() > WindowHalfHeight - VerticesSize)
 	{
-		Y(WindowHeight);
+		Y((float)WindowHalfHeight);
 		hitBound = true;
 	}
-	else if (Y() < -WindowHeight + VerticesSize)
+	else if (Y() < -WindowHalfHeight + VerticesSize)
 	{
-		Y(-WindowHeight);
+		Y((float)-WindowHalfHeight);
 		hitBound = true;
 	}
 
@@ -248,14 +265,14 @@ bool Entity::ScreenEdgeBoundY(float topOffset, float bottomOffset)
 	float top = topOffset + Radius;
 	float bottom = bottomOffset + Radius;
 
-	if (Y() > WindowHeight - bottom)
+	if (Y() > WindowHalfHeight - bottom)
 	{
-		Y(WindowHeight - bottom);
+		Y((float)WindowHalfHeight - bottom);
 		hitBound = true;
 	}
-	else if (Y() < -WindowHeight + top)
+	else if (Y() < -WindowHalfHeight + top)
 	{
-		Y(-WindowHeight + top);
+		Y((float)-WindowHalfHeight + top);
 		hitBound = true;
 	}
 
@@ -274,14 +291,14 @@ bool Entity::ScreenEdgeBoundX()
 {
 	bool hitBound = false;
 
-	if (X() > WindowWidth - VerticesSize)
+	if (X() > WindowHalfWidth - VerticesSize)
 	{
-		X(WindowWidth - VerticesSize);
+		X((float)WindowHalfWidth - VerticesSize);
 		hitBound = true;
 	}
-	else if (X() < -WindowWidth + VerticesSize)
+	else if (X() < -WindowHalfWidth + VerticesSize)
 	{
-		X(-WindowWidth + VerticesSize);
+		X((float)-WindowHalfWidth + VerticesSize);
 		hitBound = true;
 	}
 
@@ -300,14 +317,14 @@ bool Entity::ScreenEdgeBoundX(float leftOffset, float rightOffset)
 {
 	bool hitBound = false;
 
-	if (X() > WindowWidth - rightOffset - VerticesSize)
+	if (X() > WindowHalfWidth - rightOffset - VerticesSize)
 	{
-		X(WindowWidth - rightOffset);
+		X((float)WindowHalfWidth - rightOffset);
 		hitBound = true;
 	}
-	else if (X() < -WindowWidth + leftOffset - VerticesSize)
+	else if (X() < -WindowHalfWidth + leftOffset - VerticesSize)
 	{
-		X(-WindowWidth + leftOffset);
+		X((float)-WindowHalfWidth + leftOffset);
 		hitBound = true;
 	}
 
@@ -329,17 +346,16 @@ bool Entity::IsOffScreen()
 
 bool Entity::IsOffScreenSide()
 {
-	if (X() - VerticesSize > WindowWidth || X() + VerticesSize < -WindowWidth) return true;
+	if (X() - VerticesSize > WindowHalfWidth ||
+		X() + VerticesSize < -WindowHalfWidth) return true;
 
 	return false;
 }
 
 bool Entity::IsOffScreenTopBottom()
 {
-	if (Y() - VerticesSize > WindowHeight || Y() + VerticesSize < -WindowHeight)
-	{
-		return true;
-	}
+	if (Y() - VerticesSize > WindowHalfHeight ||
+		Y() + VerticesSize < -WindowHalfHeight)	return true;
 
 	return false;
 }
@@ -359,12 +375,12 @@ float Entity::Z()
 	return Position.z;
 }
 
-float Entity::GetAngleFromVectorZ(Vector3 target)
+float Entity::GetAngleFromVectorZ(Vector3& target)
 {
 	return (atan2f(target.y - Position.y, target.x - Position.x));
 }
 
-float Entity::GetAngleFromWorldVectorZ(Vector3 target)
+float Entity::GetAngleFromWorldVectorZ(Vector3& target)
 {
 	return (atan2f(target.y - GetWorldPosition().y, target.x - GetWorldPosition().x));
 }
@@ -374,24 +390,67 @@ float Entity::GetAngleFromVectors(Vector3& target)
 	return (atan2f(target.y - Position.y, target.x - Position.x));
 }
 
-Vector3 Entity::GetRandomVelocity(float magnitude)
+float Entity::GetAngleFromVectorsZ(Vector3& origin, Vector3& target)
 {
-	float ang = GetRandomFloat(0, PI * 2);
-
-	return GetVelocityFromAngleZ(ang, magnitude);
+	return { atan2f(target.y - origin.y, target.x - origin.x) };
 }
 
-Vector3 Entity::GetVelocityFromAngleZ(float angle, float magnitude)
+float Entity::GetRotationTowardsTargetZ(Vector3& origin, Vector3& target,
+	float facingAngle, float magnitude)
 {
-	return { cosf(angle) * magnitude, sinf(angle) * magnitude, 0 };
+	float turnVelocity = 0;
+	float targetAngle = GetAngleFromVectorsZ(origin, target);
+	float targetLessFacing = targetAngle - facingAngle;
+	float facingLessTarget = facingAngle - targetAngle;
+
+	if (abs(targetLessFacing) > PI)
+	{
+		if (facingAngle > targetAngle)
+		{
+			facingLessTarget = (((PI *2) - facingAngle) + targetAngle) * -1;
+		}
+		else
+		{
+			facingLessTarget = ((PI * 2) - targetAngle) + facingAngle;
+		}
+	}
+
+	if (facingLessTarget > 0)
+	{
+		turnVelocity = -magnitude;
+	}
+	else
+	{
+		turnVelocity = magnitude;
+	}
+
+	return turnVelocity;
 }
 
-Vector3 Entity::GetVelocityFromAngleZ(float magnitude)
+Vector3& Entity::GetVelocityFromAngleZ(float angle, float magnitude)
 {
-	return { cosf(RotationZ) * magnitude, sinf(RotationZ) * magnitude, 0 };
+	Vector3 velocity = { cosf(angle) * magnitude, sinf(angle) * magnitude, 0 };
+
+	return velocity;
 }
 
-Vector3 Entity::GetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed)
+Vector3& Entity::GetVelocityFromAngleZ(float magnitude)
+{
+	Vector3 velocity = { cosf(RotationZ) * magnitude, sinf(RotationZ) * magnitude, 0 };
+
+	return velocity;
+}
+
+Vector3& Entity::GetVelocityFromVectorZ(Vector3& target, float magnitude)
+{
+	float angle = (atan2f(target.y - Position.y, target.x - Position.x));
+
+	Vector3 velocity = { cosf(angle) * magnitude, sinf(angle) * magnitude, 0 };
+
+	return velocity;
+}
+
+Vector3& Entity::GetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed)
 {
 	Vector3 acceleration = { 0, 0, 0 };
 
@@ -406,7 +465,18 @@ Vector3 Entity::GetAccelerationToMaxAtRotation(float accelerationAmount, float t
 	return acceleration;
 }
 
-Vector3 Entity::GetWorldPosition()
+Vector3& Entity::GetReflectionVelocity(Vector3& position,
+	Vector3& velocity, float amountReflect,
+	float reductionHit, float reductionLoss)
+{
+	Vector3 reflection = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity,
+		{reductionLoss}), {-1}),
+		Vector3Add(Vector3Multiply(velocity, {reductionHit}),
+			GetVelocityFromAngleZ(GetAngleFromVectorsZ(position, Position),	amountReflect)));
+	return reflection;
+}
+
+Vector3& Entity::GetWorldPosition()
 {
 	BeforeCalculate();
 	CalculateWorldVectors();
@@ -417,80 +487,6 @@ Vector3 Entity::GetWorldPosition()
 	return worldPosition;
 }
 
-void Entity::SetRotationZTowardsTargetZ(Vector3& target, float magnitude)
-{
-	RotationZ = Common::GetRotationTowardsTargetZ(Position, target, RotationZ, magnitude);
-}
-
-//Sets Acceleration based on acceleration amount this frame,
-//up to a max amount based on top speed.
-void Entity::SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed)
-{
-	Acceleration = GetAccelerationToMaxAtRotation(accelerationAmount, topSpeed);
-}
-
-//Sets Acceleration down to zero over time based on deceleration amount.
-void Entity::SetAccelerationToZero(float decelerationAmount)
-{
-	if (Velocity.x > 0.01 || Velocity.y > 0.01 ||
-		Velocity.x < -0.01 || Velocity.y < -0.01)
-	{
-		Acceleration = (Velocity * -decelerationAmount) * DeltaTime;
-	}
-	else
-	{
-		Velocity = { 0, 0, 0 };
-	}
-}
-
-void Entity::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)
-{
-	RotationVelocityZ = Common::GetRotationTowardsTargetZ(Position, position, RotationZ,
-		turnSpeed);
-	Velocity = GetVelocityFromAngleZ(RotationZ, speed);
-}
-
-void Entity::SetRotationZFromVector(Vector3& target)
-{
-	RotationZ = GetAngleFromVectors(target);
-}
-
-void Entity::SetHeading(Vector3& waypoint, float rotationSpeed)
-{
-	SetAimAtTargetZ(waypoint, RotationZ, rotationSpeed);
-}
-
-//Sets Rotation Velocity Z to Aim at the Target.
-void Entity::SetAimAtTargetZ(Vector3& target, float facingAngle, float magnitude)
-{
-	float turnVelocity = 0;
-	float targetAngle = GetAngleFromVectors(target); //This is why it is here.
-	float targetLessFacing = targetAngle - facingAngle;
-	float facingLessTarget = facingAngle - targetAngle;
-
-	if (abs(targetLessFacing) > PI)
-	{
-		if (facingAngle > targetAngle)
-		{
-			facingLessTarget = ((TwoPi - facingAngle) + targetAngle) * -1;
-		}
-		else
-		{
-			facingLessTarget = (TwoPi - targetAngle) + facingAngle;
-		}
-	}
-
-	if (facingLessTarget > 0)
-	{
-		turnVelocity = -magnitude;
-	}
-	else
-	{
-		turnVelocity = magnitude;
-	}
-
-	RotationVelocityZ = turnVelocity;
-}
 
 void Entity::SetParent(Entity& parent)
 {
@@ -516,15 +512,19 @@ bool Entity::SetCamera(Camera* camera)
 
 void Entity::SetModel(Model& model, float scale)
 {
-	if (model.meshes == nullptr)
+	if (model.meshes == nullptr || model.meshes->vertices == nullptr)
 	{
 		return;
 	}
 
 	TheModel = model;
 	ModelScale = scale;
-	VerticesSize = (*model.meshes->vertices * -1.0f) * scale;
-	Radius = VerticesSize;
+
+	if (!NoCollision)
+	{
+		VerticesSize = (*model.meshes->vertices * -1.0f) * scale;
+		Radius = VerticesSize;
+	}
 }
 
 void Entity::SetModel(Model& model)
@@ -566,21 +566,21 @@ std::vector<Vector3> Entity::GetModel()
 	return std::vector<Vector3>();
 }
 
-void Entity::SetModel(std::vector<Vector3> lines)
+void Entity::SetModel(std::vector<Vector3> &lines)
 {
 	LinePoints = lines;
 	Lines.linePoints = lines;
-	CalculateRadius();
+	if (!NoCollision) CalculateRadius();
 }
 
-void Entity::SetModel(LineModelPoints lines)
+void Entity::SetModel(LineModelPoints &lines)
 {
 	Lines = lines;
 	LinePoints = lines.linePoints;
-	CalculateRadius();
+	if (!NoCollision) CalculateRadius();
 }
 
-void Entity::SetModel(LineModelPoints lines, float scale)
+void Entity::SetModel(LineModelPoints &lines, float scale)
 {
 	Scale = scale;
 	SetModel(lines);
@@ -611,27 +611,64 @@ void Entity::CheckScreenEdge()
 
 void Entity::CheckScreenEdgeX()
 {
-	if (X() > WindowWidth)
+	if (X() > WindowHalfWidth)
 	{
-		X(-WindowWidth);
+		X((float) -WindowHalfWidth);
 	}
 
-	if (X() < -WindowWidth)
+	if (X() < -WindowHalfWidth)
 	{
-		X(WindowWidth);
+		X((float)WindowHalfWidth);
 	}
 }
 
 void Entity::CheckScreenEdgeY()
 {
-	if (Y() > WindowHeight)
+	if (Y() > WindowHalfHeight)
 	{
-		Y(-WindowHeight);
+		Y((float)-WindowHalfHeight);
 	}
 
-	if (Y() < -WindowHeight)
+	if (Y() < -WindowHalfHeight)
 	{
-		Y(WindowHeight);
+		Y((float)WindowHalfHeight);
+	}
+}
+
+void Entity::CheckPlayfieldSidesWarp()
+{
+	if (X() > (float)WindowHalfWidth) X((float)-WindowHalfWidth);
+
+	if (X() < (float)-WindowHalfWidth) X((float)WindowHalfWidth);
+}
+
+bool Entity::CheckPlayfieldSidesWarp(float left, float right)
+{
+	bool warped = false;
+
+	if (X() > WindowHalfWidth * right)
+	{
+		X((float)-WindowHalfWidth * left);
+		warped = true;
+	}
+	else if (X() < -WindowHalfWidth * left)
+	{
+		X((float)WindowHalfWidth * right);
+		warped = true;
+	}
+
+	return warped;
+}
+
+void Entity::CheckPlayfieldHeightWarp(float top, float bottom)
+{
+	if (Y() > WindowHalfHeight * bottom)
+	{
+		Y((float)-WindowHalfHeight * top);
+	}
+	else if (Y() < -WindowHalfHeight * top)
+	{
+		Y((float)WindowHalfHeight * bottom);
 	}
 }
 
@@ -642,20 +679,20 @@ void Entity::LeavePlay(float turnSpeed, float speed)
 
 	if (Position.x > 0)
 	{
-		stageLeft = WindowWidth;
+		stageLeft = (float)WindowHalfWidth;
 	}
 	else
 	{
-		stageLeft = -WindowWidth;
+		stageLeft = (float)-WindowHalfWidth;
 	}
 
 	if (Position.y > 0)
 	{
-		stageDown = WindowHeight;
+		stageDown = (float)WindowHalfHeight;
 	}
 	else
 	{
-		stageDown = -WindowHeight;
+		stageDown = (float)-WindowHalfHeight;
 	}
 
 	Vector3 position = { stageLeft, stageDown, 0 };
@@ -663,35 +700,73 @@ void Entity::LeavePlay(float turnSpeed, float speed)
 	SetRotateVelocity(position, turnSpeed, speed);
 }
 
-void Entity::CheckPlayfieldSidesWarp()
+void Entity::Reset()
 {
-	if (X() > WindowWidth) X(-WindowWidth);
-
-	if (X() < -WindowWidth) X(WindowWidth);
+	Position = { 0, 0, 0 };
+	Acceleration = { 0, 0, 0 };
+	Velocity = { 0, 0, 0 };
+	RotationVelocityY = 0;
 }
 
-void Entity::CheckPlayfieldSidesWarp(float left, float right)
+void Entity::SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed)
 {
-	if (X() > WindowWidth * right)
+	Acceleration = GetAccelerationToMaxAtRotation(accelerationAmount, topSpeed);
+}
+
+void Entity::SetAccelerationToZero(float decelerationAmount)
+{
+	if (Velocity.x > 0.01 || Velocity.y > 0.01 ||
+		Velocity.x < -0.01 || Velocity.y < -0.01)
 	{
-		X(-WindowWidth * left);
+		Acceleration = (Velocity * -decelerationAmount) * DeltaTime;
 	}
-	else if (X() < -WindowWidth * left)
+	else
 	{
-		X(WindowWidth * right);
+		Velocity = { 0, 0, 0 };
 	}
 }
 
-void Entity::CheckPlayfieldHeightWarp(float top, float bottom)
+void Entity::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)
 {
-	if (Y() > WindowHeight * bottom)
+	RotationVelocityZ = GetRotationTowardsTargetZ(Position, position, RotationZ,
+		turnSpeed);
+	Velocity = GetVelocityFromAngleZ(RotationZ, speed);
+}
+
+void Entity::SetRotationZFromVector(Vector3& target)
+{
+	RotationZ = GetAngleFromVectors(target);
+}
+
+void Entity::SetAimAtTargetZ(Vector3& target, float facingAngle, float magnitude)
+{
+	float turnVelocity = 0;
+	float targetAngle = GetAngleFromVectors(target); //This is why it is here.
+	float targetLessFacing = targetAngle - facingAngle;
+	float facingLessTarget = facingAngle - targetAngle;
+
+	if (abs(targetLessFacing) > PI)
 	{
-		Y(-WindowHeight * top);
+		if (facingAngle > targetAngle)
+		{
+			facingLessTarget = ((TwoPi - facingAngle) + targetAngle) * -1;
+		}
+		else
+		{
+			facingLessTarget = (TwoPi - targetAngle) + facingAngle;
+		}
 	}
-	else if (Y() < -WindowHeight * top)
+
+	if (facingLessTarget > 0)
 	{
-		Y(WindowHeight * bottom);
+		turnVelocity = -magnitude;
 	}
+	else
+	{
+		turnVelocity = magnitude;
+	}
+
+	RotationVelocityZ = turnVelocity;
 }
 
 void Entity::BeforeCalculate()

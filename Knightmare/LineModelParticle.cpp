@@ -13,9 +13,9 @@ void LineModelParticle::SetEntityManager(EntityManager* entityManager)
 	EM = entityManager;
 }
 
-bool LineModelParticle::Initialize(Utilities* utilities)
+bool LineModelParticle::Initialize()
 {
-	LineModel::Initialize(utilities);
+	LineModel::Initialize();
 
 	return false;
 }
@@ -50,12 +50,12 @@ void LineModelParticle::Spawn(Vector3 position, Vector3 velocity,
 {
 	LineModel::Spawn(position);
 
-	EM->ResetTimer(LifeTimerID, GetRandomFloat(maxTime * 0.25f, maxTime));
+	EM->ResetTimer(LifeTimerID, M.GetRandomFloat(maxTime * 0.25f, maxTime));
 
 	//Change so that the velocity goes out from position.
 	//The position is the center of the line model that is exploding.
 	//Add the two points and divide by two to get the middle of the line model.
-	Vector3 velocityX = GetRandomVelocity(GetRandomFloat(maxSpeed * 0.15f,
+	Vector3 velocityX = M.GetRandomVelocity(M.GetRandomFloat(maxSpeed * 0.15f,
 		maxSpeed * 0.5f));
 
 	Vector3 velocityOut = Vector3((GetLineModel().linePoints.at(0).x +

@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "ParticleManager.h"
+#include "Globals.h"
 
 #ifdef _DEBUG
 	#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -16,7 +17,7 @@ public:
 	ThrustControl();
 	virtual ~ThrustControl();
 
-	bool Initialize(Utilities* utilities);
+	bool Initialize();
 	bool BeginRun();
 
 	void FixedUpdate();
@@ -25,6 +26,5 @@ public:
 		float length,  int count, float time, Color color);
 
 private:
-
 };
 

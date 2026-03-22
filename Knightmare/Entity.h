@@ -1,13 +1,17 @@
 #pragma once
+#include <vector>
+#include "raylib.h"
 #include "Common.h"
 #include "ContentManager.h"
 
 class Entity : public Common
 {
 public:
+	bool Cull = true;
 	bool EntityOnly = false;
-	bool ShowCollision = false;
 	bool HideCollision = false;
+	bool NoCollision = false;
+	bool ShowCollision = false;
 	bool IsChild = false;
 	bool IsParent = false;
 	bool IsConnectedChild = true;
@@ -15,14 +19,13 @@ public:
 	bool IgnoreParentRotation = false;
 	bool WasCulled = false;
 	bool BeenHit = false;
+	bool Stationary = false;
 	int ChildNumber = 0;
 	float Scale = 1;
 	float ModelScale = 1;
 	float MaxSpeed = 0;
 	float Radius = 0;
 	float VerticesSize = 0;
-	float WindowWidth = 0;
-	float WindowHeight = 0;
 	float RotationX = 0;
 	float RotationY = 0;
 	float RotationZ = 0;
@@ -54,23 +57,25 @@ public:
 	Entity();
 	virtual ~Entity();
 
-	virtual bool Initialize(Utilities* utilities);
+	bool Initialize();
 	virtual void Update(float deltaTime);
 	virtual void AlwaysUpdate(float deltaTime);
 	virtual void FixedUpdate(float deltaTime);
 	virtual void Draw3D();
+	void Draw2D();
 
 	void X(float x);
 	void Y(float y);
 	void Z(float z);
 	void SetScale(float scale);
 
+	virtual void Spawn();
 	virtual void Spawn(Vector3 position);
 	virtual void Hit();
 	virtual void Destroy();
 
 	bool GetBeenHit();
-	bool CirclesIntersect(Vector3 targetPosition, float targetRadius);
+	bool CirclesIntersect(Vector3& targetPosition, float targetRadius);
 	bool CirclesIntersect(Entity& target);
 	bool CirclesIntersectBullet(Entity& target);
 	bool ScreenEdgeBoundY();
@@ -84,24 +89,23 @@ public:
 	float X();
 	float Y();
 	float Z();
-	float GetAngleFromVectorZ(Vector3 target);
-	float GetAngleFromWorldVectorZ(Vector3 target);
+	float GetAngleFromVectorZ(Vector3& target);
+	float GetAngleFromWorldVectorZ(Vector3& target);
 	float GetAngleFromVectors(Vector3& target);
+	float GetRotationTowardsTargetZ(Vector3& origin, Vector3& target,
+		float facingAngle, float magnitude);
+	float GetAngleFromVectorsZ(Vector3& origin, Vector3& target);
 
-	Vector3 GetRandomVelocity(float magnitude);
-	Vector3 GetVelocityFromAngleZ(float angle, float magnitude);
-	Vector3 GetVelocityFromAngleZ(float magnitude);
-	Vector3 GetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
-	Vector3 GetWorldPosition();
+	Vector3& GetVelocityFromAngleZ(float magnitude);
+	Vector3& GetVelocityFromAngleZ(float angle, float magnitude);
+	Vector3& GetVelocityFromVectorZ(Vector3& target, float magnitude);
+	Vector3& GetReflectionVelocity(Vector3& location,
+		Vector3& velocity, float amountReflect,
+float reductionHit, float reductionLoss);
+	Vector3& GetAccelerationToMaxAtRotation(float accelerationAmount,
+		float topSpeed);
+	Vector3& GetWorldPosition();
 
-	void SetRotationZTowardsTargetZ(Vector3& target, float magnitude);
-	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
-	void SetAccelerationToZero(float decelerationAmount);
-	void SetRotateVelocity(Vector3& position, float turnSpeed, float speed);
-	void SetRotationZFromVector(Vector3& target);
-	void SetHeading(Vector3& waypoint, float rotationSpeed);
-	void SetAimAtTargetZ(Vector3& target, float facingAngle, float magnitute);
-	void SetParent(Entity& parent);
 	virtual bool SetCamera(Camera* camera);
 	virtual void SetModel(Model &model, float scale);
 	virtual void SetModel(Model &model);
@@ -109,20 +113,27 @@ public:
 	virtual void SetModelWithTexture(Model &model, Texture2D &texture);
 	virtual LineModelPoints GetLineModel();
 	virtual std::vector<Vector3> GetModel();
-	virtual void SetModel(std::vector<Vector3> lines);
-	virtual void SetModel(LineModelPoints lines);
-	virtual void SetModel(LineModelPoints lines, float scale);
+	virtual void SetModel(std::vector<Vector3> &lines);
+	virtual void SetModel(LineModelPoints& lines);
+	virtual void SetModel(LineModelPoints& lines, float scale);
 	virtual Model& Get3DModel();
+	virtual void Reset();
+	void SetAccelerationToMaxAtRotation(float accelerationAmount,
+		float topSpeed);
+	void SetAccelerationToZero(float decelerationAmount);
+	void SetRotateVelocity(Vector3& position, float turnSpeed, float speed);
+	void SetRotationZFromVector(Vector3& target);
+	void SetAimAtTargetZ(Vector3& target, float facingAngle, float magnitude);
+	void SetParent(Entity& parent);
 	void RemoveParent(Entity* parent);
 	void ClearParents();
 	void CheckScreenEdge();
 	void CheckScreenEdgeX();
 	void CheckScreenEdgeY();
-	void LeavePlay(float turnSpeed, float speed);
 	void CheckPlayfieldSidesWarp();
-	void CheckPlayfieldSidesWarp(float left, float right);
+	bool CheckPlayfieldSidesWarp(float left, float right);
 	void CheckPlayfieldHeightWarp(float top, float bottom);
-
+	void LeavePlay(float turnSpeed, float speed);
 protected:
 	std::vector<Vector3> LinePoints;
 	LineModelPoints Lines;
