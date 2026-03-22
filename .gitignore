@@ -13,3 +13,9 @@ resources
 /Release/Knightmare Engine.lib
 /Release/Knightmare Engine.pdb
 *.TMP
+/Asteroids Reimagined/.vscode
+/Asteroids Reimagined/~AutoRecover.Asteroids Reimagined.vcxproj
+/Asteroids Reimagined/~AutoRecover.Asteroids Reimagined.vcxproj0
+/Asteroids Reimagined/~AutoRecover.Asteroids Reimagined.vcxproj1
+/Release/raylib.lib
+/Knightmare/.vscode
