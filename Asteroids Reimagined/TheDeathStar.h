@@ -15,7 +15,7 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 	void SetUFO();
-	void SetWedgeModel(LineModelPoints model);
+	void SetWedgeModel(std::vector<Vector3> model);
 
 	void SetExplodeSound(Sound sound);
 	void SetSpawnSound(Sound sound);

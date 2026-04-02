@@ -21,7 +21,7 @@ public:
 	Enemy2();
 	virtual ~Enemy2();
 
-	void SetMineModel(LineModelPoints model);
+	void SetMineModel(std::vector<Vector3> model);
 	void SetSpawnSound(Sound sound);
 	void SetOnSound(Sound sound);
 	void SetMineExplodeSound(Sound sound);
@@ -49,7 +49,7 @@ private:
 
 	Sound MineExplodeSound = {};
 
-	LineModelPoints MineModel = {};
+	std::vector<Vector3> MineModel = {};
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

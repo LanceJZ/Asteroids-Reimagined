@@ -12,10 +12,10 @@ ParticleManager::~ParticleManager()
 
 bool ParticleManager::Initialize()
 {
-	ParticleModel.linePoints.push_back({ -0.250f, 0.250f, 0 });
-	ParticleModel.linePoints.push_back({ 0.250f, 0.250f, 0 });
-	ParticleModel.linePoints.push_back({ 0.250f, -0.250f, 0 });
-	ParticleModel.linePoints.push_back({ -0.250f, -0.250f, 0 });
+	ParticleModel.push_back({ -0.250f, 0.250f, 0 });
+	ParticleModel.push_back({ 0.250f, 0.250f, 0 });
+	ParticleModel.push_back({ 0.250f, -0.250f, 0 });
+	ParticleModel.push_back({ -0.250f, -0.250f, 0 });
 
 	return false;
 }
@@ -25,7 +25,7 @@ void ParticleManager::SetCubeModel(Model model)
 	CubeModel = model;
 }
 
-void ParticleManager::SetLineModel(LineModelPoints model)
+void ParticleManager::SetLineModel(std::vector<Vector3> model)
 {
 	ParticleModel = model;
 }
@@ -68,18 +68,18 @@ void ParticleManager::SpawnLineDots(Vector3 position, Vector3 velocity,
 	}
 }
 
-void ParticleManager::SpawnLineModelExplosion(LineModelPoints model,
+void ParticleManager::SpawnLineModelExplosion(std::vector<Vector3> model,
 	Vector3 position, Vector3 velocity, float rotationZ,
 	float maxSpeed, float maxTime, Color color)
 {
-	std::vector<LineModelPoints> lineModelParts = {};
+	std::vector<std::vector<Vector3>> lineModelParts = {};
 
-	for (int i = 0; i < model.linePoints.size() - 1; i++)
+	for (int i = 0; i < model.size() - 1; i++)
 	{
-		LineModelPoints lineModelPart = {};
+		std::vector<Vector3> lineModelPart = {};
 
-		lineModelPart.linePoints.push_back(model.linePoints[i]);
-		lineModelPart.linePoints.push_back(model.linePoints[i + 1]);
+		lineModelPart.push_back(model[i]);
+		lineModelPart.push_back(model[i + 1]);
 
 		lineModelParts.push_back(lineModelPart);
 	}
@@ -191,7 +191,7 @@ size_t ParticleManager::SpawnLinePool(Color color)
 	return lineSpawnNumber;
 }
 
-size_t ParticleManager::SpawnLineModelPool(LineModelPoints modelPart,
+size_t ParticleManager::SpawnLineModelPool(std::vector<Vector3> modelPart,
 	Color color)
 {
 	bool spawnNew = true;

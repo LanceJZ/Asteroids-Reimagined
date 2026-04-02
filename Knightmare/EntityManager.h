@@ -43,8 +43,8 @@ public:
 	size_t AddEntity(Entity* entity);
 	size_t AddEntity();
 	size_t AddLineModel(Entity* model);
-	size_t AddLineModel(LineModelPoints model);
-	size_t AddLineModel(Entity* model, LineModelPoints points);
+	size_t AddLineModel(std::vector<Vector3> model);
+	size_t AddLineModel(Entity* model, std::vector<Vector3> points);
 	size_t AddLineModel();
 	size_t AddModel3D(Entity* entity);
 	size_t AddModel3D(Entity* entity, Model &model);

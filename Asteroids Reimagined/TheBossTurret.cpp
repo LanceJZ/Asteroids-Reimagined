@@ -14,7 +14,7 @@ void TheBossTurret::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void TheBossTurret::SetShotModel(LineModelPoints model)
+void TheBossTurret::SetShotModel(std::vector<Vector3> model)
 {
 	ShotModel = model;
 }

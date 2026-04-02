@@ -117,7 +117,7 @@ use. */
 	Logic->SetPowerUpSound(CM.LoadAndGetSound("PowerUp"));
 	Logic->SetPickUpSound(CM.LoadAndGetSound("PickUp"));
 
-	LineModelPoints rockModels[4];
+	std::vector<Vector3> rockModels[4];
 
 	rockModels[0] = CM.LoadAndGetLineModel("Rock1");
 	rockModels[1] = CM.LoadAndGetLineModel("Rock2");

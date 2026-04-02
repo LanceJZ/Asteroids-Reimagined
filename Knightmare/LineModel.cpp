@@ -54,11 +54,6 @@ void LineModel::Draw3D()
 	AfterCalculate();
 }
 
-LineModelPoints LineModel::GetLineModel()
-{
-	return Lines;
-}
-
 std::vector<Vector3> LineModel::GetModel()
 {
 	return LinePoints;
@@ -69,12 +64,7 @@ void LineModel::SetModel(std::vector<Vector3> lines)
 	Entity::SetModel(lines);
 }
 
-void LineModel::SetModel(LineModelPoints lines)
-{
-	Entity::SetModel(lines);
-}
-
-void LineModel::SetModel(LineModelPoints lines, float scale)
+void LineModel::SetModel(std::vector<Vector3> lines, float scale)
 {
 	Entity::SetModel(lines, scale);
 }

@@ -232,7 +232,7 @@ size_t EntityManager::AddLineModel(Entity* model)
 	return number;
 }
 
-size_t EntityManager::AddLineModel(LineModelPoints model)
+size_t EntityManager::AddLineModel(std::vector<Vector3> model)
 {
 	size_t number = Entities.size();
 
@@ -244,7 +244,7 @@ size_t EntityManager::AddLineModel(LineModelPoints model)
 	return number;
 }
 
-size_t EntityManager::AddLineModel(Entity* model, LineModelPoints modelPoints)
+size_t EntityManager::AddLineModel(Entity* model, std::vector<Vector3> modelPoints)
 {
 	if (model == nullptr)
 	{

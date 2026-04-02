@@ -31,12 +31,12 @@ void TheBoss::SetPlayer(ThePlayer* player)
 	}
 }
 
-void TheBoss::SetShieldModel(LineModelPoints model)
+void TheBoss::SetShieldModel(std::vector<Vector3> model)
 {
 	Shield->SetModel(model);
 }
 
-void TheBoss::SetTurretModel(LineModelPoints model)
+void TheBoss::SetTurretModel(std::vector<Vector3> model)
 {
 	for (const auto& turret : Turrets)
 	{
@@ -44,23 +44,23 @@ void TheBoss::SetTurretModel(LineModelPoints model)
 	}
 }
 
-void TheBoss::SetLeftSpineMountModel(LineModelPoints model)
+void TheBoss::SetLeftSpineMountModel(std::vector<Vector3> model)
 {
 	LeftSpineMount->SetModel(model);
 }
 
-void TheBoss::SetRightSpineMountModel(LineModelPoints model)
+void TheBoss::SetRightSpineMountModel(std::vector<Vector3> model)
 {
 	RightSpineMount->SetModel(model);
 }
 
-void TheBoss::SetMissileModel(LineModelPoints model)
+void TheBoss::SetMissileModel(std::vector<Vector3> model)
 {
 
 	MissileModel = model;
 }
 
-void TheBoss::SetShotModel(LineModelPoints model)
+void TheBoss::SetShotModel(std::vector<Vector3> model)
 {
 
 	ShotModel = model;
@@ -71,7 +71,7 @@ void TheBoss::SetShotModel(LineModelPoints model)
 	}
 }
 
-void TheBoss::SetMineModel(LineModelPoints model)
+void TheBoss::SetMineModel(std::vector<Vector3> model)
 {
 
 	MineModel = model;

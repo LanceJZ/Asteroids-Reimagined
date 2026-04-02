@@ -21,7 +21,7 @@ public:
 
 	void SetEntityManager(EntityManager& entityManager);
 	void SetCubeModel(Model model);
-	void SetLineModel(LineModelPoints model);
+	void SetLineModel(std::vector<Vector3> model);
 
 	virtual bool Initialize();
 	virtual bool BeginRun();
@@ -32,7 +32,7 @@ public:
 		float maxSpeed,  int count, float maxTime, Color color);
 	void SpawnLineDots(Vector3 position, Vector3 velocity, float radius,
 		float maxSpeed, int count, float maxTime, Color color);
-	void SpawnLineModelExplosion(LineModelPoints model, Vector3 position,
+	void SpawnLineModelExplosion(std::vector<Vector3> model, Vector3 position,
 		Vector3 velocity, float rotationZ, float maxSpeed,
 		float maxTime, Color color);
 
@@ -42,7 +42,7 @@ public:
 	bool GetParticlesActive();
 protected:
 	Model CubeModel = {};
-	LineModelPoints ParticleModel = {};
+	std::vector<Vector3> ParticleModel = {};
 	EntityManager* EM = nullptr;
 
 private:
@@ -52,6 +52,6 @@ private:
 
 	size_t SpawnCubePool(Color color);
 	size_t SpawnLinePool(Color color);
-	size_t SpawnLineModelPool(LineModelPoints modelPart, Color color);
+	size_t SpawnLineModelPool(std::vector<Vector3> modelPart, Color color);
 };
 

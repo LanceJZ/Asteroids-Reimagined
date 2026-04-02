@@ -24,13 +24,13 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 
-	void SetShieldModel(LineModelPoints model);
-	void SetTurretModel(LineModelPoints model);
-	void SetLeftSpineMountModel(LineModelPoints model);
-	void SetRightSpineMountModel(LineModelPoints model);
-	void SetMissileModel(LineModelPoints model);
-	void SetShotModel(LineModelPoints model);
-	void SetMineModel(LineModelPoints model);
+	void SetShieldModel(std::vector<Vector3> model);
+	void SetTurretModel(std::vector<Vector3> model);
+	void SetLeftSpineMountModel(std::vector<Vector3> model);
+	void SetRightSpineMountModel(std::vector<Vector3> model);
+	void SetMissileModel(std::vector<Vector3> model);
+	void SetShotModel(std::vector<Vector3> model);
+	void SetMineModel(std::vector<Vector3> model);
 
 	void SetOnSound(Sound sound);
 	void SetExplodeSound(Sound sound);
@@ -89,10 +89,10 @@ private:
 	Sound MineDropSound = {};
 	Sound MineExplodeSound = {};
 
-	LineModelPoints MissileModel;
-	LineModelPoints ShotModel;
-	LineModelPoints MineModel;
-	LineModelPoints TurretModel;
+	std::vector<Vector3> MissileModel;
+	std::vector<Vector3> ShotModel;
+	std::vector<Vector3> MineModel;
+	std::vector<Vector3> TurretModel;
 
 	LineModel* Shield = nullptr;
 	LineModel* RightSpineMount = nullptr;

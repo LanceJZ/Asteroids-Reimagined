@@ -13,7 +13,7 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 
-	void SetShotModel(LineModelPoints model);
+	void SetShotModel(std::vector<Vector3> model);
 
 	void SetFireSound(Sound sound);
 	void SetExplodeSound(Sound sound);
@@ -40,7 +40,7 @@ private:
 	Sound FireSound = {};
 	Sound ExplodeSound = {};
 
-	LineModelPoints ShotModel = {};
+	std::vector<Vector3> ShotModel = {};
 
 	ThePlayer* Player = nullptr;
 

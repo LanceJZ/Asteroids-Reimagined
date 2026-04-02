@@ -4,7 +4,7 @@
 #define MAX(a, b) ((a)>(b)? (a) : (b))
 #define MIN(a, b) ((a)<(b)? (a) : (b))
 
-class Common //Version 3.1.0 of Knightmare Arcade Engine.
+class Common //Version 3.2.0 of Knightmare Arcade Engine.
 {
 public:
 	bool Enabled = true;

@@ -16,7 +16,7 @@ public:
 
 	void Model3DFactory(Model3D* entity, Model& model, Color color,
 	Vector3 position, Vector3 velocity);
-	void LineModelFactory(LineModel* entity, LineModelPoints& model,
+	void LineModelFactory(LineModel* entity, std::vector<Vector3> &model,
 	Color color, Vector3 position, Vector3 velocity);
 
 private:

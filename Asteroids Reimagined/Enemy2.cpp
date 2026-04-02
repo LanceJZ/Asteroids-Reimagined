@@ -9,7 +9,7 @@ Enemy2::~Enemy2()
 {
 }
 
-void Enemy2::SetMineModel(LineModelPoints model)
+void Enemy2::SetMineModel(std::vector<Vector3> model)
 {
 	MineModel = model;
 }

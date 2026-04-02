@@ -111,11 +111,9 @@ float reductionHit, float reductionLoss);
 	virtual void SetModel(Model &model);
 	virtual void SetModelCopy(Model model, float scale);
 	virtual void SetModelWithTexture(Model &model, Texture2D &texture);
-	virtual LineModelPoints GetLineModel();
 	virtual std::vector<Vector3> GetModel();
 	virtual void SetModel(std::vector<Vector3> &lines);
-	virtual void SetModel(LineModelPoints& lines);
-	virtual void SetModel(LineModelPoints& lines, float scale);
+	virtual void SetModel(std::vector<Vector3> &lines, float scale);
 	virtual Model& Get3DModel();
 	virtual void Reset();
 	void SetAccelerationToMaxAtRotation(float accelerationAmount,
@@ -136,7 +134,6 @@ float reductionHit, float reductionLoss);
 	void LeavePlay(float turnSpeed, float speed);
 protected:
 	std::vector<Vector3> LinePoints;
-	LineModelPoints Lines;
 
 	Camera* TheCamera3D = {};
 	Model TheModel = {};
@@ -145,6 +142,7 @@ protected:
 	void CalculateWorldSpace();
 	void CalculateWorldVectors();
 	void AfterCalculate();
+	void CalculateRadius();
 
 private:
 	Ray TheRay = { 0 };
@@ -153,7 +151,5 @@ private:
 	float RadianSpin(float radian);
 	float AddRotationVelAcc(float rotation, float rotationVelocity,
 		float rotationAcceleration, float deltaTime);
-
-	void CalculateRadius();
 };
 

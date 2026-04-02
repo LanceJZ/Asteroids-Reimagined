@@ -34,12 +34,12 @@ ThePlayer::~ThePlayer()
 {
 }
 
-void ThePlayer::SetTurretModel(LineModelPoints model)
+void ThePlayer::SetTurretModel(std::vector<Vector3> model)
 {
 	Turret->SetModel(model);
 }
 
-void ThePlayer::SetShotModel(LineModelPoints model)
+void ThePlayer::SetShotModel(std::vector<Vector3> model)
 {
 	for (auto& shot : Shots)
 	{
@@ -53,29 +53,29 @@ void ThePlayer::SetShotModel(LineModelPoints model)
 	WeaponTypeIconDoubleRight->SetModel(model);
 }
 
-void ThePlayer::SetFlameModel(LineModelPoints model)
+void ThePlayer::SetFlameModel(std::vector<Vector3> model)
 {
 	Flame->SetModel(model);
 }
 
-void ThePlayer::SetShieldModel(LineModelPoints model)
+void ThePlayer::SetShieldModel(std::vector<Vector3> model)
 {
 	Shield->SetModel(model);
 }
 
-void ThePlayer::SetTurretHeatModel(LineModelPoints model)
+void ThePlayer::SetTurretHeatModel(std::vector<Vector3> model)
 {
 	TurretHeatMeter->SetModel(model);
 }
 
-void ThePlayer::SetBigShotModel(LineModelPoints model)
+void ThePlayer::SetBigShotModel(std::vector<Vector3> model)
 {
 	BigShotModel = model;
 	WeaponTypeIconBig->SetModel(model);
 	WeaponTypeIconPlasma->SetModel(model);
 }
 
-void ThePlayer::SetMineModel(LineModelPoints model)
+void ThePlayer::SetMineModel(std::vector<Vector3> model)
 {
 	MineModel = model;
 	WeaponTypeIconMine->SetModel(model);
@@ -146,7 +146,7 @@ void ThePlayer::SetMineExplodeSound(Sound sound)
 	MineExplodeSound = sound;
 }
 
-void ThePlayer::SetCrosshairModel(LineModelPoints model)
+void ThePlayer::SetCrosshairModel(std::vector<Vector3> model)
 {
 	Crosshair->SetModel(model);
 	Crosshair->Radius = 0.0f;
@@ -281,9 +281,9 @@ void ThePlayer::Hit()
 	PlaySound(ExplodeSound);
 	Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
 		Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
-	Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
+	Particles.SpawnLineModelExplosion(GetModel(), Position, Velocity,
 		RotationZ, 10.0f, 4.0f, ModelColor);
-	Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
+	Particles.SpawnLineModelExplosion(Turret->GetModel(), Position, Velocity,
 		Turret->RotationZ, 15.0f, 3.0f, Turret->ModelColor);
 	Acceleration = { 0 };
 	Velocity = { 0 };

@@ -40,14 +40,14 @@ public:
 	std::vector<TheHomingMine*> Mines = {};
 	std::vector<ThePlasmaShot*> PlasmaShots = {};
 
-	void SetCrosshairModel(LineModelPoints model);
-	void SetTurretModel(LineModelPoints model);
-	void SetShotModel(LineModelPoints model);
-	void SetFlameModel(LineModelPoints model);
-	void SetShieldModel(LineModelPoints model);
-	void SetTurretHeatModel(LineModelPoints model);
-	void SetBigShotModel(LineModelPoints model);
-	void SetMineModel(LineModelPoints model);
+	void SetCrosshairModel(std::vector<Vector3> model);
+	void SetTurretModel(std::vector<Vector3> model);
+	void SetShotModel(std::vector<Vector3> model);
+	void SetFlameModel(std::vector<Vector3> model);
+	void SetShieldModel(std::vector<Vector3> model);
+	void SetTurretHeatModel(std::vector<Vector3> model);
+	void SetBigShotModel(std::vector<Vector3> model);
+	void SetMineModel(std::vector<Vector3> model);
 
 	void SetFireSound(Sound sound);
 	void SetExplodeSound(Sound sound);
@@ -144,9 +144,9 @@ private:
 	LineModel* WeaponTypeIconPlasma = {};
 	LineModel* WeaponTypeIconMine = {};
 
-	LineModelPoints ShotModel;
-	LineModelPoints MineModel;
-	LineModelPoints BigShotModel;
+	std::vector<Vector3> ShotModel;
+	std::vector<Vector3> MineModel;
+	std::vector<Vector3> BigShotModel;
 
 	TheScoreOld* Score = {};
 

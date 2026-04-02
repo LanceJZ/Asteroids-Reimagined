@@ -14,7 +14,7 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void Enemy::SetShotModel(LineModelPoints model)
+void Enemy::SetShotModel(std::vector<Vector3> model)
 {
 	ShotModel = model;
 }
@@ -184,7 +184,7 @@ void Enemy::Hit()
 	Player->ScoreUpdate(Points);
 
 	Explode();
-	Destroy();
+	//Destroy();
 }
 
 void Enemy::Reset()

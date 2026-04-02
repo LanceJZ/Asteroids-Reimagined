@@ -27,7 +27,7 @@ public:
 	void SetPlayer(ThePlayer* player);
 	void SetEnemies(EnemyControl* enemies);
 
-	void SetPowerUpModel(LineModelPoints model);
+	void SetPowerUpModel(std::vector<Vector3> model);
 
 	void SetPowerUpSound(Sound sound);
 	void SetPickUpSound(Sound sound);
@@ -46,8 +46,8 @@ private:
 	size_t ExplodeTimerID = 0;
 	Vector2 AdjustedFieldSize = {};
 
-	LineModelPoints PlayerModel = {};
-	LineModelPoints PowerUpModel = {};
+	std::vector<Vector3> PlayerModel = {};
+	std::vector<Vector3> PowerUpModel = {};
 
 	Sound PowerUpSound = {};
 	Sound PickUpSound = {};

@@ -13,11 +13,9 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw3D();
 
-	LineModelPoints GetLineModel();
 	std::vector<Vector3> GetModel();
 	void SetModel(std::vector<Vector3> lines);
-	void SetModel(LineModelPoints lines);
-	void SetModel(LineModelPoints lines, float scale);
+	void SetModel(std::vector<Vector3> lines, float scale);
 
 private:
 

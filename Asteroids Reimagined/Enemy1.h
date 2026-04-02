@@ -22,7 +22,7 @@ public:
 	virtual ~Enemy1();
 
 	void SetPlayer(ThePlayer* player);
-	void SetMissileModel(LineModelPoints model);
+	void SetMissileModel(std::vector<Vector3> model);
 
 	void SetSpawnSound(Sound sound);
 	void SetOnSound(Sound sound);
@@ -54,7 +54,7 @@ private:
 	Sound MissileOnSound = {};
 	Sound MissileExplodeSound = {};
 
-	LineModelPoints MissileModel = {};
+	std::vector<Vector3> MissileModel = {};
 
 	bool CheckWentOffScreen();
 	void DestinationTarget();

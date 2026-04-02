@@ -12,7 +12,7 @@ TheDeathStar::~TheDeathStar()
 {
 }
 
-void TheDeathStar::SetWedgeModel(LineModelPoints model)
+void TheDeathStar::SetWedgeModel(std::vector<Vector3> model)
 {
 	for (const auto &fighterPair : FighterPairs)
 	{

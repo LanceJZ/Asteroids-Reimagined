@@ -20,7 +20,7 @@ public:
 
 	void SetPlayer(ThePlayer* player);
 
-	void SetShotModel(LineModelPoints model);
+	void SetShotModel(std::vector<Vector3> model);
 
 	void SetFireSound(Sound fireSound);
 	void SetExplodeSound(Sound explodeSound);
@@ -67,7 +67,7 @@ protected:
 	Sound ExplodeSound = {};
 	Sound OnSound = {};
 	Sound SpawnSound = {};
-	LineModelPoints ShotModel = {};
+	std::vector<Vector3> ShotModel = {};
 
 	std::vector<Vector3> Path = {};
 

@@ -42,7 +42,7 @@ void TheFighterPair::SetUFO(std::vector<Enemy*> ufos)
 	}
 }
 
-void TheFighterPair::SetWedgeModel(LineModelPoints model)
+void TheFighterPair::SetWedgeModel(std::vector<Vector3> model)
 {
 	for (const auto &fighter : Fighters)
 	{

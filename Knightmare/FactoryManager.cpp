@@ -44,7 +44,7 @@ void FactoryManager::Model3DFactory(Model3D* entity, Model& model, Color color, 
 	entity->Velocity = velocity;
 }
 
-void FactoryManager::LineModelFactory(LineModel* entity, LineModelPoints& model,
+void FactoryManager::LineModelFactory(LineModel* entity, std::vector<Vector3> &model,
 	Color color, Vector3 position, Vector3 velocity)
 {
 	if (EM == nullptr)

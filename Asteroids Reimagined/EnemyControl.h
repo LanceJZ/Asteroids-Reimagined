@@ -26,22 +26,22 @@ public:
 	TheDeathStar *DeathStar = nullptr;
 	TheBoss *Boss = nullptr;
 
-	LineModelPoints UFOModel = {};
+	std::vector<Vector3> UFOModel = {};
 
 	void SetPlayer(ThePlayer* player);
-	void SetRockModels(LineModelPoints rockModels[4]);
-	void SetUFOModel(LineModelPoints model);
-	void SetShotModel(LineModelPoints model);
-	void SetWedgeModel(LineModelPoints model);
-	void SetEnemy1Model(LineModelPoints model);
-	void SetEnemy2Model(LineModelPoints model);
-	void SetBossModel(LineModelPoints model);
-	void SetBossShieldModel(LineModelPoints model);
-	void SetBossTurretModel(LineModelPoints model);
-	void SetLeftSpineMountModel(LineModelPoints model);
-	void SetRightSpineMountModel(LineModelPoints model);
-	void SetEnemyMissileModel(LineModelPoints model);
-	void SetEnemyMineModel(LineModelPoints model);
+	void SetRockModels(std::vector<Vector3> rockModels[4]);
+	void SetUFOModel(std::vector<Vector3> model);
+	void SetShotModel(std::vector<Vector3> model);
+	void SetWedgeModel(std::vector<Vector3> model);
+	void SetEnemy1Model(std::vector<Vector3> model);
+	void SetEnemy2Model(std::vector<Vector3> model);
+	void SetBossModel(std::vector<Vector3> model);
+	void SetBossShieldModel(std::vector<Vector3> model);
+	void SetBossTurretModel(std::vector<Vector3> model);
+	void SetLeftSpineMountModel(std::vector<Vector3> model);
+	void SetRightSpineMountModel(std::vector<Vector3> model);
+	void SetEnemyMissileModel(std::vector<Vector3> model);
+	void SetEnemyMineModel(std::vector<Vector3> model);
 
 	void SetRockExplodeSound(Sound sound);
 	void SetUFOExplodeSound(Sound sound);
@@ -121,12 +121,12 @@ private:
 	Sound EnemyTwoOnSound = {};
 	Sound EnemyTwoMineExplodeSound = {};
 
-	LineModelPoints ShotModel;
-	LineModelPoints RockModels[4];
-	LineModelPoints EnemyOneModel;
-	LineModelPoints EnemyTwoModel;
-	LineModelPoints MissileModel;
-	LineModelPoints MineModel;
+	std::vector<Vector3> ShotModel;
+	std::vector<Vector3> RockModels[4];
+	std::vector<Vector3> EnemyOneModel;
+	std::vector<Vector3> EnemyTwoModel;
+	std::vector<Vector3> MissileModel;
+	std::vector<Vector3> MineModel;
 
 	ThePlayer *Player = nullptr;
 

@@ -61,7 +61,7 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	float maxVS = 0;
 
 	TheRock::Size = size;
-	float scale = 25;
+	float scale = 1; //Was 25
 	float change = 0;
 
 	switch (size)

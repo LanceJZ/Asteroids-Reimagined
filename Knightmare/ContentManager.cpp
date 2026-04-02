@@ -23,7 +23,6 @@ ContentManager::~ContentManager()
 	}
 
 	LoadedModels.clear();
-	LoadedLineModels.clear();
 	LoadedSounds.clear();
 	LoadedTextures.clear();
 }
@@ -73,17 +72,17 @@ Model& ContentManager::GetModel(size_t modelNumber)
 	return LoadedModels[modelNumber];
 }
 
+std::vector<Vector3> ContentManager::GetLineModel(size_t modelNumber)
+{
+	return LoadedLineModels[modelNumber];
+}
+
 Model& ContentManager::LoadAndGetModel(std::string modelFilename)
 {
 	return GetModel(LoadTheModel(modelFilename));
 }
 
-LineModelPoints& ContentManager::GetLineModel(size_t modelNumber)
-{
-	return LoadedLineModels[modelNumber];
-}
-
-LineModelPoints ContentManager::LoadAndGetLineModel(std::string modelFileName)
+std::vector<Vector3> ContentManager::LoadAndGetLineModel(std::string modelFileName)
 {
 	return GetLineModel(LoadTheLineModel(modelFileName));
 }
@@ -184,9 +183,9 @@ Texture ContentManager::LoadTextureFile(std::string textureFileName)
 	return LoadTexture(namePNG.c_str());
 }
 //Load VEC file only, without path or ext.
-LineModelPoints ContentManager::LoadLineModel(std::string fileName)
+std::vector<Vector3> ContentManager::LoadLineModel(std::string fileName)
 {
-	LineModelPoints points;
+	std::vector<Vector3> points;
 
 	std::string path = "Models/";
 	std::string nameVEC = path;
@@ -199,11 +198,11 @@ LineModelPoints ContentManager::LoadLineModel(std::string fileName)
 
 		if (linesTemp[1] == 88)
 		{
-			points.linePoints = ConvertStringToPoints(linesTemp);
+			points = ConvertStringToPoints(linesTemp);
 		}
 		else
 		{
-			points.linePoints = ConvertStringToPointsNew(linesTemp);
+			points = ConvertStringToPointsNew(linesTemp);
 		}
 	}
 	else
@@ -213,11 +212,11 @@ LineModelPoints ContentManager::LoadLineModel(std::string fileName)
 			(nameVEC.c_str()));
 		TraceLog(LOG_INFO, "******************* One Unit Square replaced missing model file. *******************\n");
 
-		points.linePoints.push_back({1,1,0});
-		points.linePoints.push_back({-1,1,0});
-		points.linePoints.push_back({-1,-1,0});
-		points.linePoints.push_back({1,-1,0});
-		points.linePoints.push_back({1,1,0});
+		points.push_back({1,1,0});
+		points.push_back({-1,1,0});
+		points.push_back({-1,-1,0});
+		points.push_back({1,-1,0});
+		points.push_back({1,1,0});
 	}
 
 	return points;

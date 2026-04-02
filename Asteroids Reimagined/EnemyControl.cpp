@@ -24,7 +24,7 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	Boss->SetPlayer(player);
 }
 
-void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
+void EnemyControl::SetRockModels(std::vector<Vector3> rockModels[4])
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -32,65 +32,65 @@ void EnemyControl::SetRockModels(LineModelPoints rockModels[4])
 	}
 }
 
-void EnemyControl::SetUFOModel(LineModelPoints model)
+void EnemyControl::SetUFOModel(std::vector<Vector3> model)
 {
 	UFOModel = model;
 }
 
-void EnemyControl::SetShotModel(LineModelPoints model)
+void EnemyControl::SetShotModel(std::vector<Vector3> model)
 {
 	Boss->SetShotModel(model);
 
 	ShotModel = model;
 }
 
-void EnemyControl::SetWedgeModel(LineModelPoints model)
+void EnemyControl::SetWedgeModel(std::vector<Vector3> model)
 {
 	DeathStar->SetWedgeModel(model);
 }
 
-void EnemyControl::SetEnemy1Model(LineModelPoints model)
+void EnemyControl::SetEnemy1Model(std::vector<Vector3> model)
 {
 	EnemyOneModel = model;
 }
 
-void EnemyControl::SetEnemy2Model(LineModelPoints model)
+void EnemyControl::SetEnemy2Model(std::vector<Vector3> model)
 {
 	EnemyTwoModel = model;
 }
 
-void EnemyControl::SetBossModel(LineModelPoints model)
+void EnemyControl::SetBossModel(std::vector<Vector3> model)
 {
 	Boss->SetModel(model);
 }
 
-void EnemyControl::SetBossShieldModel(LineModelPoints model)
+void EnemyControl::SetBossShieldModel(std::vector<Vector3> model)
 {
 	Boss->SetShieldModel(model);
 }
 
-void EnemyControl::SetBossTurretModel(LineModelPoints model)
+void EnemyControl::SetBossTurretModel(std::vector<Vector3> model)
 {
 	Boss->SetTurretModel(model);
 }
 
-void EnemyControl::SetLeftSpineMountModel(LineModelPoints model)
+void EnemyControl::SetLeftSpineMountModel(std::vector<Vector3> model)
 {
 	Boss->SetLeftSpineMountModel(model);
 }
 
-void EnemyControl::SetRightSpineMountModel(LineModelPoints model)
+void EnemyControl::SetRightSpineMountModel(std::vector<Vector3> model)
 {
 	Boss->SetRightSpineMountModel(model);
 }
 
-void EnemyControl::SetEnemyMissileModel(LineModelPoints model)
+void EnemyControl::SetEnemyMissileModel(std::vector<Vector3> model)
 {
 	MissileModel = model;
 	Boss->SetMissileModel(model);
 }
 
-void EnemyControl::SetEnemyMineModel(LineModelPoints model)
+void EnemyControl::SetEnemyMineModel(std::vector<Vector3> model)
 {
 	MineModel = model;
 	Boss->SetMineModel(model);

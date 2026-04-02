@@ -15,7 +15,7 @@ void Enemy1::SetPlayer(ThePlayer* player)
 
 }
 
-void Enemy1::SetMissileModel(LineModelPoints model)
+void Enemy1::SetMissileModel(std::vector<Vector3> model)
 {
 	MissileModel = model;
 }

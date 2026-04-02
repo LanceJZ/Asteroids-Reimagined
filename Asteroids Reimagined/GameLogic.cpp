@@ -22,7 +22,7 @@ void GameLogic::SetEnemies(EnemyControl* enemies)
 	Enemies = enemies;
 }
 
-void GameLogic::SetPowerUpModel(LineModelPoints model)
+void GameLogic::SetPowerUpModel(std::vector<Vector3> model)
 {
 	PowerUpModel = model;
 }
@@ -52,7 +52,7 @@ bool GameLogic::BeginRun()
 {
 	Common::BeginRun();
 
-	PlayerModel = Player->GetLineModel();
+	PlayerModel = Player->GetModel();
 	PlayerClear->Enabled = false;
 	GameEnded = true;
 	Player->SetHighScore(HighScores->GetHighScore());

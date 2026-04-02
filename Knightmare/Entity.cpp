@@ -472,7 +472,8 @@ Vector3& Entity::GetReflectionVelocity(Vector3& position,
 	Vector3 reflection = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity,
 		{reductionLoss}), {-1}),
 		Vector3Add(Vector3Multiply(velocity, {reductionHit}),
-			GetVelocityFromAngleZ(GetAngleFromVectorsZ(position, Position),	amountReflect)));
+			GetVelocityFromAngleZ(GetAngleFromVectorsZ(position, Position),
+				amountReflect)));
 	return reflection;
 }
 
@@ -556,11 +557,6 @@ void Entity::SetModelWithTexture(Model& model, Texture2D& texture)
 	TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 }
 
-LineModelPoints Entity::GetLineModel()
-{
-	return LineModelPoints();
-}
-
 std::vector<Vector3> Entity::GetModel()
 {
 	return std::vector<Vector3>();
@@ -569,18 +565,10 @@ std::vector<Vector3> Entity::GetModel()
 void Entity::SetModel(std::vector<Vector3> &lines)
 {
 	LinePoints = lines;
-	Lines.linePoints = lines;
 	if (!NoCollision) CalculateRadius();
 }
 
-void Entity::SetModel(LineModelPoints &lines)
-{
-	Lines = lines;
-	LinePoints = lines.linePoints;
-	if (!NoCollision) CalculateRadius();
-}
-
-void Entity::SetModel(LineModelPoints &lines, float scale)
+void Entity::SetModel(std::vector<Vector3> &lines, float scale)
 {
 	Scale = scale;
 	SetModel(lines);
