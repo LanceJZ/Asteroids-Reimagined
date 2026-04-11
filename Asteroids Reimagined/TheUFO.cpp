@@ -96,11 +96,22 @@ void TheUFO::Spawn(int spawnCount)
 	float fullScale = 1.0f;
 	float fullRadius = 18.5f;
 	float fullSpeed = 128.666f;
-	float spawnPercent = (float)spawnCount * 0.5f;
-	spawnPercent += (Player->GetScore() * 0.0001f);
-	spawnPercent += (Wave);
+	float spawnPercent = (float)spawnCount * 0.1f;
+	TraceLog(LOG_INFO, "UFO Spawn Count: %i", spawnCount);
+	spawnPercent += (float)(Player->GetScore() * 0.0001f);
+	spawnPercent += (float)(Wave) * 0.25f;
+	TraceLog(LOG_INFO, "Wave: %i", Wave);
 
-	if (M.GetRandomFloat(0, 300) > spawnPercent)
+
+	if (spawnPercent > 90) spawnPercent = 90;
+	if (spawnPercent < 1) spawnPercent = 1;
+	//TODO:Needs testing.
+	int randvalue = GetRandomValue(1, 100);
+
+	TraceLog(LOG_INFO, "UFO SpawnPercent: %i", (int)spawnPercent);
+	TraceLog(LOG_INFO, "RandValue: %i", randvalue);
+
+	if (randvalue > (int)spawnPercent)
 	{
 		TheSize = Large;
 		Scale = fullScale;

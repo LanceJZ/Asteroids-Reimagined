@@ -58,8 +58,8 @@ void LineModelParticle::Spawn(Vector3 position, Vector3 velocity,
 	Vector3 velocityX = M.GetRandomVelocity(M.GetRandomFloat(maxSpeed * 0.15f,
 		maxSpeed * 0.5f));
 
-	float x = (GetModel().at(0).x +	GetModel().at(1).x) / 2.0f;
-	float y = (GetModel().at(0).y + GetModel().at(1).y) / 2.0f;
+	float x = (GetLineModel().at(0).x +	GetLineModel().at(1).x) / 2.0f;
+	float y = (GetLineModel().at(0).y + GetLineModel().at(1).y) / 2.0f;
 
 	Vector3 velocityOut = Vector3(x, y, 0);
 

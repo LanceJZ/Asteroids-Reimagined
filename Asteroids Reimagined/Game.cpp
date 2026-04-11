@@ -87,6 +87,9 @@ use. */
 	Player->SetDoubleShotSound(CM.LoadAndGetSound("DoubleShotFire"));
 	Player->SetBigShotSound(CM.LoadAndGetSound("BigShotFire"));
 	Player->SetPlasmaShotSound(CM.LoadAndGetSound("PlayerPlasmaFire"));
+	Player->SetGunHotSound(CM.LoadAndGetSound("GunHot"));
+	Player->SetShieldLowSound(CM.LoadAndGetSound("ShieldLow"));
+	Player->SetPowerUpWarningSound(CM.LoadAndGetSound("PowerWarning"));
 
 	Enemies->SetRockExplodeSound(CM.LoadAndGetSound("RockExplode"));
 	Enemies->SetUFOExplodeSound(CM.LoadAndGetSound("UFOExplode"));

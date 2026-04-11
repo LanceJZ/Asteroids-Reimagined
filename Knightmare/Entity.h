@@ -105,16 +105,16 @@ float reductionHit, float reductionLoss);
 	Vector3& GetAccelerationToMaxAtRotation(float accelerationAmount,
 		float topSpeed);
 	Vector3& GetWorldPosition();
+	virtual Model& Get3DModel();
+	virtual std::vector<Vector3>& GetLineModel();
 
 	virtual bool SetCamera(Camera* camera);
 	virtual void SetModel(Model &model, float scale);
 	virtual void SetModel(Model &model);
 	virtual void SetModelCopy(Model model, float scale);
 	virtual void SetModelWithTexture(Model &model, Texture2D &texture);
-	virtual std::vector<Vector3> GetModel();
 	virtual void SetModel(std::vector<Vector3> &lines);
 	virtual void SetModel(std::vector<Vector3> &lines, float scale);
-	virtual Model& Get3DModel();
 	virtual void Reset();
 	void SetAccelerationToMaxAtRotation(float accelerationAmount,
 		float topSpeed);

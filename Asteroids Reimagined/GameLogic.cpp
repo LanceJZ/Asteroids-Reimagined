@@ -52,7 +52,7 @@ bool GameLogic::BeginRun()
 {
 	Common::BeginRun();
 
-	PlayerModel = Player->GetModel();
+	PlayerModel = Player->GetLineModel();
 	PlayerClear->Enabled = false;
 	GameEnded = true;
 	Player->SetHighScore(HighScores->GetHighScore());

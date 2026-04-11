@@ -13,9 +13,6 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw3D();
 
-	std::vector<Vector3> GetModel();
-	void SetModel(std::vector<Vector3> lines);
-	void SetModel(std::vector<Vector3> lines, float scale);
 
 private:
 

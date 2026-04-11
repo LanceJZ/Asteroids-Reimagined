@@ -54,21 +54,6 @@ void LineModel::Draw3D()
 	AfterCalculate();
 }
 
-std::vector<Vector3> LineModel::GetModel()
-{
-	return LinePoints;
-}
-
-void LineModel::SetModel(std::vector<Vector3> lines)
-{
-	Entity::SetModel(lines);
-}
-
-void LineModel::SetModel(std::vector<Vector3> lines, float scale)
-{
-	Entity::SetModel(lines, scale);
-}
-
 void LineModel::DrawLines(std::vector <Vector3> points,
 	Vector3 rotationAxis, Color color)
 {

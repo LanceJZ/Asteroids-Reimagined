@@ -61,6 +61,9 @@ public:
 	void SetPlasmaShotSound(Sound sound);
 	void SetMineDropSound(Sound sound);
 	void SetMineExplodeSound(Sound sound);
+	void SetGunHotSound(Sound sound);
+	void SetShieldLowSound(Sound sound);
+	void SetPowerUpWarningSound(Sound sound);
 
 	bool Initialize();
 	bool BeginRun();
@@ -132,6 +135,9 @@ private:
 	Sound MineDropSound = {};
 	Sound MineExplodeSound = {};
 	Sound PlasmaShotSound = {};
+	Sound ShieldLowSound = {};
+	Sound GunHotSound = {};
+	Sound PowerUpWarningSound = {};
 
 	LineModel* Flame = {};
 	LineModel* Turret = {};

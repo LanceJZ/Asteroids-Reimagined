@@ -18,9 +18,9 @@ public:
 	size_t LoadTheSound(std::string soundFileName); //Without path or ext.
 	size_t LoadTheTexture(std::string textureFileName); //Without path or ext.
 	Model& GetModel(size_t modelNumber);
-	std::vector<Vector3> GetLineModel(size_t modelNumber);
+	std::vector<Vector3>& GetLineModel(size_t modelNumber);
 	Model& LoadAndGetModel(std::string modelFileName); //Without path or ext.
-	std::vector<Vector3> LoadAndGetLineModel(std::string modelFileName);
+	std::vector<Vector3>& LoadAndGetLineModel(std::string modelFileName);
 	Sound& GetSound(size_t soundNumber);
 	Sound LoadAndGetSound(std::string soundFileName); //Without path or ext.
 	Texture& GetTexture(size_t textureNumber);

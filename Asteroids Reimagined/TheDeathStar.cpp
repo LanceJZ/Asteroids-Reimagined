@@ -162,9 +162,12 @@ void TheDeathStar::Spawn(Vector3 position)
 	FighterPairs[1]->RotationZ = HalfPi * rot;
 	FighterPairs[2]->RotationZ = HalfPi + (PI * rot);
 
-	FighterPairs[0]->Position = { WX + offset, 0.0f, 0.0f };
-	FighterPairs[1]->Position = { -WX + offset, WY, 0.0f };
-	FighterPairs[2]->Position = { -WX + offset, -WY, 0.0f };
+	//FighterPairs[0]->Position = { WX + offset, 0.0f, 0.0f };
+	FighterPairs[0]->Spawn({ WX + offset, 0.0f, 0.0f });
+	//FighterPairs[1]->Position = { -WX + offset, WY, 0.0f };
+	FighterPairs[1]->Spawn({ -WX + offset, WY, 0.0f });
+	//FighterPairs[2]->Position = { -WX + offset, -WY, 0.0f };
+	FighterPairs[2]->Spawn({ -WX + offset, -WY, 0.0f });
 }
 
 void TheDeathStar::NewGame()

@@ -557,9 +557,9 @@ void Entity::SetModelWithTexture(Model& model, Texture2D& texture)
 	TheModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 }
 
-std::vector<Vector3> Entity::GetModel()
+std::vector<Vector3>& Entity::GetLineModel()
 {
-	return std::vector<Vector3>();
+	return LinePoints;
 }
 
 void Entity::SetModel(std::vector<Vector3> &lines)

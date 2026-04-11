@@ -184,7 +184,6 @@ void Enemy::Hit()
 	Player->ScoreUpdate(Points);
 
 	Explode();
-	//Destroy();
 }
 
 void Enemy::Reset()
@@ -623,7 +622,7 @@ bool Enemy::CheckCollisions()
 
 		if (ufo->CirclesIntersect(*this))
 		{
-			ufo->Destroy();
+			ufo->Hit();
 			Hit();
 			Explode();
 

@@ -84,7 +84,7 @@ void ThePlayer::SetMineModel(std::vector<Vector3> model)
 void ThePlayer::SetFireSound(Sound sound)
 {
 	FireSound = sound;
-	SetSoundVolume(FireSound, 0.25f);
+	SetSoundVolume(FireSound, 0.2f);
 }
 
 void ThePlayer::SetExplodeSound(Sound sound)
@@ -144,6 +144,23 @@ void ThePlayer::SetMineDropSound(Sound sound)
 void ThePlayer::SetMineExplodeSound(Sound sound)
 {
 	MineExplodeSound = sound;
+}
+
+void ThePlayer::SetGunHotSound(Sound sound)
+{
+	GunHotSound = sound;
+}
+
+void ThePlayer::SetShieldLowSound(Sound sound)
+{
+	ShieldLowSound = sound;
+	SetSoundVolume(ShieldLowSound, 0.33f);
+}
+
+void ThePlayer::SetPowerUpWarningSound(Sound sound)
+{
+	PowerUpWarningSound = sound;
+	SetSoundVolume(PowerUpWarningSound, 0.25f);
 }
 
 void ThePlayer::SetCrosshairModel(std::vector<Vector3> model)
@@ -275,15 +292,14 @@ void ThePlayer::Draw3D()
 
 void ThePlayer::Hit()
 {
-	//TODO:: If shield on, use shield hit function.
 	Entity::Hit();
 
 	PlaySound(ExplodeSound);
 	Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
 		Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
-	Particles.SpawnLineModelExplosion(GetModel(), Position, Velocity,
+	Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
 		RotationZ, 10.0f, 4.0f, ModelColor);
-	Particles.SpawnLineModelExplosion(Turret->GetModel(), Position, Velocity,
+	Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
 		Turret->RotationZ, 15.0f, 3.0f, Turret->ModelColor);
 	Acceleration = { 0 };
 	Velocity = { 0 };
@@ -497,15 +513,18 @@ void ThePlayer::FireTurret()
 					}
 				}
 				else
-				{
-					TurretHeat += 5;
+				{					
 					TurretHeatMeterUpdate();
+
+					if (TurretHeat > TurretHeatMax * 0.8f) 
+						PlaySound(GunHotSound);
 
 					if (TurretHeat > TurretHeatMax)
 					{
 						EM.ResetTimer(TurretCooldownTimerID);
 						TurretOverHeat = true;
 					}
+					else TurretHeat += 5;
 				}
 
 				Vector3 turretPosition = Turret->GetWorldPosition();
@@ -869,6 +888,8 @@ void ThePlayer::ShieldOn()
 		else
 		{
 			Shield->Alpha = ShieldPower * 2.55f;
+
+			if (!IsSoundPlaying(ShieldLowSound)) if (ShieldPower < 30.0f) PlaySound(ShieldLowSound);
 		}
 	}
 	else
@@ -919,6 +940,8 @@ void ThePlayer::WeHaveThePower()
 		if (EM.TimerElapsed(PowerUpBlinkTimerID))
 		{
 			EM.ResetTimer(PowerUpBlinkTimerID);
+
+			PlaySound(PowerUpWarningSound);
 
 			if (ModelColor.g == 255.0f)
 			{

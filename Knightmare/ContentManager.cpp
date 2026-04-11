@@ -72,7 +72,7 @@ Model& ContentManager::GetModel(size_t modelNumber)
 	return LoadedModels[modelNumber];
 }
 
-std::vector<Vector3> ContentManager::GetLineModel(size_t modelNumber)
+std::vector<Vector3>& ContentManager::GetLineModel(size_t modelNumber)
 {
 	return LoadedLineModels[modelNumber];
 }
@@ -82,7 +82,7 @@ Model& ContentManager::LoadAndGetModel(std::string modelFilename)
 	return GetModel(LoadTheModel(modelFilename));
 }
 
-std::vector<Vector3> ContentManager::LoadAndGetLineModel(std::string modelFileName)
+std::vector<Vector3>& ContentManager::LoadAndGetLineModel(std::string modelFileName)
 {
 	return GetLineModel(LoadTheLineModel(modelFileName));
 }
