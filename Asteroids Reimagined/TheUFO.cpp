@@ -66,8 +66,6 @@ void TheUFO::FixedUpdate(float deltaTime)
 		ChangeVector();
 	}
 
-	//if (!Player->GameOver) PlayOnSound();
-
 	if (!Player->Enabled && !Player->GameOver) EM.ResetTimer(FireTimerID);
 }
 
@@ -75,7 +73,6 @@ void TheUFO::AlwaysUpdate(float deltaTime)
 {
 	Enemy::AlwaysUpdate(deltaTime);
 
-	//CheckShotsHitPlayer();
 }
 
 void TheUFO::Draw3D()

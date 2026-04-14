@@ -88,7 +88,7 @@ bool TheFighterPair::BeginRun()
 
 void TheFighterPair::Update(float deltaTime)
 {
-	Entity::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
 	if (Separated)
 	{
@@ -98,7 +98,7 @@ void TheFighterPair::Update(float deltaTime)
 
 void TheFighterPair::FixedUpdate(float deltaTime)
 {
-	Entity::FixedUpdate(deltaTime);
+	Enemy::FixedUpdate(deltaTime);
 
 	if (Separated)
 	{
@@ -115,9 +115,7 @@ void TheFighterPair::FixedUpdate(float deltaTime)
 				return;
 			}
 
-			if (LeaveScreen()) Destroy();
-
-			return;
+			LeaveScreen();
 		}
 		else
 		{
@@ -151,7 +149,9 @@ void TheFighterPair::Separate()
 
 void TheFighterPair::Reset()
 {
-	Enemy::Reset();
+	Entity::Reset();
+
+	//ClearParents();
 
 	for (const auto& fighter : Fighters)
 	{
@@ -161,27 +161,21 @@ void TheFighterPair::Reset()
 
 void TheFighterPair::Spawn(Vector3 position)
 {
-	Enemy::Spawn(position);
+	Entity::Spawn(position);
 
 	Separated = false;
 	NewWave = false;
 
 	for (const auto &fighter : Fighters)
 	{
-		fighter->Reset();
 		fighter->SetParent(*this);
 		fighter->Wave = Wave;
-		//fighter->Spawn(position);
 	}
 
 	Fighters[0]->RotationZ = 0.0f;
 	Fighters[1]->RotationZ = PI;
 
 	float offset = 0.78f;
-	//Fighters[0]->Position.x = Fighters[0]->Radius * offset;
-	//Fighters[0]->Position.y = 0.0f;
-	//Fighters[1]->Position.x = -Fighters[1]->Radius * offset;
-	//Fighters[1]->Position.y = 0.0f;
 	Fighters[0]->Spawn({ Fighters[0]->Radius * offset, 0.0f, 0.0f });
 	Fighters[1]->Spawn({ -Fighters[1]->Radius * offset, 0.0f, 0.0f });
 }
@@ -195,15 +189,13 @@ void TheFighterPair::Hit()
 		fighter->Separate();
 		fighter->RemoveParent(this);
 	}
-
-	ClearParents();
-	Destroy();
 }
 
 void TheFighterPair::Destroy()
 {
 	Enemy::Destroy();
 
+	ClearParents();
 }
 
 bool TheFighterPair::CheckCollisions()

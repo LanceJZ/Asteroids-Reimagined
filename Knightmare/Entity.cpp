@@ -690,10 +690,13 @@ void Entity::LeavePlay(float turnSpeed, float speed)
 
 void Entity::Reset()
 {
-	Position = { 0, 0, 0 };
-	Acceleration = { 0, 0, 0 };
-	Velocity = { 0, 0, 0 };
-	RotationVelocityY = 0;
+	Destroy();
+	Position = { 0.0f, 0.0f, 0.0f };
+	Acceleration = { 0.0f, 0.0f, 0.0f };
+	Velocity = { 0.0f, 0.0f, 0.0f };
+	RotationVelocityX = 0.0f;
+	RotationVelocityY = 0.0f;
+	RotationVelocityZ = 0.0f;
 }
 
 void Entity::SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed)

@@ -63,9 +63,7 @@ void TheFighter::FixedUpdate(float deltaTime)
 				return;
 			}
 
-			if (LeaveScreen()) Destroy();
-
-			return;
+			LeaveScreen();
 		}
 		else
 		{
@@ -98,13 +96,13 @@ void TheFighter::Separate()
 
 void TheFighter::Reset()
 {
-	Enemy::Reset();
+	Entity::Reset();
 
 }
 
 void TheFighter::Spawn(Vector3 position)
 {
-	Enemy::Spawn(position);
+	Entity::Spawn(position);
 
 	Separated = false;
 	NewWave = false;
@@ -115,8 +113,6 @@ void TheFighter::Spawn(Vector3 position)
 void TheFighter::Hit()
 {
 	Enemy::Hit();
-
-	Destroy();
 }
 
 void TheFighter::Destroy()

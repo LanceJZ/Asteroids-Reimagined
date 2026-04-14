@@ -43,10 +43,6 @@ bool Game::Load()
 	Logic->Load();
 
 	//Models
-/* This line of code is declaring a variable `shotModelID` of type `size_t` and assigning it the return value of the
-`LoadTheLineModel` function from the `CM` object. The function is loading a line model named "Dot" and
-returning an identifier or ID associated with that model, which is then stored in the `shotModelID` variable for later
-use. */
 	size_t shotModelID = CM.LoadTheLineModel("Dot");
 	Player->SetModel(CM.LoadAndGetLineModel("PlayerShip"));
 	Player->SetFlameModel(CM.LoadAndGetLineModel("PlayerFlame"));
@@ -57,6 +53,8 @@ use. */
 	Player->SetTurretHeatModel(CM.LoadAndGetLineModel("HeatMeter"));
 	Player->SetBigShotModel(CM.LoadAndGetLineModel("PlayerBigShot"));
 	Player->SetMineModel(CM.LoadAndGetLineModel("HomingMine"));
+
+	Logic->SetPowerUpModel(CM.LoadAndGetLineModel("PowerUp"));
 
 	Enemies->SetUFOModel(CM.LoadAndGetLineModel("UFO"));
 	Enemies->SetShotModel(CM.GetLineModel(shotModelID));
@@ -70,8 +68,6 @@ use. */
 	Enemies->SetBossTurretModel(CM.LoadAndGetLineModel("BossTurret"));
 	Enemies->SetLeftSpineMountModel(CM.LoadAndGetLineModel("LeftSpineGun"));
 	Enemies->SetRightSpineMountModel(CM.LoadAndGetLineModel("RightSpineGun"));
-
-	Logic->SetPowerUpModel(CM.LoadAndGetLineModel("PowerUp"));
 
 	//Sounds
 	Player->SetExplodeSound(CM.LoadAndGetSound("PlayerExplode"));
@@ -89,6 +85,9 @@ use. */
 	Player->SetGunHotSound(CM.LoadAndGetSound("GunHot"));
 	Player->SetShieldLowSound(CM.LoadAndGetSound("ShieldLow"));
 	Player->SetPowerUpWarningSound(CM.LoadAndGetSound("PowerWarning"));
+
+	Logic->SetPowerUpSound(CM.LoadAndGetSound("PowerUp"));
+	Logic->SetPickUpSound(CM.LoadAndGetSound("PickUp"));
 
 	Enemies->SetRockExplodeSound(CM.LoadAndGetSound("RockExplode"));
 	Enemies->SetUFOExplodeSound(CM.LoadAndGetSound("UFOExplode"));
@@ -116,9 +115,6 @@ use. */
 	Enemies->SetBossTurretFireSound(CM.LoadAndGetSound("BossTurretFire"));
 	Enemies->SetBossTurretExplodeSound(CM.LoadAndGetSound("BossTurretExplode"));
 	Enemies->SetBossSpineFireSound(CM.LoadAndGetSound("BossSpineFire"));
-
-	Logic->SetPowerUpSound(CM.LoadAndGetSound("PowerUp"));
-	Logic->SetPickUpSound(CM.LoadAndGetSound("PickUp"));
 
 	std::vector<Vector3> rockModels[4];
 

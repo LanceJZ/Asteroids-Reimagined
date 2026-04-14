@@ -641,6 +641,8 @@ void EnemyControl::SpawnDeathStar()
 {
 	if (!Player->GameOver && !Player->Enabled) return;
 
+	DeathStar->Reset();
+
 	Vector3 position = { 0.0f, 0.0f, 0.0f };
 	int width = (int)(GetScreenWidth() / 2.25f);
 	int height = (int)(GetScreenHeight() / 2.25f);

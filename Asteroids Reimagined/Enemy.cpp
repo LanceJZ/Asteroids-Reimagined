@@ -47,6 +47,7 @@ void Enemy::Update(float deltaTime)
 {
 	LineModel::Update(deltaTime);
 
+	if (BeenHit) Destroy();
 }
 
 void Enemy::FixedUpdate(float deltaTime)
@@ -192,9 +193,6 @@ void Enemy::Reset()
 	{
 		shot->Destroy();
 	}
-
-	Velocity = { 0.0f, 0.0f, 0.0f };
-	RotationVelocityZ = 0.0f;
 
 	Destroy();
 }
@@ -385,6 +383,7 @@ bool Enemy::LeaveScreen()
 
 	if (IsOffScreen())
 	{
+		Destroy();
 		Reset();
 		true;
 	}

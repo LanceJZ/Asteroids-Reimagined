@@ -123,16 +123,11 @@ void TheDeathStar::NewWaveStart()
 
 void TheDeathStar::Reset()
 {
-	Enemy::Reset();
+	Entity::Reset();
 
 	for (const auto &fighterPair : FighterPairs)
 	{
 		fighterPair->Reset();
-
-		for (const auto &fighter : fighterPair->Fighters)
-		{
-			fighter->Reset();
-		}
 	}
 }
 
@@ -146,10 +141,8 @@ void TheDeathStar::Spawn(Vector3 position)
 
 	for (const auto &fighterPair : FighterPairs)
 	{
-		fighterPair->Reset();
 		fighterPair->SetParent(*this);
 		fighterPair->Wave = Wave;
-		fighterPair->Spawn(position);
 	}
 
 	WY = FighterPairs[0]->Fighters[0]->Radius * 0.85f;
@@ -162,11 +155,8 @@ void TheDeathStar::Spawn(Vector3 position)
 	FighterPairs[1]->RotationZ = HalfPi * rot;
 	FighterPairs[2]->RotationZ = HalfPi + (PI * rot);
 
-	//FighterPairs[0]->Position = { WX + offset, 0.0f, 0.0f };
 	FighterPairs[0]->Spawn({ WX + offset, 0.0f, 0.0f });
-	//FighterPairs[1]->Position = { -WX + offset, WY, 0.0f };
 	FighterPairs[1]->Spawn({ -WX + offset, WY, 0.0f });
-	//FighterPairs[2]->Position = { -WX + offset, -WY, 0.0f };
 	FighterPairs[2]->Spawn({ -WX + offset, -WY, 0.0f });
 }
 
@@ -198,8 +188,6 @@ void TheDeathStar::Hit()
 			fighter->RemoveParent(this);
 		}
 	}
-
-	Destroy();
 }
 
 void TheDeathStar::Destroy()
