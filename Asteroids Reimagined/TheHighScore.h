@@ -27,11 +27,13 @@ public:
 	int GetHighScore();
 
 private:
-	size_t HighScoreListTimerID = 0;
-
 	bool GameOver = false;
 	bool NewHighScore = false;
 	bool ShowHighScores = false;
+	bool PageTwo = false;
+
+	size_t HighScoreListPageOneTimerID = 0;
+	size_t HighScoreListPageTwoTimerID = 0;
 
 	int NewHighScoreRank = 0;
 	int HighScoreSelectedLetter = 0;
@@ -40,7 +42,7 @@ private:
 	static const size_t MaxScoreListLength = 50;
 	static const size_t MaxHighScoreListNameLength = 5;
 
-	Color color = WHITE;
+	Color color = LIGHTGRAY;
 
 	std::string HighScoreEntryText = "";
 	std::string HighScoreListRaw = "";

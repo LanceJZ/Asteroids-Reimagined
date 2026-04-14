@@ -5,6 +5,7 @@
 #include "ThePlayer.h"
 #include "EnemyControl.h"
 #include "TheBackground.h"
+#include "TheStarShot.h"
 
 class Game : Common
 {

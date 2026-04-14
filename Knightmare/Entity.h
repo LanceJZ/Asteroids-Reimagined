@@ -149,7 +149,6 @@ private:
 	//RayCollision TheRayCollision = { 0 };
 
 	float RadianSpin(float radian);
-	float AddRotationVelAcc(float rotation, float rotationVelocity,
-		float rotationAcceleration, float deltaTime);
+	float AddRotationVelAcc(float rotation, float rotationVelocity, float rotationAcceleration, float deltaTime);
 };
 

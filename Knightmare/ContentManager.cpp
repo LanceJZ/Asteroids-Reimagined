@@ -39,6 +39,101 @@ bool ContentManager::BeginRun()
 	return true;
 }
 
+void ContentManager::ResetLineModels()
+{
+	LoadedLineModels.clear();
+}
+
+void ContentManager::SaveLineModel(std::string name, std::vector<Vector3> points)
+{
+	std::string modelPointsSTR = { };
+
+	for (auto &point : points)
+	{
+		modelPointsSTR.append("(");
+		modelPointsSTR.append(std::to_string(point.x));
+		modelPointsSTR.append(", ");
+		modelPointsSTR.append(std::to_string(point.y));
+		modelPointsSTR.append(", ");
+		modelPointsSTR.append(std::to_string(point.z));
+		modelPointsSTR.append(")");
+	}
+
+	SaveFileText((char*)GetLineModelFileNameWithPath(name).c_str(), (char*)modelPointsSTR.c_str());
+}
+
+void ContentManager::SaveScene(std::string fileName, std::vector<Scene> sceneModels)
+{
+	std::string sceneSTR = { };
+
+	for (auto& model : sceneModels)
+	{
+		sceneSTR.append("(");
+		sceneSTR.append(std::to_string(model.Position.x));
+		sceneSTR.append(", ");
+		sceneSTR.append(std::to_string(model.Position.y));
+		sceneSTR.append(", ");
+		sceneSTR.append(std::to_string(model.Position.z));
+		sceneSTR.append(")");
+	}
+
+	for (auto& model : sceneModels)
+	{
+		sceneSTR.append("Name;");
+		sceneSTR.append(model.Name);
+		sceneSTR.append(":");
+	}
+
+	SaveFileText(GetSceneFileNameWithPath(fileName).c_str(), (char*)sceneSTR.c_str());
+}
+
+std::vector<Scene> ContentManager::LoadScene(std::string fileName)
+{
+	//if (!FileExists(GetSceneFileNameWithPath(fileName).c_str()))
+	//{
+	//	TraceLog(LOG_INFO, "*****\n");
+	//	TraceLog(LOG_ERROR, "***********************  Scene :%s missing. ***********************\n",
+	//		(GetSceneFileNameWithPath));
+
+	//	return {};
+	//}
+
+	std::vector<Scene> sceneModels = {};
+	bool foundName = false;
+
+	std::string sceneSTR = LoadFileText(GetSceneFileNameWithPath(fileName).c_str());
+
+	std::vector<Vector3> positions = ConvertStringToPointsNew(sceneSTR);
+	std::vector<std::string> names;
+	std::string name;
+
+	for (const auto& character : sceneSTR)
+	{
+		if (character == ':')
+		{
+			names.push_back(name);
+			name.clear();
+			foundName = false;
+		}
+
+		if (foundName)
+		{
+			name.append(1, character);
+		}
+
+		if (character == ';') foundName = true;
+	}
+
+	for (size_t i = 0; i < positions.size(); i++)  
+	{
+		sceneModels.push_back(Scene());
+		sceneModels.back().Position = positions[i];
+		sceneModels.back().Name = names[i];
+	}
+
+	return sceneModels;
+}
+
 size_t ContentManager::LoadTheModel(std::string modelFileName)
 {
 	LoadedModels.push_back(LoadModelWithTexture(modelFileName));
@@ -65,6 +160,33 @@ size_t ContentManager::LoadTheTexture(std::string textureFileName)
 	LoadedTextures.push_back(LoadTextureFile(textureFileName));
 
 	return LoadedTextures.size() - 1;
+}
+
+std::string ContentManager::GetModelFileNameWithPath(std::string fileName)
+{
+	std::string path = "Models/";
+	path.append(fileName);
+	path.append(".obj");
+
+	return path;
+}
+
+std::string ContentManager::GetLineModelFileNameWithPath(std::string fileName)
+{
+	std::string path = "Models/";
+	path.append(fileName);
+	path.append(".vec");
+
+	return path;
+}
+
+std::string ContentManager::GetSceneFileNameWithPath(std::string fileName)
+{
+	std::string path = "Scenes/";
+	path.append(fileName);
+	path.append(".scn");
+
+	return path;
 }
 
 Model& ContentManager::GetModel(size_t modelNumber)
@@ -109,15 +231,12 @@ Texture ContentManager::LoadAndGetTexture(std::string textureFileName)
 //Load OBJ model file only with texture/material in same folder no path or ext.
 Model ContentManager::LoadModelWithTexture(std::string modelFileName)
 {
-	std::string path = "Models/";
-
-	std::string namePNG = path;
+	std::string namePNG = "Models/";;
 	namePNG.append(modelFileName);
 	namePNG.append(".png");
 
-	std::string nameOBJ = path;
-	nameOBJ.append(modelFileName);
-	nameOBJ.append(".obj");
+	std::string nameOBJ = GetLineModelFileNameWithPath(modelFileName);
+
 	Image image = { 0 };
 	Model loadModel = { 0 };
 
@@ -151,8 +270,7 @@ Model ContentManager::SetTextureToModel(Model model, Texture2D texture)
 
 Sound ContentManager::LoadSoundFile(std::string soundFileName)
 {
-	std::string path = "Sounds/";
-	std::string nameWAV = path;
+	std::string nameWAV = "Sounds/";
 	nameWAV.append(soundFileName);
 	nameWAV.append(".wav");
 
@@ -186,11 +304,7 @@ Texture ContentManager::LoadTextureFile(std::string textureFileName)
 std::vector<Vector3> ContentManager::LoadLineModel(std::string fileName)
 {
 	std::vector<Vector3> points;
-
-	std::string path = "Models/";
-	std::string nameVEC = path;
-	nameVEC.append(fileName);
-	nameVEC.append(".vec");
+	std::string nameVEC = GetLineModelFileNameWithPath(fileName);
 
 	if (FileExists(nameVEC.c_str()))
 	{

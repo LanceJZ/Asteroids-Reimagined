@@ -2,7 +2,8 @@
 
 TheHighScore::TheHighScore()
 {
-	HighScoreListTimerID = EM.AddTimer(7.5f);
+	HighScoreListPageOneTimerID = EM.AddTimer(7.5f);
+	HighScoreListPageTwoTimerID = EM.AddTimer(15.0f);
 }
 
 TheHighScore::~TheHighScore()
@@ -21,6 +22,7 @@ bool TheHighScore::BeginRun()
 	TheFontLarge = LoadFontEx("font/asteroids-display.otf", 60, 0, 250);
 
 	GameOver = true;
+	ShowHighScores = true;
 
 	return false;
 }
@@ -42,10 +44,18 @@ void TheHighScore::FixedUpdate()
 
 	if (GameOver && !NewHighScore)
 	{
-		if (EM.TimerElapsed(HighScoreListTimerID))
+		PageTwo = false;
+
+		if (EM.TimerElapsed(HighScoreListPageOneTimerID))
 		{
-			ShowHighScores = !ShowHighScores;
-			EM.ResetTimer(HighScoreListTimerID);
+			if (EM.TimerElapsed(HighScoreListPageTwoTimerID))
+			{
+				ShowHighScores = !ShowHighScores;
+				EM.ResetTimer(HighScoreListPageOneTimerID);
+				EM.ResetTimer(HighScoreListPageOneTimerID);
+			}
+
+			PageTwo = true;
 		}
 	}
 }
@@ -111,27 +121,32 @@ int TheHighScore::GetHighScore()
 
 void TheHighScore::DisplayHighScoreList()
 {
-	std::string name = "";
-	std::string score = "";
+	size_t page = 0;
+
 	float space = 30.0f;
 	float font = 30.0f;
-	float start = 150.0f;
+	float start = 90.0f;
 	float center = (float)GetScreenWidth() / 2.0f;
 
-	DrawTextEx(TheFontSmall, "HIGH SCORE LIST",
-		Vector2((center - 120), start - 50), font, 0, color);
+	std::string name = "";
+	std::string score = "";
 
-	for (int i = 0; i < 20; i++)
+	DrawTextEx(TheFontSmall, "HIGH SCORE LIST",
+		Vector2((center - 120), start - 40), font, 0, color);
+
+	if (PageTwo) page = 25;
+
+	for (int i = 0 + page; i < 25 + page; i++)
 	{
 		name = HighScoreList[i].Name;
 		score = std::to_string(HighScoreList[i].Score);
 
 		DrawTextEx(TheFontSmall, const_cast<char*>(name.c_str()),
 			Vector2(center - (space + 70.0f),
-			start + (space * i)), font, 0, color);
+			start + (space * (i - page))), font, 0, color);
 		DrawTextEx(TheFontSmall, const_cast<char*>(score.c_str()),
 			Vector2(center + space,
-			start + (space * i)), font, 0, color);
+			start + (space * (i - page))), font, 0, color);
 	}
 
 	DrawTextEx(TheFontSmall, "PRESS N OR START TO START NEW GAME.",

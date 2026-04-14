@@ -10,6 +10,7 @@ EnemyControl::EnemyControl()
 
 	EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 	EM.AddLineModel(Boss = DBG_NEW TheBoss());
+	EM.AddLineModel(AntiPlayer = DBG_NEW TheAntiPlayer());
 }
 
 EnemyControl::~EnemyControl()
@@ -22,6 +23,7 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 
 	DeathStar->SetPlayer(player);
 	Boss->SetPlayer(player);
+	AntiPlayer->SetPlayer(player);
 }
 
 void EnemyControl::SetRockModels(std::vector<Vector3> rockModels[4])
@@ -40,7 +42,7 @@ void EnemyControl::SetUFOModel(std::vector<Vector3> model)
 void EnemyControl::SetShotModel(std::vector<Vector3> model)
 {
 	Boss->SetShotModel(model);
-
+	AntiPlayer->SetShotModel(model);
 	ShotModel = model;
 }
 
@@ -94,6 +96,11 @@ void EnemyControl::SetEnemyMineModel(std::vector<Vector3> model)
 {
 	MineModel = model;
 	Boss->SetMineModel(model);
+}
+
+void EnemyControl::SetAntiPlayerModel(std::vector<Vector3> model)
+{
+	AntiPlayer->SetModel(model);
 }
 
 void EnemyControl::SetRockExplodeSound(Sound sound)

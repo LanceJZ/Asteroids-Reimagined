@@ -87,6 +87,12 @@
     <ClCompile Include="ThePlasmaShot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TheAntiPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TheStarShot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -162,6 +168,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheAntiPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TheStarShot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

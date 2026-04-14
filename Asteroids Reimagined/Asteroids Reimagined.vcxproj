@@ -169,6 +169,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheAntiPlayer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TheBoss.cpp">
       <SubType>
       </SubType>
@@ -226,6 +230,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TheStarShot.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TheUFO.cpp">
       <SubType>
       </SubType>
@@ -253,6 +261,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="TheAntiPlayer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TheBoss.h">
       <SubType>
       </SubType>
@@ -307,6 +319,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="TheRock.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TheStarShot.h">
       <SubType>
       </SubType>
     </ClInclude>

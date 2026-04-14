@@ -7,6 +7,7 @@
 #include "Enemy1.h"
 #include "Enemy2.h"
 #include "TheBoss.h"
+#include "TheAntiPlayer.h"
 
 class EnemyControl : public Common
 {
@@ -25,9 +26,10 @@ public:
 
 	TheDeathStar *DeathStar = nullptr;
 	TheBoss *Boss = nullptr;
+	TheAntiPlayer *AntiPlayer = nullptr;
 
 	std::vector<Vector3> UFOModel = {};
-
+	//Models
 	void SetPlayer(ThePlayer* player);
 	void SetRockModels(std::vector<Vector3> rockModels[4]);
 	void SetUFOModel(std::vector<Vector3> model);
@@ -42,7 +44,8 @@ public:
 	void SetRightSpineMountModel(std::vector<Vector3> model);
 	void SetEnemyMissileModel(std::vector<Vector3> model);
 	void SetEnemyMineModel(std::vector<Vector3> model);
-
+	void SetAntiPlayerModel(std::vector<Vector3> model);
+	// Sounds
 	void SetRockExplodeSound(Sound sound);
 	void SetUFOExplodeSound(Sound sound);
 	void SetUFOFireSound(Sound sound);

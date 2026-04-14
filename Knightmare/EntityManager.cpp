@@ -183,6 +183,21 @@ void EntityManager::SetTimer(size_t id, float amount)
 	Timers[id]->Set(amount);
 }
 
+void EntityManager::DeleteEntity(size_t id)
+{
+	Entities.erase(Entities.begin() + id);
+}
+
+void EntityManager::DeleteEntities()
+{
+	for (const auto& entity : Entities)
+	{
+		delete(entity);
+	}
+
+	Entities.clear();
+}
+
 bool EntityManager::TimerElapsed(size_t id)
 {
 	return Timers[id]->Elapsed();
