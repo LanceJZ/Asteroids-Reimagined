@@ -65,7 +65,6 @@ use. */
 	Enemies->SetEnemy2Model(CM.LoadAndGetLineModel("Enemy2"));
 	Enemies->SetEnemyMissileModel(CM.LoadAndGetLineModel("Missile"));
 	Enemies->SetEnemyMineModel(CM.LoadAndGetLineModel("Mine"));
-	Enemies->SetEnemyTwoMineExplodeSound(CM.LoadAndGetSound("MineExplode"));
 	Enemies->SetBossModel(CM.LoadAndGetLineModel("BossShip"));
 	Enemies->SetBossShieldModel(CM.LoadAndGetLineModel("BossShield"));
 	Enemies->SetBossTurretModel(CM.LoadAndGetLineModel("BossTurret"));
@@ -107,6 +106,7 @@ use. */
 	Enemies->SetEnemyTwoExplodeSound(CM.LoadAndGetSound("EnemyTwoExplode"));
 	Enemies->SetEnemyTwoSpawnSound(CM.LoadAndGetSound("EnemyTwoSpawn"));
 	Enemies->SetEnemyTwoFireSound(CM.LoadAndGetSound("MineDrop"));
+	Enemies->SetEnemyTwoMineExplodeSound(CM.LoadAndGetSound("MineExplode"));
 	Enemies->SetEnemyTwoOnSound(CM.LoadAndGetSound("EnemyTwo"));
 	Enemies->SetBossOnSound(CM.LoadAndGetSound("BossShip"));
 	Enemies->SetBossExplodeSound(CM.LoadAndGetSound("BossExplode"));

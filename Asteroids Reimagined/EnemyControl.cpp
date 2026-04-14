@@ -620,6 +620,7 @@ void EnemyControl::SpawnEnemyTwo()
 		EnemyTwos.back()->SetSpawnSound(EnemyTwoSpawnSound);
 		EnemyTwos.back()->SetFireSound(EnemyTwoFireSound);
 		EnemyTwos.back()->SetExplodeSound(EnemyTwoExplodeSound);
+		EnemyTwos.back()->SetMineExplodeSound(EnemyTwoMineExplodeSound);
 		EnemyTwos.back()->SetOnSound(EnemyTwoOnSound);
 		EnemyTwos.back()->SetPlayer(Player);
 		EnemyTwos.back()->BeginRun();
