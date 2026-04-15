@@ -3,6 +3,8 @@
 
 bool LineModel::BeginRun()
 {
+	Entity::BeginRun();
+
 	return true;
 }
 

@@ -2,9 +2,6 @@
 
 ThePlayer::ThePlayer()
 {
-	EM.AddLineModel(Flame = DBG_NEW LineModel());
-	EM.AddLineModel(Shield = DBG_NEW LineModel());
-	EM.AddLineModel(Turret = DBG_NEW LineModel());
 	EM.AddLineModel(Crosshair = DBG_NEW LineModel());
 	EM.AddLineModel(TurretHeatMeter = DBG_NEW LineModel());
 	EM.AddLineModel(WeaponTypeIconDoubleLeft = DBG_NEW LineModel());
@@ -15,52 +12,22 @@ ThePlayer::ThePlayer()
 
 	EM.AddOnScreenText(Score = DBG_NEW TheScoreOld());
 
-	FireRateTimerID = EM.AddTimer(0.125f);
-	TurretCooldownTimerID = EM.AddTimer(2.0f);
-	TurretHeatTimerID = EM.AddTimer(0.15f);
-	PowerupTimerID = EM.AddTimer();
 	PowerupRundownTimerID = EM.AddTimer(2.0f);
 	PowerUpBlinkTimerID = EM.AddTimer(0.25f);
-	FlameColorTimerID = EM.AddTimer(0.15f);
 
-	for (int i = 0; i < MagazineSize; i++)
-	{
-		Shots.push_back(DBG_NEW Shot());
-		EM.AddLineModel(Shots.back());
-	}
+	MagazineSize = 16;
 }
 
 ThePlayer::~ThePlayer()
 {
 }
 
-void ThePlayer::SetTurretModel(std::vector<Vector3> model)
-{
-	Turret->SetModel(model);
-}
-
 void ThePlayer::SetShotModel(std::vector<Vector3> model)
 {
-	for (auto& shot : Shots)
-	{
-		shot->SetModel(model);
-		shot->BeginRun();
-	}
-
-	ShotModel = model;
+	ThePlayerControls::SetShotModel(model);		
 
 	WeaponTypeIconDoubleLeft->SetModel(model);
 	WeaponTypeIconDoubleRight->SetModel(model);
-}
-
-void ThePlayer::SetFlameModel(std::vector<Vector3> model)
-{
-	Flame->SetModel(model);
-}
-
-void ThePlayer::SetShieldModel(std::vector<Vector3> model)
-{
-	Shield->SetModel(model);
 }
 
 void ThePlayer::SetTurretHeatModel(std::vector<Vector3> model)
@@ -70,48 +37,33 @@ void ThePlayer::SetTurretHeatModel(std::vector<Vector3> model)
 
 void ThePlayer::SetBigShotModel(std::vector<Vector3> model)
 {
-	BigShotModel = model;
+	ThePlayerControls::SetBigShotModel(model);
 	WeaponTypeIconBig->SetModel(model);
 	WeaponTypeIconPlasma->SetModel(model);
 }
 
 void ThePlayer::SetMineModel(std::vector<Vector3> model)
 {
-	MineModel = model;
+	ThePlayerControls::SetMineModel(model);
 	WeaponTypeIconMine->SetModel(model);
 }
 
 void ThePlayer::SetFireSound(Sound sound)
 {
-	FireSound = sound;
+	ThePlayerControls::SetFireSound(sound);
 	SetSoundVolume(FireSound, 0.2f);
 }
 
 void ThePlayer::SetExplodeSound(Sound sound)
 {
-	ExplodeSound = sound;
+	ThePlayerControls::SetExplodeSound(sound);
 	SetSoundVolume(ExplodeSound, 0.95f);
-}
-
-void ThePlayer::SetShieldOnSound(Sound sound)
-{
-	ShieldOnSound = sound;
-}
-
-void ThePlayer::SetShieldHitSound(Sound sound)
-{
-	ShieldHitSound = sound;
 }
 
 void ThePlayer::SetThrustSound(Sound sound)
 {
-	ThrustSound = sound;
+	ThePlayerControls::SetThrustSound(sound);
 	SetSoundVolume(ThrustSound, 0.5f);
-}
-
-void ThePlayer::SetSpawnSound(Sound sound)
-{
-	SpawnSound = sound;
 }
 
 void ThePlayer::SetBonusSound(Sound sound)
@@ -121,29 +73,14 @@ void ThePlayer::SetBonusSound(Sound sound)
 
 void ThePlayer::SetBigShotSound(Sound sound)
 {
-	BigShotSound = sound;
+	ThePlayerControls::SetBigShotSound(sound);
 	SetSoundVolume(BigShotSound, 0.25f);
 }
 
 void ThePlayer::SetDoubleShotSound(Sound sound)
 {
-	DoubleShotSound = sound;
+	ThePlayerControls::SetDoubleShotSound(sound);
 	SetSoundVolume(DoubleShotSound, 0.5f);
-}
-
-void ThePlayer::SetPlasmaShotSound(Sound sound)
-{
-	PlasmaShotSound = sound;
-}
-
-void ThePlayer::SetMineDropSound(Sound sound)
-{
-	MineDropSound = sound;
-}
-
-void ThePlayer::SetMineExplodeSound(Sound sound)
-{
-	MineExplodeSound = sound;
 }
 
 void ThePlayer::SetGunHotSound(Sound sound)
@@ -171,12 +108,9 @@ void ThePlayer::SetCrosshairModel(std::vector<Vector3> model)
 
 bool ThePlayer::Initialize()
 {
-	LineModel::Initialize();
+	ThePlayerControls::Initialize();
 	//Scale = 35.0f;
 
-	Flame->Enabled = false;
-	Shield->Enabled = false;
-	Turret->Enabled = false;
 	Crosshair->Enabled = false;
 	WeaponTypeIconBig->Enabled = false;
 	WeaponTypeIconDoubleLeft->Enabled = false;
@@ -188,17 +122,12 @@ bool ThePlayer::Initialize()
 
 	Flame->ModelColor = { 255, 140, 0, 255 };
 
-	GameOver = true;
-	Enabled = false;
-
-	return false;
+	return true;
 }
 
 bool ThePlayer::BeginRun()
 {
-	Flame->SetParent(*this);
-	Shield->SetParent(*this);
-	Shield->ShowCollision = true;
+	ThePlayerControls::BeginRun();
 
 	Turret->X(-9.0f);
 	Turret->SetParent(*this);
@@ -267,20 +196,19 @@ void ThePlayer::Input()
 
 void ThePlayer::Update(float deltaTime)
 {
-	LineModel::Update(deltaTime);
+	ThePlayerControls::Update(deltaTime);
 
+	TurretTimers();
 	WeaponPlasmaIconUpdate(deltaTime);
 	CrosshairUpdate();
-	TurretTimers();
 
 	if (PoweredUp) WeHaveThePower();
 }
 
 void ThePlayer::FixedUpdate(float deltaTime)
 {
-	LineModel::FixedUpdate(deltaTime);
+	ThePlayerControls::FixedUpdate(deltaTime);
 
-	CheckScreenEdge();
 	ShieldPowerDrain(deltaTime);
 }
 
@@ -292,17 +220,8 @@ void ThePlayer::Draw3D()
 
 void ThePlayer::Hit()
 {
-	Entity::Hit();
+	ThePlayerControls::Hit();
 
-	PlaySound(ExplodeSound);
-	Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
-		Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
-	Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
-		RotationZ, 10.0f, 4.0f, ModelColor);
-	Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
-		Turret->RotationZ, 15.0f, 3.0f, Turret->ModelColor);
-	Acceleration = { 0 };
-	Velocity = { 0 };
 	Lives--;
 	Turret->Enabled = false;
 	Flame->Enabled = false;
@@ -314,7 +233,6 @@ void ThePlayer::Hit()
 	WeaponTypeIconDoubleRight->Enabled = false;
 	WeaponTypeIconPlasma->Enabled = false;
 	WeaponTypeIconMine->Enabled = false;
-	RotateStop();
 
 	for (const auto& model : AmmoMeterModels)
 	{
@@ -410,10 +328,9 @@ void ThePlayer::ExtraLife()
 
 void ThePlayer::ShieldPowerUp()
 {
-	ShieldOverCharge = true;
-	ShieldPower += 200;
+	ThePlayerControls::ShieldPowerUp();
+
 	Shield->ModelColor = BLUE;
-	Shield->Alpha = 255.0f;
 	if (!PoweredUp) ModelColor = BLUE;
 }
 
@@ -427,13 +344,9 @@ void ThePlayer::GunPowerUp()
 
 void ThePlayer::FullPowerUp()
 {
-	EM.ResetTimer(PowerupTimerID,
-		EM.GetTimerAmount(PowerupTimerID) + PowerUpTimerAmount);
+	ThePlayerControls::FullPowerUp();
+
 	ModelColor = PURPLE;
-	PoweredUp = true;
-	PoweredUpRundown = false;
-	TurretOverHeat = false;
-	Shield->Alpha = 255.0f;
 }
 
 void ThePlayer::BigShotPowerUp()
@@ -486,11 +399,14 @@ void ThePlayer::PointTurret(float stickDirectionX, float stickDirectionY)
 
 void ThePlayer::PointTurret(Vector3 mouseLocation)
 {
-	Turret->RotationZ = GetAngleFromVectorZ(mouseLocation) - RotationZ;
+	ThePlayerControls::PointTurret(mouseLocation);
+
 }
 
 void ThePlayer::FireTurret()
 {
+	ThePlayerControls::FireTurret();
+
 	if (TurretOverHeat)	return;
 
 	if (EM.TimerElapsed(FireRateTimerID))
@@ -541,13 +457,15 @@ void ThePlayer::FireTurret()
 
 void ThePlayer::TurretTimers()
 {
+	ThePlayerControls::TurretTimers();
+
 	if (TurretOverHeat)
 	{
 		if (EM.TimerElapsed(TurretCooldownTimerID))
 		{
+			TurretHeatMeterUpdate();
 			TurretOverHeat = false;
 			TurretHeat = 0;
-			TurretHeatMeterUpdate();
 		}
 	}
 	else
@@ -556,9 +474,10 @@ void ThePlayer::TurretTimers()
 		{
 			EM.ResetTimer(TurretHeatTimerID);
 
+			TurretHeatMeterUpdate();
+
 			if (TurretHeat > 2)	TurretHeat -= 2;
 			if (TurretHeat >= 1) TurretHeat -= 1;
-			TurretHeatMeterUpdate();
 		}
 	}
 }
@@ -832,65 +751,31 @@ void ThePlayer::CrosshairUpdate()
 
 void ThePlayer::RotateShip(float amount)
 {
-	RotationVelocityZ = (amount * 5.5f);
+	ThePlayerControls::RotateShip(amount);
 }
 
 void ThePlayer::RotateStop()
 {
-	RotationVelocityZ = 0.0f;
+	ThePlayerControls::RotateStop();
 }
 
 void ThePlayer::ThrustOn(float amount)
 {
-	if (!Enabled || GetBeenHit()) return;
-
-	SetAccelerationToMaxAtRotation((amount * 50.25f), 350.0f);
-	Flame->Enabled = true;
-
-	if (EM.TimerElapsed(FlameColorTimerID))
-	{
-		EM.ResetTimer(FlameColorTimerID, M.GetRandomFloat(0.025f, 0.25f));
-
-		Color color = {(unsigned char)GetRandomValue(100, 255),
-			(unsigned char)GetRandomValue(60, 105),
-			(unsigned char)GetRandomValue(0, 255), 255};
-
-		Flame->ModelColor = color;
-	}
-
-	if (!IsSoundPlaying(ThrustSound)) PlaySound(ThrustSound);
+	ThePlayerControls::ThrustOn(amount);
 }
 
 void ThePlayer::ThrustOff()
 {
-	StopSound(ThrustSound);
-	SetAccelerationToZero(0.45f);
-	Flame->Enabled = false;
+	ThePlayerControls::ThrustOff();
 }
 
 void ThePlayer::ShieldOn()
 {
+	ThePlayerControls::ShieldOn();
+
 	if (ShieldPower > 0.0f)
 	{
-		Shield->Enabled = true;
-
-		if (!IsSoundPlaying(ShieldOnSound)) PlaySound(ShieldOnSound);
-
-		if (ShieldOverCharge)
-		{
-			if (ShieldPower < 100.0f)
-			{
-				Shield->ModelColor = WHITE;
-				ModelColor = WHITE;
-				ShieldOverCharge = false;
-			}
-		}
-		else
-		{
-			Shield->Alpha = ShieldPower * 2.55f;
-
-			if (!IsSoundPlaying(ShieldLowSound)) if (ShieldPower < 30.0f) PlaySound(ShieldLowSound);
-		}
+		if (!ShieldOverCharge && !IsSoundPlaying(ShieldLowSound)) if (ShieldPower < 30.0f) PlaySound(ShieldLowSound);
 	}
 	else
 	{
@@ -908,25 +793,12 @@ void ThePlayer::ShieldOff()
 
 void ThePlayer::ShieldPowerDrain(float deltaTime)
 {
-	if (Shield->Enabled)
-	{
-		ShieldPower -= ShieldDrainRate * deltaTime;
-
-		if (ShieldPower < 0.0f)	ShieldPower = 0.0f;
-	}
-	else
-	{
-		if (ShieldPower < 100.0f) ShieldPower += ShieldRechargeRate * deltaTime;
-	}
+	ThePlayerControls::ShieldPowerDrain(deltaTime);
 }
 
 void ThePlayer::WeHaveThePower()
 {
-	if (ShieldPower < 100.0f) ShieldPower = 100.0f;
-
-	if (TurretHeat > 0) TurretHeat = 0;
-
-	ShieldOn();
+	ThePlayerControls::WeHaveThePower();
 
 	if (EM.TimerElapsed(PowerupTimerID) && !PoweredUpRundown)
 	{

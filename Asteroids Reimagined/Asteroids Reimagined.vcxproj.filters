@@ -93,6 +93,9 @@
     <ClCompile Include="TheStarShot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ThePlayerControls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -174,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TheStarShot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThePlayerControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

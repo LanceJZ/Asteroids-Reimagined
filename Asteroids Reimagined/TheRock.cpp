@@ -147,6 +147,7 @@ bool TheRock::CheckCollisions()
 	{
 
 		Player->Hit();
+		Hit();
 		SendScoreToPlayer();
 
 		return true;
