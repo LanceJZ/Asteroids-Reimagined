@@ -298,10 +298,10 @@ void ThePlayer::Spawn()
 	MineCount = 0;
 	PlasmaShotCount = 0;
 #if DEBUG
-	BigShotCount = 20; //Turn into keys.
-	DoubleShotCount = 40;
-	MineCount = 210;
-	PlasmaShotCount = 10;
+	//BigShotCount = 20; //Turn into keys.
+	//DoubleShotCount = 40;
+	//MineCount = 210;
+	//PlasmaShotCount = 10;
 #endif
 	MissileCount = 0;
 	SecondaryWeapon = None;

@@ -180,8 +180,6 @@ void Enemy::Hit()
 {
 	Entity::Hit();
 
-	if (!Player->GameOver) PlaySound(ExplodeSound);
-
 	Player->ScoreUpdate(Points);
 
 	Explode();
@@ -337,6 +335,8 @@ void Enemy::ChaseEnemy()
 
 void Enemy::Explode()
 {
+	if (!Player->GameOver) PlaySound(ExplodeSound);
+
 	Particles.SpawnLineDots(Position,
 		Vector3Multiply(Velocity, {0.25f}),
 		20, 100, 20, 2.0f, WHITE);
