@@ -2,6 +2,7 @@
 
 TheStarShot::TheStarShot()
 {
+	LifeTimerID = EM.AddTimer(10.0f);
 }
 
 TheStarShot::~TheStarShot()
@@ -10,14 +11,14 @@ TheStarShot::~TheStarShot()
 
 bool TheStarShot::Initialize()
 {
-	LineModel::Initialize();
+	Enemy::Initialize();
 
 	return false;
 }
 
 bool TheStarShot::BeginRun()
 {
-	LineModel::BeginRun();
+	Enemy::BeginRun();
 
 	int numberOfstarPoints = 4;
 	int numberOfVerts = 6 * numberOfstarPoints;
@@ -45,23 +46,45 @@ bool TheStarShot::BeginRun()
 
 void TheStarShot::Update(float deltaTime)
 {
-	LineModel::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
+}
+
+void TheStarShot::FixedUpdate(float deltaTime)
+{
+	Enemy::FixedUpdate(deltaTime);
+
+	if (EM.TimerElapsed(LifeTimerID)) Destroy();
+
+	CheckCollisions();
 }
 
 void TheStarShot::Draw3D()
 {
-	LineModel::Draw3D();
+	Enemy::Draw3D();
 }
 
 void TheStarShot::Spawn(Vector3 position)
 {
-	Entity::Spawn(position);
+	Enemy::Spawn(position);
+
+}
+
+void TheStarShot::Hit()
+{
+	Enemy::Hit();
 
 }
 
 void TheStarShot::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 
+}
+
+bool TheStarShot::CheckCollisions()
+{
+	Enemy::CheckCollisions();
+
+	return false;
 }

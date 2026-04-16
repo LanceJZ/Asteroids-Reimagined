@@ -17,6 +17,11 @@ void GameLogic::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void GameLogic::SetAntiPlayer(TheAntiPlayer* player)
+{
+	AntiPlayer = player;
+}
+
 void GameLogic::SetEnemies(EnemyControl* enemies)
 {
 	Enemies = enemies;
@@ -125,17 +130,16 @@ void GameLogic::FixedUpdate()
 	{
 		if (Player->GetBeenHit())
 		{
-			EM.ResetTimer(ExplodeTimerID);
-
-			if (Enemies->Boss->Enabled) EM.ResetTimer(ExplodeTimerID, 3.0f);
+			if (Enemies->Boss->Enabled)
+			{
+				EM.ResetTimer(ExplodeTimerID, 3.0f);
+				Enemies->Boss->PlayerHit = true;
+			}
+			else EM.ResetTimer(ExplodeTimerID, 4.25f);
 
 			Player->Destroy();
-
-			if (Enemies->Boss->Enabled) Enemies->Boss->PlayerHit = true;
 		}
-
-		if (!Player->Enabled && !Player->GetBeenHit() &&
-			EM.TimerElapsed(ExplodeTimerID))
+		else if (!Player->Enabled && EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
 			PlayerClear->Radius = 140.0f;
@@ -143,8 +147,7 @@ void GameLogic::FixedUpdate()
 			EM.Update(GetFrameTime());
 			EM.Update(GetFrameTime());
 
-			if (IsKeyPressed(KEY_ENTER) ||
-				(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
+			if (IsKeyPressed(KEY_ENTER) || (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
 			{
 				PlayerClear->Radius = Player->Radius * 1.5f;
 			}
@@ -178,7 +181,7 @@ void GameLogic::FixedUpdate()
 		}
 	}
 }
-//For Game Input when game is paused or not.
+//For Game Input; paused or not paused.
 void GameLogic::GameInput()
 {
 	if (State == Pause)

@@ -38,7 +38,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.57.706");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.57.707");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -49,10 +49,6 @@ int WinMain()
 	glfwSwapInterval(0);
 	SetTargetFPS(120);
 
-
-	Particles.Initialize();
-	Particles.SetEntityManager(EM);
-	FM.SetEntityManager(EM);
 
 	// Define the camera to look into our 3D world.
 	// Camera position
@@ -68,13 +64,14 @@ int WinMain()
 	// The Managers needs a reference to The Camera
 	EM.SetCamera(TheCamera);
 
-	game.Initialize();
-	EM.Initialize();
+	Particles.Initialize();
+	Particles.SetEntityManager(EM);
+	FM.SetEntityManager(EM);
 	FM.Initialize();
+	FM.BeginRun();
+	game.Initialize();
 	game.Load();
 	game.BeginRun();
-	EM.BeginRun();
-	FM.BeginRun();
 
 	while (!WindowShouldClose())
 	{
@@ -82,43 +79,27 @@ int WinMain()
 
 		float deltaTime = GetFrameTime();
 
-#if _DEBUG
+	#if _DEBUG
 		if (deltaTime > 0.05f) deltaTime = 0.05f;
-#endif
+	#endif
 
 		EM.AlwaysUpdate(deltaTime);
 
-		if (game.Logic->State != GameState::Pause &&
-			game.Logic->State != GameState::Ended)
+		if (game.Logic->State != GameState::Pause && game.Logic->State != GameState::Ended)
 		{
 			EM.Input();
-
-
 			EM.Update(deltaTime);
-			game.Update(deltaTime);
 			EM.FixedUpdate(deltaTime);
-			game.FixedUpdate(deltaTime);
 		}
 
 		BeginDrawing();
 		ClearBackground({ 8, 2, 16, 100 });
 		BeginMode3D(TheCamera);
-		EM.Draw3D();
 		game.Draw3D();
+		EM.Draw3D();
 		EndMode3D();
 		EM.Draw2D();
 		game.Draw2D();
-
-#ifdef _DEBUG
-		Color color = LIME;                            // Good FPS
-		int fps = GetFPS();
-
-		if ((fps < 30) && (fps >= 15)) color = ORANGE; // Warning FPS
-		else if (fps < 15) color = RED;                // Low FPS
-
-		DrawText(TextFormat("%2i FPS", fps), 5, 5, 20, color);
-#endif
-
 		EndDrawing();
 	}
 

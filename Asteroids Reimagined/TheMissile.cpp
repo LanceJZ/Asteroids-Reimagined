@@ -37,30 +37,27 @@ void TheMissile::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
-	CheckCollisions();
 }
 
 void TheMissile::FixedUpdate(float deltaTime)
 {
 	Enemy::FixedUpdate(deltaTime);
 
-	if (EM.TimerElapsed(LifeTimerID))
-	{
-		Destroy();
-	}
+	if (EM.TimerElapsed(LifeTimerID)) Destroy();
 
 	ChasePlayer();
 	CheckScreenEdge();
+	CheckCollisions();
 }
 
 void TheMissile::Draw3D()
 {
-	LineModel::Draw3D();
+	Enemy::Draw3D();
 }
 
 void TheMissile::Spawn(Vector3 position)
 {
-	Entity::Spawn(position);
+	Enemy::Spawn(position);
 
 	EM.ResetTimer(LifeTimerID);
 }
@@ -74,7 +71,7 @@ void TheMissile::Hit()
 
 void TheMissile::Destroy()
 {
-	Entity::Destroy();
+	Enemy::Destroy();
 
 }
 

@@ -25,6 +25,7 @@ public:
 	GameState State = MainMenu;
 
 	void SetPlayer(ThePlayer* player);
+	void SetAntiPlayer(TheAntiPlayer* player);
 	void SetEnemies(EnemyControl* enemies);
 
 	void SetPowerUpModel(std::vector<Vector3> model);
@@ -57,9 +58,10 @@ private:
 
 	Entity* PlayerClear = {};
 
-	ThePlayer* Player = {};
-	EnemyControl* Enemies = {};
-	TheHighScore* HighScores = {};
+	ThePlayer* Player = nullptr;
+	TheAntiPlayer* AntiPlayer = nullptr;
+	EnemyControl* Enemies = nullptr;
+	TheHighScore* HighScores = nullptr;
 
 	void PlayerShipDisplay();
 	void AddPlayerShipModels(int number);

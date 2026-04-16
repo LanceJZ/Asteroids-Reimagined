@@ -11,40 +11,41 @@ TheMine::~TheMine()
 
 bool TheMine::Initialize()
 {
-	LineModel::Initialize();
+	Enemy::Initialize();
 
 	return false;
 }
 
 bool TheMine::BeginRun()
 {
-	LineModel::BeginRun();
+	Enemy::BeginRun();
 
 	return false;
 }
 
 void TheMine::Update(float deltaTime)
 {
-	LineModel::Update(deltaTime);
+	Enemy::Update(deltaTime);
 
-	CheckCollisions();
 }
 
 void TheMine::FixedUpdate(float deltaTime)
 {
-	LineModel::FixedUpdate(deltaTime);
+	Enemy::FixedUpdate(deltaTime);
 
 	if (EM.TimerElapsed(LifeTimerID)) Destroy();
+
+	CheckCollisions();
 }
 
 void TheMine::Draw3D()
 {
-	LineModel::Draw3D();
+	Enemy::Draw3D();
 }
 
 void TheMine::Spawn(Vector3 position)
 {
-	Entity::Spawn(position);
+	Enemy::Spawn(position);
 
 	EM.ResetTimer(LifeTimerID);
 }

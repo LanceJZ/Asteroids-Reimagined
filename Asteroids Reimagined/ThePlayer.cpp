@@ -838,18 +838,13 @@ void ThePlayer::WeHaveThePower()
 	}
 }
 
-void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
+void ThePlayer::ShieldHit(Vector3 position, Vector3 velocity)
 {
 	//TODO:: Have rocks and enemy check for shield radius if on.
 
 	PlaySound(ShieldHitSound);
 	Acceleration = {0};
-
-	//Velocity = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity, {0.25f}), {-1}),
-	//	Vector3Add(Vector3Multiply(velocity, {0.90f}),
-	//	GetVelocityFromAngleZ(GetAngleFromVectorsZ(location, Position),	196.666f)));
-
-	Velocity = GetReflectionVelocity(location, velocity, 106.666f, 0.90f, 0.25f);
+	Velocity = GetReflectionVelocity(position, velocity, 106.666f, 0.90f, 0.25f);
 
 	if (PoweredUp) return;
 
@@ -861,6 +856,11 @@ void ThePlayer::ShieldHit(Vector3 location, Vector3 velocity)
 	{
 		ShieldPower = 0;
 	}
+}
+
+void ThePlayer::SetAntiPlayer(Entity* entity)
+{
+	AntiPlayer = entity;
 }
 
 void ThePlayer::TurretHeatMeterUpdate()

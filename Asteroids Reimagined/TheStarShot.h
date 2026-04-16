@@ -1,8 +1,8 @@
 #pragma once
 #include "Globals.h"
-#include "LineModel.h"
+#include "Enemy.h"
 
-class TheStarShot : public LineModel
+class TheStarShot : public Enemy
 {
 public:
 	TheStarShot();
@@ -12,12 +12,16 @@ public:
 	bool BeginRun();
 
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	void Spawn(Vector3 position);
+	void Hit();
 	void Destroy();
 
 private:
+	size_t LifeTimerID = 0;
 
+	bool CheckCollisions();
 
 };

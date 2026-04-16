@@ -20,7 +20,9 @@ public:
 	bool WasCulled = false;
 	bool BeenHit = false;
 	bool Stationary = false;
+
 	int ChildNumber = 0;
+
 	float Scale = 1;
 	float ModelScale = 1;
 	float MaxSpeed = 0;

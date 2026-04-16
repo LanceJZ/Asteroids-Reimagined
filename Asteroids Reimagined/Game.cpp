@@ -8,6 +8,7 @@ Game::Game()
 	//BackGroundID = EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = EM.AddCommon(Enemies = DBG_NEW EnemyControl());
 	PlayerID = EM.AddLineModel(Player = DBG_NEW ThePlayer());
+	AntiPlayerID = EM.AddLineModel(AntiPlayer = DBG_NEW TheAntiPlayer());
 }
 
 Game::~Game()
@@ -18,10 +19,8 @@ bool Game::Initialize() //Initialize
 {
 	Common::Initialize();
 
-	//BackGround->Initialize();
-	Enemies->Initialize();
-	Logic->Initialize();
-	Player->Initialize();
+	EM.Initialize();
+	//Any Entities added after this point need this method fired manually.
 
 	DisableCursor();
 
@@ -29,11 +28,10 @@ bool Game::Initialize() //Initialize
 	FieldSize = { GetScreenWidth() * multi, (float)GetScreenHeight() };
 
 	Logic->SetPlayer(Player);
+	Logic->SetAntiPlayer(AntiPlayer);
 	Logic->SetEnemies(Enemies);
 
 	Enemies->SetPlayer(Player);
-
-	//Any Entities added after this point need this method fired manually.
 
 	return true;
 }
@@ -130,6 +128,7 @@ bool Game::Load()
 
 bool Game::BeginRun()
 {
+	EM.BeginRun();
 
 	//Any Entities added after this point need this method fired manually if needed.
 
@@ -156,14 +155,10 @@ void Game::ProcessInput()
 
 void Game::Update(float deltaTime)
 {
-	if (Logic->State == Pause)	return;
-
 }
 
 void Game::FixedUpdate(float deltaTime)
 {
-	if (Logic->State == Pause)	return;
-
 }
 
 void Game::Draw3D()
@@ -181,9 +176,17 @@ void Game::Draw3D()
 
 void Game::Draw2D()
 {
+#ifdef _DEBUG
+	Color color = LIME;                            // Good FPS
+	int fps = GetFPS();
 
+	if ((fps < 30) && (fps >= 15)) color = ORANGE; // Warning FPS
+	else if (fps < 15) color = RED;                // Low FPS
+
+	DrawText(TextFormat("%2i FPS", fps), 5, 5, 20, color);
+#endif
 }
-// For Game Input when game is paused or not.
+// For Game Input paused or not.
 void Game::GameInput()
 {
 	Logic->GameInput();

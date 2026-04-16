@@ -11,6 +11,14 @@ ThePlayerControls::ThePlayerControls()
 	TurretHeatTimerID = EM.AddTimer(0.15f);
 	PowerupTimerID = EM.AddTimer();
 	FlameColorTimerID = EM.AddTimer(0.15f);
+
+	MagazineSize = 16;
+
+	for (int i = 0; i < MagazineSize; i++)
+	{
+		Shots.push_back(DBG_NEW Shot());
+		EM.AddLineModel(Shots.back());
+	}
 }
 
 ThePlayerControls::~ThePlayerControls()
@@ -122,11 +130,10 @@ bool ThePlayerControls::Initialize()
 	GameOver = true;
 	Enabled = false;
 
-	for (int i = 0; i < MagazineSize; i++)
+	for (const auto& shot : Shots)
 	{
-		Shots.push_back(DBG_NEW Shot());
-		EM.AddLineModel(Shots.back());
-		Shots.back()->Initialize();
+		shot->Initialize();
+		shot->Enabled = false;
 	}
 
 	return true;

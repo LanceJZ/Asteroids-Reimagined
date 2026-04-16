@@ -31,12 +31,14 @@ private:
 	size_t LogicID = 0;
 	size_t BackGroundID = 0;
 	size_t PlayerID = 0;
+	size_t AntiPlayerID = 0;
 	size_t EnemiesID = 0;
 	size_t ParticlesID = 0;
 
 	//When adding classes to EM, must be heap pointer.
 	//TheBackground* BackGround = {};
-	ThePlayer* Player = {};
-	EnemyControl* Enemies = {};
+	ThePlayer* Player = nullptr;
+	TheAntiPlayer* AntiPlayer = nullptr;
+	EnemyControl* Enemies =	nullptr;
 };
 
