@@ -103,13 +103,12 @@ void ThePlayer::SetPowerUpWarningSound(Sound sound)
 void ThePlayer::SetCrosshairModel(std::vector<Vector3> model)
 {
 	Crosshair->SetModel(model);
-	Crosshair->Radius = 0.0f;
+	Crosshair->ShowCollision = false;
 }
 
 bool ThePlayer::Initialize()
 {
 	ThePlayerControls::Initialize();
-	//Scale = 35.0f;
 
 	Crosshair->Enabled = false;
 	WeaponTypeIconBig->Enabled = false;
@@ -130,7 +129,6 @@ bool ThePlayer::BeginRun()
 	ThePlayerControls::BeginRun();
 
 	Turret->X(-9.0f);
-	Turret->SetParent(*this);
 
 	TurretHeatMeter->Y(-32.0f);
 	TurretHeatMeter->SetParent(*this);
@@ -171,7 +169,7 @@ bool ThePlayer::BeginRun()
 	WeaponTypeIconDoubleLeft->Scale = 0.5f;
 	WeaponTypeIconDoubleRight->Scale = 0.5f;
 
-	return false;
+	return true;
 }
 
 void ThePlayer::Input()
@@ -198,7 +196,6 @@ void ThePlayer::Update(float deltaTime)
 {
 	ThePlayerControls::Update(deltaTime);
 
-	TurretTimers();
 	WeaponPlasmaIconUpdate(deltaTime);
 	CrosshairUpdate();
 
@@ -209,7 +206,7 @@ void ThePlayer::FixedUpdate(float deltaTime)
 {
 	ThePlayerControls::FixedUpdate(deltaTime);
 
-	ShieldPowerDrain(deltaTime);
+	TurretTimers();
 }
 
 void ThePlayer::Draw3D()
@@ -286,7 +283,7 @@ void ThePlayer::Spawn()
 	TurretHeatMeter->Enabled = true;
 	ShieldPower = 100.0f;
 	TurretHeatMeter->Scale = 0.0f;
-	TurretOverHeat = false;
+	TurretOverheat = false;
 	TurretHeat = 0;
 	PoweredUp = false;
 	PoweredUpRundown = false;
@@ -339,7 +336,7 @@ void ThePlayer::ShieldPowerUp()
 void ThePlayer::GunPowerUp()
 {
 	GunOverCharge = true;
-	TurretOverHeat = false;
+	TurretOverheat = false;
 	TurretHeat -= 150;
 	Turret->ModelColor = SKYBLUE;
 }
@@ -409,7 +406,7 @@ void ThePlayer::FireTurret()
 {
 	ThePlayerControls::FireTurret();
 
-	if (TurretOverHeat)	return;
+	if (TurretOverheat)	return;
 
 	if (EM.TimerElapsed(FireRateTimerID))
 	{
@@ -440,7 +437,7 @@ void ThePlayer::FireTurret()
 					if (TurretHeat > TurretHeatMax)
 					{
 						EM.ResetTimer(TurretCooldownTimerID);
-						TurretOverHeat = true;
+						TurretOverheat = true;
 					}
 					else TurretHeat += 5;
 				}
@@ -461,25 +458,20 @@ void ThePlayer::TurretTimers()
 {
 	ThePlayerControls::TurretTimers();
 
-	if (TurretOverHeat)
+	if (TurretOverheat)
 	{
-		if (EM.TimerElapsed(TurretCooldownTimerID))
+		if (TurretOverheatCooldown)
 		{
 			TurretHeatMeterUpdate();
-			TurretOverHeat = false;
-			TurretHeat = 0;
+			TurretOverheatCooldown = false;
 		}
 	}
 	else
 	{
-		if (EM.TimerElapsed(TurretHeatTimerID))
+		if (TurretOverheatRundown)
 		{
-			EM.ResetTimer(TurretHeatTimerID);
-
+			TurretOverheatRundown = false;
 			TurretHeatMeterUpdate();
-
-			if (TurretHeat > 2)	TurretHeat -= 2;
-			if (TurretHeat >= 1) TurretHeat -= 1;
 		}
 	}
 }

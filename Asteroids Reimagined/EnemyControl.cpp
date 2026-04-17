@@ -253,7 +253,7 @@ bool EnemyControl::BeginRun()
 	Common::BeginRun();
 
 	//DeathStar->SetEnemies(EnemyOne, EnemyTwo);
-	// TODO: Change for EnemyOne and EnemyTwo info to DeathStar.
+	// TODO: Change for EnemyOne and EnemyTwo info to DeathStar. Unsure why.
 	DeathStar->BeginRun();
 	Boss->BeginRun();
 

@@ -42,20 +42,31 @@ bool Game::Load()
 
 	//Models
 	size_t shotModelID = CM.LoadTheLineModel("Dot");
+	size_t bigShotModelID = CM.LoadTheLineModel("PlayerBigShot");
+	size_t shieldModelID = CM.LoadTheLineModel("PlayerShield");
+
 	Player->SetModel(CM.LoadAndGetLineModel("PlayerShip"));
 	Player->SetFlameModel(CM.LoadAndGetLineModel("PlayerFlame"));
-	Player->SetShieldModel(CM.LoadAndGetLineModel("PlayerShield"));
 	Player->SetTurretModel(CM.LoadAndGetLineModel("PlayerTurret"));
+	Player->SetShieldModel(CM.GetLineModel(shieldModelID));
+	Player->SetBigShotModel(CM.GetLineModel(bigShotModelID));
 	Player->SetShotModel(CM.GetLineModel(shotModelID));
 	Player->SetCrosshairModel(CM.LoadAndGetLineModel("Cross"));
 	Player->SetTurretHeatModel(CM.LoadAndGetLineModel("HeatMeter"));
-	Player->SetBigShotModel(CM.LoadAndGetLineModel("PlayerBigShot"));
 	Player->SetMineModel(CM.LoadAndGetLineModel("HomingMine"));
+
+	AntiPlayer->SetModel(CM.LoadAndGetLineModel("AntiPlayer"));
+	AntiPlayer->SetTurretModel(CM.LoadAndGetLineModel("AntiPlayerTurret"));
+	AntiPlayer->SetFlameModel(CM.LoadAndGetLineModel("AntiPlayerFlame"));
+	AntiPlayer->SetMineModel(CM.LoadAndGetLineModel("AntiHomingMine"));
+	AntiPlayer->SetShieldModel(CM.GetLineModel(shieldModelID));
+	AntiPlayer->SetBigShotModel(CM.GetLineModel(bigShotModelID));
+	AntiPlayer->SetShotModel(CM.GetLineModel(shotModelID));
 
 	Logic->SetPowerUpModel(CM.LoadAndGetLineModel("PowerUp"));
 
-	Enemies->SetUFOModel(CM.LoadAndGetLineModel("UFO"));
 	Enemies->SetShotModel(CM.GetLineModel(shotModelID));
+	Enemies->SetUFOModel(CM.LoadAndGetLineModel("UFO"));
 	Enemies->SetWedgeModel(CM.LoadAndGetLineModel("Wedge"));
 	Enemies->SetEnemy1Model(CM.LoadAndGetLineModel("Enemy1"));
 	Enemies->SetEnemy2Model(CM.LoadAndGetLineModel("Enemy2"));

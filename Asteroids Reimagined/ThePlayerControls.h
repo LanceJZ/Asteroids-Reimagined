@@ -75,7 +75,9 @@ public:
 	void Destroy();
 
 protected:
-	bool TurretOverHeat = false;
+	bool TurretOverheat = false;
+	bool TurretOverheatCooldown = false;
+	bool TurretOverheatRundown = false;
 	bool PoweredUp = false;
 	bool PoweredUpRundown = false;
 	bool ShieldOverCharge = false;

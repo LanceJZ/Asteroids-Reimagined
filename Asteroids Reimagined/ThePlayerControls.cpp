@@ -123,10 +123,6 @@ bool ThePlayerControls::Initialize()
 	Shield->Enabled = false;
 	Turret->Enabled = false;
 
-	PowerUpTimerAmount = 4.0f;
-
-	Flame->ModelColor = { 200, 150, 0, 200 };
-
 	GameOver = true;
 	Enabled = false;
 
@@ -144,6 +140,7 @@ bool ThePlayerControls::BeginRun()
 	LineModel::BeginRun();
 
 	Flame->SetParent(*this);
+	Turret->SetParent(*this);
 	Shield->SetParent(*this);
 	Shield->ShowCollision = true;
 	Turret->SetParent(*this);
@@ -153,7 +150,7 @@ bool ThePlayerControls::BeginRun()
 		shot->BeginRun();
 	}
 
-	return false;
+	return true;
 }
 
 void ThePlayerControls::Update(float deltaTime)
@@ -166,6 +163,7 @@ void ThePlayerControls::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
+	ShieldPowerDrain(deltaTime);
 	CheckScreenEdge();
 }
 
@@ -230,7 +228,7 @@ void ThePlayerControls::FullPowerUp()
 	ModelColor = RED;
 	PoweredUp = true;
 	PoweredUpRundown = false;
-	TurretOverHeat = false;
+	TurretOverheat = false;
 	Shield->Alpha = 255.0f;
 }
 
@@ -267,6 +265,26 @@ void ThePlayerControls::FireTurret()
 
 void ThePlayerControls::TurretTimers()
 {
+	if (TurretOverheat)
+	{
+		if (EM.TimerElapsed(TurretCooldownTimerID))
+		{
+			TurretOverheatCooldown = true;
+			TurretOverheat = false;
+			TurretHeat = 0;
+		}
+	}
+	else
+	{
+		if (EM.TimerElapsed(TurretHeatTimerID))
+		{
+			EM.ResetTimer(TurretHeatTimerID);
+			TurretOverheatRundown = true;
+
+			if (TurretHeat > 2)	TurretHeat -= 2;
+			if (TurretHeat >= 1) TurretHeat -= 1;
+		}
+	}
 }
 
 void ThePlayerControls::FireSecondary()
