@@ -180,8 +180,6 @@ void Enemy::Hit()
 {
 	Entity::Hit();
 
-	Player->ScoreUpdate(Points);
-
 	Explode();
 }
 
@@ -472,6 +470,8 @@ bool Enemy::CheckCollisions()
 
 		if (shot->CirclesIntersect(*this))
 		{
+			Player->ScoreUpdate(Points);
+
 			shot->Destroy();
 			Hit();
 
@@ -485,6 +485,7 @@ bool Enemy::CheckCollisions()
 
 		if (CirclesIntersect(*shot))
 		{
+			Player->ScoreUpdate(Points);
 			shot->Destroy();
 			Hit();
 
@@ -498,6 +499,7 @@ bool Enemy::CheckCollisions()
 
 		if (CirclesIntersect(*bigShot))
 		{
+			Player->ScoreUpdate(Points);
 			bigShot->HitPoints -= 50;
 
 			if (bigShot->HitPoints <= 0) bigShot->Destroy();
@@ -514,6 +516,7 @@ bool Enemy::CheckCollisions()
 
 		if (CirclesIntersect(*mine))
 		{
+			Player->ScoreUpdate(Points);
 			mine->Hit();
 			Hit();
 
@@ -527,6 +530,7 @@ bool Enemy::CheckCollisions()
 
 		if (CirclesIntersect(*plasma))
 		{
+			Player->ScoreUpdate(Points);
 			Hit();
 
 			return true;
@@ -566,8 +570,6 @@ bool Enemy::CheckCollisions()
 
 		for (const auto& ufo : UFORefs)
 		{
-			if (!ufo->Enabled) continue;
-
 			for (const auto& shot : ufo->Shots)
 			{
 				if (!shot->Enabled) continue;

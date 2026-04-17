@@ -252,6 +252,8 @@ void ThePlayer::Hit()
 
 void ThePlayer::ScoreUpdate(int addToScore)
 {
+	if (GameOver) return;
+
 	//TODO: Convert this to use engine score class.
 	Score->UpdateScore(addToScore);
 
