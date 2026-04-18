@@ -11,7 +11,7 @@ Enter key is now used for Forced Spawn when player is waiting for rocks to clear
 
 Game also has controller support.
 
-Made with raylib and my Knightmare arcade engine in C++.
+Made with raylib and my Knightmare arcade library in C++.
 
 To try it out, unzip this to your desktop or documents, or somewhere without write protection for saving the high score. Download the file Asteroids Reimagined.zip or the Update zip file if you already did the previous one.
 
