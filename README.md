@@ -13,7 +13,7 @@ Game also has controller support.
 
 Made with raylib and my Knightmare arcade library in C++.
 
-To try it out, unzip this to your desktop or documents, or somewhere without write protection for saving the high score. Download the file Asteroids Reimagined.zip or the Update zip file if you already did the previous one.
+To try it out, go to Releases download and unzip it to your desktop or documents, or somewhere without write protection for saving the high score.
 
 Bug Fixes:
 Player homing mine went to center of screen when Death Star or fighters active. Fixed.
@@ -44,6 +44,7 @@ Fixed sound issue with Boss.
 Fixed bug in High Score, only the first ten were being checked.
 Fixed bug in Engine for collisions for children.
 Fixed bug with high score, not counting shots fired that hit something after last player ship hit.
+Other bug fixes listed in Rlease section for each release.
 
 Changes:
 When UFO hits rock, 5 to number of rocks by wave spawn if not a small rock.
