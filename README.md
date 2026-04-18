@@ -1,4 +1,4 @@
-Asteroids Reimagined RC 4.54.435 Released.
+Asteroids Reimagined RC 4.57.708 Released.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
