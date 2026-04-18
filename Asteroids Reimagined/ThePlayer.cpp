@@ -103,7 +103,7 @@ void ThePlayer::SetPowerUpWarningSound(Sound sound)
 void ThePlayer::SetCrosshairModel(std::vector<Vector3> model)
 {
 	Crosshair->SetModel(model);
-	Crosshair->ShowCollision = false;
+	Crosshair->NoCollision = true;
 }
 
 bool ThePlayer::Initialize()
@@ -220,9 +220,6 @@ void ThePlayer::Hit()
 	ThePlayerControls::Hit();
 
 	Lives--;
-	Turret->Enabled = false;
-	Flame->Enabled = false;
-	Shield->Enabled = false;
 	Crosshair->Enabled = false;
 	TurretHeatMeter->Enabled = false;
 	WeaponTypeIconBig->Enabled = false;
@@ -405,8 +402,6 @@ void ThePlayer::PointTurret(Vector3 mouseLocation)
 void ThePlayer::FireTurret()
 {
 	ThePlayerControls::FireTurret();
-
-	if (TurretOverheat)	return;
 
 	if (EM.TimerElapsed(FireRateTimerID))
 	{

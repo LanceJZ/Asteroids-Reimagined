@@ -26,6 +26,11 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	AntiPlayer->SetPlayer(player);
 }
 
+void EnemyControl::SetAntiPlayer(TheAntiPlayer* player)
+{
+	AntiPlayer = player;
+}
+
 void EnemyControl::SetRockModels(std::vector<Vector3> rockModels[4])
 {
 	for (int i = 0; i < 4; i++)
@@ -245,7 +250,7 @@ bool EnemyControl::Initialize()
 	DeathStar->Initialize();
 	Boss->Initialize();
 
-	return false;
+	return true;
 }
 
 bool EnemyControl::BeginRun()
@@ -259,7 +264,7 @@ bool EnemyControl::BeginRun()
 
 	Reset();
 
-	return false;
+	return true;
 }
 
 void EnemyControl::Update()
@@ -383,6 +388,8 @@ void EnemyControl::NewGame()
 {
 	Reset();
 	DeathStar->NewGame();
+
+	AntiPlayer->Spawn({ (float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2, 0 });
 }
 
 void EnemyControl::Reset()

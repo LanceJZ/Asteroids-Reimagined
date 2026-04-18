@@ -39,7 +39,9 @@ TheCurrentState CurrentState = TheCurrentState::Idle;
 private:
 	size_t MovingTimerID = 0;
 	size_t ShootingTimerID = 0;
-	size_t FireTiemrID = 0;
+	size_t FireTimerID = 0;
+	size_t IdelTimerID = 0;
+
 	Vector3 PlayerPosition = {};
 
 	Sound StarShotSound = {};
@@ -50,7 +52,7 @@ private:
 	ThePlayer* Player = nullptr;
 
 	void TurretTimers();
-
+	void FireTurret();
 	void DoIdle();
 	void DoShootingAtPlayer();
 	void DoChasingPlayer();

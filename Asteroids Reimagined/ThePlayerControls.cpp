@@ -119,10 +119,6 @@ bool ThePlayerControls::Initialize()
 {
 	LineModel::Initialize();
 
-	Flame->Enabled = false;
-	Shield->Enabled = false;
-	Turret->Enabled = false;
-
 	GameOver = true;
 	Enabled = false;
 
@@ -142,8 +138,13 @@ bool ThePlayerControls::BeginRun()
 	Flame->SetParent(*this);
 	Turret->SetParent(*this);
 	Shield->SetParent(*this);
-	Shield->ShowCollision = true;
-	Turret->SetParent(*this);
+
+	Flame->Enabled = false;
+	Shield->Enabled = false;
+	Turret->Enabled = false;
+
+	Turret->NoCollision = true;
+	Flame->NoCollision = true;
 
 	for (const auto& shot : Shots)
 	{
@@ -176,7 +177,12 @@ void ThePlayerControls::Hit()
 {
 	LineModel::Hit();
 
+	Turret->Enabled = false;
+	Flame->Enabled = false;
+	Shield->Enabled = false;
+
 	PlaySound(ExplodeSound);
+
 	Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
 		Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
 	Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
@@ -261,6 +267,9 @@ void ThePlayerControls::PointTurret(Vector3 mouseLocation)
 
 void ThePlayerControls::FireTurret()
 {
+	if (TurretOverheat)	return;
+
+
 }
 
 void ThePlayerControls::TurretTimers()

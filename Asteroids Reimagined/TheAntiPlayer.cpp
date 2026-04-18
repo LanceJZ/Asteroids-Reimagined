@@ -3,8 +3,9 @@
 TheAntiPlayer::TheAntiPlayer()
 {
 	MovingTimerID = EM.AddTimer(1.0f);
-	ShootingTimerID = EM.AddTimer(0.20f);
+	ShootingTimerID = EM.AddTimer(0.5f);
 	FireRateTimerID = EM.AddTimer(0.10f);
+	IdelTimerID = EM.AddTimer(2.0f);
 }
 
 TheAntiPlayer::~TheAntiPlayer()
@@ -75,6 +76,10 @@ void TheAntiPlayer::Spawn(Vector3 position)
 {
 	Entity::Spawn(position);
 
+	Turret->Spawn();
+	CurrentState = Idle;
+	EM.ResetTimer(IdelTimerID);
+	DoChasingPlayer();
 }
 
 void TheAntiPlayer::Destroy()
@@ -89,28 +94,86 @@ void TheAntiPlayer::TurretTimers()
 
 }
 
+void TheAntiPlayer::FireTurret()
+{
+	if (EM.TimerElapsed(FireRateTimerID))
+	{
+		for (auto& shot : Shots)
+		{
+			if (!shot->Enabled)
+			{
+				//PlaySound(FireSound);
+
+				EM.ResetTimer(FireRateTimerID);
+
+				if (GunOverCharge)
+				{
+					if (TurretHeat > 0)
+					{
+						GunOverCharge = false;
+						Turret->ModelColor = WHITE;
+					}
+				}
+				else
+				{					
+					if (TurretHeat > TurretHeatMax)
+					{
+						EM.ResetTimer(TurretCooldownTimerID);
+						TurretOverheat = true;
+						Turret->ModelColor = RED;
+					}
+					else TurretHeat += 5;
+				}
+
+				if (TurretOverheat) return;
+
+				Vector3 turretPosition = Turret->GetWorldPosition();
+				Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 375.0f);
+				velocity = Vector3Add(Vector3Multiply(Velocity,
+					{ 0.5f, 0.5f, 0.0f }), velocity);
+				shot->Spawn(turretPosition, velocity, 2.15f);
+				break;
+			}
+		}
+	}
+}
+
 void TheAntiPlayer::DoIdle()
 {
-	if (Player->Enabled) CurrentState = ShootingAtPlayer;
+	if (!Player->Enabled || Player->GetBeenHit()) EM.ResetTimer(IdelTimerID);
+
+	ThrustOff();
+
+	if (EM.TimerElapsed(IdelTimerID))
+	{
+		CurrentState = Moveing;
+		EM.ResetTimer(MovingTimerID, M.GetRandomFloat(0.5f, 1.25f));
+	}
 }
 
 void TheAntiPlayer::DoShootingAtPlayer()
 {
-	if (!Player->Enabled || Player->GetBeenHit()) CurrentState = Idle;
+	ThrustOff();
 
-	PointTurret(PlayerPosition);
-
-	if (EM.TimerElapsed(FireRateTimerID))
+	if (!Player->Enabled || Player->GetBeenHit())
 	{
-		EM.ResetTimer(FireRateTimerID);
+		CurrentState = Idle;
+		return;
+	}
+
+
+	if (EM.TimerElapsed(FireTimerID))
+	{
+		EM.ResetTimer(FireTimerID);
+		PointTurret(PlayerPosition);
 		FireTurret();
 	}
 
 
 	if (EM.TimerElapsed(ShootingTimerID))
 	{
-		CurrentState = Moveing;
-		EM.ResetTimer(MovingTimerID);
+		CurrentState = Idle;
+		EM.ResetTimer(IdelTimerID);
 	}
 }
 
@@ -121,15 +184,12 @@ void TheAntiPlayer::DoChasingPlayer()
 	PlayerPosition = Player->Position;
 
 	Vector3 target = PlayerPosition;
-	if (X() > 0.0f) target.x = (float)WindowHalfWidth;
-	else target.x = (float)-WindowHalfWidth;
 
-	if (Y() > 0.0f) target.y = (float)WindowHalfHeight;
-	else target.y = (float)-WindowHalfHeight;
+	if (Vector3Distance(target, Position) > (float)WindowHalfWidth) target.x -= (float)WindowHalfWidth;
+	
+	if (Vector3Distance(target, Position) > (float)WindowHalfHeight) target.y -= (float)WindowHalfHeight;
+	
 	PlayerPosition = target;
-
-	CurrentState = Moveing;
-	EM.ResetTimer(MovingTimerID);
 }
 
 void TheAntiPlayer::DoShootingAtRock()
@@ -142,6 +202,14 @@ void TheAntiPlayer::DoShootingAtEnemy()
 
 void TheAntiPlayer::DoMoveing()
 {
+	if (!Player->Enabled || Player->GetBeenHit())
+	{
+		CurrentState = Idle;
+		RotateStop();
+		ThrustOff();
+		return;
+	}
+
 	float direction = GetRotationTowardsTargetZ(Position, PlayerPosition, RotationZ, 1.0f);
 
 	if (direction > 0.2f) RotateShip(1.0f);
@@ -152,7 +220,10 @@ void TheAntiPlayer::DoMoveing()
 
 	if (EM.TimerElapsed(MovingTimerID))
 	{
-		CurrentState = ShootingAtPlayer;
+		RotateStop();
 		ThrustOff();
+		DoChasingPlayer();
+		EM.ResetTimer(ShootingTimerID, M.GetRandomFloat(0.5f, 1.25f));
+		CurrentState = ShootingAtPlayer;
 	}
 }

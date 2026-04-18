@@ -11,7 +11,6 @@ public:
 	bool EntityOnly = false;
 	bool HideCollision = false;
 	bool NoCollision = false;
-	bool ShowCollision = false;
 	bool IsChild = false;
 	bool IsParent = false;
 	bool IsConnectedChild = true;

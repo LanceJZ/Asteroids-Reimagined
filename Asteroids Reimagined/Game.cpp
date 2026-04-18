@@ -27,11 +27,15 @@ bool Game::Initialize() //Initialize
 	float multi = 1.0f;
 	FieldSize = { GetScreenWidth() * multi, (float)GetScreenHeight() };
 
+	Player->SetAntiPlayer(AntiPlayer);
+	AntiPlayer->SetPlayer(Player);
+
 	Logic->SetPlayer(Player);
 	Logic->SetAntiPlayer(AntiPlayer);
 	Logic->SetEnemies(Enemies);
 
 	Enemies->SetPlayer(Player);
+	Enemies->SetAntiPlayer(AntiPlayer);
 
 	return true;
 }

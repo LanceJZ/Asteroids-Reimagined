@@ -63,8 +63,7 @@ void Entity::FixedUpdate(float deltaTime)
 void Entity::Draw3D()
 {
 #ifdef _DEBUG
-	if((Enabled && ShowCollision) || (Enabled && !EntityOnly) && (Enabled && !IsChild && !HideCollision) &&
-		!NoCollision)
+	if((Enabled && !NoCollision && !HideCollision) || (Enabled && !EntityOnly && !NoCollision && !HideCollision))
 	{
 		DrawCircle3D(GetWorldPosition(), Radius * Scale,
 			{0}, 0, {150, 50, 200, 200});

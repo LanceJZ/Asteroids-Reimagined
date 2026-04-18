@@ -31,6 +31,7 @@ public:
 	std::vector<Vector3> UFOModel = {};
 	//Models
 	void SetPlayer(ThePlayer* player);
+	void SetAntiPlayer(TheAntiPlayer* player);
 	void SetRockModels(std::vector<Vector3> rockModels[4]);
 	void SetUFOModel(std::vector<Vector3> model);
 	void SetShotModel(std::vector<Vector3> model);
