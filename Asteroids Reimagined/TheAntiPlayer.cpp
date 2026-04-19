@@ -2,10 +2,14 @@
 
 TheAntiPlayer::TheAntiPlayer()
 {
+	EM.AddEntity(AvoidBorder = DBG_NEW Entity());
+	EM.AddEntity(ShieldBorder = DBG_NEW Entity());
+
 	MovingTimerID = EM.AddTimer(1.0f);
 	ShootingTimerID = EM.AddTimer(0.5f);
 	FireRateTimerID = EM.AddTimer(0.10f);
-	IdelTimerID = EM.AddTimer(2.0f);
+	FireTimerID = EM.AddTimer(0.05f);
+	IdelTimerID = EM.AddTimer(1.0f);
 }
 
 TheAntiPlayer::~TheAntiPlayer()
@@ -21,6 +25,11 @@ bool TheAntiPlayer::Initialize()
 	Flame->ModelColor = { 200, 150, 0, 200 };
 	PowerUpTimerAmount = 4.0f;
 
+	ShieldBorder->Radius = Radius * 2.0f;
+	ShieldBorder->EntityOnly = true;
+	AvoidBorder->Radius = Radius * 4.0f;
+	AvoidBorder->EntityOnly = true;
+
 	return false;
 }
 
@@ -30,6 +39,9 @@ bool TheAntiPlayer::BeginRun()
 
 	Shield->Scale = 1.63f;
 	Shield->X(-7.0f);
+
+	ShieldBorder->SetParent(*this);
+	AvoidBorder->SetParent(*this);
 
 	return false;
 }
@@ -164,8 +176,11 @@ void TheAntiPlayer::DoShootingAtPlayer()
 
 	if (EM.TimerElapsed(FireTimerID))
 	{
-		EM.ResetTimer(FireTimerID);
-		PointTurret(PlayerPosition);
+		EM.ResetTimer(FireTimerID, M.GetRandomFloat(0.1f, 0.55f));
+
+		if (AvoidRocksOrEnemies) PointTurret(RockOrEnemyPosition);
+		else PointTurret(PlayerPosition);		
+		
 		FireTurret();
 	}
 
@@ -173,7 +188,7 @@ void TheAntiPlayer::DoShootingAtPlayer()
 	if (EM.TimerElapsed(ShootingTimerID))
 	{
 		CurrentState = Idle;
-		EM.ResetTimer(IdelTimerID);
+		EM.ResetTimer(IdelTimerID, M.GetRandomFloat(0.75f, 3.25f));
 	}
 }
 
@@ -202,6 +217,8 @@ void TheAntiPlayer::DoShootingAtEnemy()
 
 void TheAntiPlayer::DoMoveing()
 {
+	float direction = 0;
+
 	if (!Player->Enabled || Player->GetBeenHit())
 	{
 		CurrentState = Idle;
@@ -210,7 +227,8 @@ void TheAntiPlayer::DoMoveing()
 		return;
 	}
 
-	float direction = GetRotationTowardsTargetZ(Position, PlayerPosition, RotationZ, 1.0f);
+	if (AvoidRocksOrEnemies) direction = GetRotationTowardsTargetZ(Position, RockOrEnemyPosition, RotationZ, 1.0f);
+	else direction = GetRotationTowardsTargetZ(Position, PlayerPosition, RotationZ, 1.0f);
 
 	if (direction > 0.2f) RotateShip(1.0f);
 	else if (direction < -0.2f) RotateShip(-1.0f);

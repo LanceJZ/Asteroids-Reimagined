@@ -14,7 +14,6 @@ public:
 	bool IsChild = false;
 	bool IsParent = false;
 	bool IsConnectedChild = true;
-	bool Enabled = true;
 	bool IgnoreParentRotation = false;
 	bool WasCulled = false;
 	bool BeenHit = false;

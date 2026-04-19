@@ -19,7 +19,12 @@ public:
 	TheAntiPlayer();
 	virtual ~TheAntiPlayer();
 
-TheCurrentState CurrentState = TheCurrentState::Idle;
+	bool AvoidRocksOrEnemies = false; //avoid rocks or enemies.
+	bool ActivateShield = false; //activate shield
+
+	Vector3 RockOrEnemyPosition = {};
+
+	TheCurrentState CurrentState = TheCurrentState::Idle;
 
 	std::vector<TheStarShot*> StarShots;
 
@@ -47,7 +52,7 @@ private:
 	Sound StarShotSound = {};
 
 	Entity* ShieldBorder = nullptr;
-	Entity* RockBorder = nullptr;
+	Entity* AvoidBorder = nullptr;
 
 	ThePlayer* Player = nullptr;
 

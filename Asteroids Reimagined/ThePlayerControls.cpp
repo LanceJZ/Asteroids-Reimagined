@@ -125,7 +125,6 @@ bool ThePlayerControls::Initialize()
 	for (const auto& shot : Shots)
 	{
 		shot->Initialize();
-		shot->Enabled = false;
 	}
 
 	return true;
@@ -184,7 +183,7 @@ void ThePlayerControls::Hit()
 	PlaySound(ExplodeSound);
 
 	Particles.SpawnLineDots(Position, Vector3Multiply(Velocity, { 0.15f }),
-		Radius * 0.25f, 30.0f, 20, 3.5f, WHITE);
+		Radius * 0.25f, 30.0f, 20, 3.5f, GRAY);
 	Particles.SpawnLineModelExplosion(GetLineModel(), Position, Velocity,
 		RotationZ, 10.0f, 4.0f, ModelColor);
 	Particles.SpawnLineModelExplosion(Turret->GetLineModel(), Position, Velocity,
@@ -193,7 +192,6 @@ void ThePlayerControls::Hit()
 	Velocity = { 0 };
 
 	RotateStop();
-
 }
 
 void ThePlayerControls::ShieldHit(Vector3 location, Vector3 velocity)

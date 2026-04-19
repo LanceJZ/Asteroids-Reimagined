@@ -13,6 +13,11 @@ void TheRock::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void TheRock::SetAntiPlayer(TheAntiPlayer* player)
+{
+	AntiPlayer = player;
+}
+
 void TheRock::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;
@@ -153,7 +158,22 @@ bool TheRock::CheckCollisions()
 		return true;
 	}
 
-	for (const auto& shot : Player->Shots)
+	if (AntiPlayer->Shield->Enabled &&
+		CirclesIntersect(AntiPlayer->Position, AntiPlayer->Shield->Radius))
+	{
+		AntiPlayer->ShieldHit(Position, Velocity);
+		return false;
+	}
+
+	if (AntiPlayer->Enabled && !AntiPlayer->Shield->Enabled && CirclesIntersect(*AntiPlayer))
+	{
+		AntiPlayer->Hit();
+		AntiPlayer->Destroy();
+		Hit();
+		return true;
+	}
+
+		for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{
@@ -195,6 +215,49 @@ bool TheRock::CheckCollisions()
 		{
 			Hit();
 			SendScoreToPlayer();
+			return true;
+		}
+	}
+
+
+	for (const auto& shot : AntiPlayer->Shots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			return true;
+		}
+	}
+
+	for (const auto& shot : AntiPlayer->DoubleShots)
+	{
+		if (shot->Enabled && CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			return true;
+		}
+	}
+
+	for (const auto& bigShot : AntiPlayer->BigShots)
+	{
+		if (bigShot->Enabled && CirclesIntersect(*bigShot))
+		{
+			bigShot->HitPoints -= 20;
+
+			if (bigShot->HitPoints <= 0) bigShot->Destroy();
+
+			Hit();
+			return true;
+		}
+	}
+
+	for (const auto& plasmaShot : AntiPlayer->PlasmaShots)
+	{
+		if (plasmaShot->Enabled && CirclesIntersect(*plasmaShot))
+		{
+			Hit();
 			return true;
 		}
 	}

@@ -13,12 +13,13 @@ bool Shot::Initialize()
 {
 	LineModel::Initialize();
 
-	return false;
+	Enabled = false;
+
+	return true;
 }
 
 bool Shot::BeginRun()
 {
-	Enabled = false;
 
 	return false;
 }

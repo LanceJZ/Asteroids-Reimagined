@@ -7,6 +7,7 @@ EnemyControl::EnemyControl()
 	EnemyOneSpawnTimerID = EM.AddTimer(15.0f);
 	EnemyTwoSpawnTimerID = EM.AddTimer(12.0f);
 	BossExplodingTimerID = EM.AddTimer(5.0f);
+	SpawnAntiPlayerTimerID = EM.AddTimer(5.0f);
 
 	EM.AddEntity(DeathStar = DBG_NEW TheDeathStar());
 	EM.AddLineModel(Boss = DBG_NEW TheBoss());
@@ -23,7 +24,6 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 
 	DeathStar->SetPlayer(player);
 	Boss->SetPlayer(player);
-	AntiPlayer->SetPlayer(player);
 }
 
 void EnemyControl::SetAntiPlayer(TheAntiPlayer* player)
@@ -272,6 +272,7 @@ void EnemyControl::Update()
 	Common::Update();
 
 	CheckRockCollisions();
+
 }
 
 void EnemyControl::FixedUpdate()
@@ -347,6 +348,7 @@ void EnemyControl::FixedUpdate()
 			SpawnDeathStar();
 		}
 	}
+	else if (EM.TimerElapsed(SpawnAntiPlayerTimerID)) SpawnAntiPlayer();
 
 	HaveHomingMineChaseEnemy();
 
@@ -388,8 +390,6 @@ void EnemyControl::NewGame()
 {
 	Reset();
 	DeathStar->NewGame();
-
-	AntiPlayer->Spawn({ (float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2, 0 });
 }
 
 void EnemyControl::Reset()
@@ -456,6 +456,7 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			Rocks.push_back(DBG_NEW TheRock());
 			EM.AddLineModel(Rocks.back(), (RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
+			Rocks.back()->SetAntiPlayer(AntiPlayer);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->BeginRun();
 
@@ -745,6 +746,19 @@ void EnemyControl::SpawnBoss()
 	Boss->Spawn(position, rotation);
 }
 
+void EnemyControl::SpawnAntiPlayer()
+{
+	EM.ResetTimer(SpawnAntiPlayerTimerID);
+	
+	Vector3 pos = { };
+
+	pos.x = GetRandomValue(-WindowHalfWidth, WindowHalfWidth);
+	pos.y = GetRandomValue(-WindowHalfHeight, WindowHalfHeight);
+
+
+	AntiPlayer->Spawn(pos);
+}
+
 void EnemyControl::CheckDeathStarStatus()
 {
 	if (DeathStar->Enabled)
@@ -819,14 +833,14 @@ void EnemyControl::CheckRockCollisions()
 				EM.ResetTimer(DeathStarSpawnTimerID);
 				Particles.SpawnLineDots(Rocks.at(i)->Position,
 					Vector3Multiply(Rocks.at(i)->Velocity, { 0.25f, 0.25f }),
-					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, WHITE);
+					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, LIGHTGRAY);
 
 				int count = 0;
 
 				int max = (int)(WaveNumber * 0.5f) + 5;
 
 				if (ufoHitRock) count = GetRandomValue(4, max);
-				else if (enemyHitRock) count = GetRandomValue(3, max);
+				else if (enemyHitRock) count = GetRandomValue(5, max);
 				else count = GetRandomValue(1, 4);
 
 				if (Rocks.at(i)->Size == TheRock::Large)
@@ -898,6 +912,21 @@ bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	}
 
 	return enemyHitRock;
+}
+
+bool EnemyControl::CheckAntiPlayerCollisions(TheRock* rock)
+{
+	bool antiPlayerHitRock = false;
+
+	if (!AntiPlayer->Enabled) return false;
+
+	if (AntiPlayer->CirclesIntersect(*rock))
+	{
+		antiPlayerHitRock = true;
+		rock->Hit();
+	}
+
+	return antiPlayerHitRock;
 }
 
 void EnemyControl::MakeReadyForBossWave()

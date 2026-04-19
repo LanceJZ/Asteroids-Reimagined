@@ -96,6 +96,7 @@ private:
 	size_t EnemyOneSpawnTimerID;
 	size_t EnemyTwoSpawnTimerID;
 	size_t BossExplodingTimerID;
+	size_t SpawnAntiPlayerTimerID;
 
 	int UFOSpawnCount = 0;
 	int StartRockCount = 4;
@@ -140,10 +141,12 @@ private:
 	void SpawnEnemyTwo();
 	void SpawnDeathStar();
 	void SpawnBoss();
+	void SpawnAntiPlayer();
 	void CheckDeathStarStatus();
 	void CheckRockCollisions();
 	bool CheckUFOCollisions(TheRock* rock);
 	bool CheckEnemyCollisions(TheRock* rock);
+	bool CheckAntiPlayerCollisions(TheRock* rock);
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void HaveHomingMineChaseEnemy();

@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "TheAntiPlayer.h"
 #include "Enemy.h"
 
 class TheRock : public LineModel
@@ -20,6 +21,7 @@ public:
 	RockSize Size = Large;
 
 	void SetPlayer(ThePlayer* player);
+	void SetAntiPlayer(TheAntiPlayer* player);
 	void SetExplodeSound(Sound sound);
 
 	bool Initialize();
@@ -37,6 +39,7 @@ private:
 	Sound ExplodeSound = {};
 
 	ThePlayer *Player = nullptr;
+	TheAntiPlayer *AntiPlayer = nullptr;
 
 	bool CheckCollisions();
 	void SendScoreToPlayer();
