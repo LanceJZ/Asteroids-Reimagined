@@ -22,6 +22,9 @@ public:
 	virtual ~GameLogic();
 
 	bool PlayBackgroundMusic = true;
+
+	float GameVolume = 1.0f;
+
 	GameState State = MainMenu;
 
 	void SetPlayer(ThePlayer* player);

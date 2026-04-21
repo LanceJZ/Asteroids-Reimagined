@@ -194,8 +194,22 @@ void ThePlayerControls::Hit()
 	RotateStop();
 }
 
-void ThePlayerControls::ShieldHit(Vector3 location, Vector3 velocity)
+void ThePlayerControls::ShieldHit(Vector3 position, Vector3 velocity)
 {
+	PlaySound(ShieldHitSound);
+	Acceleration = {0};
+	Velocity = GetReflectionVelocity(position, velocity, 106.666f, 0.90f, 0.25f);
+
+	if (PoweredUp) return;
+
+	if (ShieldPower > 20)
+	{
+		ShieldPower -= 20;
+	}
+	else
+	{
+		ShieldPower = 0;
+	}
 }
 
 void ThePlayerControls::Spawn()
@@ -345,10 +359,10 @@ void ThePlayerControls::ThrustOn(float amount)
 	if (!IsSoundPlaying(ThrustSound)) PlaySound(ThrustSound);
 }
 
-void ThePlayerControls::ThrustOff()
+void ThePlayerControls::ThrustOff(float amount)
 {
 	StopSound(ThrustSound);
-	SetAccelerationToZero(0.45f);
+	SetAccelerationToZero(amount);
 	Flame->Enabled = false;
 }
 
@@ -382,6 +396,10 @@ void ThePlayerControls::ShieldOn()
 
 void ThePlayerControls::ShieldOff()
 {
+	if (PoweredUp) return;
+
+	StopSound(ShieldOnSound);
+	Shield->Enabled = false;
 }
 
 void ThePlayerControls::ShieldPowerDrain(float deltaTime)

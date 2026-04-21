@@ -2,6 +2,7 @@
 
 TheRock::TheRock()
 {
+	EM.AddLineModel(PowerUp = DBG_NEW LineModel());
 }
 
 TheRock::~TheRock()
@@ -18,10 +19,15 @@ void TheRock::SetAntiPlayer(TheAntiPlayer* player)
 	AntiPlayer = player;
 }
 
+void TheRock::SetPowerUpModel(std::vector<Vector3> model)
+{
+	PowerUp->SetModel(model);
+}
+
 void TheRock::SetExplodeSound(Sound sound)
 {
 	ExplodeSound = sound;
-	SetSoundVolume(ExplodeSound, 0.333f);
+	SetSoundVolume(ExplodeSound, 0.2f);
 }
 
 bool TheRock::Initialize()
@@ -34,6 +40,8 @@ bool TheRock::Initialize()
 bool TheRock::BeginRun()
 {
 	LineModel::BeginRun();
+
+	PowerUp->SetParent(*this);
 
 	return false;
 }
@@ -60,6 +68,8 @@ void TheRock::Draw3D()
 void TheRock::Spawn(Vector3 position, RockSize size)
 {
 	Entity::Spawn(position);
+
+	PowerUp->Enabled = false;
 
 	float magnitude = 0;
 	float angle = M.GetRandomRadian();
@@ -124,12 +134,107 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	}
 
 	RotationVelocityZ = rVel;
+
+	// Setup PowerUp
+
+	int chance = GetRandomValue(1, 100); //Rework this. Later waves limit Purple on a curve.
+	//TraceLog(LOG_INFO, "RandValue: %i", chance);
+
+	PowerUpType = PowerUp::PowerUpType::None;
+	PowerUp->ModelColor = WHITE;
+
+	TraceLog(LOG_INFO, "Rock Wave %d", WaveNumber);
+
+	if (WaveNumber < 3)
+	{
+		if (chance < 5)
+		{
+			PowerUp->ModelColor = PURPLE;
+			PowerUpType = PowerUp::PowerUpType::Purple; //Everything over charged for a time.
+		}
+		else if (chance < 10)
+		{
+			PowerUp->ModelColor = BLUE;
+			PowerUpType = PowerUp::PowerUpType::Blue; //Shield over charge.
+		}
+		else if (chance < 20)
+		{
+			PowerUp->ModelColor = SKYBLUE;
+			PowerUpType = PowerUp::PowerUpType::Skyblue; //Gun cooling over charge.
+		}
+	}
+	else
+	{
+		if (chance == 1)
+		{
+			PowerUp->ModelColor = PURPLE;
+			PowerUpType = PowerUp::PowerUpType::Purple; //Everything over charged for a time.
+		}
+		else if (chance < 6)
+		{
+			PowerUp->ModelColor = BLUE;
+			PowerUpType = PowerUp::PowerUpType::Blue; //Shield over charge.
+		}
+		else if (chance < 9)
+		{
+			PowerUp->ModelColor = SKYBLUE;
+			PowerUpType = PowerUp::PowerUpType::Skyblue; //Gun cooling over charge.
+		}
+		else if (chance == 11)
+		{
+			PowerUp->ModelColor = RED;
+			PowerUpType = PowerUp::PowerUpType::Red; //Larger Shots limited number.
+		}
+		else if (chance > 11 || chance < 15)
+		{
+			PowerUp->ModelColor = YELLOW;
+			PowerUpType = PowerUp::PowerUpType::Yellow; //Two side by side shots limited number.
+		}
+		else if (chance > 15 || chance < 17)
+		{
+			PowerUp->ModelColor = ORANGE;
+			PowerUpType = PowerUp::PowerUpType::Orange; //Homing Mines limited number.
+			// Rocks ignored. (Explodes on impact)
+		}
+		else if (chance == 17)
+		{
+			PowerUp->ModelColor = VIOLET;
+			PowerUpType = PowerUp::PowerUpType::Violet; //Growing plasma shot limited number.
+			// Dies at edge of screen. Annihilates everything in it's path.
+		}
+
+	}
+
+	if (PowerUpType != PowerUp::PowerUpType::None)
+	{
+		PowerUp->Enabled = true;
+	}
+
+
+	return;
+
+	if (WaveNumber > 5)
+	{
+		if (chance == 3)
+		{
+			PowerUp->ModelColor = MAGENTA;
+			PowerUpType = PowerUp::PowerUpType::Magenta; //Spread Shot limited number.
+		}
+
+		if (chance == 4)
+		{
+			PowerUp->ModelColor = MAROON;
+			PowerUpType = PowerUp::PowerUpType::Maroon; //Homing missiles limited number. Ignores rocks. Explodes on impact.
+		}
+	}
+
 }
 
 void TheRock::Destroy()
 {
 	Entity::Destroy();
 
+	PowerUp->Destroy();
 }
 
 void TheRock::Hit()
@@ -165,15 +270,7 @@ bool TheRock::CheckCollisions()
 		return false;
 	}
 
-	if (AntiPlayer->Enabled && !AntiPlayer->Shield->Enabled && CirclesIntersect(*AntiPlayer))
-	{
-		AntiPlayer->Hit();
-		AntiPlayer->Destroy();
-		Hit();
-		return true;
-	}
-
-		for (const auto& shot : Player->Shots)
+	for (const auto& shot : Player->Shots)
 	{
 		if (shot->Enabled && CirclesIntersect(*shot))
 		{

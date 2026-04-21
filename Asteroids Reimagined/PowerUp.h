@@ -1,7 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
-#include "EnemyControl.h"
+#include "TheAntiPlayer.h"
 
 class PowerUp : public LineModel
 {
@@ -17,19 +17,17 @@ public:
 		Orange,
 		Violet,
 		Magenta,
-		Maroon
+		Maroon,
+		None
 	};
 
-	PowerUpType Type = PowerUpType::Skyblue;
-
-	int WaveNumber = 0;
+	PowerUpType Type = PowerUpType::None;
 
 	PowerUp();
 	virtual ~PowerUp();
 
 	void SetPlayer(ThePlayer* player);
-	void SetEnemy(EnemyControl* enemy);
-
+	void SetAntiPlayer(TheAntiPlayer* player);
 	void SetPickUpSound(Sound sound);
 
 	bool Initialize();
@@ -39,7 +37,7 @@ public:
 	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position);
+	void Spawn(Vector3 position, PowerUpType type);
 	void Destroy();
 
 private:
@@ -48,7 +46,7 @@ private:
 	Sound PickUpSound = {};
 
 	ThePlayer* Player = nullptr;
-	EnemyControl* Enemies = nullptr;
+	TheAntiPlayer* AntiPlayer = nullptr;
 
 	void CheckCollisions();
 	void DriftToPlayer();

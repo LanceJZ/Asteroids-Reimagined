@@ -30,6 +30,7 @@ void GameLogic::SetEnemies(EnemyControl* enemies)
 void GameLogic::SetPowerUpModel(std::vector<Vector3> model)
 {
 	PowerUpModel = model;
+	Enemies->SetPowerUpModel(model);
 }
 
 void GameLogic::SetPowerUpSound(Sound sound)
@@ -235,12 +236,17 @@ void GameLogic::GameInput()
 			Player->Paused = true;
 		}
 
+		if (IsKeyPressed(KEY_F1)) SetMasterVolume((0.15f));
+		if (IsKeyPressed(KEY_F2)) SetMasterVolume((0.25f));
+		else if (IsKeyPressed(KEY_F3)) SetMasterVolume((0.75f));
+		else if (IsKeyPressed(KEY_F4)) SetMasterVolume((1.0f));
 	}
 
 #if DEBUG
 	if (IsKeyPressed(KEY_F5))
 	{
 		Enemies->NextWave();
+		TraceLog(LOG_INFO, "Wave: %i", Enemies->WaveNumber);
 	}
 
 	if (IsKeyPressed(KEY_F6))
@@ -287,14 +293,12 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 		PowerUps.push_back(DBG_NEW PowerUp());
 		EM.AddEntity(PowerUps.back());
 		PowerUps.back()->SetPlayer(Player);
-		PowerUps.back()->SetEnemy(Enemies);
 		PowerUps.back()->SetModel(PowerUpModel);
 		PowerUps.back()->SetPickUpSound(PickUpSound);
 		PowerUps.back()->BeginRun();
 	}
 
-	PowerUps.at(powerUpNumber)->WaveNumber = Enemies->WaveNumber;
-	PowerUps.at(powerUpNumber)->Spawn(position);
+	PowerUps.at(powerUpNumber)->Spawn(position, Enemies->PowerUpType);
 }
 
 void GameLogic::PlayerShipDisplay()

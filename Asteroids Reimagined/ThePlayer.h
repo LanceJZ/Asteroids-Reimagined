@@ -101,7 +101,7 @@ private:
 	void RotateStop();
 
 	void ThrustOn(float amount);
-	void ThrustOff();
+	void ThrustOff(float amount);
 
 	void ShieldOn();
 	void ShieldOff();

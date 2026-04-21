@@ -80,10 +80,13 @@ void TheUFO::Draw3D()
 	Enemy::Draw3D();
 }
 
-void TheUFO::Spawn(int spawnCount)
+void TheUFO::Spawn(int spawnCount, int wave)
 {
+	WaveNumber = wave;
 	Vector3 position = { 0, 0, 0 };
 	int height = (int)(WindowHalfHeight / 1.25f);
+
+	TraceLog(LOG_INFO, "UFO Wave: %i", WaveNumber);
 
 	position.y = (float)GetRandomValue(-height, height);
 
@@ -94,10 +97,11 @@ void TheUFO::Spawn(int spawnCount)
 	float fullRadius = 18.5f;
 	float fullSpeed = 128.666f;
 	float spawnPercent = (float)spawnCount * 0.1f;
+
 	TraceLog(LOG_INFO, "UFO Spawn Count: %i", spawnCount);
+
 	spawnPercent += (float)(Player->GetScore() * 0.0001f);
-	spawnPercent += (float)(Wave) * 0.25f;
-	TraceLog(LOG_INFO, "Wave: %i", Wave);
+	spawnPercent += (float)(WaveNumber) * 0.25f;
 
 
 	if (spawnPercent > 90) spawnPercent = 90;
@@ -146,7 +150,9 @@ void TheUFO::Spawn(int spawnCount)
 		break;
 	}
 
-	ShotTimerAmount = 1.75f - (spawnCount * 0.01f) - (Wave * 0.1f);
+	ShotTimerAmount = 1.75f - (spawnCount * 0.01f) - (WaveNumber * 0.1f);
+
+	TraceLog(LOG_INFO, "ShotTimerAmount: %f", ShotTimerAmount);
 
 	if (ShotTimerAmount < 0.2f) ShotTimerAmount = 0.2f;
 
@@ -309,7 +315,7 @@ float TheUFO::AimedShotAtRock()
 
 void TheUFO::ChangeVector()
 {
-	float vectorTimer = M.GetRandomFloat(3.1f - (Wave * 0.1f), 7.5f);
+	float vectorTimer = M.GetRandomFloat(3.1f - (WaveNumber * 0.1f), 7.5f);
 
 	if (vectorTimer < 0.25f) vectorTimer = 0.25f;
 

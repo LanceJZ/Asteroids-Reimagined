@@ -3,6 +3,7 @@
 #include "ThePlayer.h"
 #include "TheAntiPlayer.h"
 #include "Enemy.h"
+#include "PowerUp.h"
 
 class TheRock : public LineModel
 {
@@ -18,10 +19,14 @@ public:
 	TheRock();
 	virtual ~TheRock();
 
+	int WaveNumber = 0;
+
 	RockSize Size = Large;
+	PowerUp::PowerUpType PowerUpType = PowerUp::PowerUpType::None;
 
 	void SetPlayer(ThePlayer* player);
 	void SetAntiPlayer(TheAntiPlayer* player);
+	void SetPowerUpModel(std::vector<Vector3> model);
 	void SetExplodeSound(Sound sound);
 
 	bool Initialize();
@@ -37,6 +42,8 @@ public:
 
 private:
 	Sound ExplodeSound = {};
+
+	LineModel* PowerUp = nullptr;
 
 	ThePlayer *Player = nullptr;
 	TheAntiPlayer *AntiPlayer = nullptr;

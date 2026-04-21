@@ -10,10 +10,16 @@ TheAntiPlayer::TheAntiPlayer()
 	FireRateTimerID = EM.AddTimer(0.10f);
 	FireTimerID = EM.AddTimer(0.05f);
 	IdelTimerID = EM.AddTimer(1.0f);
+	AttackRockTimerID = EM.AddTimer(1.0f);
 }
 
 TheAntiPlayer::~TheAntiPlayer()
 {
+}
+
+void TheAntiPlayer::SetPlayer(ThePlayer* player)
+{
+	Player = player;
 }
 
 bool TheAntiPlayer::Initialize()
@@ -24,11 +30,6 @@ bool TheAntiPlayer::Initialize()
 
 	Flame->ModelColor = { 200, 150, 0, 200 };
 	PowerUpTimerAmount = 4.0f;
-
-	ShieldBorder->Radius = Radius * 2.0f;
-	ShieldBorder->EntityOnly = true;
-	AvoidBorder->Radius = Radius * 4.0f;
-	AvoidBorder->EntityOnly = true;
 
 	return false;
 }
@@ -56,7 +57,7 @@ void TheAntiPlayer::Update(float deltaTime)
 		DoIdle();
 		break;
 	case ShootingAtPlayer:
-		DoShootingAtPlayer();
+		DoShooting();
 		break;
 	case ShootingAtRock:
 		DoShootingAtRock();
@@ -79,25 +80,59 @@ void TheAntiPlayer::Draw3D()
 	ThePlayerControls::Draw3D();
 }
 
-void TheAntiPlayer::SetPlayer(ThePlayer* player)
+void TheAntiPlayer::AttackRocksOrEnemies(Vector3 position)
 {
-	Player = player;
+	AvoidRocksOrEnemies = true;
+	RockOrEnemyPosition = position;
+	CurrentState = ShootingAtRock;
+	EM.ResetTimer(AttackRockTimerID);
+}
+
+void TheAntiPlayer::ActivateTheShield()
+{
+	ShieldOn();
+	NearbyRockOrEnemy = true;
+}
+
+void TheAntiPlayer::DeactivateTheShield()
+{
+	ShieldOff();
 }
 
 void TheAntiPlayer::Spawn(Vector3 position)
 {
+	return; //Turn off for updates.
+
 	Entity::Spawn(position);
 
-	Turret->Spawn();
+	AvoidBorder->Position = { 0.0f, 0.0f, 0.0f };
+
+	CheckSafeToSpawn = false;
+	SafeToSpawn = false;
+
+	ShieldBorder->Radius = Shield->Radius + Radius * 1.25f;
+	ShieldBorder->EntityOnly = true;
+	AvoidBorder->Radius = Radius * 4.0f;
+	AvoidBorder->EntityOnly = true;
+	ShieldBorder->Enabled = true;
+	AvoidBorder->Enabled = true;
 	CurrentState = Idle;
+	Turret->Spawn();
 	EM.ResetTimer(IdelTimerID);
-	DoChasingPlayer();
+
+	ShieldPower = 100;
 }
 
 void TheAntiPlayer::Destroy()
 {
 	Entity::Destroy();
 
+	SafeToSpawn = false;
+	ShieldBorder->Enabled = false;
+	AvoidBorder->Enabled = false;
+	Turret->Destroy();
+	ShieldOff();
+	ThrustOff(0.25f);
 }
 
 void TheAntiPlayer::TurretTimers()
@@ -154,7 +189,8 @@ void TheAntiPlayer::DoIdle()
 {
 	if (!Player->Enabled || Player->GetBeenHit()) EM.ResetTimer(IdelTimerID);
 
-	ThrustOff();
+	ThrustOff(0.25f);
+	RotateStop();
 
 	if (EM.TimerElapsed(IdelTimerID))
 	{
@@ -163,9 +199,9 @@ void TheAntiPlayer::DoIdle()
 	}
 }
 
-void TheAntiPlayer::DoShootingAtPlayer()
+void TheAntiPlayer::DoShooting()
 {
-	ThrustOff();
+	ThrustOff(0.25f);
 
 	if (!Player->Enabled || Player->GetBeenHit())
 	{
@@ -209,6 +245,13 @@ void TheAntiPlayer::DoChasingPlayer()
 
 void TheAntiPlayer::DoShootingAtRock()
 {
+	DoShooting();
+
+	if (EM.TimerElapsed(ShootingTimerID))
+	{
+		CurrentState = Moveing;
+		EM.ResetTimer(MovingTimerID, M.GetRandomFloat(0.75f, 1.25f));
+	}
 }
 
 void TheAntiPlayer::DoShootingAtEnemy()
@@ -223,23 +266,23 @@ void TheAntiPlayer::DoMoveing()
 	{
 		CurrentState = Idle;
 		RotateStop();
-		ThrustOff();
+		ThrustOff(0.25f);
 		return;
 	}
 
-	if (AvoidRocksOrEnemies) direction = GetRotationTowardsTargetZ(Position, RockOrEnemyPosition, RotationZ, 1.0f);
+	if (AvoidRocksOrEnemies) direction = -GetRotationTowardsTargetZ(Position, RockOrEnemyPosition, RotationZ, 1.0f);
 	else direction = GetRotationTowardsTargetZ(Position, PlayerPosition, RotationZ, 1.0f);
 
 	if (direction > 0.2f) RotateShip(1.0f);
 	else if (direction < -0.2f) RotateShip(-1.0f);
 	else RotateStop();
 
-	ThrustOn(1.0f);
+	ThrustOn(0.25f);
 
 	if (EM.TimerElapsed(MovingTimerID))
 	{
 		RotateStop();
-		ThrustOff();
+		ThrustOff(0.25f);
 		DoChasingPlayer();
 		EM.ResetTimer(ShootingTimerID, M.GetRandomFloat(0.5f, 1.25f));
 		CurrentState = ShootingAtPlayer;

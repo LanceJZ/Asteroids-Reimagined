@@ -108,6 +108,11 @@ void EnemyControl::SetAntiPlayerModel(std::vector<Vector3> model)
 	AntiPlayer->SetModel(model);
 }
 
+void EnemyControl::SetPowerUpModel(std::vector<Vector3> model)
+{
+	PowerUpModel = model;
+}
+
 void EnemyControl::SetRockExplodeSound(Sound sound)
 {
 	RockExplodeSound = sound;
@@ -297,6 +302,8 @@ void EnemyControl::FixedUpdate()
 	{
 		WaveNumber++;
 
+		TraceLog(LOG_INFO, "New Wave %d", WaveNumber);
+
 		if (SpawnedDeathStar) DeathStar->NewWaveStart();
 
 		if (WaveNumber % 5 == 0 && !Player->GameOver)
@@ -350,6 +357,7 @@ void EnemyControl::FixedUpdate()
 	}
 	else if (EM.TimerElapsed(SpawnAntiPlayerTimerID)) SpawnAntiPlayer();
 
+
 	HaveHomingMineChaseEnemy();
 
 	if (EM.TimerElapsed(EnemyOneSpawnTimerID))
@@ -381,9 +389,9 @@ void EnemyControl::FixedUpdate()
 
 void EnemyControl::NextWave()
 {
-	int wave = WaveNumber++;
 	Reset();
-	WaveNumber = wave;
+	WaveNumber++;
+
 }
 
 void EnemyControl::NewGame()
@@ -457,8 +465,10 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			EM.AddLineModel(Rocks.back(), (RockModels[rockType]));
 			Rocks.back()->SetPlayer(Player);
 			Rocks.back()->SetAntiPlayer(AntiPlayer);
+			Rocks.back()->SetPowerUpModel(PowerUpModel);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->BeginRun();
+			Rocks.back()->WaveNumber = WaveNumber;
 
 			for (const auto& ufo : UFOs)
 			{
@@ -523,7 +533,7 @@ void EnemyControl::SpawnUFO()
 		DeathStar->SetUFO();
 	}
 
-	UFOs.at(ufoNumber)->Spawn(UFOSpawnCount++);
+	UFOs.at(ufoNumber)->Spawn(UFOSpawnCount++, WaveNumber);
 }
 
 void EnemyControl::SpawnEnemyOne()
@@ -749,12 +759,19 @@ void EnemyControl::SpawnBoss()
 void EnemyControl::SpawnAntiPlayer()
 {
 	EM.ResetTimer(SpawnAntiPlayerTimerID);
-	
+
+	if (AntiPlayer->Enabled) return;
+
 	Vector3 pos = { };
 
 	pos.x = GetRandomValue(-WindowHalfWidth, WindowHalfWidth);
 	pos.y = GetRandomValue(-WindowHalfHeight, WindowHalfHeight);
 
+	AntiPlayer->AvoidBorder->Position = pos;
+	AntiPlayer->AvoidBorder->Enabled = true;
+	AntiPlayer->CheckSafeToSpawn = true;
+
+	if (!AntiPlayer->SafeToSpawn) return;
 
 	AntiPlayer->Spawn(pos);
 }
@@ -798,8 +815,12 @@ void EnemyControl::CheckRockCollisions()
 {
 	bool ufoHitRock = false;
 	bool enemyHitRock = false;
+	bool antiPlayerHitRock = false;
+
 	NoMoreRocks = true;
 	RockCount = 0;
+	AntiPlayer->NearbyRockOrEnemy = false;
+	AntiPlayer->SafeToSpawn = true;
 
 	for (int i = 0; i < Rocks.size(); i++)
 	{
@@ -812,20 +833,29 @@ void EnemyControl::CheckRockCollisions()
 
 			if (CheckEnemyCollisions(Rocks.at(i))) enemyHitRock = true;
 
+			if (CheckAntiPlayerCollisions(Rocks.at(i))) antiPlayerHitRock = true;
+
 			if (Rocks.at(i)->GetBeenHit())
 			{
 				if (!Player->GameOver)
 				{
-					int chance = 30;
+					//int chance = 30;
 
-					chance -= (int)((WaveNumber + 1) * 3.5f);
+					//chance -= (int)((WaveNumber + 1) * 3.5f);
 
-					if (chance < 1) chance = 1;
+					//if (chance < 1) chance = 1;
 
-					if ((float)GetRandomValue(0, 100) < chance)
+					//if ((float)GetRandomValue(0, 100) < chance)
+					//{
+					//	SpawnPowerUp = true;
+					//	PowerUpSpawnPosition = Rocks.at(i)->Position;
+					//}
+
+					if (Rocks.at(i)->PowerUpType != PowerUp::None)
 					{
 						SpawnPowerUp = true;
 						PowerUpSpawnPosition = Rocks.at(i)->Position;
+						PowerUpType = Rocks.at(i)->PowerUpType;
 					}
 				}
 
@@ -836,11 +866,11 @@ void EnemyControl::CheckRockCollisions()
 					Rocks.at(i)->Radius * 0.25f, 15.0f, 15, 1.5f, LIGHTGRAY);
 
 				int count = 0;
-
 				int max = (int)(WaveNumber * 0.5f) + 5;
 
 				if (ufoHitRock) count = GetRandomValue(4, max);
 				else if (enemyHitRock) count = GetRandomValue(5, max);
+				else if (antiPlayerHitRock) count = GetRandomValue(6, max);
 				else count = GetRandomValue(1, 4);
 
 				if (Rocks.at(i)->Size == TheRock::Large)
@@ -861,6 +891,8 @@ void EnemyControl::CheckRockCollisions()
 			}
 		}
 	}
+
+	if (!AntiPlayer->NearbyRockOrEnemy) AntiPlayer->DeactivateTheShield();
 }
 
 bool EnemyControl::CheckUFOCollisions(TheRock* rock)
@@ -918,12 +950,30 @@ bool EnemyControl::CheckAntiPlayerCollisions(TheRock* rock)
 {
 	bool antiPlayerHitRock = false;
 
-	if (!AntiPlayer->Enabled) return false;
+	if (AntiPlayer->CheckSafeToSpawn)
+	{
+		if (AntiPlayer->AvoidBorder->CirclesIntersect(*rock)) AntiPlayer->SafeToSpawn = false;
+		return false;
+	}	
+	else if (!AntiPlayer->Enabled) return false;
 
-	if (AntiPlayer->CirclesIntersect(*rock))
+	if (AntiPlayer->CirclesIntersect(*rock) && !AntiPlayer->Shield->Enabled)
 	{
 		antiPlayerHitRock = true;
 		rock->Hit();
+		AntiPlayer->Hit();
+		AntiPlayer->Destroy();
+		EM.ResetTimer(SpawnAntiPlayerTimerID);
+	}
+
+	if (AntiPlayer->AvoidBorder->CirclesIntersect(*rock))
+	{
+		AntiPlayer->AttackRocksOrEnemies(rock->Position);
+	}	
+
+	if (AntiPlayer->ShieldBorder->CirclesIntersect(*rock))
+	{
+		AntiPlayer->ActivateTheShield();
 	}
 
 	return antiPlayerHitRock;

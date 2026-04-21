@@ -753,9 +753,9 @@ void ThePlayer::ThrustOn(float amount)
 	ThePlayerControls::ThrustOn(amount);
 }
 
-void ThePlayer::ThrustOff()
+void ThePlayer::ThrustOff(float amount)
 {
-	ThePlayerControls::ThrustOff();
+	ThePlayerControls::ThrustOff(0.45f);
 }
 
 void ThePlayer::ShieldOn()
@@ -774,10 +774,8 @@ void ThePlayer::ShieldOn()
 
 void ThePlayer::ShieldOff()
 {
-	if (PoweredUp) return;
+	ThePlayerControls::ShieldOff();
 
-	StopSound(ShieldOnSound);
-	Shield->Enabled = false;
 }
 
 void ThePlayer::ShieldPowerDrain(float deltaTime)
@@ -829,22 +827,8 @@ void ThePlayer::WeHaveThePower()
 
 void ThePlayer::ShieldHit(Vector3 position, Vector3 velocity)
 {
-	//TODO:: Have rocks and enemy check for shield radius if on.
+	ThePlayerControls::ShieldHit(position, velocity);
 
-	PlaySound(ShieldHitSound);
-	Acceleration = {0};
-	Velocity = GetReflectionVelocity(position, velocity, 106.666f, 0.90f, 0.25f);
-
-	if (PoweredUp) return;
-
-	if (ShieldPower > 20)
-	{
-		ShieldPower -= 20;
-	}
-	else
-	{
-		ShieldPower = 0;
-	}
 }
 
 void ThePlayer::SetAntiPlayer(Entity* entity)
@@ -1081,7 +1065,7 @@ void ThePlayer::Gamepad()
 	}
 	else
 	{
-		ThrustOff();
+		ThrustOff(0.45f);
 	}
 
 	//Left Bumper
@@ -1149,7 +1133,7 @@ void ThePlayer::Keyboard()
 	}
 	else
 	{
-		ThrustOff();
+		ThrustOff(0.45f);
 	}
 
 	if (IsKeyDown(KEY_SPACE)

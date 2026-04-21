@@ -16,7 +16,6 @@ public:
 	Size TheSize = Large;
 
 	bool DeathStarActive = false;
-	int Wave = 0;
 
 	Vector3 DeathStarPosition = { 0.0f, 0.0f, 0.0f };
 
@@ -36,7 +35,7 @@ public:
 	void AlwaysUpdate(float deltaTime);
 	void Draw3D();
 
-	void Spawn(int SpawnCount);
+	void Spawn(int spawnCount, int wave);
 	void Destroy();
 	void Hit();
 	void Reset();

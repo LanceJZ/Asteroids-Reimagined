@@ -16,7 +16,11 @@ public:
 	virtual ~EnemyControl();
 
 	bool SpawnPowerUp = false;
+
 	int WaveNumber = 0;
+
+	PowerUp::PowerUpType PowerUpType = PowerUp::PowerUpType::None;
+
 	Vector3 PowerUpSpawnPosition = {};
 
 	std::vector<TheRock*> Rocks;
@@ -46,6 +50,7 @@ public:
 	void SetEnemyMissileModel(std::vector<Vector3> model);
 	void SetEnemyMineModel(std::vector<Vector3> model);
 	void SetAntiPlayerModel(std::vector<Vector3> model);
+	void SetPowerUpModel(std::vector<Vector3> model);
 	// Sounds
 	void SetRockExplodeSound(Sound sound);
 	void SetUFOExplodeSound(Sound sound);
@@ -132,6 +137,7 @@ private:
 	std::vector<Vector3> EnemyTwoModel;
 	std::vector<Vector3> MissileModel;
 	std::vector<Vector3> MineModel;
+	std::vector<Vector3> PowerUpModel;
 
 	ThePlayer *Player = nullptr;
 

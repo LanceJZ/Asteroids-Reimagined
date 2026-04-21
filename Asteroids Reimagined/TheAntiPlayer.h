@@ -19,16 +19,21 @@ public:
 	TheAntiPlayer();
 	virtual ~TheAntiPlayer();
 
-	bool AvoidRocksOrEnemies = false; //avoid rocks or enemies.
-	bool ActivateShield = false; //activate shield
+	bool NearbyRockOrEnemy = false;
+	bool SafeToSpawn = false;
+	bool CheckSafeToSpawn = false;
 
 	Vector3 RockOrEnemyPosition = {};
 
 	TheCurrentState CurrentState = TheCurrentState::Idle;
 
+	Entity* ShieldBorder = nullptr;
+	Entity* AvoidBorder = nullptr;
+
 	std::vector<TheStarShot*> StarShots;
 
 	void SetStarShotSound(std::string sound);
+	void SetPlayer(ThePlayer *player);
 
 	bool Initialize();
 	bool BeginRun();
@@ -37,29 +42,32 @@ public:
 	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void SetPlayer(ThePlayer *player);
+	void AttackRocksOrEnemies(Vector3 position);
+	void ActivateTheShield();
+	void DeactivateTheShield();
 	void Spawn(Vector3 position);
 	void Destroy();
 
 private:
+	bool AvoidRocksOrEnemies = false; //avoid rocks or enemies.
+	bool ActivateShield = false; //activate shield
+
 	size_t MovingTimerID = 0;
 	size_t ShootingTimerID = 0;
 	size_t FireTimerID = 0;
 	size_t IdelTimerID = 0;
+	size_t AttackRockTimerID = 0;
 
 	Vector3 PlayerPosition = {};
 
 	Sound StarShotSound = {};
-
-	Entity* ShieldBorder = nullptr;
-	Entity* AvoidBorder = nullptr;
 
 	ThePlayer* Player = nullptr;
 
 	void TurretTimers();
 	void FireTurret();
 	void DoIdle();
-	void DoShootingAtPlayer();
+	void DoShooting();
 	void DoChasingPlayer();
 	void DoShootingAtRock();
 	void DoShootingAtEnemy();

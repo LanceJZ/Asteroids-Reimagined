@@ -61,7 +61,7 @@ public:
 	void Draw3D();
 
 	void Hit();
-	void ShieldHit(Vector3 location, Vector3 velocity);
+	void ShieldHit(Vector3 position, Vector3 velocity);
 	void Spawn();
 	void NewGame();
 	void Spawn(Vector3 position);
@@ -138,7 +138,7 @@ protected:
 	void RotateStop();
 
 	void ThrustOn(float amount);
-	void ThrustOff();
+	void ThrustOff(float amount);
 
 	void ShieldOn();
 	void ShieldOff();
