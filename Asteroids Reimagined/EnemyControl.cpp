@@ -443,6 +443,8 @@ void EnemyControl::Reset()
 
 void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize size)
 {
+	//TraceLog(LOG_INFO, "Rock Wave %d", WaveNumber);
+
 	for (int rock = 0; rock < count; rock++)
 	{
 		bool spawnNewRock = true;
@@ -468,7 +470,6 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			Rocks.back()->SetPowerUpModel(PowerUpModel);
 			Rocks.back()->SetExplodeSound(RockExplodeSound);
 			Rocks.back()->BeginRun();
-			Rocks.back()->WaveNumber = WaveNumber;
 
 			for (const auto& ufo : UFOs)
 			{
@@ -476,7 +477,7 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 			}
 		}
 
-		Rocks.at(rockNumber)->Spawn(position, size);
+		Rocks.at(rockNumber)->Spawn(position, WaveNumber, size);
 	}
 }
 

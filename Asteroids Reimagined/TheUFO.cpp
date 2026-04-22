@@ -146,7 +146,7 @@ void TheUFO::Spawn(int spawnCount, int wave)
 		if (!IsSoundPlaying(BigSound)) OnSound = BigSound;
 		break;
 	case Small:
-		if (!IsSoundPlaying(SmallSound)) SmallSound;
+		if (!IsSoundPlaying(SmallSound)) OnSound = SmallSound;
 		break;
 	}
 

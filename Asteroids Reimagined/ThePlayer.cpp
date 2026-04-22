@@ -219,7 +219,6 @@ void ThePlayer::Hit()
 {
 	ThePlayerControls::Hit();
 
-	Lives--;
 	Crosshair->Enabled = false;
 	TurretHeatMeter->Enabled = false;
 	WeaponTypeIconBig->Enabled = false;
@@ -231,16 +230,6 @@ void ThePlayer::Hit()
 	for (const auto& model : AmmoMeterModels)
 	{
 		model->Enabled = false;
-	}
-
-	if (Lives < 0)
-	{
-		GameOver = true;
-
-		for (const auto& mine : Mines)
-		{
-			mine->GameOver = true;
-		}
 	}
 }
 
@@ -257,6 +246,8 @@ void ThePlayer::ScoreUpdate(int addToScore)
 		Lives++;
 		NewLife = true;
 		PlaySound(BonusSound);
+
+		TraceLog(LOG_INFO, "Next New Life at: %i" , NextNewLifeScore);
 	}
 }
 
@@ -272,10 +263,23 @@ void ThePlayer::SetHighScore(int highScore)
 
 void ThePlayer::Spawn()
 {
-	Entity::Spawn({ 0, 0, 0 });
-
 	Velocity = { 0, 0, 0 };
 
+	if (Lives < 1)
+	{
+		GameOver = true;
+
+		for (const auto& mine : Mines)
+		{
+			mine->GameOver = true;
+		}
+
+		return;
+	}
+
+	Entity::Spawn({ 0, 0, 0 });
+
+	Lives--;
 	Turret->Enabled = true;
 	TurretHeatMeter->Enabled = true;
 	ShieldPower = 100.0f;
@@ -293,16 +297,18 @@ void ThePlayer::Spawn()
 	DoubleShotCount = 0;
 	MineCount = 0;
 	PlasmaShotCount = 0;
+	MissileCount = 0;
+	SecondaryWeapon = None;
+
+	PlaySound(SpawnSound);
+
+
 #if DEBUG
 	//BigShotCount = 20; //Turn into keys.
 	//DoubleShotCount = 40;
 	//MineCount = 210;
 	//PlasmaShotCount = 10;
 #endif
-	MissileCount = 0;
-	SecondaryWeapon = None;
-
-	PlaySound(SpawnSound);
 }
 
 void ThePlayer::NewGame()
@@ -316,7 +322,7 @@ void ThePlayer::NewGame()
 	Spawn();
 }
 
-void ThePlayer::ExtraLife()
+void ThePlayer::ExtraLife() // For Debug Only.
 {
 	NewLife = true;
 	Lives++;
@@ -401,6 +407,8 @@ void ThePlayer::PointTurret(Vector3 mouseLocation)
 
 void ThePlayer::FireTurret()
 {
+	if (TurretOverheat)	return;
+
 	ThePlayerControls::FireTurret();
 
 	if (EM.TimerElapsed(FireRateTimerID))

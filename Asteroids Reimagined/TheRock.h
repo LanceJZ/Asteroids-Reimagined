@@ -36,7 +36,7 @@ public:
 	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position, RockSize size = Large);
+	void Spawn(Vector3 position, int waveNumber, RockSize size = Large);
 	void Destroy();
 	void Hit();
 

@@ -279,7 +279,6 @@ void ThePlayerControls::PointTurret(Vector3 mouseLocation)
 
 void ThePlayerControls::FireTurret()
 {
-	if (TurretOverheat)	return;
 
 
 }

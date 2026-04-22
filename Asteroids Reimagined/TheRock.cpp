@@ -65,10 +65,11 @@ void TheRock::Draw3D()
 	LineModel::Draw3D();
 }
 
-void TheRock::Spawn(Vector3 position, RockSize size)
+void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 {
 	Entity::Spawn(position);
 
+	WaveNumber = waveNumber;
 	PowerUp->Enabled = false;
 
 	float magnitude = 0;
@@ -143,8 +144,6 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	PowerUpType = PowerUp::PowerUpType::None;
 	PowerUp->ModelColor = WHITE;
 
-	TraceLog(LOG_INFO, "Rock Wave %d", WaveNumber);
-
 	if (WaveNumber < 3)
 	{
 		if (chance < 5)
@@ -165,6 +164,8 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 	}
 	else
 	{
+		chance = GetRandomValue(1, 250);
+
 		if (chance == 1)
 		{
 			PowerUp->ModelColor = PURPLE;
@@ -185,12 +186,12 @@ void TheRock::Spawn(Vector3 position, RockSize size)
 			PowerUp->ModelColor = RED;
 			PowerUpType = PowerUp::PowerUpType::Red; //Larger Shots limited number.
 		}
-		else if (chance > 11 || chance < 15)
+		else if (chance > 11 && chance < 15)
 		{
 			PowerUp->ModelColor = YELLOW;
 			PowerUpType = PowerUp::PowerUpType::Yellow; //Two side by side shots limited number.
 		}
-		else if (chance > 15 || chance < 17)
+		else if (chance > 15 && chance < 17)
 		{
 			PowerUp->ModelColor = ORANGE;
 			PowerUpType = PowerUp::PowerUpType::Orange; //Homing Mines limited number.
