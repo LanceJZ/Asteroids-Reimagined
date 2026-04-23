@@ -231,9 +231,9 @@ void ThePlayerControls::ShieldPowerUp()
 {
 	ShieldOverCharge = true;
 	ShieldPower += 200;
-	Shield->ModelColor = PINK;
+	Shield->ModelColor = BLUE;
 	Shield->Alpha = 255.0f;
-	if (!PoweredUp) ModelColor = PINK;
+	if (!PoweredUp) ModelColor = BLUE;
 }
 
 void ThePlayerControls::GunPowerUp()
@@ -381,6 +381,10 @@ void ThePlayerControls::ShieldOn()
 				Shield->ModelColor = WHITE;
 				ModelColor = WHITE;
 				ShieldOverCharge = false;
+			}
+			else
+			{
+				Shield->ModelColor = BLUE;
 			}
 		}
 		else
