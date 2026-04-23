@@ -277,7 +277,6 @@ void EnemyControl::Update()
 	Common::Update();
 
 	CheckRockCollisions();
-
 }
 
 void EnemyControl::FixedUpdate()
@@ -904,7 +903,7 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 	{
 		if (!ufo->Enabled) continue;
 
-		if (ufo->CheckRockCollisions(rock)) ufoHitRock = true;
+		if (ufo->CheckShotvsRockCollisions(rock)) ufoHitRock = true;
 
 		if (rock->Size == TheRock::Small) continue;
 
@@ -930,7 +929,7 @@ bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 			rock->Hit();
 		}
 
-		if (enemy->CheckRockCollisions(rock)) enemyHitRock = true;
+		if (enemy->CheckShotvsRockCollisions(rock)) enemyHitRock = true;
 	}
 
 	for (const auto& enemy : EnemyTwos)
@@ -941,7 +940,7 @@ bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 			rock->Hit();
 		}
 
-		if (enemy->CheckRockCollisions(rock)) enemyHitRock = true;
+		if (enemy->CheckShotvsRockCollisions(rock)) enemyHitRock = true;
 	}
 
 	return enemyHitRock;

@@ -47,7 +47,12 @@ public:
 
 private:
 	bool GameEnded = false;
+	
 	size_t ExplodeTimerID = 0;
+	size_t ClearWaitTimerID = 0;
+	size_t ClearSuperWaitTimerID = 0;
+	size_t ClearUltraWaitTimerID = 0;
+
 	Vector2 AdjustedFieldSize = {};
 
 	std::vector<Vector3> PlayerModel = {};

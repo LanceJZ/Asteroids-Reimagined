@@ -163,7 +163,8 @@ void ThePlayerControls::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	ShieldPowerDrain(deltaTime);
+	if (!PoweredUp) ShieldPowerDrain(deltaTime);
+
 	CheckScreenEdge();
 }
 
@@ -373,7 +374,7 @@ void ThePlayerControls::ShieldOn()
 
 		if (!IsSoundPlaying(ShieldOnSound)) PlaySound(ShieldOnSound);
 
-		if (ShieldOverCharge)
+		if (ShieldOverCharge && !PoweredUp)
 		{
 			if (ShieldPower < 100.0f)
 			{

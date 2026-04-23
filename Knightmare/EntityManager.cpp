@@ -81,39 +81,40 @@ void EntityManager::Input()
 // For Movement and Collisions.
 void EntityManager::Update(float deltaTime)
 {
-	float halfDeltaTime = deltaTime * 0.25f;
+	float HalfDeltaTime = deltaTime * 0.5f;
 
-	for (int i = 0; i < Entities.size(); i++)
+	for (const auto& common : Commons)
 	{
-		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
+		common->Update();
 	}
 
 	for (int i = 0; i < Entities.size(); i++)
 	{
-		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
-	}
-
-	for (int i = 0; i < Entities.size(); i++)
-	{
-		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
-	}
-
-	for (int i = 0; i < Entities.size(); i++)
-	{
-		if (Entities.at(i)->Enabled) Entities.at(i)->Update(halfDeltaTime);
-	}
-
-	for (const auto& timer : Timers)
-	{
-		timer->Update(deltaTime);
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(HalfDeltaTime);
 	}
 
 	for (const auto& common : Commons)
 	{
 		common->Update();
 	}
+
+	for (int i = 0; i < Entities.size(); i++)
+	{
+		if (Entities.at(i)->Enabled) Entities.at(i)->Update(HalfDeltaTime);
+	}
+
+
+	for (const auto& common : Commons)
+	{
+		common->Update();
+	}
+
+	for (const auto& timer : Timers)
+	{
+		timer->Update(deltaTime);
+	}
 }
-// Movement and Collision Updates you need done even when Entity is Disabled.
+// Movement and Collision Updates you need done even when Entity is Disabled. IE: For shots that an entity fires.
 void EntityManager::AlwaysUpdate(float deltaTime)
 {
 	float halfDeltaTime = deltaTime * 0.5f;

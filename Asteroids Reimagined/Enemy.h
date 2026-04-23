@@ -33,7 +33,7 @@ public:
 	void AlwaysUpdate(float deltaTime);
 	void Draw3D();
 
-	bool CheckRockCollisions(Entity* rock);
+	bool CheckShotvsRockCollisions(Entity* rock);
 	void CheckShotsHitPlayer();
 
 	virtual void Spawn();

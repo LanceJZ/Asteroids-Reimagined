@@ -6,6 +6,9 @@ GameLogic::GameLogic()
 	EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
 
 	ExplodeTimerID = EM.AddTimer(4.25f);
+	ClearWaitTimerID = EM.AddTimer(3.0f);
+	ClearSuperWaitTimerID = EM.AddTimer(5.0f);
+	ClearUltraWaitTimerID = EM.AddTimer(7.0f);
 }
 
 GameLogic::~GameLogic()
@@ -139,18 +142,51 @@ void GameLogic::FixedUpdate()
 			else EM.ResetTimer(ExplodeTimerID, 4.25f);
 
 			Player->Destroy();
+
+			EM.ResetTimer(ClearWaitTimerID);
+			EM.ResetTimer(ClearSuperWaitTimerID);
+			EM.ResetTimer(ClearUltraWaitTimerID);
+
+			if (Player->Lives < 1)
+			{
+				Player->GameOver = true;
+			}
 		}
 		else if (!Player->Enabled && EM.TimerElapsed(ExplodeTimerID))
 		{
 			PlayerClear->Enabled = true;
-			PlayerClear->Radius = 140.0f;
+			PlayerClear->Radius = 150.0f;
 
 			EM.Update(GetFrameTime());
 			EM.Update(GetFrameTime());
+
+			if (EM.TimerElapsed(ClearWaitTimerID))
+			{
+				EM.Update(GetFrameTime());
+				EM.Update(GetFrameTime());
+
+				PlayerClear->Radius = 120.0f;
+			}
+
+			if (EM.TimerElapsed(ClearSuperWaitTimerID))
+			{
+				EM.Update(GetFrameTime());
+				EM.Update(GetFrameTime());
+
+				PlayerClear->Radius = 100.0f;
+			}
+
+			if (EM.TimerElapsed(ClearUltraWaitTimerID))
+			{
+				EM.Update(GetFrameTime());
+				EM.Update(GetFrameTime());
+
+				PlayerClear->Radius = Player->Radius * 1.25f;
+			}
 
 			if (IsKeyPressed(KEY_ENTER) || (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)))
 			{
-				PlayerClear->Radius = Player->Radius * 1.5f;
+				PlayerClear->Radius = Player->Radius * 1.25f;
 			}
 
 			if (CheckPlayerClear())

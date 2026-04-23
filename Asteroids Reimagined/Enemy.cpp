@@ -69,7 +69,7 @@ void Enemy::Draw3D()
 	LineModel::Draw3D();
 }
 
-bool Enemy::CheckRockCollisions(Entity* rock)
+bool Enemy::CheckShotvsRockCollisions(Entity* rock)
 {
 	bool shotHit = false;
 
