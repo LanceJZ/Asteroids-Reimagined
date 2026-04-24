@@ -45,6 +45,7 @@ public:
 	void AttackRocksOrEnemies(Vector3 position);
 	void ActivateTheShield();
 	void DeactivateTheShield();
+	void FullPowerUp();
 	void Spawn(Vector3 position);
 	void Destroy();
 

@@ -6,9 +6,9 @@ GameLogic::GameLogic()
 	EM.AddOnScreenText(HighScores = DBG_NEW TheHighScore());
 
 	ExplodeTimerID = EM.AddTimer(4.25f);
-	ClearWaitTimerID = EM.AddTimer(3.0f);
-	ClearSuperWaitTimerID = EM.AddTimer(5.0f);
-	ClearUltraWaitTimerID = EM.AddTimer(7.0f);
+	ClearWaitTimerID = EM.AddTimer(7.666f);
+	ClearSuperWaitTimerID = EM.AddTimer(9.666f);
+	ClearUltraWaitTimerID = EM.AddTimer(12.666f);
 }
 
 GameLogic::~GameLogic()
@@ -391,7 +391,7 @@ void GameLogic::NewGame()
 
 	for (const auto& powerUp : PowerUps)
 	{
-		powerUp->Enabled = false;
+		powerUp->Destroy();
 	}
 }
 

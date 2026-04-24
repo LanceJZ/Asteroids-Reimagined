@@ -37,25 +37,27 @@ void TheHighScore::FixedUpdate()
 {
 	OnScreenText::FixedUpdate();
 
-	if (NewHighScore && GameOver)
+	if (GameOver)
 	{
-		NewHighScoreEntry();
-	}
-
-	if (GameOver && !NewHighScore)
-	{
-		PageTwo = false;
-
-		if (EM.TimerElapsed(HighScoreListPageOneTimerID))
+		if (NewHighScore)
 		{
-			if (EM.TimerElapsed(HighScoreListPageTwoTimerID))
-			{
-				ShowHighScores = !ShowHighScores;
-				EM.ResetTimer(HighScoreListPageOneTimerID);
-				EM.ResetTimer(HighScoreListPageOneTimerID);
-			}
+			NewHighScoreEntry();
+		}
+		else
+		{
+			PageTwo = false;
 
-			PageTwo = true;
+			if (EM.TimerElapsed(HighScoreListPageOneTimerID))
+			{
+				if (EM.TimerElapsed(HighScoreListPageTwoTimerID))
+				{
+					ShowHighScores = !ShowHighScores;
+					EM.ResetTimer(HighScoreListPageOneTimerID);
+					EM.ResetTimer(HighScoreListPageOneTimerID);
+				}
+
+				PageTwo = true;
+			}
 		}
 	}
 }
@@ -105,6 +107,8 @@ void TheHighScore::Draw2D()
 
 void TheHighScore::TheGameIsOver(int playerScore)
 {
+	HighScoreEntryText[0] = (char)65;
+	HighScoreSelectedLetter = 0;
 	GameOver = true;
 	CheckForNewHighScore(playerScore);
 }

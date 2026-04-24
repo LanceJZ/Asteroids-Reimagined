@@ -62,82 +62,6 @@ void PowerUp::Draw3D()
 	LineModel::Draw3D();
 }
 
-//void PowerUp::Spawn(Vector3 position)
-//{
-//
-//	int chance = GetRandomValue(1, 10); //Rework this. Later waves limit Purple.
-//
-//	if (chance < 5)
-//	{
-//		ModelColor = BLUE;
-//		Type = Blue; //Shield over charge.
-//	}
-//	else if (chance < 9)
-//	{
-//		ModelColor = SKYBLUE;
-//		Type = Skyblue; //Gun cooling over charge.
-//	}
-//	else
-//	{
-//		if (WaveNumber > 1)
-//		{
-//			if (GetRandomValue(1, 100) < (100 - (int)(WaveNumber * 4.75f))) return;
-//		}
-//
-//		ModelColor = PURPLE;
-//		Type = Purple; //Everything over charged for a time.
-//	}
-//
-//	if (Enemies->WaveNumber > 1)
-//	{
-//		if (chance == 7)
-//		{
-//			ModelColor = RED;
-//			Type = Red; //Larger Shots limited number.
-//		}
-//
-//		if (chance == 8)
-//		{
-//			ModelColor = YELLOW;
-//			Type = Yellow; //Two side by side shots limited number.
-//		}
-//	}
-//
-//	if (Enemies->WaveNumber > 2)
-//	{
-//		if (chance == 1)
-//		{
-//			ModelColor = ORANGE;
-//			Type = Orange; //Homing Mines limited number.
-//			// Rocks ignored. (Explodes on impact)
-//		}
-//
-//		if (chance == 2)
-//		{
-//			ModelColor = VIOLET;
-//			Type = Violet; //Growing plasma shot limited number.
-//			// Dies at edge of screen. Annihilates everything in it's path.
-//		}
-//	}
-//
-//	return;
-//
-//	if (Enemies->WaveNumber > 3)
-//	{
-//		if (chance == 3)
-//		{
-//			ModelColor = MAGENTA;
-//			Type = Magenta; //Spread Shot limited number.
-//		}
-//
-//		if (chance == 4)
-//		{
-//			ModelColor = MAROON;
-//			Type = Maroon; //Homing missiles limited number. Ignores rocks. Explodes on impact.
-//		}
-//	}
-//}
-
 void PowerUp::Spawn(Vector3 position, PowerUpType type)
 {
 	Entity::Spawn(position);
@@ -165,6 +89,8 @@ void PowerUp::Destroy()
 
 void PowerUp::CheckCollisions()
 {
+	if (!Enabled) return;
+
 	if (Player->Enabled && CirclesIntersect(*Player))
 	{
 		PlaySound(PickUpSound);

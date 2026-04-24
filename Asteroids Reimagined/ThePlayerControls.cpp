@@ -230,10 +230,6 @@ void ThePlayerControls::Spawn(Vector3 position)
 void ThePlayerControls::ShieldPowerUp()
 {
 	ShieldOverCharge = true;
-	ShieldPower += 200;
-	Shield->ModelColor = BLUE;
-	Shield->Alpha = 255.0f;
-	if (!PoweredUp) ModelColor = BLUE;
 }
 
 void ThePlayerControls::GunPowerUp()
@@ -244,11 +240,9 @@ void ThePlayerControls::FullPowerUp()
 {
 	EM.ResetTimer(PowerupTimerID,
 	EM.GetTimerAmount(PowerupTimerID) + PowerUpTimerAmount);
-	ModelColor = RED;
 	PoweredUp = true;
 	PoweredUpRundown = false;
 	TurretOverheat = false;
-	Shield->Alpha = 255.0f;
 }
 
 void ThePlayerControls::BigShotPowerUp()
@@ -378,8 +372,8 @@ void ThePlayerControls::ShieldOn()
 		{
 			if (ShieldPower < 100.0f)
 			{
-				Shield->ModelColor = WHITE;
-				ModelColor = WHITE;
+				Shield->ModelColor = RAYWHITE;
+				ModelColor = RAYWHITE;
 				ShieldOverCharge = false;
 			}
 			else

@@ -288,9 +288,9 @@ void ThePlayer::Spawn()
 	TurretHeat = 0;
 	PoweredUp = false;
 	PoweredUpRundown = false;
-	ModelColor = WHITE;
-	Turret->ModelColor = WHITE;
-	Shield->ModelColor = WHITE;
+	ModelColor = RAYWHITE;
+	Turret->ModelColor = RAYWHITE;
+	Shield->ModelColor = RAYWHITE;
 	GunOverCharge = false;
 	ShieldOverCharge = false;
 	BigShotCount = 0;
@@ -332,7 +332,9 @@ void ThePlayer::ShieldPowerUp()
 {
 	ThePlayerControls::ShieldPowerUp();
 
+	ShieldPower += 200;
 	Shield->ModelColor = BLUE;
+
 	if (!PoweredUp) ModelColor = BLUE;
 }
 
@@ -349,6 +351,9 @@ void ThePlayer::FullPowerUp()
 	ThePlayerControls::FullPowerUp();
 
 	ModelColor = PURPLE;
+
+	if (ShieldOverCharge) Shield->ModelColor = BLUE;
+	else Shield->ModelColor = RAYWHITE;
 }
 
 void ThePlayer::BigShotPowerUp()
@@ -816,7 +821,7 @@ void ThePlayer::WeHaveThePower()
 			}
 			else
 			{
-				ModelColor = WHITE;
+				ModelColor = RAYWHITE;
 			}
 		}
 	}
@@ -827,7 +832,7 @@ void ThePlayer::WeHaveThePower()
 		PoweredUpRundown = false;
 
 		if (ShieldOverCharge) ModelColor = BLUE;
-		else ModelColor = WHITE;
+		else ModelColor = RAYWHITE;
 
 		EM.SetTimer(PowerupTimerID, 0.0f);
 	}

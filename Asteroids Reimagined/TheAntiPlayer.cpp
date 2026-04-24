@@ -99,6 +99,13 @@ void TheAntiPlayer::DeactivateTheShield()
 	ShieldOff();
 }
 
+void TheAntiPlayer::FullPowerUp()
+{
+	ThePlayerControls::FullPowerUp();
+
+	ModelColor = RED;
+}
+
 void TheAntiPlayer::Spawn(Vector3 position)
 {
 	return; //Turn off for updates.
