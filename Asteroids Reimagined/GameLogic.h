@@ -43,7 +43,7 @@ public:
 	void FixedUpdate();
 	void GameInput();
 
-	void SpawnPowerUp(Vector3 position);
+	void SpawnPowerUp(Vector3 position, Vector3 velocity);
 
 private:
 	bool GameEnded = false;

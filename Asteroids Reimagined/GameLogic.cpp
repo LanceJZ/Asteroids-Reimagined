@@ -7,8 +7,8 @@ GameLogic::GameLogic()
 
 	ExplodeTimerID = EM.AddTimer(4.25f);
 	ClearWaitTimerID = EM.AddTimer(7.666f);
-	ClearSuperWaitTimerID = EM.AddTimer(9.666f);
-	ClearUltraWaitTimerID = EM.AddTimer(12.666f);
+	ClearSuperWaitTimerID = EM.AddTimer(11.666f);
+	ClearUltraWaitTimerID = EM.AddTimer(15.666f);
 }
 
 GameLogic::~GameLogic()
@@ -214,7 +214,7 @@ void GameLogic::FixedUpdate()
 		if (Enemies->SpawnPowerUp)
 		{
 			Enemies->SpawnPowerUp = false;
-			SpawnPowerUp(Enemies->PowerUpSpawnPosition);
+			SpawnPowerUp(Enemies->PowerUpSpawnPosition, Enemies->PowerUpSpawnVelocity);
 		}
 	}
 }
@@ -304,12 +304,9 @@ void GameLogic::GameInput()
 	}
 }
 
-void GameLogic::SpawnPowerUp(Vector3 position)
+void GameLogic::SpawnPowerUp(Vector3 position, Vector3 velocity)
 {
-	if (!Player->Enabled)
-	{
-		PlaySound(PowerUpSound);
-	}
+	if (Player->Enabled) PlaySound(PowerUpSound);
 
 	bool spawnNewPowerUp = true;
 	size_t powerUpNumber = PowerUps.size();
@@ -331,10 +328,11 @@ void GameLogic::SpawnPowerUp(Vector3 position)
 		PowerUps.back()->SetPlayer(Player);
 		PowerUps.back()->SetModel(PowerUpModel);
 		PowerUps.back()->SetPickUpSound(PickUpSound);
+		PowerUps.back()->Initialize();
 		PowerUps.back()->BeginRun();
 	}
 
-	PowerUps.at(powerUpNumber)->Spawn(position, Enemies->PowerUpType);
+	PowerUps.at(powerUpNumber)->Spawn(position, velocity, Enemies->PowerUpType, Enemies->WaveNumber);
 }
 
 void GameLogic::PlayerShipDisplay()

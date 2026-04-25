@@ -37,7 +37,7 @@ public:
 	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void Spawn(Vector3 position, PowerUpType type);
+	void Spawn(Vector3 position, Vector3 velocity, PowerUpType type, int wave);
 	void Destroy();
 
 private:

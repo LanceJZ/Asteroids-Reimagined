@@ -829,32 +829,21 @@ void EnemyControl::CheckRockCollisions()
 			NoMoreRocks = false;
 			RockCount++;
 
-			if (CheckUFOCollisions(Rocks.at(i))) ufoHitRock = true;
+			if (CheckUFORockCollisions(Rocks.at(i))) ufoHitRock = true; //UFO does not hit small rocks.
 
-			if (CheckEnemyCollisions(Rocks.at(i))) enemyHitRock = true;
+			if (CheckEnemyRockCollisions(Rocks.at(i))) enemyHitRock = true; //Enemies do not hit small rocks.
 
-			if (CheckAntiPlayerCollisions(Rocks.at(i))) antiPlayerHitRock = true;
+			if (CheckAntiPlayerRockCollisions(Rocks.at(i))) antiPlayerHitRock = true;
 
 			if (Rocks.at(i)->GetBeenHit())
 			{
 				if (!Player->GameOver)
 				{
-					//int chance = 30;
-
-					//chance -= (int)((WaveNumber + 1) * 3.5f);
-
-					//if (chance < 1) chance = 1;
-
-					//if ((float)GetRandomValue(0, 100) < chance)
-					//{
-					//	SpawnPowerUp = true;
-					//	PowerUpSpawnPosition = Rocks.at(i)->Position;
-					//}
-
 					if (Rocks.at(i)->PowerUpType != PowerUp::None)
 					{
 						SpawnPowerUp = true;
 						PowerUpSpawnPosition = Rocks.at(i)->Position;
+						PowerUpSpawnVelocity = Rocks.at(i)->Velocity;
 						PowerUpType = Rocks.at(i)->PowerUpType;
 					}
 				}
@@ -895,8 +884,10 @@ void EnemyControl::CheckRockCollisions()
 	if (!AntiPlayer->NearbyRockOrEnemy) AntiPlayer->DeactivateTheShield();
 }
 
-bool EnemyControl::CheckUFOCollisions(TheRock* rock)
+bool EnemyControl::CheckUFORockCollisions(TheRock* rock)
 {
+	if (rock->Size == TheRock::Small) return false; //Small rocks don't hit UFOs.
+
 	bool ufoHitRock = false;
 
 	for (const auto& ufo : UFOs)
@@ -904,8 +895,6 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 		if (!ufo->Enabled) continue;
 
 		if (ufo->CheckShotvsRockCollisions(rock)) ufoHitRock = true;
-
-		if (rock->Size == TheRock::Small) continue;
 
 		if (ufo->CirclesIntersect(*rock))
 		{
@@ -917,8 +906,10 @@ bool EnemyControl::CheckUFOCollisions(TheRock* rock)
 	return ufoHitRock;
 }
 
-bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
+bool EnemyControl::CheckEnemyRockCollisions(TheRock* rock)
 {
+	if (rock->Size == TheRock::Small) return false; //Small rocks don't hit enemies.
+
 	bool enemyHitRock = false;
 
 	for (const auto& enemy : EnemyOnes)
@@ -946,7 +937,7 @@ bool EnemyControl::CheckEnemyCollisions(TheRock* rock)
 	return enemyHitRock;
 }
 
-bool EnemyControl::CheckAntiPlayerCollisions(TheRock* rock)
+bool EnemyControl::CheckAntiPlayerRockCollisions(TheRock* rock)
 {
 	bool antiPlayerHitRock = false;
 

@@ -94,7 +94,7 @@ void TheUFO::Spawn(int spawnCount, int wave)
 	EM.ResetTimer(ChangeVectorTimerID);
 
 	float fullScale = 1.0f;
-	float fullRadius = 18.5f;
+	float fullRadius = 21.0f;
 	float fullSpeed = 128.666f;
 	float spawnPercent = (float)spawnCount * 0.1f;
 

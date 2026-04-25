@@ -67,7 +67,7 @@ void TheRock::Draw3D()
 
 void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 {
-	Entity::Spawn(position);
+	LineModel::Spawn(position);
 
 	WaveNumber = waveNumber;
 	PowerUp->Enabled = false;
@@ -83,7 +83,7 @@ void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 	switch (size)
 	{
 	case Small:
-		change = 4.5f;
+		change = 4.25f;
 		Scale = scale / change;
 		maxVS = 3;
 		magnitude = M.GetRandomFloat(52.3f, 74.1f);
@@ -142,7 +142,7 @@ void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 	//TraceLog(LOG_INFO, "RandValue: %i", chance);
 
 	PowerUpType = PowerUp::PowerUpType::None;
-	PowerUp->ModelColor = WHITE;
+	PowerUp->ModelColor = GRAY;
 
 	if (WaveNumber < 3)
 	{
@@ -164,7 +164,8 @@ void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 	}
 	else
 	{
-		chance = GetRandomValue(1, 250);
+		if (WaveNumber < 5)	chance = GetRandomValue(1, 250);
+		else chance = GetRandomValue(1, 500);
 
 		if (chance == 1)
 		{
@@ -210,7 +211,6 @@ void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 	{
 		PowerUp->Enabled = true;
 	}
-
 
 	return;
 

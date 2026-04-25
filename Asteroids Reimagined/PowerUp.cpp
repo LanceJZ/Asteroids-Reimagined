@@ -2,7 +2,7 @@
 
 PowerUp::PowerUp()
 {
-	LifeTimerID = EM.AddTimer(15.0f);
+	LifeTimerID = EM.AddTimer(30.0f);
 }
 
 PowerUp::~PowerUp()
@@ -62,13 +62,18 @@ void PowerUp::Draw3D()
 	LineModel::Draw3D();
 }
 
-void PowerUp::Spawn(Vector3 position, PowerUpType type)
+void PowerUp::Spawn(Vector3 position, Vector3 velocity, PowerUpType type, int wave)
 {
 	Entity::Spawn(position);
 
-	EM.ResetTimer(LifeTimerID);
+	if (wave > 1) EM.ResetTimer(LifeTimerID, 25);
+	else if (wave > 3) EM.ResetTimer(LifeTimerID, 20);
+	else if (wave > 5) EM.ResetTimer(LifeTimerID, 15);
+	else EM.ResetTimer(LifeTimerID, 30);
 
 	Type = type;
+
+	Velocity = velocity;
 
 	if (type == Skyblue) ModelColor = SKYBLUE;
 	else if (type == Blue) ModelColor = BLUE;
@@ -133,5 +138,5 @@ void PowerUp::DriftToPlayer()
 	if (!Player->Enabled) pos = { 0.0f, 0.0f, 0.0f };
 
 	RotationZ = GetAngleFromVectors(pos);
-	Velocity = GetVelocityFromAngleZ(36.666f);
+	SetAccelerationToMaxAtRotation(6.66f, 26.666f);
 }

@@ -22,6 +22,7 @@ public:
 	PowerUp::PowerUpType PowerUpType = PowerUp::PowerUpType::None;
 
 	Vector3 PowerUpSpawnPosition = {};
+	Vector3 PowerUpSpawnVelocity = {};
 
 	std::vector<TheRock*> Rocks;
 	std::vector<TheUFO*> UFOs;
@@ -150,9 +151,9 @@ private:
 	void SpawnAntiPlayer();
 	void CheckDeathStarStatus();
 	void CheckRockCollisions();
-	bool CheckUFOCollisions(TheRock* rock);
-	bool CheckEnemyCollisions(TheRock* rock);
-	bool CheckAntiPlayerCollisions(TheRock* rock);
+	bool CheckUFORockCollisions(TheRock* rock);
+	bool CheckEnemyRockCollisions(TheRock* rock);
+	bool CheckAntiPlayerRockCollisions(TheRock* rock);
 	void MakeReadyForBossWave();
 	void DoBossStuff();
 	void HaveHomingMineChaseEnemy();

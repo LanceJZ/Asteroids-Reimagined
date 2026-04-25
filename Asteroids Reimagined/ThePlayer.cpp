@@ -342,7 +342,7 @@ void ThePlayer::GunPowerUp()
 {
 	GunOverCharge = true;
 	TurretOverheat = false;
-	TurretHeat -= 150;
+	TurretHeat -= 100;
 	Turret->ModelColor = SKYBLUE;
 }
 
@@ -439,8 +439,7 @@ void ThePlayer::FireTurret()
 				{					
 					TurretHeatMeterUpdate();
 
-					if (TurretHeat > TurretHeatMax * 0.8f) 
-						PlaySound(GunHotSound);
+					if (TurretHeat > TurretHeatMax * 0.8f) PlaySound(GunHotSound);
 
 					if (TurretHeat > TurretHeatMax)
 					{
@@ -815,7 +814,7 @@ void ThePlayer::WeHaveThePower()
 
 			PlaySound(PowerUpWarningSound);
 
-			if (ModelColor.g == 255.0f)
+			if (ModelColor.g == 245.0f)
 			{
 				ModelColor = PURPLE;
 			}
@@ -1130,7 +1129,7 @@ void ThePlayer::Keyboard()
 		Turret->RotationVelocityZ = 0.0f;
 	}
 
-	if (IsKeyDown(KEY_DOWN))
+	if (IsKeyDown(KEY_SPACE))
 	{
 		FireSecondary();
 	}
@@ -1149,7 +1148,7 @@ void ThePlayer::Keyboard()
 		ThrustOff(0.45f);
 	}
 
-	if (IsKeyDown(KEY_SPACE)
+	if (IsKeyDown(KEY_DOWN)
 		|| IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
 		ShieldOn();
