@@ -1301,8 +1301,8 @@ void rlRotatef(float angle, float x, float y, float z)
     }
 
     // Rotation matrix generation
-    float sinres = sinf(DEG2RAD*angle);
-    float cosres = cosf(DEG2RAD*angle);
+    float sinres = sinf(angle);
+    float cosres = cosf(angle);
     float t = 1.0f - cosres;
 
     matRotation.m0 = x*x*t + cosres;
