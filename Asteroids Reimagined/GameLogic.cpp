@@ -66,6 +66,8 @@ bool GameLogic::BeginRun()
 	GameEnded = true;
 	Player->SetHighScore(HighScores->GetHighScore());
 
+	SetSoundVolume(PowerUpSound, 0.5f);
+
 	return true;
 }
 
