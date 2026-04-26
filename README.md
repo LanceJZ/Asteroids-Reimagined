@@ -1,4 +1,5 @@
-Asteroids Reimagined RC 4.57.708 Released.
+Asteroids Reimagined arcade video game.
+You can reach me at purple.knightmare@proton.me if you have any suggestions or questions.
 
 ![Asteroids Reimagined RC 4](https://github.com/user-attachments/assets/d57901d3-3caf-47cb-bf0e-4c03a182b9f0)
 
