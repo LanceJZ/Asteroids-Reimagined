@@ -379,6 +379,7 @@ void ThePlayerControls::ShieldOn()
 			else
 			{
 				Shield->ModelColor = BLUE;
+				Shield->Alpha = 255.0f;
 			}
 		}
 		else if (!PoweredUp)

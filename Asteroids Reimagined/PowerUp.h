@@ -42,6 +42,7 @@ public:
 
 private:
 	size_t LifeTimerID = 0;
+	size_t DriftTimerID = 0;
 
 	Sound PickUpSound = {};
 

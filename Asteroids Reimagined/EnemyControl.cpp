@@ -383,7 +383,10 @@ void EnemyControl::FixedUpdate()
 		}
 	}
 
-	if (EM.TimerElapsed(UFOSpawnTimerID)) SpawnUFO();
+	if (EM.TimerElapsed(UFOSpawnTimerID))
+	{
+		SpawnUFO();
+	}
 }
 
 void EnemyControl::NextWave()
@@ -482,10 +485,9 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 void EnemyControl::SpawnUFO()
 {
-	float ufoTimeAmountAdjust = ((float)WaveNumber * 0.3f) + ((float)UFOSpawnCount * 0.03f);
+	float ufoTimeAmountAdjust = (((float)WaveNumber - 1) * 4.666f) + ((float)UFOSpawnCount * 0.03f);
 
-	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.5f)
-		ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.5f;
+	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.75f) ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.75f;
 
 	float min = (UFOSpawnTimeAmount - ufoTimeAmountAdjust) /
 		(((float)WaveNumber * 0.1f) + 1.0f);
@@ -493,9 +495,9 @@ void EnemyControl::SpawnUFO()
 
 	if (max < min) min = max;
 
-	float ufoSpawnTime = M.GetRandomFloat(min, max);
+	TraceLog(LOG_INFO, "UFO max spawn time: %f", max);
 
-	EM.ResetTimer(UFOSpawnTimerID, ufoSpawnTime);
+	EM.ResetTimer(UFOSpawnTimerID, M.GetRandomFloat(min, max));
 
 	if (!Player->GameOver && !Player->Enabled) return;
 

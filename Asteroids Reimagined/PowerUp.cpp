@@ -3,6 +3,7 @@
 PowerUp::PowerUp()
 {
 	LifeTimerID = EM.AddTimer(30.0f);
+	DriftTimerID = EM.AddTimer(1.666f);
 }
 
 PowerUp::~PowerUp()
@@ -138,5 +139,10 @@ void PowerUp::DriftToPlayer()
 	if (!Player->Enabled) pos = { 0.0f, 0.0f, 0.0f };
 
 	RotationZ = GetAngleFromVectors(pos);
-	SetAccelerationToMaxAtRotation(6.66f, 26.666f);
+
+	if (EM.TimerElapsed(DriftTimerID))
+	{
+		EM.ResetTimer(DriftTimerID, M.GetRandomFloat(0.666f, 1.666f));
+		SetAccelerationToMaxAtRotation(0.666f, 24.666f);
+	}
 }

@@ -94,8 +94,8 @@ void TheUFO::Spawn(int spawnCount, int wave)
 	EM.ResetTimer(ChangeVectorTimerID);
 
 	float fullScale = 1.0f;
-	float fullRadius = 21.0f;
-	float fullSpeed = 128.666f;
+	float fullRadius = 20.750f;
+	float fullSpeed = 130.666f;
 	float spawnPercent = (float)spawnCount * 0.1f;
 
 	TraceLog(LOG_INFO, "UFO Spawn Count: %i", spawnCount);
@@ -116,7 +116,7 @@ void TheUFO::Spawn(int spawnCount, int wave)
 	{
 		TheSize = Large;
 		Scale = fullScale;
-		MaxSpeed = fullSpeed / 1.333f;
+		MaxSpeed = fullSpeed / 1.666f;
 		Radius = fullRadius;
 		Points = 200;
 	}
@@ -150,11 +150,21 @@ void TheUFO::Spawn(int spawnCount, int wave)
 		break;
 	}
 
-	ShotTimerAmount = 1.75f - (spawnCount * 0.01f) - (WaveNumber * 0.1f);
+	ShotTimerAmount = 1.75f - (spawnCount * 0.00666f) - ((float)WaveNumber - 1) * 0.1666f;
 
 	TraceLog(LOG_INFO, "ShotTimerAmount: %f", ShotTimerAmount);
 
-	if (ShotTimerAmount < 0.2f) ShotTimerAmount = 0.2f;
+	if (ShotTimerAmount < 1.666f) ShotTimerAmount = 1.666f;
+
+	float shotTimerAdjust = (((float)WaveNumber - 1) * 0.00666f);
+
+	if (ShotTimerAmount < shotTimerAdjust - 0.666f)	ShotTimerAmount = shotTimerAdjust - 0.666f;
+
+	MinShotTime = (ShotTimerAmount - shotTimerAdjust) / ((float)(WaveNumber * 0.1f) + 1.0f);
+
+	if (MinShotTime < 0.666f) MinShotTime = 0.666f;
+
+	TraceLog(LOG_INFO, "UFO min shot time: %f", MinShotTime);
 
 	Entity::Spawn(position);
 }
@@ -186,7 +196,8 @@ void TheUFO::FireShot()
 	float angle = 0;
 	float shotSpeed = 325;
 	bool shootRocks = false;
-	EM.ResetTimer(FireTimerID, ShotTimerAmount);
+
+	EM.ResetTimer(FireTimerID, M.GetRandomFloat(MinShotTime, ShotTimerAmount));
 
 	if (DeathStarActive)
 	{

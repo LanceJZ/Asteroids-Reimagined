@@ -44,6 +44,8 @@ private:
 	size_t FireTimerID = 0;
 	size_t ChangeVectorTimerID = 0;
 
+	float MinShotTime = 0.0f;
+
 	Sound BigSound = {};
 	Sound SmallSound = {};
 

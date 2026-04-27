@@ -38,7 +38,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.67.839");
+	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.67.940");
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -46,6 +46,7 @@ int WinMain()
 	SetWindowIcon(icon);
 
 	if (IsWindowState(FLAG_VSYNC_HINT)) ClearWindowState(FLAG_VSYNC_HINT);
+
 	glfwSwapInterval(0);
 	SetTargetFPS(120);
 
