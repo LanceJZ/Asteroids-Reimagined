@@ -474,7 +474,7 @@ void TheBoss::CheckCollisions()
 			{
 				if (shot->CirclesIntersect(*Player->Shield))
 				{
-					Player->ShieldHit(shot->Position, shot->Velocity);
+					Player->ShieldHit(shot->Position, shot->Velocity, 0.60f);
 					shot->Destroy();
 					break;
 				}
@@ -490,14 +490,12 @@ void TheBoss::CheckCollisions()
 		}
 	}
 
-	Vector3 shieldPos = Shield->GetWorldPosition();
-
 	for (const auto& shot : Player->Shots)
 	{
 		if (!shot->Enabled) continue;
 
 
-		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
+		if (shot->CirclesIntersect(*Shield))
 		{
 			Hit(shot, 2);
 		}
@@ -507,7 +505,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
+		if (shot->CirclesIntersect(*Shield))
 		{
 			Hit(shot, 10);
 		}
@@ -517,7 +515,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
+		if (shot->CirclesIntersect(*Shield))
 		{
 			Hit(shot, 5);
 		}
@@ -527,7 +525,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(shieldPos, Shield->Radius))
+		if (shot->CirclesIntersect(*Shield))
 		{
 			Hit(shot, 50);
 		}

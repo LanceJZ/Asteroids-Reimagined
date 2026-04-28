@@ -94,15 +94,16 @@ void Enemy::CheckShotsHitPlayer()
 	{
 		if (!shot->Enabled) continue;
 
-		if (Player->Shield->Enabled &&
-			shot->CirclesIntersect(Player->Position, Player->Shield->Radius))
+		if (Player->Shield->Enabled)
 		{
-			Player->ShieldHit(shot->Position, shot->Velocity);
-			shot->Destroy();
-			break;
+			if (shot->CirclesIntersect(*Player->Shield))
+			{
+				Player->ShieldHit(shot->Position, shot->Velocity, 0.60f);
+				shot->Destroy();
+				break;
+			}
 		}
-
-		if (shot->CirclesIntersect(*Player) && !Player->Shield->Enabled)
+		else if (shot->CirclesIntersect(*Player))
 		{
 			Player->Hit();
 			shot->Destroy();
@@ -584,14 +585,15 @@ bool Enemy::CheckCollisions()
 
 	if (!Player->GetBeenHit())
 	{
-		if (Player->Shield->Enabled &&
-			CirclesIntersect(Player->Position, Player->Shield->Radius))
+		if (Player->Shield - Enabled)
 		{
-			Player->ShieldHit(Position, Velocity);
-			return false;
+			if (CirclesIntersect(*Player->Shield))
+			{
+				Player->ShieldHit(Position, Velocity, 0.99f);
+				return false;
+			}
 		}
-
-		if (CirclesIntersect(*Player) && !Player->Shield->Enabled)
+		else if (CirclesIntersect(*Player))
 		{
 			Hit();
 			Player->ScoreUpdate(Points);

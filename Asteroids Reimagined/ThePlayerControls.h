@@ -61,7 +61,7 @@ public:
 	void Draw3D();
 
 	void Hit();
-	void ShieldHit(Vector3 position, Vector3 velocity);
+	void ShieldHit(Vector3 position, Vector3 velocity, float power);
 	void Spawn();
 	void NewGame();
 	void Spawn(Vector3 position);

@@ -233,6 +233,11 @@ void ThePlayer::Hit()
 	}
 }
 
+void ThePlayer::ShieldHit(Vector3 position, Vector3 velocity, float power)
+{
+	ThePlayerControls::ShieldHit(position, velocity, power);
+}
+
 void ThePlayer::ScoreUpdate(int addToScore)
 {
 	if (GameOver) return;
@@ -835,12 +840,6 @@ void ThePlayer::WeHaveThePower()
 
 		EM.SetTimer(PowerupTimerID, 0.0f);
 	}
-}
-
-void ThePlayer::ShieldHit(Vector3 position, Vector3 velocity)
-{
-	ThePlayerControls::ShieldHit(position, velocity);
-
 }
 
 void ThePlayer::SetAntiPlayer(Entity* entity)

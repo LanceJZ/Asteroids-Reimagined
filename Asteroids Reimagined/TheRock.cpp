@@ -247,10 +247,12 @@ void TheRock::Hit()
 
 bool TheRock::CheckCollisions()
 {
+	float power = 0.92f;
+
 	if (Player->Shield->Enabled &&
 		CirclesIntersect(Player->Position, Player->Shield->Radius))
 	{
-		Player->ShieldHit(Position, Velocity);
+		Player->ShieldHit(Position, Velocity, power);
 		return false;
 	}
 
@@ -267,7 +269,7 @@ bool TheRock::CheckCollisions()
 	if (AntiPlayer->Shield->Enabled &&
 		CirclesIntersect(AntiPlayer->Position, AntiPlayer->Shield->Radius))
 	{
-		AntiPlayer->ShieldHit(Position, Velocity);
+		AntiPlayer->ShieldHit(Position, Velocity, power);
 		return false;
 	}
 

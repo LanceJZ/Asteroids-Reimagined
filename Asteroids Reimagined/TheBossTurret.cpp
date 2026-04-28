@@ -113,7 +113,7 @@ void TheBossTurret::CheckCollisions()
 		{
 			if (shot->CirclesIntersect(*Player->Shield))
 			{
-				Player->ShieldHit(shot->Position, shot->Velocity);
+				Player->ShieldHit(shot->Position, shot->Velocity, 0.60f);
 				shot->Destroy();
 				break;
 			}

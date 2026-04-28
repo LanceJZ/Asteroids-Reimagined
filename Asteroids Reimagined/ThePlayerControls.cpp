@@ -195,11 +195,11 @@ void ThePlayerControls::Hit()
 	RotateStop();
 }
 
-void ThePlayerControls::ShieldHit(Vector3 position, Vector3 velocity)
+void ThePlayerControls::ShieldHit(Vector3 position, Vector3 velocity, float power)
 {
 	PlaySound(ShieldHitSound);
 	Acceleration = {0};
-	Velocity = GetReflectionVelocity(position, velocity, 106.666f, 0.90f, 0.25f);
+	Velocity = GetReflectionVelocity(position, velocity, 106.666f, power, 0.25f); //power is for reduction hit, was 0.90f, needs to be more for objects not a shot. So maybe 60 for shots, and 95 for other things.
 
 	if (PoweredUp) return;
 

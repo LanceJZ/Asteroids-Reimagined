@@ -39,7 +39,7 @@ public:
 	void Draw3D();
 
 	void Hit();
-	void ShieldHit(Vector3 position, Vector3 velocity);
+	void ShieldHit(Vector3 position, Vector3 velocity, float power);
 	void SetAntiPlayer(Entity* entity);
 	void ScoreUpdate(int addToScore);
 	void Spawn();
