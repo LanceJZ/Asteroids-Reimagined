@@ -109,18 +109,19 @@ void TheBossTurret::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (Player->Shield->Enabled &&
-			CirclesIntersect(Player->Position, Player->Shield->Radius))
+		if (Player->Shield->Enabled)
 		{
-			Player->ShieldHit(shot->Position, shot->Velocity);
-			shot->Destroy();
-			break;
+			if (shot->CirclesIntersect(*Player->Shield))
+			{
+				Player->ShieldHit(shot->Position, shot->Velocity);
+				shot->Destroy();
+				break;
+			}
 		}
-
-		if (shot->CirclesIntersect(*Player) && !Player->Shield->Enabled)
+		else if (shot->CirclesIntersect(*Player))
 		{
-			shot->Destroy();
 			Player->Hit();
+			shot->Destroy();
 			break;
 		}
 	}

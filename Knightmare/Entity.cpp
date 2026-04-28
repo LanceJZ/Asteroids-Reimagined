@@ -165,7 +165,7 @@ bool Entity::CirclesIntersect(Entity& target)
 
 	if (target.IsChild) targetPosition = target.GetWorldPosition();
 
-	return CirclesIntersect(target.Position, (target.Radius * target.Scale));
+	return CirclesIntersect(targetPosition, (target.Radius * target.Scale));
 }
 
 bool Entity::CirclesIntersectBullet(Entity& target)

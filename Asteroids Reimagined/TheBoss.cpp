@@ -468,16 +468,23 @@ void TheBoss::CheckCollisions()
 
 		for (const auto& shot : Shots)
 		{
-			if (Player->Shield->Enabled &&
-				CirclesIntersect(Player->Position, Player->Shield->Radius))
+			if (!shot->Enabled) continue;
+
+			if (Player->Shield->Enabled)
 			{
-				Player->ShieldHit(shot->Position, shot->Velocity);
-				break;
+				if (shot->CirclesIntersect(*Player->Shield))
+				{
+					Player->ShieldHit(shot->Position, shot->Velocity);
+					shot->Destroy();
+					break;
+				}
 			}
 
-			if (shot->CirclesIntersect(*Player) && !Player->Shield->Enabled)
+
+			else if (shot->CirclesIntersect(*Player))
 			{
 				Player->Hit();
+				shot->Destroy();
 				break;
 			}
 		}

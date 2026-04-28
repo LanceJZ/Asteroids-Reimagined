@@ -275,7 +275,7 @@ void GameLogic::GameInput()
 		}
 
 		if (IsKeyPressed(KEY_F1)) SetMasterVolume((0.15f));
-		if (IsKeyPressed(KEY_F2)) SetMasterVolume((0.25f));
+		else if (IsKeyPressed(KEY_F2)) SetMasterVolume((0.25f));
 		else if (IsKeyPressed(KEY_F3)) SetMasterVolume((0.75f));
 		else if (IsKeyPressed(KEY_F4)) SetMasterVolume((1.0f));
 	}
@@ -284,7 +284,7 @@ void GameLogic::GameInput()
 	if (IsKeyPressed(KEY_F5))
 	{
 		Enemies->NextWave();
-		TraceLog(LOG_INFO, "Wave: %i", Enemies->WaveNumber);
+		TraceLog(LOG_INFO, "Next Wave Hit, now wave: %i", Enemies->WaveNumber);
 	}
 
 	if (IsKeyPressed(KEY_F6))

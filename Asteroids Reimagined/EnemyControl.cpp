@@ -391,9 +391,31 @@ void EnemyControl::FixedUpdate()
 
 void EnemyControl::NextWave()
 {
-	Reset();
-	WaveNumber++;
+	BossWave = false;
 
+	for (const auto& enemy : EnemyOnes)
+	{
+		enemy->Reset();
+	}
+
+	for (const auto& enemy : EnemyTwos)
+	{
+		enemy->Reset();
+	}
+
+	for (const auto& ufo : UFOs)
+	{
+		ufo->Reset();
+	}
+
+	for (const auto& rock : Rocks)
+	{
+		rock->Destroy();
+	}
+
+	DeathStar->Reset();
+
+	Boss->Reset();
 }
 
 void EnemyControl::NewGame()
@@ -439,7 +461,6 @@ void EnemyControl::Reset()
 	}
 
 	DeathStar->Reset();
-
 	Boss->Reset();
 }
 
