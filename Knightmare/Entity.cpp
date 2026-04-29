@@ -118,6 +118,12 @@ void Entity::Destroy()
 {
 	Enabled = false;
 	BeenHit = false;
+	RotationZ = 0;
+	RotationX = 0;
+	RotationY = 0;
+
+	Velocity = { 0, 0, 0 };
+	Acceleration = { 0, 0, 0 };
 }
 
 bool Entity::GetBeenHit()

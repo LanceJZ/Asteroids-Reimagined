@@ -70,10 +70,10 @@ private:
 	int ShieldPower = 100;
 	int NextWaypoint = 0;
 
-	float ShieldPoints = 100.0f;
+	float ShieldPoints = 0.0f;
 	float ShieldRegenRate = 1.0f;
-	float FireTimerSetting = 0;
-	float HitPoints = 100.0f;
+	float FireTimerSetting = 0.0f;
+	float HitPoints = 0.0f;
 
 	Sound OnSound = {};
 	Sound ShieldHitSound = {};

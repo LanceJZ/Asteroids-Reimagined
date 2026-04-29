@@ -231,8 +231,6 @@ void TheBoss::Update(float deltaTime)
 
 	FireShotAtPlayerArea->Enabled = Enabled;
 
-	//Vector3 p = Position;
-
 	CheckCollisions();
 }
 
@@ -300,7 +298,7 @@ void TheBoss::Spawn(Vector3 position, float rotation)
 	RightSpineMount->Enabled = true;
 	//Shield->ShowCollision = true;
 	ShieldPower = 100;
-	HitPoints = 100;
+	HitPoints = 10;
 	ModelColor = { 255, 255, 255, 255 };
 	Shield->Alpha = 255;
 
@@ -366,7 +364,7 @@ void TheBoss::ChasePlayer()
 
 void TheBoss::HeadToEdge()
 {
-	Vector3 edge = { WindowHalfWidth * 0.666f, WindowHalfHeight * 0.666f, 0.0f };
+	Vector3 edge = { WindowHalfWidth * 0.4666f, WindowHalfHeight * 0.4666f, 0.0f };
 
 	float speed = 10.0f;
 	float rotationSpeed = 0.60f;
@@ -432,11 +430,6 @@ void TheBoss::HeadToEdge()
 
 	EM.SetTimer(MissileFireTimerID, 5.5f);
 	EM.SetTimer(MineDropTimerID, 4.0f);
-
-	for (const auto& turret : Turrets)
-	{
-		turret->Spawn();
-	}
 }
 
 void TheBoss::ReachedWaypoint()
@@ -451,9 +444,7 @@ void TheBoss::CheckCollisions()
 {
 	if (Player->Enabled)
 	{
-		Vector3 fireShot = FireShotAtPlayerArea->GetWorldPosition();
-
-		if (Player->CirclesIntersect(fireShot, FireShotAtPlayerArea->Radius))
+		if (Player->CirclesIntersect(*FireShotAtPlayerArea))
 		{
 			if (EM.TimerElapsed(FireTimerID))
 			{
@@ -494,8 +485,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-
-		if (shot->CirclesIntersect(*Shield))
+		if (shot->CirclesIntersect(*Shield) || shot->CirclesIntersect(*this))
 		{
 			Hit(shot, 2);
 		}
@@ -505,7 +495,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(*Shield))
+		if (shot->CirclesIntersect(*Shield) || shot->CirclesIntersect(*this))
 		{
 			Hit(shot, 10);
 		}
@@ -515,7 +505,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(*Shield))
+		if (shot->CirclesIntersect(*Shield) || shot->CirclesIntersect(*this))
 		{
 			Hit(shot, 5);
 		}
@@ -525,7 +515,7 @@ void TheBoss::CheckCollisions()
 	{
 		if (!shot->Enabled) continue;
 
-		if (shot->CirclesIntersect(*Shield))
+		if (shot->CirclesIntersect(*Shield) || shot->CirclesIntersect(*this))
 		{
 			Hit(shot, 50);
 		}
@@ -689,9 +679,7 @@ void TheBoss::ShieldDown(Entity* shot, int damage)
 	{
 		if (!turret->Enabled) continue;
 
-		Vector3 turretPos = turret->GetWorldPosition();
-
-		if (shot->CirclesIntersect(turretPos, turret->Radius))
+		if (shot->CirclesIntersect(*turret))
 		{
 			shot->Destroy();
 			turret->Hit();

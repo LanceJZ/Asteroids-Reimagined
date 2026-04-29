@@ -163,8 +163,6 @@ void ThePlayerControls::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (!PoweredUp) ShieldPowerDrain(deltaTime);
-
 	CheckScreenEdge();
 }
 
@@ -362,7 +360,7 @@ void ThePlayerControls::ThrustOff(float amount)
 
 void ThePlayerControls::ShieldOn()
 {
-	if (ShieldPower > 0.0f)
+	if (ShieldPower > 1.0f)
 	{
 		Shield->Enabled = true;
 
@@ -389,8 +387,12 @@ void ThePlayerControls::ShieldOn()
 	}
 	else
 	{
-		ShieldOff();
+		Shield->Enabled = false;
 	}
+
+	if (!PoweredUp)	ShieldPower -= ShieldDrainRate * GetFrameTime();
+
+	if (ShieldPower < 0.0f)	ShieldPower = 0.0f;
 }
 
 void ThePlayerControls::ShieldOff()
@@ -399,20 +401,8 @@ void ThePlayerControls::ShieldOff()
 
 	StopSound(ShieldOnSound);
 	Shield->Enabled = false;
-}
 
-void ThePlayerControls::ShieldPowerDrain(float deltaTime)
-{
-	if (Shield->Enabled)
-	{
-		ShieldPower -= ShieldDrainRate * deltaTime;
-
-		if (ShieldPower < 0.0f)	ShieldPower = 0.0f;
-	}
-	else
-	{
-		if (ShieldPower < 100.0f) ShieldPower += ShieldRechargeRate * deltaTime;
-	}
+	if (ShieldPower < 100.0f) ShieldPower += ShieldRechargeRate * GetFrameTime();
 }
 
 void ThePlayerControls::WeHaveThePower()

@@ -90,7 +90,7 @@ void TheBossTurret::Hit()
 void TheBossTurret::Destroy()
 {
 	Entity::Destroy();
-	RotationZ = 0.0f;
+
 }
 
 void TheBossTurret::Reset()
@@ -125,6 +125,55 @@ void TheBossTurret::CheckCollisions()
 			break;
 		}
 	}
+
+	for (const auto& shot : Player->Shots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (CirclesIntersect(*shot))
+		{
+			shot->Destroy();
+			Hit();
+			break;
+		}
+	}
+
+	for (const auto& shot : Player->BigShots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (shot->CirclesIntersect(*this))
+		{
+			shot->Destroy();
+			Hit();
+			break;
+		}
+	}
+
+	for (const auto& shot : Player->DoubleShots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (shot->CirclesIntersect(*this))
+		{
+			shot->Destroy();
+			Hit();
+			break;
+		}
+	}
+
+	for (const auto& shot : Player->PlasmaShots)
+	{
+		if (!shot->Enabled) continue;
+
+		if (shot->CirclesIntersect(*this))
+		{
+			shot->Destroy();
+			Hit();
+			break;
+		}
+	}
+
 }
 
 void TheBossTurret::Fire()

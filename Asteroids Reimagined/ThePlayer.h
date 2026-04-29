@@ -89,33 +89,24 @@ private:
 	void FireTurret();
 	void TurretTimers();
 	void FireSecondary();
-
 	void FireBigShot();
 	void FireDoubleShot();
 	void DropHomingMine();
 	void FirePlasmaShot();
-
 	void CrosshairUpdate();
-
 	void RotateShip(float amount);
 	void RotateStop();
-
 	void ThrustOn(float amount);
 	void ThrustOff(float amount);
-
 	void ShieldOn();
 	void ShieldOff();
-	void ShieldPowerDrain(float deltaTime);
-
 	void WeHaveThePower();
-
 	void TurretHeatMeterUpdate();
 	void AmmoMeterUpdate(int ammoCount);
 	void AddAmmoMeterModels(int count);
 	void WeaponPlasmaIconUpdate(float deltaTime);
 	void SwitchSecondaryWeapon(SecondaryWeaponType type);
 	void IsSecondaryWeaponSwitched(float next);
-
 	void Gamepad();
 	void Keyboard();
 	void Mouse();

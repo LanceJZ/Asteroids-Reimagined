@@ -128,24 +128,17 @@ protected:
 	void FireTurret();
 	void TurretTimers();
 	void FireSecondary();
-
 	void FireBigShot();
 	void FireDoubleShot();
 	void DropHomingMine();
 	void FirePlasmaShot();
-
 	void RotateShip(float amount);
 	void RotateStop();
-
 	void ThrustOn(float amount);
 	void ThrustOff(float amount);
-
 	void ShieldOn();
 	void ShieldOff();
-	void ShieldPowerDrain(float deltaTime);
-
 	void WeHaveThePower();
-
 	void SwitchSecondaryWeapon(SecondaryWeaponType type);
 	void IsSecondaryWeaponSwitched(float next);
 

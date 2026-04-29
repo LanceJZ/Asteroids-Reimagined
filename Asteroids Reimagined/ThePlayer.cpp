@@ -320,7 +320,7 @@ void ThePlayer::NewGame()
 {
 	Lives = 4;
 	ShieldDrainRate = 25.15f;
-	ShieldRechargeRate = 5.15f;
+	ShieldRechargeRate = 6.66f;
 	NextNewLifeScore = 10000;
 	GameOver = false;
 	Score->Reset();
@@ -793,11 +793,6 @@ void ThePlayer::ShieldOff()
 {
 	ThePlayerControls::ShieldOff();
 
-}
-
-void ThePlayer::ShieldPowerDrain(float deltaTime)
-{
-	ThePlayerControls::ShieldPowerDrain(deltaTime);
 }
 
 void ThePlayer::WeHaveThePower()
