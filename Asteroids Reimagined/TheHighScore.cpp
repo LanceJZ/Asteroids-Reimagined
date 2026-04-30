@@ -53,7 +53,7 @@ void TheHighScore::FixedUpdate()
 				{
 					ShowHighScores = !ShowHighScores;
 					EM.ResetTimer(HighScoreListPageOneTimerID);
-					EM.ResetTimer(HighScoreListPageOneTimerID);
+					EM.ResetTimer(HighScoreListPageTwoTimerID);
 				}
 
 				PageTwo = true;
@@ -277,6 +277,11 @@ void TheHighScore::CheckForNewHighScore(int score)
 {
 	for (int rank = 0; rank < MaxScoreListLength; rank++)
 	{
+		if (score == HighScoreList[rank].Score)
+		{
+			return;
+		}
+
 		if (score > HighScoreList[rank].Score)
 		{
 			if (rank < MaxScoreListLength - 1)

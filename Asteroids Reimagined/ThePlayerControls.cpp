@@ -164,6 +164,8 @@ void ThePlayerControls::FixedUpdate(float deltaTime)
 	LineModel::FixedUpdate(deltaTime);
 
 	CheckScreenEdge();
+
+	if (PoweredUp) WeHaveThePower();
 }
 
 void ThePlayerControls::Draw3D()
@@ -228,6 +230,7 @@ void ThePlayerControls::Spawn(Vector3 position)
 void ThePlayerControls::ShieldPowerUp()
 {
 	ShieldOverCharge = true;
+	Shield->Alpha = 255;
 }
 
 void ThePlayerControls::GunPowerUp()
@@ -238,6 +241,7 @@ void ThePlayerControls::FullPowerUp()
 {
 	EM.ResetTimer(PowerupTimerID,
 	EM.GetTimerAmount(PowerupTimerID) + PowerUpTimerAmount);
+	Shield->Alpha = 255;
 	PoweredUp = true;
 	PoweredUpRundown = false;
 	TurretOverheat = false;
@@ -374,25 +378,21 @@ void ThePlayerControls::ShieldOn()
 				ModelColor = RAYWHITE;
 				ShieldOverCharge = false;
 			}
-			else
-			{
-				Shield->ModelColor = BLUE;
-				Shield->Alpha = 255.0f;
-			}
+
 		}
 		else if (!PoweredUp)
 		{
-			Shield->Alpha = ShieldPower * 2.55f;
+			Shield->Alpha = (unsigned char)ShieldPower * 2.55f;
+
+			ShieldPower -= ShieldDrainRate * GetFrameTime();
+
+			if (ShieldPower < 0.0f)	ShieldPower = 0.0f;
 		}
 	}
 	else
 	{
 		Shield->Enabled = false;
 	}
-
-	if (!PoweredUp)	ShieldPower -= ShieldDrainRate * GetFrameTime();
-
-	if (ShieldPower < 0.0f)	ShieldPower = 0.0f;
 }
 
 void ThePlayerControls::ShieldOff()

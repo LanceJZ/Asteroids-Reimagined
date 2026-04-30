@@ -98,7 +98,7 @@ void Enemy::CheckShotsHitPlayer()
 		{
 			if (shot->CirclesIntersect(*Player->Shield))
 			{
-				Player->ShieldHit(shot->Position, shot->Velocity, 0.60f);
+				Player->ShieldHit(shot->Position, shot->Velocity, 0.10f);
 				shot->Destroy();
 				break;
 			}
@@ -585,7 +585,7 @@ bool Enemy::CheckCollisions()
 
 	if (!Player->GetBeenHit())
 	{
-		if (Player->Shield - Enabled)
+		if (Player->Shield->Enabled)
 		{
 			if (CirclesIntersect(*Player->Shield))
 			{

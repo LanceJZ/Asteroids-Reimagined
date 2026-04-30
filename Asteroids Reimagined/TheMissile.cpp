@@ -37,6 +37,7 @@ void TheMissile::Update(float deltaTime)
 {
 	Enemy::Update(deltaTime);
 
+	CheckCollisions();
 }
 
 void TheMissile::FixedUpdate(float deltaTime)
@@ -47,7 +48,6 @@ void TheMissile::FixedUpdate(float deltaTime)
 
 	ChasePlayer();
 	CheckScreenEdge();
-	CheckCollisions();
 }
 
 void TheMissile::Draw3D()

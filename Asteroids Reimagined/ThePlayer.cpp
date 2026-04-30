@@ -198,8 +198,6 @@ void ThePlayer::Update(float deltaTime)
 
 	WeaponPlasmaIconUpdate(deltaTime);
 	CrosshairUpdate();
-
-	if (PoweredUp) WeHaveThePower();
 }
 
 void ThePlayer::FixedUpdate(float deltaTime)
@@ -207,6 +205,8 @@ void ThePlayer::FixedUpdate(float deltaTime)
 	ThePlayerControls::FixedUpdate(deltaTime);
 
 	TurretTimers();
+
+	if (PoweredUp) WeHaveThePower();
 }
 
 void ThePlayer::Draw3D()
@@ -814,7 +814,7 @@ void ThePlayer::WeHaveThePower()
 
 			PlaySound(PowerUpWarningSound);
 
-			if (ModelColor.g == 245.0f)
+			if (ModelColor.g > 200)
 			{
 				ModelColor = PURPLE;
 			}

@@ -5,7 +5,7 @@
 class LineModel : public Entity
 {
 public:
-	float Alpha = 255;
+	unsigned char Alpha = 255;
 	Color ModelColor = WHITE;
 
 	virtual bool BeginRun();
