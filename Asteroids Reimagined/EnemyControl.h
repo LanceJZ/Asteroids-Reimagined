@@ -111,9 +111,9 @@ private:
 	int EnemyOneSpawnCount = 0;
 	int EnemyTwoSpawnCount = 0;
 
-	float EnemyOneSpawnTimeAmount = 0;
-	float EnemyTwoSpawnTimeAmount = 0;
-	float UFOSpawnTimeAmount = 0.0f;
+	float const EnemyOneSpawnTimeAmount = 15.0f;
+	float EnemyTwoSpawnTimeAmount = 20.0f;
+	float const UFOSpawnTimeAmount = 30.0f;
 
 	Sound RockExplodeSound = {};
 	Sound UFOExplodeSound = {};

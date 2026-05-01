@@ -436,10 +436,6 @@ void EnemyControl::Reset()
 	EM.ResetTimer(UFOSpawnTimerID, 35.0f);
 	EM.ResetTimer(DeathStarSpawnTimerID);
 
-	UFOSpawnTimeAmount = 30.0f;
-	EnemyOneSpawnTimeAmount = 15.0f;
-	EnemyTwoSpawnTimeAmount = 20.0f;
-
 	for (const auto& enemy : EnemyOnes)
 	{
 		enemy->Reset();
@@ -506,17 +502,19 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 void EnemyControl::SpawnUFO()
 {
-	float ufoTimeAmountAdjust = (((float)WaveNumber - 1) * 4.666f) + ((float)UFOSpawnCount * 0.03f);
+	float ufoTimeAmountAdjust = (((float)WaveNumber - 1) * 2.666f) + ((float)UFOSpawnCount * 0.03f);
 
-	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 0.75f) ufoTimeAmountAdjust = UFOSpawnTimeAmount - 0.75f;
+	if (UFOSpawnTimeAmount < ufoTimeAmountAdjust - 5.75f) ufoTimeAmountAdjust = UFOSpawnTimeAmount - 5.75f;
 
 	float min = (UFOSpawnTimeAmount - ufoTimeAmountAdjust) /
 		(((float)WaveNumber * 0.1f) + 1.0f);
 	float max = UFOSpawnTimeAmount - ufoTimeAmountAdjust;
 
-	if (max < min) min = max;
+	if (min < 3.0f) min = 3.0f;
+	if (max < 5.0f) max = 5.0f;
 
 	TraceLog(LOG_INFO, "UFO max spawn time: %f", max);
+	TraceLog(LOG_INFO, "UFO min spawn time: %f", min);
 
 	EM.ResetTimer(UFOSpawnTimerID, M.GetRandomFloat(min, max));
 

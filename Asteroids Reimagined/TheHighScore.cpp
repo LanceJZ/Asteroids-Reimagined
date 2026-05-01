@@ -275,13 +275,10 @@ void TheHighScore::ConvertRawScoreListToArray()
 
 void TheHighScore::CheckForNewHighScore(int score)
 {
+	for (const auto& entry : HighScoreList)	if (score == entry.Score) return;
+
 	for (int rank = 0; rank < MaxScoreListLength; rank++)
 	{
-		if (score == HighScoreList[rank].Score)
-		{
-			return;
-		}
-
 		if (score > HighScoreList[rank].Score)
 		{
 			if (rank < MaxScoreListLength - 1)
@@ -299,7 +296,7 @@ void TheHighScore::CheckForNewHighScore(int score)
 				}
 			}
 
-			HighScoreList[rank].Name = "XXXXX";
+			HighScoreList[rank].Name = "AAAAA";
 			HighScoreList[rank].Score = score;
 			HighScoreEntryText = "_____";
 			NewHighScoreRank = rank;
