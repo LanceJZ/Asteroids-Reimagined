@@ -8,6 +8,7 @@ Game::Game()
 	//BackGroundID = EM.AddCommon(BackGround = DBG_NEW TheBackground());
 	EnemiesID = EM.AddCommon(Enemies = DBG_NEW EnemyControl());
 	PlayerID = EM.AddLineModel(Player = DBG_NEW ThePlayer());
+	PlayerDroneID = EM.AddLineModel(PlayerDrone = DBG_NEW ThePlayerDrone());
 	AntiPlayerID = EM.AddLineModel(AntiPlayer = DBG_NEW TheAntiPlayer());
 }
 
@@ -27,7 +28,6 @@ bool Game::Initialize() //Initialize
 	float multi = 1.0f;
 	FieldSize = { GetScreenWidth() * multi, (float)GetScreenHeight() };
 
-	Player->SetAntiPlayer(AntiPlayer);
 	AntiPlayer->SetPlayer(Player);
 
 	Logic->SetPlayer(Player);
@@ -58,6 +58,8 @@ bool Game::Load()
 	Player->SetCrosshairModel(CM.LoadAndGetLineModel("Cross"));
 	Player->SetTurretHeatModel(CM.LoadAndGetLineModel("HeatMeter"));
 	Player->SetMineModel(CM.LoadAndGetLineModel("HomingMine"));
+
+	PlayerDrone->SetModel(CM.LoadAndGetLineModel("PlayerDroneShip"));
 
 	AntiPlayer->SetModel(CM.LoadAndGetLineModel("AntiPlayer"));
 	AntiPlayer->SetTurretModel(CM.LoadAndGetLineModel("AntiPlayerTurret"));

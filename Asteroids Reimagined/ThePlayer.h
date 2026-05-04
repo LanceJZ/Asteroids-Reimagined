@@ -40,7 +40,6 @@ public:
 
 	void Hit();
 	void ShieldHit(Vector3 position, Vector3 velocity, float power);
-	void SetAntiPlayer(Entity* entity);
 	void ScoreUpdate(int addToScore);
 	void Spawn();
 	void NewGame();
@@ -68,8 +67,6 @@ private:
 	Sound ShieldLowSound = {};
 	Sound GunHotSound = {};
 	Sound PowerUpWarningSound = {};
-
-	Entity* AntiPlayer = nullptr;
 
 	LineModel* Crosshair = {};
 	LineModel* TurretHeatMeter = {};

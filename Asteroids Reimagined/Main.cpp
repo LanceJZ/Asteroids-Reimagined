@@ -38,7 +38,12 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	InitWindow(windowWidth, windowHeight, "Asteroids Reimagined - RC 4.67.952");
+	std::string version = "RC 4.67.952";
+	std::string title = "Asteroids Reimagined - ";
+
+	title.append(version);
+
+	InitWindow(windowWidth, windowHeight, title.c_str());
 	InitAudioDevice();
 
 	Image icon = LoadImage("icon.png");
@@ -74,6 +79,8 @@ int WinMain()
 	game.Load();
 	game.BeginRun();
 
+	Font theFontSmall = LoadFontEx("font/asteroids-display.otf", 15, 0, 250);
+
 	while (!WindowShouldClose())
 	{
 		game.ProcessInput();
@@ -101,6 +108,9 @@ int WinMain()
 		EndMode3D();
 		EM.Draw2D();
 		game.Draw2D();
+
+		DrawTextEx(theFontSmall, version.c_str(), Vector2(1175, 8), 15, 0, LIGHTGRAY);
+
 		EndDrawing();
 	}
 

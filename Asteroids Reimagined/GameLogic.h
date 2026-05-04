@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "ThePlayerDrone.h"
 #include "EnemyControl.h"
 #include "PowerUp.h"
 #include "TheHighScore.h"
@@ -28,6 +29,7 @@ public:
 	GameState State = MainMenu;
 
 	void SetPlayer(ThePlayer* player);
+	void SetPlayerDrone(ThePlayerDrone* player);
 	void SetAntiPlayer(TheAntiPlayer* player);
 	void SetEnemies(EnemyControl* enemies);
 
@@ -67,6 +69,7 @@ private:
 	Entity* PlayerClear = {};
 
 	ThePlayer* Player = nullptr;
+	ThePlayerDrone* PlayerDrone = nullptr;
 	TheAntiPlayer* AntiPlayer = nullptr;
 	EnemyControl* Enemies = nullptr;
 	TheHighScore* HighScores = nullptr;

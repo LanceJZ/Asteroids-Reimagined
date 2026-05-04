@@ -33,7 +33,7 @@ public:
 	std::vector<TheStarShot*> StarShots;
 
 	void SetStarShotSound(std::string sound);
-	void SetPlayer(ThePlayer *player);
+	void SetPlayer(ThePlayerControls *player);
 
 	bool Initialize();
 	bool BeginRun();
@@ -63,7 +63,7 @@ private:
 
 	Sound StarShotSound = {};
 
-	ThePlayer* Player = nullptr;
+	ThePlayerControls* Player = nullptr;
 
 	void TurretTimers();
 	void FireTurret();

@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "GameLogic.h"
 #include "ThePlayer.h"
+#include "ThePlayerDrone.h"
 #include "EnemyControl.h"
 #include "TheBackground.h"
 #include "TheStarShot.h"
@@ -31,6 +32,7 @@ private:
 	size_t LogicID = 0;
 	size_t BackGroundID = 0;
 	size_t PlayerID = 0;
+	size_t PlayerDroneID = 0;
 	size_t AntiPlayerID = 0;
 	size_t EnemiesID = 0;
 	size_t ParticlesID = 0;
@@ -38,6 +40,7 @@ private:
 	//When adding classes to EM, must be heap pointer.
 	//TheBackground* BackGround = {};
 	ThePlayer* Player = nullptr;
+	ThePlayerDrone* PlayerDrone = nullptr;
 	TheAntiPlayer* AntiPlayer = nullptr;
 	EnemyControl* Enemies =	nullptr;
 };

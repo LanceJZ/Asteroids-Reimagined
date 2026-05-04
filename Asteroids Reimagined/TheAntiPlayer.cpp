@@ -17,7 +17,7 @@ TheAntiPlayer::~TheAntiPlayer()
 {
 }
 
-void TheAntiPlayer::SetPlayer(ThePlayer* player)
+void TheAntiPlayer::SetPlayer(ThePlayerControls* player)
 {
 	Player = player;
 }

@@ -837,11 +837,6 @@ void ThePlayer::WeHaveThePower()
 	}
 }
 
-void ThePlayer::SetAntiPlayer(Entity* entity)
-{
-	AntiPlayer = entity;
-}
-
 void ThePlayer::TurretHeatMeterUpdate()
 {
 	if (!GunOverCharge)

@@ -20,6 +20,11 @@ void GameLogic::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void GameLogic::SetPlayerDrone(ThePlayerDrone* playerDrone)
+{
+	PlayerDrone = playerDrone;
+}
+
 void GameLogic::SetAntiPlayer(TheAntiPlayer* player)
 {
 	AntiPlayer = player;

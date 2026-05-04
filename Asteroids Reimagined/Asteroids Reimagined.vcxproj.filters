@@ -96,6 +96,9 @@
     <ClCompile Include="ThePlayerControls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ThePlayerDrone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -180,6 +183,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ThePlayerControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThePlayerDrone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
