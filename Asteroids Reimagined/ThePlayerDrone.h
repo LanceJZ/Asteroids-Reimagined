@@ -1,12 +1,16 @@
 #pragma once
 #include "Globals.h"
+#include "SharedMethods.h"
 #include "ThePlayer.h"
+#include "ThePlayerBase.h"
 
-class ThePlayerDrone : public LineModel
+class ThePlayerDrone : public ThePlayerBase
 {
 public:
 	ThePlayerDrone();
 	virtual ~ThePlayerDrone();
+
+	SharedMethods SM = SharedMethods();
 
 	void SetPlayer(ThePlayer* player);
 
@@ -24,4 +28,8 @@ private:
 	LineModel *Flame = nullptr;
 
 	Entity *RockDetector = nullptr;
+
+	void FireShot();
+
+
 };

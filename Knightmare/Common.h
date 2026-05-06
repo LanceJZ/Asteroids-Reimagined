@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "raylib.h"
 
 #define MAX(a, b) ((a)>(b)? (a) : (b))
@@ -24,6 +25,11 @@ public:
 	virtual void Update();
 	virtual void FixedUpdate();
 	virtual void Draw2D();
+
+	float GetRotationTowardsTargetZ(Vector3& origin, Vector3& target, float facingAngle, float magnitude);
+	float GetAngleFromVectorsZ(Vector3& origin, Vector3& target);
+	Vector3& GetVelocityFromAngleZ(float angle, float magnitude);
+
 
 private:
 };

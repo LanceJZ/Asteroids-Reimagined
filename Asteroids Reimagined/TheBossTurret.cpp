@@ -216,5 +216,5 @@ void TheBossTurret::Fire()
 	float shotSpeed = 200;
 
 	Vector3 offset = Vector3Add(GetVelocityFromAngleZ(Radius), GetWorldPosition());
-	Shots.at(shotNumber)->Spawn(offset, GetVelocityFromAngleZ(angle, shotSpeed), 4.75f);
+	Shots.at(shotNumber)->Spawn(offset, Common::GetVelocityFromAngleZ(angle, shotSpeed), 4.75f);
 }

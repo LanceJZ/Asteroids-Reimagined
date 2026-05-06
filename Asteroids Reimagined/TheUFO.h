@@ -1,5 +1,6 @@
 #pragma once
 #include "Globals.h"
+#include "SharedMethods.h"
 #include "Enemy.h"
 #include "ThePlayer.h"
 #include "Shot.h"
@@ -19,7 +20,9 @@ public:
 
 	Vector3 DeathStarPosition = { 0.0f, 0.0f, 0.0f };
 
-	std::vector<Entity*> Rocks;
+	SharedMethods SM = SharedMethods();
+
+	//std::vector<Entity*> Rocks;
 
 	TheUFO();
 	virtual ~TheUFO();
@@ -41,6 +44,8 @@ public:
 	void Reset();
 
 private:
+	bool AimedAtRock = false;
+
 	size_t FireTimerID = 0;
 	size_t ChangeVectorTimerID = 0;
 
@@ -52,7 +57,7 @@ private:
 	void FireShot();
 	float AimedShot();
 	float AimedShotAtDeathStar();
-	float AimedShotAtRock();
+	//float AimedShotAtNearbyRock();
 	void ChangeVector();
 	bool CheckReachedSide();
 	bool CheckCollisions();

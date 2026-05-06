@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-#include "raylib.h"
 #include "Common.h"
 #include "ContentManager.h"
 
@@ -92,18 +90,11 @@ public:
 	float GetAngleFromVectorZ(Vector3& target);
 	float GetAngleFromWorldVectorZ(Vector3& target);
 	float GetAngleFromVectors(Vector3& target);
-	float GetRotationTowardsTargetZ(Vector3& origin, Vector3& target,
-		float facingAngle, float magnitude);
-	float GetAngleFromVectorsZ(Vector3& origin, Vector3& target);
 
 	Vector3& GetVelocityFromAngleZ(float magnitude);
-	Vector3& GetVelocityFromAngleZ(float angle, float magnitude);
 	Vector3& GetVelocityFromVectorZ(Vector3& target, float magnitude);
-	Vector3& GetReflectionVelocity(Vector3& location,
-		Vector3& velocity, float amountReflect,
-float reductionHit, float reductionLoss);
-	Vector3& GetAccelerationToMaxAtRotation(float accelerationAmount,
-		float topSpeed);
+	Vector3& GetReflectionVelocity(Vector3& position, Vector3& velocity, float amountReflect, float reductionHit, float reductionLoss);
+	Vector3& GetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	Vector3& GetWorldPosition();
 	virtual Model& Get3DModel();
 	virtual std::vector<Vector3>& GetLineModel();
@@ -116,8 +107,7 @@ float reductionHit, float reductionLoss);
 	virtual void SetModel(std::vector<Vector3> &lines);
 	virtual void SetModel(std::vector<Vector3> &lines, float scale);
 	virtual void Reset();
-	void SetAccelerationToMaxAtRotation(float accelerationAmount,
-		float topSpeed);
+	void SetAccelerationToMaxAtRotation(float accelerationAmount, float topSpeed);
 	void SetAccelerationToZero(float decelerationAmount);
 	void SetRotateVelocity(Vector3& position, float turnSpeed, float speed);
 	void SetRotationZFromVector(Vector3& target);

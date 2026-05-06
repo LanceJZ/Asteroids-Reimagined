@@ -395,50 +395,6 @@ float Entity::GetAngleFromVectors(Vector3& target)
 	return (atan2f(target.y - Position.y, target.x - Position.x));
 }
 
-float Entity::GetAngleFromVectorsZ(Vector3& origin, Vector3& target)
-{
-	return { atan2f(target.y - origin.y, target.x - origin.x) };
-}
-
-float Entity::GetRotationTowardsTargetZ(Vector3& origin, Vector3& target,
-	float facingAngle, float magnitude)
-{
-	float turnVelocity = 0;
-	float targetAngle = GetAngleFromVectorsZ(origin, target);
-	float targetLessFacing = targetAngle - facingAngle;
-	float facingLessTarget = facingAngle - targetAngle;
-
-	if (abs(targetLessFacing) > PI)
-	{
-		if (facingAngle > targetAngle)
-		{
-			facingLessTarget = (((PI *2) - facingAngle) + targetAngle) * -1;
-		}
-		else
-		{
-			facingLessTarget = ((PI * 2) - targetAngle) + facingAngle;
-		}
-	}
-
-	if (facingLessTarget > 0)
-	{
-		turnVelocity = -magnitude;
-	}
-	else
-	{
-		turnVelocity = magnitude;
-	}
-
-	return turnVelocity;
-}
-
-Vector3& Entity::GetVelocityFromAngleZ(float angle, float magnitude)
-{
-	Vector3 velocity = { cosf(angle) * magnitude, sinf(angle) * magnitude, 0 };
-
-	return velocity;
-}
-
 Vector3& Entity::GetVelocityFromAngleZ(float magnitude)
 {
 	Vector3 velocity = { cosf(RotationZ) * magnitude, sinf(RotationZ) * magnitude, 0 };
@@ -477,7 +433,7 @@ Vector3& Entity::GetReflectionVelocity(Vector3& position,
 	Vector3 reflection = Vector3Add(Vector3Multiply(Vector3Multiply(Velocity,
 		{reductionLoss}), {-1}),
 		Vector3Add(Vector3Multiply(velocity, {reductionHit}),
-			GetVelocityFromAngleZ(GetAngleFromVectorsZ(position, Position),
+			Common::GetVelocityFromAngleZ(GetAngleFromVectorsZ(position, Position),
 				amountReflect)));
 	return reflection;
 }
@@ -726,7 +682,7 @@ void Entity::SetRotateVelocity(Vector3& position, float turnSpeed, float speed)
 {
 	RotationVelocityZ = GetRotationTowardsTargetZ(Position, position, RotationZ,
 		turnSpeed);
-	Velocity = GetVelocityFromAngleZ(RotationZ, speed);
+	Velocity = Common::GetVelocityFromAngleZ(RotationZ, speed);
 }
 
 void Entity::SetRotationZFromVector(Vector3& target)

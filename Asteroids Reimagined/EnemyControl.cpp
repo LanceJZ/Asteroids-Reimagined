@@ -492,8 +492,11 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 			for (const auto& ufo : UFOs)
 			{
-				ufo->Rocks.push_back(Rocks.back());
+				//ufo->Rocks.push_back(Rocks.back());
+				ufo->SM.UpdateRocks(Rocks);
 			}
+
+			UpdateDroneRocks = true;
 		}
 
 		Rocks.at(rockNumber)->Spawn(position, WaveNumber, size);

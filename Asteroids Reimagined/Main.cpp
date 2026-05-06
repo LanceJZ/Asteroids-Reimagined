@@ -38,7 +38,7 @@ int WinMain()
 	int windowHeight = 960; //height
 	int windowWidth = 1280; //width
 
-	std::string version = "RC 4.67.952";
+	std::string version = "RC 4.67.962";
 	std::string title = "Asteroids Reimagined - ";
 
 	title.append(version);

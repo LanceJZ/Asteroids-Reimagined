@@ -139,6 +139,15 @@ void GameLogic::FixedUpdate()
 
 	if (State == InPlay)
 	{
+		if (PlayerDrone->Enabled)
+		{
+			if (Enemies->UpdateDroneRocks)
+			{
+				Enemies->UpdateDroneRocks = false;
+				PlayerDrone->SM.UpdateRocks(Enemies->Rocks);
+			}
+		}
+
 		if (Player->GetBeenHit())
 		{
 			if (Enemies->Boss->Enabled)

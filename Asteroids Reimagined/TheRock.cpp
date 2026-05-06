@@ -87,21 +87,21 @@ void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 		Scale = scale / change;
 		maxVS = 3;
 		magnitude = M.GetRandomFloat(52.3f, 74.1f);
-		Velocity = GetVelocityFromAngleZ(angle, magnitude);
+		Velocity = Common::GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Medium:
 		change = 2.75f;
 		Scale =  scale / change;
 		maxVS = 2;
 		magnitude = M.GetRandomFloat(43.2f, 63.1f);
-		Velocity = GetVelocityFromAngleZ(angle, magnitude);
+		Velocity = Common::GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case MediumLarge:
 		change = 1.85f;
 		Scale =  scale / change;
 		maxVS = 2;
 		magnitude = M.GetRandomFloat(36.1f, 56.1f);
-		Velocity = GetVelocityFromAngleZ(angle, magnitude);
+		Velocity = Common::GetVelocityFromAngleZ(angle, magnitude);
 		break;
 	case Large:
 		Y(M.GetRandomFloat((float)-WindowHalfHeight, (float)WindowHalfHeight));
@@ -109,7 +109,7 @@ void TheRock::Spawn(Vector3 position, int waveNumber, RockSize size)
 		maxVS = 1;
 
 		magnitude = M.GetRandomFloat(20.35f, 40.1f);
-		Velocity = GetVelocityFromAngleZ(angle, magnitude);
+		Velocity = Common::GetVelocityFromAngleZ(angle, magnitude);
 
 		if (Velocity.x > 0)
 		{

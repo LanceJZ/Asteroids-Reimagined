@@ -28,9 +28,12 @@ bool Game::Initialize() //Initialize
 	float multi = 1.0f;
 	FieldSize = { GetScreenWidth() * multi, (float)GetScreenHeight() };
 
+	PlayerDrone->SetPlayer(Player);
+
 	AntiPlayer->SetPlayer(Player);
 
 	Logic->SetPlayer(Player);
+	Logic->SetPlayerDrone(PlayerDrone);
 	Logic->SetAntiPlayer(AntiPlayer);
 	Logic->SetEnemies(Enemies);
 
@@ -45,7 +48,7 @@ bool Game::Load()
 	Logic->Load();
 
 	//Models
-	size_t shotModelID = CM.LoadTheLineModel("Dot");
+	size_t shotModelID = CM.LoadTheLineModel("Shot");
 	size_t bigShotModelID = CM.LoadTheLineModel("PlayerBigShot");
 	size_t shieldModelID = CM.LoadTheLineModel("PlayerShield");
 

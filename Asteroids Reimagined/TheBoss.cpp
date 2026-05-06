@@ -556,7 +556,7 @@ void TheBoss::FireShots()
 	Vector3 offset = Vector3Add(GetVelocityFromAngleZ(LeftSpineMount->Radius),
 		LeftSpineMount->GetWorldPosition());
 	Shots.at(shotNumberL)->Spawn(offset,
-		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
+		Common::GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
 
 	bool spawnNewShotR = true;
 	size_t shotNumberR = Shots.size();
@@ -583,7 +583,7 @@ void TheBoss::FireShots()
 	offset = Vector3Add(GetVelocityFromAngleZ(RightSpineMount->Radius),
 		RightSpineMount->GetWorldPosition());
 	Shots.at(shotNumberR)->Spawn(offset,
-		GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
+		Common::GetVelocityFromAngleZ(RotationZ, shotSpeed), 4.75f);
 }
 
 void TheBoss::FireMissile()

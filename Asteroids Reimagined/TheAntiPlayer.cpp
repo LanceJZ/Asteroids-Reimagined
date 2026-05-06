@@ -11,6 +11,8 @@ TheAntiPlayer::TheAntiPlayer()
 	FireTimerID = EM.AddTimer(0.05f);
 	IdelTimerID = EM.AddTimer(1.0f);
 	AttackRockTimerID = EM.AddTimer(1.0f);
+
+	MagazineSize = 8;
 }
 
 TheAntiPlayer::~TheAntiPlayer()
@@ -182,7 +184,7 @@ void TheAntiPlayer::FireTurret()
 				if (TurretOverheat) return;
 
 				Vector3 turretPosition = Turret->GetWorldPosition();
-				Vector3 velocity = GetVelocityFromAngleZ(Turret->WorldRotation.z, 375.0f);
+				Vector3 velocity = Common::GetVelocityFromAngleZ(Turret->WorldRotation.z, 375.0f);
 				velocity = Vector3Add(Vector3Multiply(Velocity,
 					{ 0.5f, 0.5f, 0.0f }), velocity);
 				shot->Spawn(turretPosition, velocity, 2.15f);

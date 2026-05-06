@@ -16,6 +16,7 @@ public:
 	virtual ~EnemyControl();
 
 	bool SpawnPowerUp = false;
+	bool UpdateDroneRocks = false;
 
 	int WaveNumber = 0;
 

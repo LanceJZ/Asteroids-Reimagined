@@ -12,13 +12,6 @@ ThePlayerControls::ThePlayerControls()
 	PowerupTimerID = EM.AddTimer();
 	FlameColorTimerID = EM.AddTimer(0.15f);
 
-	MagazineSize = 16;
-
-	for (int i = 0; i < MagazineSize; i++)
-	{
-		Shots.push_back(DBG_NEW Shot());
-		EM.AddLineModel(Shots.back());
-	}
 }
 
 ThePlayerControls::~ThePlayerControls()
@@ -28,16 +21,6 @@ ThePlayerControls::~ThePlayerControls()
 void ThePlayerControls::SetTurretModel(std::vector<Vector3> model)
 {
 	Turret->SetModel(model);
-}
-
-void ThePlayerControls::SetShotModel(std::vector<Vector3> model)
-{
-	ShotModel = model;
-
-	for (const auto& shot : Shots)
-	{
-		shot->SetModel(model);
-	}
 }
 
 void ThePlayerControls::SetFlameModel(std::vector<Vector3> model)
@@ -58,16 +41,6 @@ void ThePlayerControls::SetBigShotModel(std::vector<Vector3> model)
 void ThePlayerControls::SetMineModel(std::vector<Vector3> model)
 {
 	MineModel = model;
-}
-
-void ThePlayerControls::SetFireSound(Sound sound)
-{
-	FireSound = sound;
-}
-
-void ThePlayerControls::SetExplodeSound(Sound sound)
-{
-	ExplodeSound = sound;
 }
 
 void ThePlayerControls::SetShieldOnSound(Sound sound)

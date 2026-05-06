@@ -1,8 +1,8 @@
 #pragma once
 #include "Globals.h"
-#include "Shot.h"
 #include "TheHomingMine.h"
 #include "ThePlasmaShot.h"
+#include "ThePlayerBase.h"
 
 enum SecondaryWeaponType
 {
@@ -13,7 +13,7 @@ enum SecondaryWeaponType
 	Mine
 };
 
-class ThePlayerControls : public LineModel
+class ThePlayerControls : public ThePlayerBase
 {
 public:
 	ThePlayerControls();
@@ -28,21 +28,17 @@ public:
 
 	SecondaryWeaponType SecondaryWeapon = SecondaryWeaponType::None;
 
-	std::vector<Shot*> Shots = {};
 	std::vector<Shot*> DoubleShots = {};
 	std::vector<Shot*> BigShots = {};
 	std::vector<TheHomingMine*> Mines = {};
 	std::vector<ThePlasmaShot*> PlasmaShots = {};
 
 	void SetTurretModel(std::vector<Vector3> model);
-	void SetShotModel(std::vector<Vector3> model);
 	void SetFlameModel(std::vector<Vector3> model);
 	void SetShieldModel(std::vector<Vector3> model);
 	void SetBigShotModel(std::vector<Vector3> model);
 	void SetMineModel(std::vector<Vector3> model);
 
-	void SetFireSound(Sound sound);
-	void SetExplodeSound(Sound sound);
 	void SetShieldOnSound(Sound sound);
 	void SetShieldHitSound(Sound sound);
 	void SetThrustSound(Sound sound);
@@ -83,7 +79,6 @@ protected:
 	bool ShieldOverCharge = false;
 	bool GunOverCharge = false;
 
-	size_t MagazineSize = 0;
 	size_t FireRateTimerID = 0;
 	size_t TurretCooldownTimerID = 0;
 	size_t TurretHeatTimerID = 0;
@@ -105,8 +100,6 @@ protected:
 	float ShieldRechargeRate = 0.0f;
 	float PowerUpTimerAmount = 0.0f;
 
-	Sound FireSound = {};
-	Sound ExplodeSound = {};
 	Sound ShieldOnSound = {};
 	Sound ShieldHitSound = {};
 	Sound ThrustSound = {};
@@ -120,7 +113,6 @@ protected:
 	LineModel* Flame = {};
 	LineModel* Turret = {};
 
-	std::vector<Vector3> ShotModel;
 	std::vector<Vector3> MineModel;
 	std::vector<Vector3> BigShotModel;
 

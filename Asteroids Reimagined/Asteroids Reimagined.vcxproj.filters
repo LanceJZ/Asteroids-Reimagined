@@ -99,6 +99,12 @@
     <ClCompile Include="ThePlayerDrone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ThePlayerBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedMethods.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -186,6 +192,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ThePlayerDrone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThePlayerBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

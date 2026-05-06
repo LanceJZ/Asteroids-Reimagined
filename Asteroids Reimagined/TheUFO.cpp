@@ -15,6 +15,7 @@ bool TheUFO::Initialize()
 	Enemy::Initialize();
 
 	ShotTimerAmount = 1.75f;
+	SM.ForUFO = true;
 
 	return false;
 }
@@ -78,10 +79,22 @@ void TheUFO::AlwaysUpdate(float deltaTime)
 void TheUFO::Draw3D()
 {
 	Enemy::Draw3D();
+
+#if DEBUG
+	if (AimedAtRock)
+	{
+		DrawCircle3D(SM.ClosestRockPosition, 15.0f, { 0 }, 0, ORANGE);
+		DrawCircle3D(SM.ClosestRockPosition, 10.0f, { 0 }, 0, ORANGE);
+		
+		DrawCircle3D(SM.AimedShotPosition, 5.0f, { 0 }, 0, RED);
+		DrawCircle3D(SM.AimedShotPosition, 10.0f, { 0 }, 0, RED);
+	}
+#endif // DEBUG
 }
 
 void TheUFO::Spawn(int spawnCount, int wave)
 {
+	AimedAtRock = false;
 	WaveNumber = wave;
 	Vector3 position = { 0, 0, 0 };
 	int height = (int)(WindowHalfHeight / 1.25f);
@@ -106,7 +119,7 @@ void TheUFO::Spawn(int spawnCount, int wave)
 
 	if (spawnPercent > 90) spawnPercent = 90;
 	if (spawnPercent < 1) spawnPercent = 1;
-	//TODO:Needs testing.
+
 	int randvalue = GetRandomValue(1, 100);
 
 	TraceLog(LOG_INFO, "UFO SpawnPercent: %i", (int)spawnPercent);
@@ -202,27 +215,25 @@ void TheUFO::FireShot()
 	if (DeathStarActive)
 	{
 		angle = AimedShotAtDeathStar();
-		//printf("UFO shot at Death Star\n");
+		AimedAtRock = false;
 	}
 	else
 	{
-		if (GetRandomValue(1, 10) < 5 || !Player->Enabled)
+		float chance = GetRandomValue(1, 10);
+		AimedAtRock = false;
+
+		if (chance < 5 && Player->Enabled && TheUFO::Small)
 		{
-			angle = AimedShotAtRock();
-			//printf("UFO shot at rock\n");
+			angle = AimedShot();
+		}
+		else if (chance < 3 && Player->Enabled && TheUFO::Large)
+		{
+			angle = M.GetRandomRadian();
 		}
 		else
 		{
-			angle = AimedShot();
-			//printf("UFO shot at player\n");
-		}
-	}
-
-	if (TheUFO::Large)
-	{
-		if (GetRandomValue(1, 10) < 3)
-		{
-			angle = M.GetRandomRadian();
+			angle = SM.AimedShotAtNearbyRock(Position);
+			AimedAtRock = true;
 		}
 	}
 
@@ -251,7 +262,7 @@ void TheUFO::FireShot()
 	if (!Player->GameOver) PlaySound(FireSound);
 
 	Vector3 position = Vector3Add(GetVelocityFromAngleZ(Radius), Position);
-	Shots[spawnNumber]->Spawn(position, GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
+	Shots[spawnNumber]->Spawn(position, Common::GetVelocityFromAngleZ(angle, shotSpeed), 2.5f);
 }
 
 float TheUFO::AimedShot()
@@ -286,43 +297,43 @@ float TheUFO::AimedShotAtDeathStar()
 	return GetAngleFromVectorZ(DeathStarPosition);
 }
 
-float TheUFO::AimedShotAtRock()
-{
-	bool noRocks = true;
-
-	Vector3 closestRockPosition = { 0, 0, 0 };
-	Vector3 closestRockVelocity = { 0, 0, 0 };
-	float shortestDistance = 1000.0f;
-
-	for (const auto &rock : Rocks)
-	{
-		if (rock->Enabled)
-		{
-			noRocks = false;
-			float distance = Vector3Distance(rock->Position, Position);
-
-			if (distance < shortestDistance)
-			{
-				shortestDistance = distance;
-				closestRockPosition = rock->Position;
-				closestRockVelocity = rock->Velocity;
-			}
-		}
-	}
-
-	if (noRocks)
-	{
-		return M.GetRandomRadian();
-	}
-
-	Vector3 compensation = GetVelocityFromAngleZ(GetAngleFromVectorZ(closestRockVelocity),
-		shortestDistance);
-
-	Vector3 closestRock = Vector3Add(closestRockPosition,
-		Vector3Add(closestRockVelocity, compensation));
-
-	return GetAngleFromVectorZ(closestRock);
-}
+//float TheUFO::AimedShotAtNearbyRock()
+//{
+//	bool noRocks = true;
+//
+//	Vector3 closestRockPosition = { 0, 0, 0 };
+//	Vector3 closestRockVelocity = { 0, 0, 0 };
+//	float shortestDistance = 1000.0f;
+//
+//	for (const auto &rock : Rocks)
+//	{
+//		if (rock->Enabled)
+//		{
+//			noRocks = false;
+//			float distance = Vector3Distance(rock->Position, Position);
+//
+//			if (distance < shortestDistance)
+//			{
+//				shortestDistance = distance;
+//				closestRockPosition = rock->Position;
+//				closestRockVelocity = rock->Velocity;
+//			}
+//		}
+//	}
+//
+//	if (noRocks)
+//	{
+//		return M.GetRandomRadian();
+//	}
+//
+//	Vector3 compensation = GetVelocityFromAngleZ(GetAngleFromVectorZ(closestRockVelocity),
+//		shortestDistance);
+//
+//	Vector3 closestRock = Vector3Add(closestRockPosition,
+//		Vector3Add(closestRockVelocity, compensation));
+//
+//	return GetAngleFromVectorZ(closestRock);
+//}
 
 void TheUFO::ChangeVector()
 {

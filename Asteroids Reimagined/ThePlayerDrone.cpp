@@ -2,6 +2,10 @@
 
 ThePlayerDrone::ThePlayerDrone()
 {
+	FireRateTimerID = EM.AddTimer(0.125f);
+	
+	MagazineSize = 10;
+
 }
 
 ThePlayerDrone::~ThePlayerDrone()
@@ -24,7 +28,9 @@ bool ThePlayerDrone::BeginRun()
 {
 	LineModel::BeginRun();
 
-	return false;
+	Enabled = false;
+
+	return true;
 }
 
 void ThePlayerDrone::Update(float deltaTime)
@@ -48,4 +54,39 @@ void ThePlayerDrone::Destroy()
 {
 	Entity::Destroy();
 
+}
+
+void ThePlayerDrone::FireShot()
+{
+	float angle = 0;
+	float shotSpeed = 525;
+
+	angle = SM.AimedShotAtNearbyRock(Position);
+
+	EM.ResetTimer(FireRateTimerID);
+
+	bool spawnNew = true;
+	size_t spawnNumber = Shots.size();
+
+	for (size_t check = 0; check < spawnNumber; check++)
+	{
+		if (!Shots[check]->Enabled)
+		{
+			spawnNew = false;
+			spawnNumber = check;
+			break;
+		}
+	}
+
+	if (spawnNew)
+	{
+		Shots.push_back(DBG_NEW Shot());
+		EM.AddLineModel(Shots[spawnNumber], ShotModel);
+		Shots[spawnNumber]->BeginRun();
+	}
+
+	//if (!Player->GameOver) PlaySound(FireSound);
+
+	Vector3 position = Vector3Add(GetVelocityFromAngleZ(Radius), Position);
+	Shots[spawnNumber]->Spawn(position, GetVelocityFromAngleZ(shotSpeed), 2.5f);
 }
