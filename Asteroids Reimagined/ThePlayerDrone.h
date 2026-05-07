@@ -12,12 +12,15 @@ public:
 
 	SharedMethods SM = SharedMethods();
 
+	std::vector<Enemy*> Enemies = std::vector<Enemy*>();
+
 	void SetPlayer(ThePlayer* player);
 
 	bool Initialize();
 	bool BeginRun();
 
 	void Update(float deltaTime);
+	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
 	void Spawn(Vector3 position);

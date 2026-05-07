@@ -38,6 +38,7 @@ bool Game::Initialize() //Initialize
 	Logic->SetEnemies(Enemies);
 
 	Enemies->SetPlayer(Player);
+	Enemies->SetPlayerDrone(PlayerDrone);
 	Enemies->SetAntiPlayer(AntiPlayer);
 
 	return true;
@@ -63,6 +64,8 @@ bool Game::Load()
 	Player->SetMineModel(CM.LoadAndGetLineModel("HomingMine"));
 
 	PlayerDrone->SetModel(CM.LoadAndGetLineModel("PlayerDroneShip"));
+	PlayerDrone->SetFlameModel(CM.LoadAndGetLineModel("PlayerDroneFlame"));
+	PlayerDrone->SetShotModel(CM.GetLineModel(shotModelID));
 
 	AntiPlayer->SetModel(CM.LoadAndGetLineModel("AntiPlayer"));
 	AntiPlayer->SetTurretModel(CM.LoadAndGetLineModel("AntiPlayerTurret"));

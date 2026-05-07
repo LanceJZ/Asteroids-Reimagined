@@ -2,7 +2,6 @@
 
 ThePlayerControls::ThePlayerControls()
 {
-	EM.AddLineModel(Flame = DBG_NEW LineModel());
 	EM.AddLineModel(Shield = DBG_NEW LineModel());
 	EM.AddLineModel(Turret = DBG_NEW LineModel());
 
@@ -21,11 +20,6 @@ ThePlayerControls::~ThePlayerControls()
 void ThePlayerControls::SetTurretModel(std::vector<Vector3> model)
 {
 	Turret->SetModel(model);
-}
-
-void ThePlayerControls::SetFlameModel(std::vector<Vector3> model)
-{
-	Flame->SetModel(model);
 }
 
 void ThePlayerControls::SetShieldModel(std::vector<Vector3> model)

@@ -27,6 +27,7 @@ float SharedMethods::AimedShotAtNearbyRock(Vector3 position)
 		if (rock->Enabled)
 		{
 			float distance = Vector3Distance(rock->Position, position);
+			noRocks = false;
 
 			if (!ForUFO)
 			{
@@ -39,8 +40,6 @@ float SharedMethods::AimedShotAtNearbyRock(Vector3 position)
 			}
 			else
 			{
-				noRocks = false;
-	
 				if (distance < shortestDistance && rock->Size != TheRock::Small)
 				{
 					shortestDistance = distance;
@@ -49,6 +48,8 @@ float SharedMethods::AimedShotAtNearbyRock(Vector3 position)
 				}
 			}
 		}
+
+		NoRocks = noRocks;
 	}
 
 	if (noRocks)

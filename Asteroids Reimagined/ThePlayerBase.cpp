@@ -2,6 +2,7 @@
 
 ThePlayerBase::ThePlayerBase()
 {
+	EM.AddLineModel(Flame = DBG_NEW LineModel());
 }
 
 ThePlayerBase::~ThePlayerBase()
@@ -22,6 +23,11 @@ void ThePlayerBase::SetShotModel(std::vector<Vector3> model)
 	{
 		shot->SetModel(model);
 	}
+}
+
+void ThePlayerBase::SetFlameModel(std::vector<Vector3> model)
+{
+	Flame->SetModel(model);
 }
 
 void ThePlayerBase::SetFireSound(Sound sound)

@@ -19,14 +19,14 @@ void ThePlayerDrone::SetPlayer(ThePlayer* player)
 
 bool ThePlayerDrone::Initialize()
 {
-	LineModel::Initialize();
+	ThePlayerBase::Initialize();
 
 	return false;
 }
 
 bool ThePlayerDrone::BeginRun()
 {
-	LineModel::BeginRun();
+	ThePlayerBase::BeginRun();
 
 	Enabled = false;
 
@@ -35,13 +35,23 @@ bool ThePlayerDrone::BeginRun()
 
 void ThePlayerDrone::Update(float deltaTime)
 {
-	LineModel::Update(deltaTime);
+	ThePlayerBase::Update(deltaTime);
 
+}
+
+void ThePlayerDrone::FixedUpdate(float deltaTime)
+{
+	ThePlayerBase::FixedUpdate(deltaTime);
+
+	if (EM.TimerElapsed(FireRateTimerID))
+	{
+		FireShot();
+	}
 }
 
 void ThePlayerDrone::Draw3D()
 {
-	LineModel::Draw3D();
+	ThePlayerBase::Draw3D();
 }
 
 void ThePlayerDrone::Spawn(Vector3 position)
@@ -58,10 +68,21 @@ void ThePlayerDrone::Destroy()
 
 void ThePlayerDrone::FireShot()
 {
-	float angle = 0;
+	float angle = RotationZ;
 	float shotSpeed = 525;
+	bool noEnemies = true;
 
-	angle = SM.AimedShotAtNearbyRock(Position);
+	for (const auto &enemy : Enemies)
+	{
+		if (enemy->Enabled)
+		{
+			noEnemies = false;
+			angle = GetAngleFromVectorsZ(Position, enemy->Position);
+			break;
+		}
+	}
+
+	if (noEnemies) angle = SM.AimedShotAtNearbyRock(Position);
 
 	EM.ResetTimer(FireRateTimerID);
 
@@ -86,6 +107,8 @@ void ThePlayerDrone::FireShot()
 	}
 
 	//if (!Player->GameOver) PlaySound(FireSound);
+
+	RotationZ = angle;
 
 	Vector3 position = Vector3Add(GetVelocityFromAngleZ(Radius), Position);
 	Shots[spawnNumber]->Spawn(position, GetVelocityFromAngleZ(shotSpeed), 2.5f);

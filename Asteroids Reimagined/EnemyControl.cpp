@@ -26,6 +26,22 @@ void EnemyControl::SetPlayer(ThePlayer* player)
 	Boss->SetPlayer(player);
 }
 
+void EnemyControl::SetPlayerDrone(ThePlayerDrone* playerDrone)
+{
+	PlayerDrone = playerDrone;
+	PlayerDrone->Enemies.push_back(DeathStar);
+
+	for (const auto& fighterPair : DeathStar->FighterPairs)
+	{
+		PlayerDrone->Enemies.push_back(fighterPair);
+
+		for (const auto& fighter : fighterPair->Fighters)
+		{
+			PlayerDrone->Enemies.push_back(fighter);
+		}
+	}
+}
+
 void EnemyControl::SetAntiPlayer(TheAntiPlayer* player)
 {
 	AntiPlayer = player;
@@ -492,8 +508,8 @@ void EnemyControl::SpawnRocks(Vector3 position, int count, TheRock::RockSize siz
 
 			for (const auto& ufo : UFOs)
 			{
-				//ufo->Rocks.push_back(Rocks.back());
 				ufo->SM.UpdateRocks(Rocks);
+				PlayerDrone->SM.UpdateRocks(Rocks);
 			}
 
 			UpdateDroneRocks = true;
@@ -546,6 +562,7 @@ void EnemyControl::SpawnUFO()
 		UFOs.back()->SetBigSound(UFOBigSound);
 		UFOs.back()->SetSmallSound(UFOSmallSound);
 		UFOs.back()->SetPlayer(Player);
+		UFOs.back()->SetPlayerDrone(PlayerDrone);
 		UFOs.back()->BeginRun();
 
 		for (const auto& enemy : EnemyOnes)
@@ -606,6 +623,7 @@ void EnemyControl::SpawnEnemyOne()
 		EnemyOnes.back()->SetOnSound(EnemyOneOnSound);
 		EnemyOnes.back()->SetMissileOnSound(EnemyOneMissileOnSound);
 		EnemyOnes.back()->SetPlayer(Player);
+		EnemyOnes.back()->SetPlayerDrone(PlayerDrone);
 		EnemyOnes.back()->BeginRun();
 	}
 
@@ -665,6 +683,7 @@ void EnemyControl::SpawnEnemyTwo()
 		EnemyTwos.back()->SetMineExplodeSound(EnemyTwoMineExplodeSound);
 		EnemyTwos.back()->SetOnSound(EnemyTwoOnSound);
 		EnemyTwos.back()->SetPlayer(Player);
+		EnemyTwos.back()->SetPlayerDrone(PlayerDrone);
 		EnemyTwos.back()->BeginRun();
 	}
 

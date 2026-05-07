@@ -9,6 +9,7 @@ public:
 	virtual ~SharedMethods();
 
 	bool ForUFO = false;
+	bool NoRocks = false;
 
 	Vector3 ClosestRockPosition;
 	Vector3 AimedShotPosition;

@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
+#include "ThePlayerDrone.h"
 #include "TheRock.h"
 #include "TheUFO.h"
 #include "TheDeathStar.h"
@@ -37,6 +38,7 @@ public:
 	std::vector<Vector3> UFOModel = {};
 	//Models
 	void SetPlayer(ThePlayer* player);
+	void SetPlayerDrone(ThePlayerDrone* playerDrone);
 	void SetAntiPlayer(TheAntiPlayer* player);
 	void SetRockModels(std::vector<Vector3> rockModels[4]);
 	void SetUFOModel(std::vector<Vector3> model);
@@ -142,6 +144,7 @@ private:
 	std::vector<Vector3> PowerUpModel;
 
 	ThePlayer *Player = nullptr;
+	ThePlayerDrone *PlayerDrone = nullptr;
 
 	void SpawnRocks(Vector3 position, int count, TheRock::RockSize size);
 	void SpawnUFO();

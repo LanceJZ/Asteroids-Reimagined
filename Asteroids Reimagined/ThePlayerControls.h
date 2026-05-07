@@ -34,7 +34,6 @@ public:
 	std::vector<ThePlasmaShot*> PlasmaShots = {};
 
 	void SetTurretModel(std::vector<Vector3> model);
-	void SetFlameModel(std::vector<Vector3> model);
 	void SetShieldModel(std::vector<Vector3> model);
 	void SetBigShotModel(std::vector<Vector3> model);
 	void SetMineModel(std::vector<Vector3> model);
@@ -110,7 +109,6 @@ protected:
 	Sound MineExplodeSound = {};
 	Sound PlasmaShotSound = {};
 
-	LineModel* Flame = {};
 	LineModel* Turret = {};
 
 	std::vector<Vector3> MineModel;

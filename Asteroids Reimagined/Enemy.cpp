@@ -14,6 +14,11 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
+void Enemy::SetPlayerDrone(ThePlayerDrone* playerDrone)
+{
+	PlayerDrone = playerDrone;
+}
+
 void Enemy::SetShotModel(std::vector<Vector3> model)
 {
 	ShotModel = model;

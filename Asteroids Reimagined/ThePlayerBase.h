@@ -11,6 +11,7 @@ public:
 	std::vector<Shot*> Shots = {};
 
 	void SetShotModel(std::vector<Vector3> model);
+	void SetFlameModel(std::vector<Vector3> model);
 
 	void SetFireSound(Sound sound);
 	void SetExplodeSound(Sound sound);
@@ -33,6 +34,7 @@ protected:
 	Sound ExplodeSound = {};
 
 	std::vector<Vector3> ShotModel;
+	LineModel* Flame = {};
 
 private:
 

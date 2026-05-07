@@ -297,44 +297,6 @@ float TheUFO::AimedShotAtDeathStar()
 	return GetAngleFromVectorZ(DeathStarPosition);
 }
 
-//float TheUFO::AimedShotAtNearbyRock()
-//{
-//	bool noRocks = true;
-//
-//	Vector3 closestRockPosition = { 0, 0, 0 };
-//	Vector3 closestRockVelocity = { 0, 0, 0 };
-//	float shortestDistance = 1000.0f;
-//
-//	for (const auto &rock : Rocks)
-//	{
-//		if (rock->Enabled)
-//		{
-//			noRocks = false;
-//			float distance = Vector3Distance(rock->Position, Position);
-//
-//			if (distance < shortestDistance)
-//			{
-//				shortestDistance = distance;
-//				closestRockPosition = rock->Position;
-//				closestRockVelocity = rock->Velocity;
-//			}
-//		}
-//	}
-//
-//	if (noRocks)
-//	{
-//		return M.GetRandomRadian();
-//	}
-//
-//	Vector3 compensation = GetVelocityFromAngleZ(GetAngleFromVectorZ(closestRockVelocity),
-//		shortestDistance);
-//
-//	Vector3 closestRock = Vector3Add(closestRockPosition,
-//		Vector3Add(closestRockVelocity, compensation));
-//
-//	return GetAngleFromVectorZ(closestRock);
-//}
-
 void TheUFO::ChangeVector()
 {
 	float vectorTimer = M.GetRandomFloat(3.1f - (WaveNumber * 0.1f), 7.5f);
