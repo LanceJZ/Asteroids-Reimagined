@@ -2,14 +2,13 @@ Asteroids Reimagined
 ========================
 Names: Super Asteroids, Asteroids Ultimate, Asteroids Ultra Deluxe
 
+Original Game Plan:
 Make similar to first game on VCTR-SCTR included with Atari 50th Anniversary.
-Ship moves like Asteroids Deluxe, with shield and shoots with turret. Two Stick/Keyboard mouse.
-First New ship, enters from any side of screen, shoots homing missiles that player can shoot, until shot down or goes off edge. Ship varies vector in one axis only. They avoid enemy by moving to opposite side of screen as player. If player in middle, stay on same side, but move towards edge.
-Second New ship, enters from any side of screen goes in strait line, lays mines that player must shot, until shot down or goes off other side.
-The new ships can hit rocks, and the missiles and mines can hit rocks.
-Start game with four large rocks at start, same as original. There are now four sizes of rocks, Large, Medium Large, Medium, and small. Large makes two ML, ML makes three M, and M makes four Small.
+Player Ship moves like Asteroids Deluxe, with shield and shoots with turret. Two Stick/Keyboard mouse.
+First New Enemy ship, enters from any side of screen, shoots homing missiles that player can shoot, until shot down or goes off edge. Ship varies vector in one axis only. They avoid enemy by moving to opposite side of screen as player. If player in middle, stay on same side, but move towards edge.
+Second Enemy ship, enters from any side of screen goes in strait line, lays mines that player must shot, until shot down or goes off other side.
 
-Optional: Add extra mouse mode, FPS mode, keep mouse in center, and use deltas so that it works like the controller. User stops moving mouse, to stop shooting.
+Optional: Add extra mouse mode, FPS mode, keep mouse in center, and use deltas so that it works like the controller. User stops moving mouse, to stop shooting turret.
 
 Optional: Add boss levels, every five waves. No rocks, no other enemies, just a boss ship. How should it behave; Boss ship has turrets, you have to shoot all the turrets before you can shoot the ship. You have to get the shields down to shoot the turrets. If player is hit, Boss stops shooting. Boss also shots missiles. Also lays mines too. Boss ship also has a shield. -Done
 Add two spine mounted guns off center, make models, have two shots shoot out front from those models when player in kill zones. -Done
@@ -17,12 +16,11 @@ New Anti-Player enemy that behaves like the player, except shoots at player, inc
 
 New power ups, Larger shot. Double shot. One that grows with limited distance, it starts out white, and turns red as it grows in size, Ion paralyzing homing mine that only effects ships for a time, and homing missile.
 
-TODO:
+TODO in future:
+Player ship or player shield can't hit Boss or Boss shield, should that be a thing? Should destroy player ship/Drain shield and cause Boss damage. --Still undecided.
 Make new class for Shooting at UFO and Enemies to use like functions instead of inheriting it so both UFO and Drone can use it. - Moved Aim At Nearby Rock.
-After Boss wave, went overboard on UFO spawns. Made Jenni laugh though. Tweaked spawn rate.
 Make it so there is only one function to see if object hit player or player shield.
 Rocks show if they have power up, or something that orbits the rock so the player knows what rock to go after. I have power up drawn inside rock. -Done
-The UFO will shot two shots, and there will be two UFOs spawned at once after wave 6. More UFOs at once in later waves.
 When Boss ship is defeated, player gets a drone that looks like the original Asteroids ship, but smaller. - Working on now.
 After level 5 add a new enemy, something the anti-player, with behavior like the player. Targets rocks, and other enemies and player as well as has limited shields and gathers power ups. This option will take time, as it will have AI with behavior tree.
 Add another power up, fan out shots. As you get another one, more shots fan out also add heat seeking missile after level five.
@@ -39,9 +37,12 @@ Weird Bugs:
 Player Drone:
 As a new Power Up type, player needs to pick it up. Should be accumulative or not? Should spawn right away, or be like weapon?
 It handles like the player ship.
-Priority of shots: Deathstar/Fighter Pair/Fighter, Missile, Enemy1, Enemy2 Mines, UFOs, Rocks.
-Should Fighter Pair/Fighter be aware of Player Drone?
-Should Player lose Drone if hit?
+Priority of shots: Deathstar/Fighter Pair/Fighter, Missile, Enemy1, Enemy2, Mines, UFOs, Rocks.
+Drone activates as soon as Player picks up Power Up and spawns where the player is. Drone Power Up has it's own model.
+Should Fighter Pair/Fighter be aware of Player Drone? - Ignore Drone.
+Should Player lose Drone if hit? - Yes drone leaves screen if player is hit.
+Player Drone should have HP, so it takes more than one hit.
+One Drone at a time, if Drone is active, no Drone power ups will drop. Drone Power Ups only spawn into rock if there is no Drone active.
 
 Anti Player:
 
@@ -54,7 +55,7 @@ Audio------------------------
 When UFO runs into Deathstar, no sound for UFO exploding. Moved Explode SFX to explode FX to fix.
 
 Effects Game Play------------
-Player ship or player shield can't hit Boss or Boss shield, should that be a thing? Should destroy player ship/Drain shield and cause Boss damage. --Still undecided.
-Anti Player still spawns into rocks.
+Anti Player still spawns into rocks. - Only applies to unreleased version.
+After Boss wave, went overboard on UFO spawns. there were six at a time in wave seven. Made Jenni laugh though. Tweaked spawn rate.
 
 Game breaking -------------
