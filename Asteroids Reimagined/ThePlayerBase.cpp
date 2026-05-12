@@ -51,6 +51,10 @@ bool ThePlayerBase::BeginRun()
 {
 	LineModel::BeginRun();
 
+	Enabled = false;
+	Flame->Enabled = false;
+	Flame->NoCollision = true;
+
 	return false;
 }
 

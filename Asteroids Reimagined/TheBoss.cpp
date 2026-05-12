@@ -83,10 +83,10 @@ void TheBoss::SetOnSound(Sound sound)
 	SetSoundVolume(OnSound, 0.15f);
 }
 
-void TheBoss::SetExplodeSound(Sound sound)
-{
-	ExplodeSound = sound;
-}
+//void TheBoss::SetExplodeSound(Sound sound)
+//{
+//	ExplodeSound = sound;
+//}
 
 void TheBoss::SetShieldHitSound(Sound sound)
 {
@@ -440,7 +440,7 @@ void TheBoss::ReachedWaypoint()
 	}
 }
 
-void TheBoss::CheckCollisions()
+bool TheBoss::CheckCollisions()
 {
 	if (Player->Enabled)
 	{
@@ -520,6 +520,8 @@ void TheBoss::CheckCollisions()
 			Hit(shot, 50);
 		}
 	}
+
+	return false;
 }
 
 void TheBoss::FireShots()

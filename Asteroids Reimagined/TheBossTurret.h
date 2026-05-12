@@ -1,9 +1,8 @@
 #pragma once
 #include "Globals.h"
-#include "ThePlayer.h"
-#include "Shot.h"
+#include "Enemy.h"
 
-class TheBossTurret : public LineModel
+class TheBossTurret : public Enemy
 {
 public:
 	TheBossTurret();
@@ -11,9 +10,9 @@ public:
 
 	std::vector<Shot*> Shots;
 
-	void SetPlayer(ThePlayer* player);
+	//void SetPlayer(ThePlayer* player);
 
-	void SetShotModel(std::vector<Vector3> model);
+	//void SetShotModel(std::vector<Vector3> model);
 
 	void SetFireSound(Sound sound);
 	void SetExplodeSound(Sound sound);
@@ -25,7 +24,7 @@ public:
 	void FixedUpdate(float deltaTime);
 	void Draw3D();
 
-	void CheckCollisions();
+	bool CheckCollisions();
 
 	void Spawn();
 	void Hit();
@@ -33,16 +32,16 @@ public:
 	void Reset();
 
 private:
-	size_t FireTimerID;
+	//size_t ShotTimerID;
 
-	float FireTimerSetting = 0;
+	float ShotTimerSetting = 0;
 
-	Sound FireSound = {};
-	Sound ExplodeSound = {};
+	//Sound FireSound = {};
+	//Sound ExplodeSound = {};
 
-	std::vector<Vector3> ShotModel = {};
+	//std::vector<Vector3> ShotModel = {};
 
-	ThePlayer* Player = nullptr;
+	//ThePlayer* Player = nullptr;
 
 	void Fire();
 };

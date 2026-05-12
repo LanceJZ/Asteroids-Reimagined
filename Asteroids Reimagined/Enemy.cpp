@@ -14,7 +14,7 @@ void Enemy::SetPlayer(ThePlayer* player)
 	Player = player;
 }
 
-void Enemy::SetPlayerDrone(ThePlayerDrone* playerDrone)
+void Enemy::SetPlayerDrone(ThePlayerBase* playerDrone)
 {
 	PlayerDrone = playerDrone;
 }

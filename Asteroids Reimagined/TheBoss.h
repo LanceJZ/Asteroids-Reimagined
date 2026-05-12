@@ -1,12 +1,11 @@
 #pragma once
 #include "Globals.h"
-#include "ThePlayer.h"
+#include "Enemy.h"
 #include "TheMissile.h"
 #include "TheMine.h"
-#include "Shot.h"
 #include "TheBossTurret.h"
 
-class TheBoss : public LineModel
+class TheBoss : public Enemy
 {
 public:
 	TheBoss();
@@ -33,7 +32,7 @@ public:
 	void SetMineModel(std::vector<Vector3> model);
 
 	void SetOnSound(Sound sound);
-	void SetExplodeSound(Sound sound);
+	//void SetExplodeSound(Sound sound);
 	void SetShieldHitSound(Sound sound);
 	void SetShieldDownSound(Sound sound);
 	void SetHitSound(Sound sound);
@@ -75,11 +74,11 @@ private:
 	float FireTimerSetting = 0.0f;
 	float HitPoints = 0.0f;
 
-	Sound OnSound = {};
+	//Sound OnSound = {};
 	Sound ShieldHitSound = {};
 	Sound ShieldDownSound = {};
 	Sound HitSound = {};
-	Sound ExplodeSound = {};
+	//Sound ExplodeSound = {};
 	Sound TurretFireSound = {};
 	Sound TurretExplodeSound = {};
 	Sound SpineFireSound = {};
@@ -90,7 +89,7 @@ private:
 	Sound MineExplodeSound = {};
 
 	std::vector<Vector3> MissileModel;
-	std::vector<Vector3> ShotModel;
+	//std::vector<Vector3> ShotModel;
 	std::vector<Vector3> MineModel;
 	std::vector<Vector3> TurretModel;
 
@@ -98,7 +97,7 @@ private:
 	LineModel* RightSpineMount = nullptr;
 	LineModel* LeftSpineMount = nullptr;
 
-	ThePlayer* Player = nullptr;
+	//ThePlayer* Player = nullptr;
 
 	std::vector<Vector3> Path;
 
@@ -106,7 +105,7 @@ private:
 	void ChasePlayer();
 	void HeadToEdge();
 	void ReachedWaypoint();
-	void CheckCollisions();
+	bool CheckCollisions();
 	void FireShots();
 	void FireMissile();
 	void DropMine();

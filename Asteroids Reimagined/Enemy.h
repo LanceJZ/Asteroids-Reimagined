@@ -1,7 +1,6 @@
 #pragma once
 #include "Globals.h"
 #include "ThePlayer.h"
-#include "ThePlayerDrone.h"
 #include "Shot.h"
 
 class Enemy : public LineModel
@@ -20,7 +19,7 @@ public:
 	std::vector<Enemy*> Enemy2Refs;
 
 	void SetPlayer(ThePlayer* player);
-	void SetPlayerDrone(ThePlayerDrone* playerDrone);
+	void SetPlayerDrone(ThePlayerBase* playerDrone);
 
 	void SetShotModel(std::vector<Vector3> model);
 
@@ -65,7 +64,7 @@ protected:
 	Vector3 Destination = { 0.0f, 0.0f, 0.0f };
 
 	ThePlayer* Player = nullptr;
-	ThePlayerDrone* PlayerDrone = nullptr;
+	ThePlayerBase* PlayerDrone = nullptr;
 
 	Sound FireSound = {};
 	Sound ExplodeSound = {};

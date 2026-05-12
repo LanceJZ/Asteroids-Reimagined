@@ -2,22 +2,22 @@
 
 TheBossTurret::TheBossTurret()
 {
-	FireTimerID = EM.AddTimer();
+	//FireTimerID = EM.AddTimer();
 }
 
 TheBossTurret::~TheBossTurret()
 {
 }
 
-void TheBossTurret::SetPlayer(ThePlayer* player)
-{
-	Player = player;
-}
+//void TheBossTurret::SetPlayer(ThePlayer* player)
+//{
+//	Player = player;
+//}
 
-void TheBossTurret::SetShotModel(std::vector<Vector3> model)
-{
-	ShotModel = model;
-}
+//void TheBossTurret::SetShotModel(std::vector<Vector3> model)
+//{
+//	ShotModel = model;
+//}
 
 void TheBossTurret::SetFireSound(Sound sound)
 {
@@ -41,7 +41,7 @@ bool TheBossTurret::BeginRun()
 {
 	LineModel::BeginRun();
 
-	FireTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
+	ShotTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
 
 	return false;
 }
@@ -56,7 +56,7 @@ void TheBossTurret::FixedUpdate(float deltaTime)
 {
 	LineModel::FixedUpdate(deltaTime);
 
-	if (EM.TimerElapsed(FireTimerID))
+	if (EM.TimerElapsed(ShotTimerID))
 	{
 		Fire();
 	}
@@ -71,7 +71,7 @@ void TheBossTurret::Spawn()
 {
 	Enabled = true;
 
-	EM.ResetTimer(FireTimerID, FireTimerSetting * 3.5f);
+	EM.ResetTimer(ShotTimerID, ShotTimerSetting * 3.5f);
 }
 
 void TheBossTurret::Hit()
@@ -103,7 +103,7 @@ void TheBossTurret::Reset()
 	}
 }
 
-void TheBossTurret::CheckCollisions()
+bool TheBossTurret::CheckCollisions()
 {
 	for (const auto& shot : Shots)
 	{
@@ -174,12 +174,13 @@ void TheBossTurret::CheckCollisions()
 		}
 	}
 
+	return false;
 }
 
 void TheBossTurret::Fire()
 {
-	FireTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
-	EM.ResetTimer(FireTimerID, FireTimerSetting);
+	ShotTimerSetting = M.GetRandomFloat(0.75f, 1.5f);
+	EM.ResetTimer(ShotTimerID, ShotTimerSetting);
 
 	if (!Player->Enabled) return;
 

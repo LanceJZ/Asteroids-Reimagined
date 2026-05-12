@@ -30,8 +30,6 @@ bool ThePlayerDrone::BeginRun()
 {
 	ThePlayerBase::BeginRun();
 
-	Enabled = false;
-
 	return true;
 }
 
